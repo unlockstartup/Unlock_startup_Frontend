@@ -711,7 +711,7 @@ const fetchJobs = async (overrides = {}) => {
             <div className="modalFooter">
               <button className="btn btnSecondary" onClick={closeModal} disabled={saving}>Cancel</button>
               <button className="btn btnPrimary" onClick={saveJob} disabled={saving}>
-                {saving ? "Saving…" : editId ? "Update Job" : "Save Job"}
+                  {saving ? "Submitting…" : editId ? "Update Job" : "Submit Job"}
               </button>
             </div>
 

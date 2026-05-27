@@ -504,25 +504,29 @@ registrationDeadline: raw.registrationDeadline
           </div>
         </>
       )}
-      <button
-        className="eventCtaPrimary"
-        type="button"
-        onClick={() => {
-          TrackPublicAppyClick(event.id).catch(() => {});
-          setShowForm(true);
-        }}
-      >
-        <Send size={13} strokeWidth={1.75} />
-        Apply here
-      </button>
-      <ApplyModal
-        isOpen={showForm}
-        onClose={() => setShowForm(false)}
-        jobTitle={event.title}
-        companyName={event.publisherName}
-        listingId={event.id}
-        listingType="event"
-      />
+{!event.registrationUrl && (
+  <>
+    <button
+      className="eventCtaPrimary"
+      type="button"
+      onClick={() => {
+        TrackPublicAppyClick(event.id).catch(() => {});
+        setShowForm(true);
+      }}
+    >
+      <Send size={13} strokeWidth={1.75} />
+      Apply here
+    </button>
+    <ApplyModal
+      isOpen={showForm}
+      onClose={() => setShowForm(false)}
+      jobTitle={event.title}
+      companyName={event.publisherName}
+      listingId={event.id}
+      listingType="event"
+    />
+  </>
+)}
       <button className="eventCtaSecondary" type="button" onClick={handleShare} style={{ marginTop: "8px" }}>
         <Share2 size={14} strokeWidth={1.75} />
         Share Event

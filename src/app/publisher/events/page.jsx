@@ -689,7 +689,7 @@ const fetchEvents = async (overrides = {}) => {
             <div className="modalFooter">
               <button className="btn btnSecondary" onClick={closeModal} disabled={saving}>Cancel</button>
               <button className="btn btnPrimary" onClick={saveEvent} disabled={saving}>
-                {saving ? "Saving…" : editId ? "Update Event" : "Save Event"}
+               {saving ? "Submitting…" : editId ? "Update Event" : "Submit Event"}
               </button>
             </div>
           </div>

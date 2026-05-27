@@ -12,8 +12,20 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="hero-banner-two position-relative">
-      <div className="container">
+    <div className="hero-banner-two position-relative" style={{ overflow: "hidden" }}>
+      
+      {/* Background Image */}
+      <Image
+        src="/assets/images/assets/latest_banner.png"
+        alt="Hero Background"
+        fill
+        style={{ objectFit: "fill", objectPosition: "center", zIndex: 0 }}
+        className="lazy-img"
+        priority
+      />
+
+      {/* Content sits on top */}
+      <div className="container" style={{ position: "relative", zIndex: 1 }}>
         <div className="position-relative pt-225 xl-pt-200 lg-pt-150 pb-80 lg-pb-60">
           <div className="row">
             <div className="col-lg-6 col-md-8">
@@ -44,30 +56,13 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Main Images Box */}
-      <div className="img-box">
-        <Image
-          src="/assets/images/assets/img_10.png"
-          alt="Main Hero"
-          width={600}
-          height={500}
-          style={{ height: "auto", width: "auto" }}
-          className="lazy-img wow fadeInUp"
-          data-wow-delay="0.2s"
-        />
-  
-      </div>
-
       {/* Rating Box */}
-      <div className="rating-box position-relative">
+      <div className="rating-box position-relative" style={{ zIndex: 1 }}>
         <div className="d-sm-flex justify-content-end">
           <div className="me-sm-5 pe-xxl-4">
-            <div className="d-flex align-items-center">
-          
-            </div>
+            <div className="d-flex align-items-center"></div>
           </div>
           <div>
-  
           </div>
         </div>
       </div>

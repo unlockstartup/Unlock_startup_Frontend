@@ -714,17 +714,13 @@ function FundingCallsCrud() {
               <div style={{ padding: "0.9rem 1rem", borderRadius: "0.85rem", background: "var(--yellow-soft)", border: "1px solid rgba(252,207,2,0.4)", color: "var(--yellow-hover)", fontSize: "var(--text-sm)" }}>
                 Note: Creating or updating a competition sets its status to <strong>Pending</strong> until an admin approves it.
               </div>
-
+          <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>
+                <button className="btn btnSecondary inc-size" onClick={closeModal} disabled={saving || attachmentsUploading} style={{ padding: "1.75rem 2rem", fontSize: "1.8rem" }}>Cancel</button>
+                <button className="btn btnPrimary" onClick={save} disabled={saving || attachmentsUploading} style={{ padding: "0.75rem 2rem", fontSize: "1.5rem" }}>
+                  {saving ? "Submitting…" : mode === "create" ? "Submit Competition" : "Update Competition"}
+                </button>
+              </div>
             </div>{/* /modalBody */}
-
-            {/* Footer */}
-            <div className="modalFooter">
-              <button className="btn btnSecondary" onClick={closeModal} disabled={saving || attachmentsUploading}>Cancel</button>
-              <button className="btn btnPrimary" onClick={save} disabled={saving || attachmentsUploading}>
-                {saving ? "Saving…" : mode === "create" ? "Save Competition" : "Update Competition"}
-              </button>
-            </div>
-
           </div>
         </div>
       )}

@@ -566,7 +566,7 @@ export default function ServiceListings() {
             <div className="modalFooter">
               <button className="btn btnSecondary" onClick={closeModal} disabled={saving || uploadingIdx !== null}>Cancel</button>
               <button className="btn btnPrimary" onClick={save} disabled={saving || uploadingIdx !== null}>
-                {saving ? "Saving…" : mode === "create" ? "Submit Service Listing" : "Save Changes"}
+                {saving ? "Submitting…" : mode === "create" ? "Submit Service Listing" : "Update Changes"}
               </button>
             </div>
 

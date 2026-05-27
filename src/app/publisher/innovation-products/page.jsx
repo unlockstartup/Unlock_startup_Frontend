@@ -626,7 +626,7 @@ export default function InnovationProducts() {
             <div className="modalFooter">
               <button className="btn btnSecondary" onClick={closeModal} disabled={saving || uploadingImage || uploadingProductImages}>Cancel</button>
               <button className="btn btnPrimary" onClick={save} disabled={saving || uploadingImage || uploadingProductImages}>
-                {saving ? "Saving…" : mode === "create" ? "Submit Product" : "Save Changes"}
+                {saving ? "Submitting…" : mode === "create" ? "Submit Product" : "Update Changes"}
               </button>
             </div>
 
