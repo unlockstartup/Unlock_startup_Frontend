@@ -1,0 +1,378 @@
+/* AboutUs.module.css */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.au-page {
+  min-height: 100vh;
+  font-family: 'gordita', -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #1a1a1a;
+  background: #ffffff;
+}
+
+.au-page a { color: inherit; text-decoration: none; }
+.au-page button { font: inherit; border: 0; background: none; cursor: pointer; }
+
+.au-container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ─── Hero ──────────────────────────────────────────────────────────────── */
+.au-hero {
+  padding: 80px 0 64px;
+}
+
+.au-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 0.75fr;
+  gap: 64px;
+  align-items: start;
+}
+
+/* Shared label style — used for eyebrow AND section labels */
+.au-eyebrow,
+.au-section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: #fecd06;
+}
+
+.au-eyebrow {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgb(30 160 223);
+  color: white;
+  margin-bottom: 24px;
+}
+
+.au-hero h1 {
+  font-size: 38px;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.au-hero p {
+  font-size: 15px;
+  max-width: 60ch;
+  color: #666666;
+  margin-bottom: 32px;
+  line-height: 1.75;
+}
+
+.au-nav-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.au-hero-card {
+  padding: 32px;
+  border-radius: 20px;
+  background: #fafafa;
+  border: 1px solid #e5e5e5;
+}
+
+.au-metric {
+  display: grid;
+  gap: 24px;
+}
+
+.au-metric-block {
+  padding-top: 24px;
+  border-top: 1px solid #eeeeee;
+}
+
+.au-metric-block:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.au-metric-block strong {
+  display: block;
+  font-size: 17px;
+  line-height: 1.3;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #1a1a1a;
+  letter-spacing: -0.01em;
+}
+
+.au-metric-block span {
+  color: #666666;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ─── Section ────────────────────────────────────────────────────────────── */
+.au-section {
+  padding: 80px 0;
+  border-top: 1px solid #eeeeee;
+}
+
+.au-section-head {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 40px;
+  margin-bottom: 48px;
+  align-items: start;
+}
+
+.au-section-label {
+  padding-top: 6px; /* aligns baseline with h2 cap-height */
+}
+
+.au-section h2 {
+  font-size: 32px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.au-section-copy {
+  font-size: 15px;
+  color: #666666;
+  max-width: 62ch;
+  line-height: 1.75;
+}
+
+/* ─── Grids ──────────────────────────────────────────────────────────────── */
+.au-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.au-service-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.au-values-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* ─── Cards ──────────────────────────────────────────────────────────────── */
+.au-card {
+  padding: 28px;
+  background: #fafafa;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+}
+
+.au-card h3 {
+  font-size: 16px;
+  line-height: 1.3;
+  margin-bottom: 10px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #1a1a1a;
+}
+
+.au-card p,
+.au-card li {
+  color: #666666;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.au-card ul {
+  list-style: none;
+  display: grid;
+  gap: 0;
+  margin-top: 16px;
+}
+
+.au-card li {
+  padding: 12px 0 12px 20px;
+  border-top: 1px solid #eeeeee;
+  position: relative;
+}
+
+.au-card li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #7bbfea;
+}
+
+/* ─── Mission / Vision ───────────────────────────────────────────────────── */
+.au-mission-vision {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.au-statement {
+  padding: 32px;
+  border-radius: 16px;
+  background: #fafafa;
+  border: 1px solid #e5e5e5;
+}
+
+.au-statement span {
+  display: inline-block;
+  margin-bottom: 14px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: #fecd06;
+}
+
+.au-statement p {
+  font-size: 17px;
+  line-height: 1.6;
+  color: #1a1a1a;
+  font-weight: 400;
+}
+
+/* ─── CTA Panel ──────────────────────────────────────────────────────────── */
+.au-cta-panel {
+  padding: 48px;
+  border-radius: 20px;
+  background: rgb(30 160 223);
+  color: #ffffff;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: center;
+}
+
+.au-cta-panel h2 {
+  font-size: 28px;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  font-weight: 500;
+  color: #ffffff;
+  margin-bottom: 0;
+}
+
+.au-cta-panel p {
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.65;
+  max-width: 52ch;
+}
+
+/* ─── Buttons ────────────────────────────────────────────────────────────── */
+.au-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 20px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease;
+  white-space: nowrap;
+}
+
+.au-btn:hover { transform: translateY(-1px); }
+
+.au-btn-primary {
+  background: rgb(30 160 223);
+  color: #ffffff;
+}
+
+.au-btn-primary:hover { background: #0b4b50; }
+
+.au-btn-secondary {
+  border-color: #e5e5e5;
+  background: #ffffff;
+  color: #1a1a1a;
+}
+
+.au-btn-secondary:hover { background: #f5f5f5; }
+
+.au-btn-light {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.au-btn-light:hover { background: rgba(255, 255, 255, 0.22); }
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .au-values-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 980px) {
+  .au-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .au-section-head {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .au-overview-grid,
+  .au-service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .au-mission-vision {
+    grid-template-columns: 1fr;
+  }
+
+  .au-cta-panel {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .au-hero h1 { font-size: 32px; }
+  .au-section h2 { font-size: 26px; }
+}
+
+@media (max-width: 640px) {
+  .au-container { padding: 0 16px; }
+
+  .au-hero { padding: 48px 0 40px; }
+  .au-section { padding: 56px 0; }
+
+  .au-hero-card,
+  .au-statement,
+  .au-card,
+  .au-cta-panel { padding: 24px; }
+
+  .au-hero h1 { font-size: 26px; }
+  .au-section h2 { font-size: 22px; }
+
+  .au-values-grid { grid-template-columns: 1fr; }
+}

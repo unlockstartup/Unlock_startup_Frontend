@@ -1,0 +1,325 @@
+/* layout.css */
+
+html, body, #root { height: 100%; width: 100%; }
+body { margin: 0; background: #f6f7fb; }
+
+/* ── Shell ───────────────────────────────────────────────── */
+.ventic-shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────── */
+.ventic-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: #fff;
+  border-right: 1px solid #eef0f4;
+  padding: 16px 12px;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: sticky;
+  top: 0;
+  transition: width 0.25s ease, transform 0.25s ease;
+  z-index: 200;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.1) transparent;
+}
+.ventic-sidebar::-webkit-scrollbar { width: 4px; }
+.ventic-sidebar::-webkit-scrollbar-track { background: transparent; }
+.ventic-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.1);
+  border-radius: 4px;
+}
+
+/* Collapsed (icon-only) */
+.ventic-sidebar.collapsed { width: 72px; }
+.ventic-sidebar.collapsed .ventic-nav__text,
+.ventic-sidebar.collapsed .ventic-brand-text { display: none; }
+.ventic-sidebar.collapsed .ventic-sidebar__brand { justify-content: center; }
+.ventic-sidebar.collapsed .ventic-nav { justify-content: center; padding: 12px 0; }
+
+/* ── Sidebar Brand ───────────────────────────────────────── */
+.ventic-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px 18px;
+}
+
+.ventic-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: #0f8a65;
+  color: #fff;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.ventic-brand-text { font-size: 18px; font-weight: 800; }
+
+/* ── Nav Links ───────────────────────────────────────────── */
+.ventic-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: #4b5563;
+  text-decoration: none;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.ventic-nav:hover { background: #f4f6fb; color: #111; }
+.ventic-nav.active { background: #e8f6f0; color: #0f8a65; font-weight: 700; }
+.ventic-nav__icon { font-size: 18px; flex-shrink: 0; }
+
+/* ── Main ────────────────────────────────────────────────── */
+.ventic-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.ventic-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  height: 100%;
+  min-height: 0;
+}
+
+/* ── Topbar ──────────────────────────────────────────────── */
+.ventic-topbar {
+  height: 64px;
+  flex-shrink: 0;
+  background: #fff;
+  border-bottom: 1px solid #eef0f4;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ventic-topbar__right { display: flex; align-items: center; gap: 12px; }
+
+.ventic-icon-btn {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px !important;
+}
+
+.ventic-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  border-radius: 999px;
+  font-size: 11px;
+  padding: 3px 6px;
+}
+
+/* ── Mobile Backdrop ─────────────────────────────────────── */
+.ventic-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 199;
+  animation: fadeIn 0.2s ease;
+}
+.ventic-backdrop.visible { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Modal overrides ─────────────────────────────────────── */
+@media (min-width: 992px) {
+  .modal-lg, .modal-xl {
+    --bs-modal-width: 100% !important;
+    margin-top: -10px;
+  }
+}
+.modal-dialog-scrollable .modal-content { max-height: none; }
+.modal-body { padding: 10px 70px 0 70px; }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Tablet (768px – 1199px): icon-only sidebar ──────────── */
+@media (max-width: 1199px) and (min-width: 768px) {
+  .ventic-sidebar {
+    width: 72px;
+  }
+  .ventic-sidebar .ventic-nav__text,
+  .ventic-sidebar .ventic-brand-text { display: unset; text-align: start;}
+  .ventic-sidebar .ventic-sidebar__brand { justify-content: center; }
+  .ventic-sidebar .ventic-nav { padding: 12px 0; }
+
+  /* Collapsed becomes fully hidden on tablet (toggle still works) */
+  .ventic-sidebar.collapsed {
+    width: 0;
+    padding: 0;
+    overflow: hidden;
+    border: none;
+  }
+
+  .ventic-content { padding: 16px; }
+  .modal-body { padding: 10px 24px 0; }
+}
+
+/* ── Mobile (< 768px): overlay drawer ───────────────────── */
+@media (max-width: 767px) {
+  /* Sidebar slides in from the left as a fixed drawer */
+  .ventic-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 260px;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+    z-index: 200;
+  }
+
+  /* When "open" class is present, slide in */
+  .ventic-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Always show labels in mobile drawer */
+  .ventic-sidebar .ventic-nav__text,
+  .ventic-sidebar .ventic-brand-text { display: inline; }
+  .ventic-sidebar .ventic-sidebar__brand { justify-content: flex-start; }
+  .ventic-sidebar .ventic-nav { justify-content: flex-start; padding: 10px 12px; }
+
+  /* collapsed class has no effect on mobile — drawer controls it */
+  .ventic-sidebar.collapsed { width: 260px; transform: translateX(-100%); }
+  .ventic-sidebar.collapsed.mobile-open { transform: translateX(0); }
+
+  .ventic-content { padding: 14px; }
+
+  /* Slim topbar text on mobile */
+  .ventic-topbar .fw-semibold { display: none; }
+
+  .modal-body { padding: 10px 16px 0; }
+}
+
+/* ── Large desktop (≥ 1200px) ────────────────────────────── */
+@media (min-width: 1200px) {
+  /* Optionally scale down the whole shell slightly */
+  /* .ventic-shell { zoom: 90%; } */
+}
+
+
+        /* ── Header row ── */
+        .sl-header {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 12px;
+          flex-wrap: wrap;
+          margin-bottom: 16px;
+        }
+        .sl-header__titles h2 { margin-bottom: 2px; }
+
+        /* ── Filter card ── */
+        .sl-filters {
+          display: grid;
+          grid-template-columns: 180px 1fr auto;
+          gap: 10px;
+          align-items: flex-end;
+        }
+        .sl-filters__actions { display: flex; gap: 8px; }
+
+        /* ── Desktop table ── */
+        .sl-table-wrap { display: block; }
+        .sl-cards-wrap  { display: none; }
+
+        /* ── Service card (tablet / mobile) ── */
+        .sl-card {
+          background: #fff;
+          border: 1px solid #e9ecef;
+          border-radius: 12px;
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+        .sl-card + .sl-card { margin-top: 10px; }
+
+        .sl-card__top {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+        .sl-card__title { font-weight: 700; font-size: 15px; line-height: 1.3; }
+        .sl-card__sub   { font-size: 12px; color: #6c757d; margin-top: 2px; }
+
+        .sl-card__meta {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          align-items: center;
+        }
+        .sl-card__company { font-size: 13px; color: #374151; font-weight: 500; }
+        .sl-card__brand   { font-size: 12px; color: #6c757d; }
+
+        .sl-card__actions {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+          padding-top: 6px;
+          border-top: 1px solid #f0f0f0;
+        }
+        .sl-card__actions .btn { flex: 1; min-width: 80px; font-size: 13px; }
+
+        /* ── Breakpoints ── */
+        @media (max-width:  768px) {
+          .sl-table-wrap { display: none; }
+          .sl-cards-wrap  { display: block; }
+        }
+
+        @media (max-width: 768px) {
+          .sl-filters {
+            grid-template-columns: 1fr 1fr;
+          }
+          .sl-filters .sl-filter-search {
+            grid-column: 1 / -1;
+          }
+          .sl-filters__actions {
+            grid-column: 1 / -1;
+          }
+          .sl-card__actions .btn { font-size: 12px; padding: 6px 8px; }
+        }
+
+        @media (max-width: 480px) {
+          .sl-filters {
+            grid-template-columns: 1fr;
+          }
+          .sl-filters .sl-filter-search,
+          .sl-filters__actions {
+            grid-column: 1;
+          }
+        }
+  
+    .ventic-nav__text{
+      font-size: 1.15rem;
+    }

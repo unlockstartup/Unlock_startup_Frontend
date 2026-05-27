@@ -1,0 +1,356 @@
+/* ─── Color Tokens ──────────────────────────────────────────── */
+:root {
+  --sp-blue:         rgb(30, 176, 228);
+  --sp-blue-light:   rgba(30, 176, 228, 0.10);
+  --sp-blue-border:  rgba(30, 176, 228, 0.28);
+  --sp-blue-dark:    rgb(18, 130, 170);
+
+  --sp-yellow:        rgb(255, 207, 10);
+  --sp-yellow-light:  rgba(255, 207, 10, 0.11);
+  --sp-yellow-border: rgba(255, 207, 10, 0.35);
+  --sp-yellow-dark:   rgb(160, 128, 0);
+}
+
+/* ─── Our Services Page ─────────────────────────────────────── */
+.services-page {
+  font-family: 'gordita', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #23211c;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.services-page *,
+.services-page *::before,
+.services-page *::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Container ─────────────────────────────────────────────── */
+.services-page .container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ─── Typography scale ──────────────────────────────────────── */
+.services-page h1 {
+  font-size: 44px;
+  line-height: 1.06;
+  letter-spacing: -0.04em;
+  font-weight: 500;
+  color: #23211c;
+  margin-bottom: 20px;
+}
+
+.services-page h2 {
+  font-size: 28px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+  color: #23211c;
+  margin-bottom: 14px;
+}
+
+.services-page h3 {
+  font-size: 18px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  color: #23211c;
+  margin-bottom: 10px;
+}
+
+.services-page h4 {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #9ca3af;
+  margin-bottom: 10px;
+}
+
+.services-page p {
+  font-size: 15px;
+  color: #66625c;
+  line-height: 1.75;
+}
+
+/* ─── Hero ──────────────────────────────────────────────────── */
+.services-page .hero {
+  padding: 80px 0 64px;
+  background: #ffffff;
+  margin-top: 60px;
+}
+
+.services-page .hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: start;
+}
+
+/* Eyebrow badge — yellow accent */
+.services-page .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--sp-yellow-light);
+  border: 1px solid var(--sp-yellow-border);
+  color: var(--sp-yellow-dark);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+}
+
+.services-page .hero-left > p {
+  max-width: 60ch;
+  margin-bottom: 32px;
+}
+
+/* Hero panel — blue accent */
+.services-page .hero-panel {
+  padding: 32px;
+  border-radius: 16px;
+  background: #fafafa;
+  border: 1px solid var(--sp-blue-border);
+}
+
+.services-page .hero-panel h2 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.services-page .hero-panel ul {
+  list-style: none;
+  display: grid;
+  gap: 0;
+}
+
+.services-page .hero-panel li {
+  border-top: 1px solid var(--sp-blue-border);
+  padding: 14px 0 14px 20px;
+  color: #66625c;
+  font-size: 14px;
+  line-height: 1.65;
+  position: relative;
+}
+
+.services-page .hero-panel li:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.services-page .hero-panel li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sp-blue);
+}
+
+.services-page .hero-panel li:first-child::before {
+  top: 10px;
+  transform: none;
+}
+
+/* ─── Services Section ──────────────────────────────────────── */
+section#services {
+  padding: 80px 0;
+  border-top: 1px solid #e4dfd7;
+}
+
+.services-page .section-head {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 40px;
+  align-items: start;
+  margin-bottom: 48px;
+}
+
+/* Section label — yellow accent */
+.services-page .section-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--sp-yellow-dark);
+  padding-top: 6px;
+}
+
+.services-page .section-copy {
+  font-size: 15px;
+  color: #66625c;
+  max-width: 62ch;
+  line-height: 1.75;
+}
+
+/* ─── Services Grid ─────────────────────────────────────────── */
+.services-page .services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* ─── Service Card ──────────────────────────────────────────── */
+.services-page .service-card {
+  padding: 28px;
+  border-radius: 16px;
+  background: #fafafa;
+  border: 1px solid #e5e5e5;
+}
+
+.services-page .service-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+/* Service number badge — yellow accent */
+.services-page .service-number {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: var(--sp-yellow-light);
+  border: 1px solid var(--sp-yellow-border);
+  display: grid;
+  place-items: center;
+  color: var(--sp-yellow-dark);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.services-page .service-card > p {
+  font-size: 14px;
+  color: #66625c;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+/* ─── Feature Items ─────────────────────────────────────────── */
+.services-page .features-grid {
+  display: grid;
+  gap: 0;
+  margin-bottom: 20px;
+}
+
+.services-page .feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid #e5e5e5;
+  font-size: 14px;
+  color: #66625c;
+  line-height: 1.65;
+}
+
+.services-page .feature-item:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+/* Feature icon — blue accent */
+.services-page .feature-icon {
+  color: var(--sp-blue);
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+}
+
+/* ─── Sub Section (Use Cases / Benefits) ───────────────────── */
+.services-page .sub-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.services-page .sub-section ul {
+  list-style: none;
+  display: grid;
+  gap: 0;
+}
+
+.services-page .sub-section li {
+  font-size: 14px;
+  color: #66625c;
+  line-height: 1.65;
+  padding: 9px 0 9px 18px;
+  border-top: 1px solid #e5e5e5;
+  position: relative;
+}
+
+.services-page .sub-section li:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+/* Blue bullet */
+.services-page .sub-section li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sp-blue);
+}
+
+.services-page .sub-section li:first-child::before {
+  top: 8px;
+  transform: none;
+}
+
+/* ─── Responsive ────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .services-page .services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 980px) {
+  .services-page .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .services-page .section-head {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .services-page h1 { font-size: 34px; }
+  .services-page h2 { font-size: 24px; }
+}
+
+@media (max-width: 640px) {
+  .services-page .container { padding: 0 16px; }
+  .services-page .hero { padding: 48px 0 40px; }
+  section#services { padding: 56px 0; }
+
+  .services-page .service-card,
+  .services-page .hero-panel { padding: 24px; }
+
+  .services-page h1 { font-size: 28px; }
+  .services-page h2 { font-size: 22px; }
+}

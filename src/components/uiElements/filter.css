@@ -1,0 +1,96 @@
+.sf-sidebar {
+  height: 80vh;          /* or 600px / 100vh / calc(100vh - 120px) */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;      /* keeps the scrollbar inside the content area */
+}
+/* (All styles remain exactly the same as previous version) */
+        .sf-sidebar { width: 100%; background: #ffffff; border: 1px solid #e8eaed; border-radius: 14px; padding: 24px 7px 30px 20px; position: sticky;  }
+        .sf-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .sf-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #0a0a0a; }
+        .sf-clear-btn { font-size: 12px; color: #6b7280; background: none; border: none; cursor: pointer; padding: 0; text-decoration: underline; text-underline-offset: 2px; transition: color 0.15s; }
+        .sf-clear-btn:hover { color: #111; }
+        .sf-search { position: relative; margin-bottom: 22px; }
+        .sf-search input { width: 100%; padding: 10px 14px 10px 38px; border: 1.5px solid #e8eaed; border-radius: 8px; font-size: 13.5px; color: #111; outline: none; transition: border-color 0.15s; font-family: inherit; background: #fafafa; box-sizing: border-box; }
+        .sf-search input:focus { border-color: #111; background: #fff; }
+        .sf-search input::placeholder { color: #aaa; }
+        .sf-search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af; pointer-events: none; }
+        .sf-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+        .sf-pill { display: inline-flex; align-items: center; gap: 5px; background: #f0f0f0; border-radius: 999px; padding: 4px 10px 4px 11px; font-size: 12px; color: #333; font-weight: 500; }
+        .sf-pill-remove { background: none; border: none; cursor: pointer; font-size: 15px; line-height: 1; color: #888; padding: 0; display: flex; align-items: center; transition: color 0.12s; }
+        .sf-pill-remove:hover { color: #111; }
+        .sf-divider { height: 1px; background: #f0f0f0; margin: 6px 0 18px; }
+        .sf-group { margin-bottom: 22px; }
+        .sf-group-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; margin-bottom: 12px; }
+        .sf-group-label { font-size: 12.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #374151; margin-bottom: 12px; }
+        .sf-group-header .sf-group-label { margin-bottom: 0; }
+        .sf-collapse-icon { color: #9ca3af; transition: transform 0.2s; flex-shrink: 0; }
+        .sf-collapse-icon.open { transform: rotate(180deg); }
+        .sf-checkbox-list { display: flex; flex-direction: column; gap: 9px; }
+        .sf-checkbox-row { display: flex; align-items: center; gap: 9px; cursor: pointer; }
+        .sf-checkbox-row input[type="checkbox"] { display: none; }
+        .sf-checkbox-box { width: 17px; height: 17px; border: 1.5px solid #d1d5db; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s, border-color 0.15s; color: #fff; }
+        .sf-checkbox-row input:checked + .sf-checkbox-box { background: #111; border-color: #111; }
+        .sf-checkbox-label { font-size: 13.5px; color: #374151; line-height: 1.3; }
+        .sf-select-wrapper { position: relative; }
+        .sf-select { width: 100%; appearance: none; padding: 9px 32px 9px 12px; border: 1.5px solid #e8eaed; border-radius: 8px; font-size: 13.5px; color: #374151; background: #fafafa; cursor: pointer; outline: none; font-family: inherit; transition: border-color 0.15s; }
+        .sf-select:focus { border-color: #111; background: #fff; }
+        .sf-select-arrow { position: absolute; right: 11px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #9ca3af; }
+
+        .sf-mobile-trigger { display: none; width: 100%; align-items: center; justify-content: center; gap: 8px; background: #ffffff; border: 1.5px solid #e8eaed; border-radius: 12px; padding: 12px; font-size: 14px; font-weight: 600; color: #0a0a0a; cursor: pointer; box-shadow: 0 2px 8px rgba(10, 10, 10, 0.06); transition: all 0.2s; }
+        .sf-mobile-trigger:hover { border-color: #111; }
+        .sf-mobile-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 9999; animation: fadeInOverlay 0.25s ease forwards; }
+        .sf-mobile-drawer { position: fixed; bottom: 0; left: 0; right: 0; background: #ffffff; border-top-left-radius: 20px; border-top-right-radius: 20px; box-shadow: 0 -10px 30px -10px rgba(0, 0, 0, 0.15); z-index: 10000; max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; animation: slideUpDrawer 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+        .sf-mobile-drawer-header { padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e8eaed; flex-shrink: 0; }
+        .sf-mobile-drawer-header .sf-title { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+        .sf-mobile-actions { display: flex; align-items: center; gap: 16px; }
+        .sf-mobile-content { flex: 1; overflow-y: auto; padding: 8px 24px 24px; -webkit-overflow-scrolling: touch; }
+        .sf-close-drawer { background: none; border: none; font-size: 28px; line-height: 1; color: #6b7280; cursor: pointer; padding: 0 8px; }
+.sf-apply-btn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 10px 0;
+  border: none;
+  border-radius: 8px;
+  background-color: #000;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.sf-apply-btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.sf-apply-btn:active:not(:disabled) {
+  opacity: 0.7;
+}
+
+.sf-apply-btn:disabled {
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+  cursor: not-allowed;
+}
+        @media (max-width: 768px) {
+          .sf-mobile-trigger { display: flex; }
+          .sf-sidebar { display: none; }
+        }
+                @media (max-width: 420px) {
+          .sf-mobile-trigger { display: flex; }
+          .sf-sidebar { display: none; }
+        }
+             @media (min-width: 641px) and (max-width: 924px)  {
+          .sf-mobile-trigger { display: flex; }
+          .sf-sidebar { display: none; }
+        }
+        @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpDrawer { from { transform: translateY(100%); } to { transform: translateY(0); } }
+      
+
+.sf-scroll-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;    /* optional: keeps content away from scrollbar */
+}

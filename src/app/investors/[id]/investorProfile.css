@@ -1,0 +1,1010 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ─── STRICT 2-COLOR DESIGN SYSTEM ─────────────────────────── */
+/* Primary: Blue rgb(30, 176, 228) | Accent: Yellow rgb(255, 207, 10) */
+:root {
+  /* ─── BRAND COLORS ONLY ─── */
+  --blue:             rgb(30, 176, 228);
+  --blue-900:         rgb(10, 80, 110);      /* Deepest blue - headings */
+  --blue-800:         rgb(15, 110, 145);     /* Dark blue - primary text */
+  --blue-700:         rgb(20, 130, 170);     /* Medium dark - hover states */
+  --blue-600:         rgb(25, 155, 200);     /* Base dark variant */
+  --blue-500:         rgb(30, 176, 228);     /* BRAND BLUE - primary actions */
+  --blue-400:         rgb(80, 195, 240);     /* Light blue */
+  --blue-300:         rgb(130, 210, 245);    /* Lighter */
+  --blue-200:         rgb(180, 230, 250);    /* Very light */
+  --blue-100:         rgb(220, 245, 255);    /* Soft background */
+  --blue-50:          rgb(240, 250, 255);     /* Lightest background */
+
+  --yellow:           rgb(255, 207, 10);
+  --yellow-900:       rgb(180, 140, 0);      /* Dark yellow - text */
+  --yellow-800:       rgb(200, 160, 0);      /* Darker accent */
+  --yellow-700:       rgb(220, 180, 0);      /* Medium dark - hover */
+  --yellow-600:       rgb(240, 195, 5);      /* Dark variant */
+  --yellow-500:       rgb(255, 207, 10);     /* BRAND YELLOW - accent */
+  --yellow-400:       rgb(255, 220, 60);     /* Light yellow */
+  --yellow-300:       rgb(255, 230, 100);    /* Lighter */
+  --yellow-200:       rgb(255, 240, 150);    /* Very light */
+  --yellow-100:       rgb(255, 248, 200);    /* Soft background */
+  --yellow-50:        rgb(255, 252, 230);     /* Lightest background */
+
+  /* ─── NEUTRALS (Grays only, no other hues) ─── */
+  --gray-950:         #0a0f1a;               /* Almost black */
+  --gray-900:         #111827;               /* Deep text */
+  --gray-800:         #1f2937;               /* Primary text */
+  --gray-700:         #374151;               /* Secondary text */
+  --gray-600:         #4b5563;               /* Muted text */
+  --gray-500:         #6b7280;               /* Light text */
+  --gray-400:         #9ca3af;               /* Faint text */
+  --gray-300:         #d1d5db;               /* Borders light */
+  --gray-200:         #e5e7eb;               /* Borders */
+  --gray-100:         #f3f4f6;               /* Light bg */
+  --gray-50:          #f9fafb;               /* Lightest bg */
+  --white:            #ffffff;
+
+  /* ─── SEMANTIC MAPPINGS (Strictly Blue/Yellow/Gray only) ─── */
+  --sdp-bg:           var(--gray-50);
+  --sdp-white:        var(--white);
+  --sdp-border:       var(--gray-200);
+  --sdp-border-light: var(--gray-100);
+
+  --sdp-text-primary: var(--gray-900);
+  --sdp-text-secondary: var(--gray-700);
+  --sdp-text-muted:   var(--gray-600);
+  --sdp-text-faint:   var(--gray-500);
+
+  /* ALL accents must be blue or yellow variants */
+  --sdp-accent:       var(--blue-500);
+  --sdp-accent-hover: var(--blue-700);
+  --sdp-accent-light: var(--blue-100);
+  --sdp-accent-soft:  var(--blue-50);
+
+  --sdp-highlight:    var(--yellow-500);
+  --sdp-highlight-hover: var(--yellow-700);
+  --sdp-highlight-light: var(--yellow-100);
+  --sdp-highlight-soft: var(--yellow-50);
+
+  /* Status colors derived from brand only */
+  --sdp-success:      var(--blue-600);       /* Using blue for consistency */
+  --sdp-success-bg:   var(--blue-50);
+  --sdp-warning:      var(--yellow-700);
+  --sdp-warning-bg:   var(--yellow-100);
+  --sdp-danger:       #dc2626;               /* Red for errors only - unavoidable */
+  --sdp-danger-bg:    #fef2f2;
+
+  /* ─── EFFECTS ─── */
+  --shadow-sm:        0 1px 2px rgba(10, 15, 30, 0.05), 0 2px 8px rgba(10, 15, 30, 0.04);
+  --shadow-md:        0 4px 12px rgba(10, 15, 30, 0.08), 0 16px 40px rgba(10, 15, 30, 0.06);
+  --shadow-blue:      0 4px 16px rgba(30, 176, 228, 0.25);
+  --shadow-yellow:    0 4px 16px rgba(255, 207, 10, 0.25);
+
+  --radius-lg:        16px;
+  --radius-md:        12px;
+  --radius-sm:        8px;
+
+  --font-display:     'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:        'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ─── Page Wrapper ─────────────────────────────────────────── */
+.serviceDetailPage {
+  background: #f0f2f7;
+  min-height: 100vh;
+  padding: 40px 0 100px;
+  font-family: var(--font-body);
+  color: var(--sdp-text-primary);
+  -webkit-font-smoothing: antialiased;
+  margin-top: 110px;
+}
+.serviceDetailPage .container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--sdp-text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 28px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  background: transparent;
+  border: 1px solid transparent;
+}
+.backLink:hover { 
+  color: var(--blue-700);
+  background: var(--blue-50);
+  border-color: var(--blue-200);
+}
+
+/* ─── Hero ──────────────────────────────────────────────────── */
+.serviceHero {
+  position: relative;
+  width: 100%;
+  height: 370px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-md);
+}
+.serviceHeroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    140deg,
+    rgba(8,12,38,0.82) 0%,
+    rgba(8,12,38,0.18) 60%,
+    transparent 100%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 36px 40px;
+}
+.serviceHeroOverlay h1 {
+  font-size: clamp(24px, 3.8vw, 40px);
+  color: #fff;
+  font-weight: 800;
+  margin: 0 0 8px;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  font-family: var(--font-display);
+}
+.companySub {
+  color: rgba(255,255,255,0.72);
+  font-size: 14.5px;
+  margin: 0;
+  font-weight: 500;
+  font-family: var(--font-body);
+  letter-spacing: 0.01em;
+}
+.serviceHeroPlaceholder {
+  width: 100%;
+  padding: 52px 40px;
+  background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-500) 100%);
+  border-radius: var(--radius-lg);
+  margin-bottom: 28px;
+  border: 1px solid var(--blue-600);
+}
+.serviceHeroPlaceholder h1 {
+  font-size: clamp(26px, 3.8vw, 42px);
+  color: #fff;
+  font-weight: 800;
+  margin: 0 0 8px;
+  letter-spacing: -0.04em;
+  line-height: 1.12;
+  font-family: var(--font-display);
+}
+
+/* ─── Category Badge ────────────────────────────────────────── */
+.badgeCategory {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.26);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+  backdrop-filter: blur(8px);
+  width: fit-content;
+  font-family: var(--font-body);
+}
+
+/* ─── Two-Column Grid ───────────────────────────────────────── */
+.sdpLayout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ─── LEFT COLUMN ───────────────────────────────────────────── */
+.sdpLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ─── Generic Card ──────────────────────────────────────────── */
+.sdpCard {
+  background: var(--sdp-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--sdp-border);
+  padding: 32px 36px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.sdpCard:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Left accent border on hover - blue */
+.sdpCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--blue-500);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.sdpCard:hover::before { opacity: 1; }
+
+/* ─── Section Headers with Blue/Yellow Icons ────────────────────── */
+.sdpSectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* Base icon shape - Blue default */
+.sdpSectionIcon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--blue-50);
+  color: var(--blue-700);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  transition: all 0.3s ease;
+}
+
+/* Hover state - solid blue */
+.sdpCard:hover .sdpSectionIcon {
+  background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
+  color: var(--white);
+  transform: scale(1.05);
+}
+
+/* Yellow variant for specific sections */
+.sdpSectionIcon--highlight { 
+  background: var(--blue-50);
+  color: var(--blue-700);
+  transform: scale(1.05);
+}
+.sdpCard:hover .sdpSectionIcon--highlight {
+  background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
+  color: var(--white);
+  transform: scale(1.05);
+}
+
+/* Section title typography */
+.sdpSectionTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--sdp-text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+  line-height: 1.2;
+}
+
+/* ─── Body Text ─────────────────────────────────────────────── */
+.sdpBodyText {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--sdp-text-secondary);
+  margin: 0;
+  font-weight: 400;
+  font-family: var(--font-body);
+}
+
+/* ─── Bullet / Numbered List ──────────────────────────────────── */
+.sdpNumberedList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.sdpNumberedList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--sdp-text-secondary);
+  line-height: 1.65;
+  font-weight: 500;
+  font-family: var(--font-body);
+  padding: 9px 0;
+  border-bottom: 1px solid var(--gray-100);
+}
+.sdpNumberedList li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.sdpNumberedList li:first-child {
+  padding-top: 0;
+}
+.sdpNumberedList li strong {
+  font-weight: 700;
+  color: var(--sdp-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.sdpBulletDot {
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 50%;
+  background: var(--blue-500);
+  margin-top: 9px;
+  opacity: 0.6;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(30, 176, 228, 0.4);
+}
+
+/* ─── Pill Tags ─────────────────────────────────────────────── */
+.sdpTagGroupLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--sdp-text-faint);
+  margin: 0 0 9px;
+  font-family: var(--font-body);
+}
+.sdpTagGroupLabel + .sdpTagGroupLabel,
+.sdpTagRow + .sdpTagGroupLabel {
+  margin-top: 16px;
+}
+.sdpTagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+/* Sector tags — Blue theme */
+.sdpTagRow:nth-of-type(1) .sdpTag {
+  background: var(--yellow-50);
+  border: 1px solid var(--yellow-200);
+  color: var(--yellow-900);
+}
+.sdpTagRow:nth-of-type(1) .sdpTag:hover {
+  background: linear-gradient(135deg, var(--yellow-500) 0%, var(--yellow-700) 100%);
+  color: var(--white);
+  border-color: var(--yellow-500);
+  transform: translateY(-1px);
+}
+
+/* Stage tags — Yellow theme */
+.sdpTagRow:nth-of-type(2) .sdpTag {
+  background: var(--yellow-50);
+  border: 1px solid var(--yellow-200);
+  color: var(--yellow-900);
+}
+.sdpTagRow:nth-of-type(2) .sdpTag:hover {
+  background: linear-gradient(135deg, var(--yellow-500) 0%, var(--yellow-700) 100%);
+  color: var(--white);
+  border-color: var(--yellow-500);
+  transform: translateY(-1px);
+}
+
+/* Geo tags — Blue theme (lighter) */
+.sdpTagRow:nth-of-type(3) .sdpTag {
+  background: var(--yellow-50);
+  border: 1px solid var(--yellow-200);
+  color: var(--yellow-900);
+}
+.sdpTagRow:nth-of-type(3) .sdpTag:hover {
+  background: linear-gradient(135deg, var(--yellow-500) 0%, var(--yellow-700) 100%);
+  color: var(--white);
+  border-color: var(--yellow-500);
+  transform: translateY(-1px);
+}
+.sdpTagRow:nth-of-type(4) .sdpTag {
+  background: var(--yellow-50);
+  border: 1px solid var(--yellow-200);
+  color: var(--yellow-900);
+}
+.sdpTagRow:nth-of-type(4) .sdpTag:hover {
+  background: linear-gradient(135deg, var(--yellow-500) 0%, var(--yellow-700) 100%);
+  color: var(--white);
+  border-color: var(--yellow-500);
+  transform: translateY(-1px);
+}
+
+.sdpTag {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--gray-100);
+  border: 1px solid var(--sdp-border);
+  border-radius: 999px;
+  padding: 6px 14px;
+  line-height: 1;
+  font-family: var(--font-body);
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+/* ─── RIGHT SIDEBAR ─────────────────────────────────────────── */
+.sdpRight {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: sticky;
+  top: 24px;
+}
+
+/* ─── CTA Card ──────────────────────────────────────────────── */
+.sdpCtaCard {
+  background: linear-gradient(135deg, var(--white) 0%, var(--yellow-50) 100%);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--sdp-border);
+  padding: 32px 28px 30px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.sdpCtaCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--blue-500) 0%, var(--yellow-500) 100%);
+}
+.sdpCtaTitle {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--sdp-text-primary);
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+  line-height: 1.2;
+}
+.sdpCtaSub {
+  font-size: 14px;
+  color: var(--sdp-text-muted);
+  margin: 0 0 24px;
+  font-weight: 500;
+  font-family: var(--font-body);
+}
+.sdpCtaPrimary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px 24px;
+  background: #ec512b;
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  box-shadow: var(--shadow-blue);
+  letter-spacing: 0.01em;
+  position: relative;
+  overflow: hidden;
+}
+.sdpCtaPrimary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+.sdpCtaPrimary:hover {
+  background: linear-gradient(135deg, var(--blue-700) 0%, var(--blue-800) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(30, 176, 228, 0.4);
+}
+.sdpCtaPrimary:hover::before { left: 100%; }
+
+.sdpCtaSecondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 24px;
+  background: var(--white);
+  color: var(--sdp-text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  border: 1px solid var(--yellow-400);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+.sdpCtaSecondary:hover {
+  background: var(--yellow-50);
+  border-color: var(--yellow-500);
+  color: var(--yellow-900);
+  transform: translateY(-1px);
+}
+
+/* ─── Sidebar Info Card ─────────────────────────────────────── */
+.sdpInfoCard {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--sdp-border);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+.sdpInfoCard:hover { box-shadow: var(--shadow-md); }
+
+.sdpInfoBlock {
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--sdp-border);
+}
+.sdpInfoBlock:last-child { border-bottom: none; }
+
+.sdpInfoBlockTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--sdp-text-primary);
+  margin-bottom: 20px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: var(--font-display);
+}
+.sdpInfoBlockIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--blue-50);
+  color: var(--blue-700);
+}
+
+/* Card-specific icon colors - ALL blue or yellow variants */
+.sdpInfoCard:nth-child(2) .sdpInfoBlockIcon,
+.sdpInfoCard:nth-child(2) .sdpRegIcon { 
+  background: var(--blue-100); 
+  color: var(--blue-800); 
+}
+.sdpInfoCard:nth-child(3) .sdpInfoBlockIcon,
+.sdpInfoCard:nth-child(3) .sdpRegIcon { 
+    background: var(--blue-100);
+    color: var(--blue-800); 
+}
+.sdpInfoCard:nth-child(4) .sdpInfoBlockIcon,
+.sdpInfoCard:nth-child(4) .sdpRegIcon { 
+background: var(--yellow-100); color: var(--yellow-900); 
+}
+
+.sdpInfoAddress {
+  font-size: 14px;
+  color: var(--sdp-text-muted);
+  line-height: 1.65;
+  margin: 0;
+  font-weight: 500;
+  font-family: var(--font-body);
+}
+.sdpInfoLine {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--sdp-text-secondary);
+  line-height: 1.5;
+  padding: 3px 0;
+  font-weight: 500;
+  font-family: var(--font-body);
+}
+.sdpInfoLine svg { color: var(--sdp-text-faint); flex-shrink: 0; }
+.sdpInfoLineLink {
+  color: var(--blue-700);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 240px;
+  display: inline-block;
+  font-family: var(--font-body);
+  transition: all 0.2s ease;
+}
+.sdpInfoLineLink:hover { 
+  color: var(--blue-500);
+  text-decoration: underline;
+}
+
+/* ─── Registration / Info Rows ───────────────────────────────── */
+.sdpRegRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--gray-100);
+}
+.sdpRegRow:last-child { border-bottom: none; padding-bottom: 0; }
+.sdpRegRow:first-of-type { padding-top: 0; }
+
+.sdpRegIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 2px;
+  background: var(--blue-50);
+  color: var(--blue-700);
+}
+
+/* Icon color cycling - Blue and Yellow only */
+.sdpInfoBlock .sdpRegRow:nth-child(1) .sdpRegIcon { background: var(--blue-100); color: var(--blue-800); }
+.sdpInfoBlock .sdpRegRow:nth-child(2) .sdpRegIcon { background: var(--blue-100); color: var(--blue-800); }
+.sdpInfoBlock .sdpRegRow:nth-child(3) .sdpRegIcon { background: var(--blue-100); color: var(--blue-800);  }
+.sdpInfoBlock .sdpRegRow:nth-child(4) .sdpRegIcon { background: var(--blue-100); color: var(--blue-800); }
+.sdpInfoBlock .sdpRegRow:nth-child(5) .sdpRegIcon {background: var(--blue-100); color: var(--blue-800);  }
+.sdpInfoBlock .sdpRegRow:nth-child(6) .sdpRegIcon { background: var(--yellow-100); color: var(--yellow-900); }
+
+.sdpContactIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 2px;
+  background: var(--blue-50);
+  color: var(--blue-700);
+}
+
+.sdpInfoBlock .sdpRegRow:nth-child(1) .sdpContactIcon { background: var(--blue-100); color: var(--blue-800); }
+.sdpInfoBlock .sdpRegRow:nth-child(2) .sdpContactIcon { background: var(--yellow-100); color: var(--yellow-900); }
+.sdpInfoBlock .sdpRegRow:nth-child(3) .sdpContactIcon { background: var(--yellow-100); color: var(--yellow-900);  }
+.sdpInfoBlock .sdpRegRow:nth-child(4) .sdpContactIcon {    background: var(--yellow-100); color: var(--yellow-900); }
+.sdpInfoBlock .sdpRegRow:nth-child(5) .sdpContactIcon {background: var(--yellow-100); color: var(--yellow-900);  }
+.sdpInfoBlock .sdpRegRow:nth-child(6) .sdpContactIcon { background: var(--yellow-100); color: var(--yellow-900); }
+
+
+.sdpRegMeta { display: flex; flex-direction: column; gap: 4px; }
+.sdpRegLabel {
+  font-size: 11px;
+  color: var(--sdp-text-faint);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  font-family: var(--font-body);
+}
+.sdpRegValue {
+  font-size: 15px;
+  color: var(--sdp-text-primary);
+  font-weight: 600;
+  font-family: var(--font-body);
+  line-height: 1.3;
+}
+.icontag{
+  margin-left: 4px;
+}
+/* ─── Availability Badge ────────────────────────────────────── */
+.availBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--yellow-100);
+  color: var(--yellow-900);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--yellow-400);
+  font-family: var(--font-body);
+  letter-spacing: 0.01em;
+  box-shadow: 0 1px 3px rgba(255, 207, 10, 0.12);
+}
+.availDot {
+  width: 8px;
+  height: 8px;
+  background: var(--yellow-500);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+  box-shadow: 0 0 0 4px rgba(255, 207, 10, 0.2);
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%      { opacity:.6; transform:scale(1.2); }
+}
+
+/* ─── Ticket-size value highlight in sidebar ────────────────── */
+.sdpRegValue.highlight {
+  color: var(--blue-800);
+}
+
+/* ─── Registration Divider ────────────────────────────────── */
+.regDivider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 20px 0;
+}
+.regDividerLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--sdp-border), transparent);
+}
+.regDividerText {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sdp-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ─── Not Found ─────────────────────────────────────────────── */
+.notFoundWrap { 
+  text-align: center; 
+  padding: 120px 32px; 
+  background: linear-gradient(135deg, var(--blue-50) 0%, var(--yellow-50) 100%);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--sdp-border);
+}
+.notFoundWrap h2 {
+  font-size: 36px;
+  color: var(--sdp-text-primary);
+  margin-bottom: 16px;
+  font-weight: 800;
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+}
+.notFoundWrap p {
+  color: var(--sdp-text-muted);
+  margin-bottom: 36px;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+/* ─── Loading State ─────────────────────────────────────────── */
+.loadingSpinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--blue-200);
+  border-top: 3px solid var(--blue-500);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* ─── Portfolio Companies Box ─────────────────────────────── */
+.portfolioCompanyBox {
+  background: var(--blue-50);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  border: 1px solid var(--blue-200);
+  transition: all 0.2s ease;
+}
+.portfolioCompanyBox:hover {
+  background: var(--blue-100);
+  border-color: var(--blue-400);
+  transform: translateY(-1px);
+}
+.portfolioCompanyBox strong {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 8px;
+  color: var(--sdp-text-primary);
+}
+.portfolioCompanyBox p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--sdp-text-secondary);
+}
+
+/* ─── Responsive ────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .serviceDetailPage .container { padding: 0 20px; }
+  .sdpLayout { gap: 28px; }
+  .sdpCard, .sdpCtaCard, .sdpInfoCard { padding: 28px 32px; }
+}
+
+@media (max-width: 820px) {
+  .sdpLayout { grid-template-columns: 1fr; }
+  .sdpRight  { position: static; }
+  .sdpRight > * { width: 100%; max-width: 100%; }
+  .sdpCtaCard { order: 999; }
+  .serviceHero { height: 240px; }
+  .serviceHeroOverlay { padding: 24px; }
+  .serviceHeroPlaceholder { padding: 32px 24px; }
+}
+
+@media (max-width: 640px) {
+  .sdpCard, .sdpCtaCard, .sdpInfoCard { padding: 24px 22px; }
+  .serviceHeroPlaceholder { padding: 28px 22px; }
+  .sdpSectionHeader { gap: 12px; }
+}
+
+@media (max-width: 480px) {
+  .serviceDetailPage .container { padding: 0 16px; }
+  .sdpInfoBlock { padding: 20px 22px; }
+  .sdpCard, .sdpCtaCard, .sdpInfoCard { padding: 22px 18px; }
+}
+
+/* Ensure no overflow */
+.sdpInfoLineLink {
+  max-width: 100%;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sdpInfoBlock {
+  position: relative;           /* ← THIS WAS MISSING – ensures overlay stays inside the card */
+}
+
+.sdpContactContent {
+  transition: filter 0.3s ease;
+}
+
+.sdpContactContent.sdpBlurred {
+  filter: blur(8px);
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Blur Overlay – now correctly contained within the Contact Details card only */
+.sdpBlurOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(2px);
+  z-index: 10;                  /* ensures it sits above the blurred content */
+}
+
+.sdpBlurCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  text-align: center;
+  background: var(--jd-white);
+  border-radius: var(--jd-radius-sm);
+  box-shadow: var(--jd-shadow);
+  border: 1px solid var(--jd-border);
+}
+
+.sdpBlurCard p {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--jd-text-muted);
+  margin: 0;
+}
+
+.sdpBlurLogin {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue-700);
+  text-decoration: none;
+  padding: 8px 16px;
+  background: var(--blue-50);
+  border-radius: 8px;
+  border: 1px solid var(--blue-200);
+  transition: all 0.2s;
+}
+
+.sdpBlurLogin:hover {
+  background: var(--blue-100);
+  border-color: var(--blue-300);
+}
+.sdpMetaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+ 
+.sdpMetaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  background: var(--blue-50);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--blue-200);
+}
+ 
+.sdpMetaItemFull {
+  grid-column: 1 / -1;
+}
+ 
+.sdpMetaLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--sdp-text-faint);
+}
+ 
+.sdpMetaValue {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--sdp-text-primary);
+}
+ 
+.sdpMetaValue--blue   { color: var(--blue-800); }
+.sdpMetaValue--yellow { color: var(--yellow-900); }
+ 
+@media (max-width: 640px) {
+  .sdpMetaGrid { grid-template-columns: 1fr; }
+}
+/* Add inside your existing @media (max-width: 820px) block */
+@media (max-width: 820px) {
+  .serviceHeroPlaceholder {
+    padding: 28px 20px;
+  }
+
+  /* The outer space-between row */
+  .serviceHeroPlaceholder > div {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+
+  /* The inner logo + name row */
+  .serviceHeroPlaceholder > div > div:first-child {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+    width: 100%;
+  }
+
+  /* The right badges row */
+  .serviceHeroPlaceholder > div > div:last-child {
+    flex-direction: row !important;
+    align-items: center !important;
+    flex-wrap: wrap;
+    gap: 8px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .serviceHeroPlaceholder {
+    padding: 24px 16px;
+  }
+}

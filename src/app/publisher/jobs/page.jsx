@@ -1,0 +1,726 @@
+"use client"
+
+import { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import publisherApi from "@/app/publisherapi";
+import RichTextEditor from "@/components/RichTextEditor";
+import { getPublisherPlanInfo } from "@/app/apiServices/subscriptions";
+import {
+  getPublicJobTypes,
+  getPublicWorkModes,
+  getPublicWorkExperiences,
+} from "@/app/apiServices/publicapi";
+import ConfirmationModal from "@/components/ConfirmationModal";
+import { INDIA_STATES } from "@/app/constants";
+
+import "../styles/publishercretepages.css";
+
+/* ─── Constants ─────────────────────────────────────────────────────────────── */
+const defaultForm = {
+  title: "",
+  jobCategory: "",
+  jobType: "",
+  workMode: "",
+  experienceLevel: "",
+  openings: 1,
+  companyName: "",
+  companyWebsite: "",
+  companyDescription: "",
+  companySize: "",
+  industrySector: "",
+  companyLogo: null,
+  hiringManagerName: "",
+  hiringManagerEmail: "",
+  hiringManagerPhone: "",
+  roleOverview: "",
+  keyResponsibilities: "",
+  requiredEducation: "",
+  yearsExperienceRequired: "",
+  mustHaveSkills: "",
+  salaryMin: "",
+  salaryMax: "",
+  salaryType: "",
+  jobLocationAddress: "",
+  jobLocationCity: "",
+  jobLocationState: "",
+  jobLocationCountry: "India",
+  applyLastDate: "",
+  applyDate: "",
+  applicationMethod: "",
+  externalApplicationUrl: "",
+};
+
+const companySizes    = ["1-10", "11-50", "51-200", "201-500", "501-1000", "1000+"];
+const educationLevels = ["High School", "Bachelor's", "Master's", "PhD", "No Degree Required"];
+const salaryTypes     = ["Annual", "Monthly", "Hourly", "Project-based"];
+
+const statusBadge = (status) => {
+  if (status === "approved") return "badgeSuccess";
+  if (status === "rejected") return "badgeDanger";
+  return "badgeWarning";
+};
+
+/* ─── Component ─────────────────────────────────────────────────────────────── */
+export default function Page() {
+  const [jobs, setJobs]         = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading]   = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [saving, setSaving]     = useState(false);
+  const [form, setForm]         = useState(defaultForm);
+  const [editId, setEditId]     = useState(null);
+  const [logoUploading, setLogoUploading] = useState(false);
+  const [planInfo, setPlanInfo] = useState(null);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [stateOpen, setStateOpen] = useState(false);
+  const [status, setStatus] = useState("all");
+const [q, setQ]           = useState("");
+  const [confirmConfig, setConfirmConfig] = useState({
+    title: "", message: "",
+    confirmText: "Confirm", cancelText: "Cancel",
+    confirmVariant: "danger", onConfirm: () => {},
+  });
+
+  const [jobTypes, setJobTypes]           = useState([]);
+  const [workModes, setWorkModes]         = useState([]);
+  const [workExperiences, setWorkExperiences] = useState([]);
+
+  const itemValue = (item) => item.value ?? item.name ?? item._id;
+  const itemLabel = (item) => item.name  ?? item.value ?? item._id;
+
+const fetchJobs = async (overrides = {}) => {
+  try {
+    setLoading(true);
+    const params = new URLSearchParams();
+    const s      = overrides.status !== undefined ? overrides.status : status;
+    const search = overrides.q      !== undefined ? overrides.q      : q;
+    if (s !== "all")   params.append("status", s);
+    if (search.trim()) params.append("q", search.trim());
+    const res = await publisherApi.get(`/api/publisher/jobs?${params}`);
+    setJobs(res.data?.items || []);
+  } catch (err) {
+    toast.error(err?.response?.data?.message || "Failed to load jobs");
+  } finally {
+    setLoading(false);
+  }
+};
+
+  useEffect(() => {
+    fetchJobs();
+
+    (async () => {
+      try {
+        const res = await publisherApi.get("/api/public/job-categories");
+        setCategories(res.data?.categories || []);
+      } catch (err) {
+        toast.error(err?.response?.data?.message || "Failed to load categories");
+      }
+    })();
+
+    (async () => {
+      try { const res = await getPublisherPlanInfo(); setPlanInfo(res.data); } catch (_) {}
+    })();
+
+    (async () => {
+      try {
+        const res = await getPublicJobTypes();
+        setJobTypes(res.data?.jobTypes ?? res.data?.data ?? (Array.isArray(res.data) ? res.data : []));
+      } catch (err) { toast.error(err?.response?.data?.message || "Failed to load job types"); }
+    })();
+
+    (async () => {
+      try {
+        const res = await getPublicWorkModes();
+        setWorkModes(res.data?.workModes ?? res.data?.data ?? (Array.isArray(res.data) ? res.data : []));
+      } catch (err) { toast.error(err?.response?.data?.message || "Failed to load work modes"); }
+    })();
+
+    (async () => {
+      try {
+        const res = await getPublicWorkExperiences();
+        setWorkExperiences(res.data?.workExperiences ?? res.data?.data ?? (Array.isArray(res.data) ? res.data : []));
+      } catch (err) { toast.error(err?.response?.data?.message || "Failed to load work experiences"); }
+    })();
+  }, []);
+
+  /* ── Modal helpers ─────────────────────────────────────────────────────────── */
+  const openCreate = () => { setForm(defaultForm); setEditId(null); setShowModal(true); };
+
+  const openEdit = (job) => {
+    const fmtDate = (iso) => (iso ? iso.split("T")[0] : "");
+    const normalizeWorkMode = (mode) => {
+      if (!mode) return "";
+      if (Array.isArray(mode)) return String(mode[0] || "").trim();
+      return String(mode).split(",")[0].trim();
+    };
+    setEditId(job._id);
+    setForm({
+      ...defaultForm, ...job,
+      applyLastDate: fmtDate(job.applyLastDate || job.deadline),
+      applyDate:     fmtDate(job.applyDate),
+      jobType:       String(job.jobType || "").trim(),
+      workMode:      normalizeWorkMode(job.workMode),
+      companyLogo:   job.companyLogo || null,
+    });
+    setShowModal(true);
+  };
+
+  const closeModal = () => setShowModal(false);
+
+  const set = (field) => (e) => setForm((p) => ({ ...p, [field]: e.target.value }));
+
+  /* ── Save / delete / toggle ────────────────────────────────────────────────── */
+  const validate = () => {
+    if (!form.title.trim())        return "Job Title is required";
+    if (!form.jobCategory)         return "Job Category is required";
+    if (!form.jobType)             return "Job Type is required";
+    if (!form.hiringManagerEmail)  return "Hiring Manager Email is required";
+    return null;
+  };
+
+  const saveJob = async () => {
+    const msg = validate();
+    if (msg) return toast.warn(msg);
+    const payload = {
+      ...form,
+      openings:               Number(form.openings) || 0,
+      salaryMin:              form.salaryMin ? Number(form.salaryMin) : undefined,
+      salaryMax:              form.salaryMax ? Number(form.salaryMax) : undefined,
+      yearsExperienceRequired: form.yearsExperienceRequired ? Number(form.yearsExperienceRequired) : undefined,
+      workMode:               form.workMode || "",
+    };
+    try {
+      setSaving(true);
+      if (editId) {
+        await publisherApi.patch(`/api/publisher/jobs/${editId}`, payload);
+        toast.success("Job updated (pending approval)");
+      } else {
+        await publisherApi.post("/api/publisher/jobs", payload);
+        toast.success("Job created (pending approval)");
+      }
+      setShowModal(false);
+      fetchJobs();
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Save failed");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const uploadLogo = async (file) => {
+    if (!file) return;
+    const fd = new FormData();
+    fd.append("files", file);
+    try {
+      setLogoUploading(true);
+      const res = await publisherApi.post("/api/uploads", fd, { headers: { "Content-Type": "multipart/form-data" } });
+      const uploaded = res.data?.files?.[0];
+      if (uploaded) {
+        setForm((p) => ({ ...p, companyLogo: { url: uploaded.url, publicId: uploaded.publicId, resourceType: uploaded.resourceType } }));
+        toast.success("Logo uploaded");
+      } else {
+        toast.error("Upload failed");
+      }
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Upload failed");
+    } finally {
+      setLogoUploading(false);
+    }
+  };
+
+  const deleteJob = (id) => {
+    if (!id) return;
+    setConfirmConfig({
+      title: "Delete Job",
+      message: "Are you sure you want to permanently delete this job? This action cannot be undone.",
+      confirmText: "Yes, Delete Job", cancelText: "Cancel", confirmVariant: "danger",
+      onConfirm: async () => {
+        try {
+          await publisherApi.delete(`/api/publisher/jobs/${id}`);
+          toast.success("Job deleted");
+          fetchJobs();
+        } catch (err) {
+          toast.error(err?.response?.data?.message || "Delete failed");
+        }
+      },
+    });
+    setShowConfirm(true);
+  };
+
+  const toggleActive = async (job) => {
+    try {
+      await publisherApi.post(`/api/publisher/jobs/${job._id}/toggle`);
+      toast.success(job.isActive ? "Deactivated" : "Activated");
+      fetchJobs();
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Update failed");
+    }
+  };
+
+  /* ── Plan limits ───────────────────────────────────────────────────────────── */
+  const subscriptionExpired = planInfo && planInfo.subscriptionStatus !== "active";
+  const jobLimitReached     = planInfo && !subscriptionExpired && planInfo.limits?.jobLimit > 0 && planInfo.usage?.jobs >= planInfo.limits?.jobLimit;
+  const jobButtonDisabled   = subscriptionExpired || jobLimitReached;
+
+  const addBtnLabel = subscriptionExpired
+    ? "Subscription Expired"
+    : jobLimitReached
+    ? `Limit Reached (${planInfo.usage.jobs}/${planInfo.limits.jobLimit})`
+    : "+ Post a Job";
+
+  /* ── Render ────────────────────────────────────────────────────────────────── */
+  return (
+    <div className="page">
+
+      {/* ── Topbar ── */}
+      <header className="topbar">
+        <div>
+          <h1 className="topbarTitle">Jobs</h1>
+          <p className="topbarSub">Create and manage job postings (pending admin approval)</p>
+        </div>
+        <div className="topbarActions">
+          <button
+            className={`btn ${jobButtonDisabled ? "btnSecondary" : "btnPrimary"}`}
+            onClick={jobButtonDisabled ? undefined : openCreate}
+            disabled={jobButtonDisabled}
+            title={
+              subscriptionExpired ? "Your subscription has expired. Please renew to post jobs."
+              : jobLimitReached   ? `Job limit of ${planInfo.limits.jobLimit} reached for your current plan`
+              : ""
+            }
+          >
+            {addBtnLabel}
+          </button>
+        </div>
+      </header>
+{/* ── Filters ── */}
+<div className="tableShell">
+  <div className="tableHead">
+    <h2 className="tableHeadTitle">Filter &amp; Search</h2>
+  </div>
+  <div className="tableBody">
+    <div className="row3" style={{ alignItems: "flex-end" }}>
+      <div className="field">
+        <label className="label">Approval Status</label>
+        <select
+          className="select"
+          value={status}
+          onChange={(e) => { setStatus(e.target.value); fetchJobs({ status: e.target.value }); }}
+        >
+          <option value="all">All</option>
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+      <div className="field">
+        <label className="label">Search</label>
+        <input
+          className="input"
+          placeholder="Search by title or category…"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && fetchJobs()}
+        />
+      </div>
+      <div className="field">
+        <label className="label" style={{ visibility: "hidden" }}>_</label>
+        <div style={{ display: "flex", gap: "0.6rem" }}>
+          <button className="btn btnPrimary btnSm" onClick={() => fetchJobs()} disabled={loading}>Search</button>
+          <button
+            className="btn btnSecondary btnSm"
+            onClick={() => { setStatus("all"); setQ(""); fetchJobs({ status: "all", q: "" }); }}
+            disabled={loading}
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      {/* ── Jobs table ── */}
+      <div className="tableShell">
+        <div className="tableHead">
+          <h2 className="tableHeadTitle">All Jobs</h2>
+        </div>
+        <div className="tableBody">
+          {loading ? (
+            <p className="loadingState">Loading jobs…</p>
+          ) : jobs.length === 0 ? (
+            <p className="emptyState">No jobs yet. Click "Post a Job" to get started.</p>
+          ) : (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Title</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Active</th>
+                  <th>Openings</th>
+                  <th className="tdRight" style={{textAlign: "center"}}> Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {jobs.map((job, idx) => (
+                  <tr key={job._id}>
+                    <td className="tdMuted">{idx + 1}</td>
+                    <td className="tdSemibold">{job.title}</td>
+                    <td className="tdMuted">{job.jobCategory || "—"}</td>
+                    <td>
+                      <span className={`badge ${statusBadge(job.status)}`}>{job.status}</span>
+                    </td>
+                    <td>
+                      <span className={`badge ${job.isActive ? "badgeSuccess" : "badgeNeutral"}`}>
+                        {job.isActive ? "Active" : "Inactive"}
+                      </span>
+                    </td>
+                    <td className="tdMuted">{job.openings || "—"}</td>
+                    <td>
+                      <div className="actionGroup">
+                        <button className="btn btnSm btnPrimary"  onClick={() => openEdit(job)}>Edit</button>
+                        <button
+                          className={`btn btnSm ${job.isActive ? "btnWarning" : "btnSuccess"}`}
+                          onClick={() => toggleActive(job)}
+                        >
+                          {job.isActive ? "Deactivate" : "Activate"}
+                        </button>
+                        <button className="btn btnSm btnDanger" onClick={() => deleteJob(job._id)}>Delete</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </div>
+
+      {/* ── Create / Edit modal ── */}
+      {showModal && (
+        <div className="modalOverlay">
+          <div className="modalDialog">
+
+            {/* Header */}
+            <div className="modalHeader">
+              <h2 className="modalTitle">{editId ? "Edit Job" : "Post a Job"}</h2>
+              <button className="modalClose" onClick={closeModal} aria-label="Close">✕</button>
+            </div>
+
+            {/* Body */}
+            <div className="modalBody">
+
+              {/* ── Core details ── */}
+              <section className="section">
+                <h3 className="sectionTitle">Core details</h3>
+
+                <div className="field">
+                  <label className="label">Job Title / Position Name *</label>
+                  <input className="input" value={form.title} onChange={set("title")} placeholder="Enter job title" />
+                </div>
+
+                <div className="row2">
+                  <div className="field">
+                    <label className="label">Job Category *</label>
+                    <select className="select" value={form.jobCategory} onChange={set("jobCategory")}>
+                      <option value="">Select</option>
+                      {categories.map((c) => <option key={c._id} value={c.name}>{c.name}</option>)}
+                    </select>
+                  </div>
+
+                  <div className="field">
+                    <label className="label">Number of Openings</label>
+                    <input type="number" className="input" value={form.openings} onChange={set("openings")} />
+                  </div>
+                </div>
+
+                <div className="row2">
+                  <div className="field">
+                    <label className="label">Job Type *</label>
+                    {jobTypes.length === 0 ? (
+                      <span className="labelNote">Loading…</span>
+                    ) : (
+                      <div className="radioGroup">
+                        {jobTypes.map((t) => (
+                          <label key={t._id ?? itemValue(t)} className="radioLabel">
+                            <input
+                              type="radio"
+                              className="radioInput"
+                              name="jobType"
+                              value={itemValue(t)}
+                              checked={form.jobType === itemValue(t)}
+                              onChange={set("jobType")}
+                            />
+                            {itemLabel(t)}
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="field">
+                    <label className="label">Work Mode</label>
+                    {workModes.length === 0 ? (
+                      <span className="labelNote">Loading…</span>
+                    ) : (
+                      <div className="radioGroup">
+                        {workModes.map((w) => {
+                          const value = itemValue(w);
+                          return (
+                            <label key={w._id ?? value} className="radioLabel">
+                              <input
+                                type="radio"
+                                className="radioInput"
+                                name="workMode"
+                                value={value}
+                                checked={form.workMode === value}
+                                onChange={set("workMode")}
+                              />
+                              {itemLabel(w)}
+                            </label>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="row2">
+                  <div className="field">
+                    <label className="label">Experience Level</label>
+                    <select className="select" value={form.experienceLevel} onChange={set("experienceLevel")}>
+                      <option value="">Select</option>
+                      {workExperiences.map((ex) => (
+                        <option key={ex._id ?? itemValue(ex)} value={itemValue(ex)}>{itemLabel(ex)}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="field">
+                    <label className="label">Required Education</label>
+                    <select className="select" value={form.requiredEducation} onChange={set("requiredEducation")}>
+                      <option value="">Select</option>
+                      {educationLevels.map((el) => <option key={el} value={el}>{el}</option>)}
+                    </select>
+                  </div>
+                </div>
+              </section>
+
+              {/* ── Company information ── */}
+              <section className="section">
+                <h3 className="sectionTitle">Company information</h3>
+
+                <div className="row2">
+                  <div className="field">
+                    <label className="label">Company / Startup Name</label>
+                    <input className="input" value={form.companyName} onChange={set("companyName")} placeholder="Enter company name" />
+                  </div>
+                  <div className="field">
+                    <label className="label">Company Website</label>
+                    <input type="url" className="input" value={form.companyWebsite} onChange={set("companyWebsite")} placeholder="https://" />
+                  </div>
+                </div>
+
+                <div className="row2">
+                  <div className="field">
+                    <label className="label">Company Size</label>
+                    <select className="select" value={form.companySize} onChange={set("companySize")}>
+                      <option value="">Select</option>
+                      {companySizes.map((s) => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                  </div>
+                  <div className="field">
+                    <label className="label">Industry / Sector</label>
+                    <input className="input" value={form.industrySector} onChange={set("industrySector")} placeholder="e.g. Artificial Intelligence & SaaS" />
+                  </div>
+                </div>
+
+                <div className="field">
+                  <label className="label">Company Description</label>
+                  <RichTextEditor
+                    value={form.companyDescription}
+                    onChange={(val) => setForm((p) => ({ ...p, companyDescription: val }))}
+                    placeholder="Describe the company / startup"
+                  />
+                </div>
+
+                <div className="field">
+                  <label className="label">
+                    Company Logo
+                    <span className="labelNote">Recommended: 280 × 180 px</span>
+                  </label>
+                  <div className="imageRow">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="input"
+                      style={{ flex: 1 }}
+                      onChange={(e) => uploadLogo(e.target.files?.[0])}
+                      disabled={logoUploading}
+                    />
+                    {form.companyLogo?.url && (
+                      <img src={form.companyLogo.url} alt="logo" className="imagePreview" />
+                    )}
+                  </div>
+                </div>
+              </section>
+
+              {/* ── Hiring manager ── */}
+              <section className="section">
+                <h3 className="sectionTitle">Hiring manager</h3>
+
+                <div className="row3">
+                  <div className="field">
+                    <label className="label">Name</label>
+                    <input className="input" value={form.hiringManagerName} onChange={set("hiringManagerName")} placeholder="Enter name" />
+                  </div>
+                  <div className="field">
+                    <label className="label">Email *</label>
+                    <input type="email" className="input" value={form.hiringManagerEmail} onChange={set("hiringManagerEmail")} placeholder="Enter email" />
+                  </div>
+                  <div className="field">
+                    <label className="label">Phone</label>
+                    <input className="input" value={form.hiringManagerPhone} onChange={set("hiringManagerPhone")} placeholder="Enter phone" />
+                  </div>
+                </div>
+              </section>
+
+              {/* ── Role details ── */}
+              <section className="section">
+                <h3 className="sectionTitle">Role details</h3>
+
+                <div className="field">
+                  <label className="label">Role Overview</label>
+                  <textarea className="textarea" rows={2} value={form.roleOverview} onChange={set("roleOverview")} placeholder="1-paragraph summary of the position" />
+                </div>
+
+                <div className="field">
+                  <label className="label">Key Responsibilities</label>
+                  <textarea className="textarea" rows={3} value={form.keyResponsibilities} onChange={set("keyResponsibilities")} placeholder="List key responsibilities" />
+                </div>
+
+                <div className="row2">
+                  <div className="field">
+                    <label className="label">Years of Experience Required</label>
+                    <input type="number" className="input" value={form.yearsExperienceRequired} onChange={set("yearsExperienceRequired")} />
+                  </div>
+                  <div className="field">
+                    <label className="label">Must-Have Skills</label>
+                    <textarea className="textarea" rows={2} value={form.mustHaveSkills} onChange={set("mustHaveSkills")} placeholder="e.g. React, Node.js, SQL" />
+                  </div>
+                </div>
+              </section>
+
+              {/* ── Salary ── */}
+              <section className="section">
+                <h3 className="sectionTitle">Salary</h3>
+
+                <div className="row3">
+                  <div className="field">
+                    <label className="label">Minimum (₹)</label>
+                    <input type="number" className="input" value={form.salaryMin} onChange={set("salaryMin")} placeholder="0" />
+                  </div>
+                  <div className="field">
+                    <label className="label">Maximum (₹)</label>
+                    <input type="number" className="input" value={form.salaryMax} onChange={set("salaryMax")} placeholder="0" />
+                  </div>
+                  <div className="field">
+                    <label className="label">Salary Type</label>
+                    <select className="select" value={form.salaryType} onChange={set("salaryType")}>
+                      <option value="">Select</option>
+                      {salaryTypes.map((s) => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                  </div>
+                </div>
+              </section>
+
+              {/* ── Location ── */}
+              <section className="section">
+                <h3 className="sectionTitle">Location</h3>
+
+                <div className="field">
+                  <label className="label">Full Address</label>
+                  <textarea className="textarea" rows={2} value={form.jobLocationAddress} onChange={set("jobLocationAddress")} placeholder="Enter full address" />
+                </div>
+
+                <div className="row2">
+                  <div className="field">
+                    <label className="label">City</label>
+                    <input className="input" value={form.jobLocationCity} onChange={set("jobLocationCity")} placeholder="Enter city" />
+                  </div>
+
+                  <div className="field">
+                    <label className="label">State</label>
+                    <div className="stateDropdownWrapper">
+                      <div
+                        className="select"
+                        style={{ cursor: "pointer", userSelect: "none" }}
+                        onClick={() => setStateOpen((p) => !p)}
+                      >
+                        {form.jobLocationState || "Select State"}
+                      </div>
+                      {stateOpen && (
+                        <div className="stateDropdownMenu">
+                          <div
+                            className="statePlaceholder"
+                            onClick={() => { setForm((p) => ({ ...p, jobLocationState: "" })); setStateOpen(false); }}
+                          >
+                            Select State
+                          </div>
+                          {INDIA_STATES.map((state) => (
+                            <div
+                              key={state}
+                              className={form.jobLocationState === state ? "stateOptionActive" : "stateOption"}
+                              onClick={() => { setForm((p) => ({ ...p, jobLocationState: state })); setStateOpen(false); }}
+                            >
+                              {state}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* ── Application ── */}
+              <section className="section">
+                <h3 className="sectionTitle">Application</h3>
+
+                <div className="row2">
+                  <div className="field">
+                    <label className="label">Application Deadline</label>
+                    <input type="date" className="input" value={form.applyLastDate} onChange={set("applyLastDate")} />
+                  </div>
+                  <div className="field">
+                    <label className="label">Expected Start Date</label>
+                    <input type="date" className="input" value={form.applyDate} onChange={set("applyDate")} />
+                  </div>
+                </div>
+
+                <div className="field">
+                  <label className="label">External Application URL</label>
+                  <input type="url" className="input" value={form.externalApplicationUrl} onChange={set("externalApplicationUrl")} placeholder="https://" />
+                </div>
+              </section>
+
+            </div>{/* /modalBody */}
+
+            {/* Footer */}
+            <div className="modalFooter">
+              <button className="btn btnSecondary" onClick={closeModal} disabled={saving}>Cancel</button>
+              <button className="btn btnPrimary" onClick={saveJob} disabled={saving}>
+                {saving ? "Saving…" : editId ? "Update Job" : "Save Job"}
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      <ConfirmationModal show={showConfirm} config={confirmConfig} onClose={() => setShowConfirm(false)} />
+      <ToastContainer position="top-center" />
+    </div>
+  );
+}

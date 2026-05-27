@@ -1,0 +1,1015 @@
+
+:root {
+  --pd-blue:        #0194df;
+  --pd-slate-900:   #0f172a;
+  --pd-slate-800:   #1e293b;
+  --pd-slate-700:   #374151;
+  --pd-slate-600:   #475569;
+  --pd-slate-500:   #64748b;
+  --pd-slate-400:   #94a3b8;
+  --pd-slate-300:   #cbd5e1;
+  --pd-slate-200:   #e2e8f0;
+  --pd-slate-100:   #f1f5f9;
+  --pd-slate-50:    #f8fafc;
+  --pd-white:       #ffffff;
+  --pd-radius-card: 14px;
+  --pd-radius-sm:   8px;
+  --pd-shadow-card: 0 2px 10px rgba(15,23,42,.05);
+  --pd-border:      1px solid #e5e7eb;
+}
+
+
+/* Section accent bar + label row */
+.pd__section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.pd__section-bar {
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #2d8cff, #7c4dff);
+  flex-shrink: 0;
+}
+.pd__section-label {
+  font-weight: 800;
+  font-size: 1.25rem;        /* ↑ from 0.82rem */
+  color: var(--pd-slate-800);/* ↑ from #374151 */
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* Generic card panel */
+.pd__panel {
+  background: var(--pd-white);
+  border: var(--pd-border);
+  border-radius: var(--pd-radius-card);
+  overflow: hidden;
+  box-shadow: var(--pd-shadow-card);
+}
+
+/* Panel header bar */
+.pd__panel-header {
+  padding: 16px 20px 13px;
+  border-bottom: 1px solid var(--pd-slate-100);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.pd__panel-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pd__panel-title {
+  font-weight: 700;
+  font-size: 18px;       /* ↑ from 13px / 0.8125rem */
+  color: var(--pd-slate-700);
+  /* letter-spacing: 0.06em; */
+  text-transform: uppercase;
+}
+.pd__panel-subtitle {
+  margin-left: 10px;
+  font-size: 1rem;         /* ↑ from 12px */
+  color: var(--pd-slate-400);
+}
+
+
+
+.pd__overview-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 2rem;
+}
+
+.pd__stat-card {
+  background: var(--pd-white);
+  border-radius: var(--pd-radius-card);
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: default;
+}
+.pd__stat-card:hover {
+  transform: translateY(-3px);
+}
+
+.pd__stat-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.pd__stat-card-label {
+  font-size: 16px;        
+  font-weight: 700;
+  color: var(--pd-slate-600);/* ↑ from #94a3b8 */
+  text-transform: uppercase;
+  /* letter-spacing: 0.07em; */
+}
+.pd__stat-card-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.pd__stat-card-value {
+  font-size: 3.1rem;         /* ↑ from 2rem */
+  font-weight: 800;
+  line-height: 1;
+}
+.pd__stat-card-sub {
+  font-size: 16px;         /* ↑ from 0.72rem */
+  color: var(--pd-slate-500);/* ↑ from #94a3b8 */
+  margin-bottom: 6px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.pd__stat-card-bar {
+  height: 3px;
+  border-radius: 99px;
+}
+
+/* Warning / limit-reached banner */
+.pd__limit-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(220,38,38,0.07);
+  border: 1px solid rgba(220,38,38,0.25);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.925rem;       /* ↑ from 0.875rem */
+  color: #7f1d1d;            /* ↑ from #991b1b */
+  font-weight: 600;          /* ↑ from 500 */
+}
+.pd__limit-banner-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* Subscription-expired warning badge */
+.pd__expired-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(217,119,6,0.08);
+  border: 1px solid rgba(217,119,6,0.3);
+  border-radius: var(--pd-radius-sm);
+  padding: 7px 14px;
+  font-size: 0.875rem;       /* ↑ from 0.8rem */
+  color: #78350f;            /* ↑ from #92400e */
+  font-weight: 600;          /* ↑ from 500 */
+  white-space: nowrap;
+}
+
+/* Section divider */
+.pd__divider {
+  border: none;
+  border-top: 1px solid var(--pd-slate-300); /* ↑ from #e5e7eb */
+  margin-bottom: 2rem;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LISTINGS ANALYTICS — top row panels
+══════════════════════════════════════════════════════════════════════════ */
+
+.pd__analytics-top-grid {
+  display: grid;
+  grid-template-columns: 1fr 600px;
+  gap: 16px;
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+/* "Updated today" meta label */
+.pd__panel-meta {
+  font-size: 1.25rem;        /* ↑ from 11px */
+  color: var(--pd-slate-400);
+}
+
+/* Count cards inside Listing Overview */
+.pd__count-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--pd-slate-100);
+}
+
+.pd__count-card {
+  background: var(--pd-white);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.pd__count-card:hover {
+  transform: translateY(-2px);
+}
+.pd__count-card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.pd__count-card-value {
+  font-size: 45px;        /* ↑ from 26px */
+  font-weight: 800;
+  line-height: 1;
+}
+.pd__count-card-label {
+  font-size: 15px;        /* ↑ from 11px */
+  color: var(--pd-slate-400);
+  margin-top: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  /* letter-spacing: 0.06em; */
+}
+.pd__count-card-bar {
+  height: 3px;
+  border-radius: 99px;
+  margin-top: 2px;
+}
+
+/* Bar chart wrapper */
+.pd__barchart-wrap {
+  padding: 14px 16px 8px;
+}
+
+/* Apply Clicks panel */
+.pd__clicks-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f9fafb;
+}
+.pd__clicks-row-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pd__clicks-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.pd__clicks-type-label {
+  font-size: 1.25rem;       /* ↑ from 13px */
+  color: var(--pd-slate-700);
+  font-weight: 700;
+}
+.pd__clicks-sub-label {
+  font-size: 1rem;        /* ↑ from 11px */
+  color: var(--pd-slate-400);
+}
+.pd__clicks-value {
+  font-size: 1.2rem;         /* ↑ from 18px */
+  font-weight: 800;
+}
+
+/* Engagement footer */
+.pd__engagement-footer {
+  border-top: 1px solid var(--pd-slate-100);
+  padding: 14px 20px;
+}
+.pd__engagement-meta {
+  font-size: 1.15rem;        /* ↑ from 11px */
+  color: var(--pd-slate-400);
+  margin-bottom: 8px;
+}
+.pd__engagement-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.pd__engagement-pct {
+  font-size: 2rem;           /* ↑ from 30px */
+  font-weight: 800;
+  line-height: 1;
+}
+.pd__engagement-track {
+  flex: 1;
+}
+.pd__engagement-bar-bg {
+  height: 7px;
+  background: #e5e7eb;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.pd__engagement-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.6s ease;
+}
+.pd__engagement-caption {
+  font-size: 0.75rem;        /* ↑ from 11px */
+  color: var(--pd-slate-400);
+  margin-top: 5px;
+}
+
+/* Empty / loading states */
+.pd__empty-state {
+  padding: 40px;
+  text-align: center;
+  color: var(--pd-slate-400);
+  font-size: 0.875rem;       /* ↑ from 14px */
+}
+
+
+
+.pd__table-panel {
+  background: var(--pd-white);
+  border: var(--pd-border);
+  border-radius: var(--pd-radius-card);
+  overflow: hidden;
+  box-shadow: var(--pd-shadow-card);
+}
+
+/* Filter tab bar */
+.pd__filter-bar {
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--pd-slate-100);
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.pd__filter-btn {
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  padding: 5px 16px;         /* ↑ slightly taller */
+  font-size: 16px;        /* ↑ from 11px */
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--pd-slate-50);
+  color: var(--pd-slate-500);
+  transition: all 0.15s;
+  text-transform: capitalize;
+}
+.pd__filter-btn:hover {
+  background: var(--pd-slate-100);
+}
+.pd__filter-btn.pd__filter-active {
+  background: var(--pd-blue);
+  color: #fff;
+  border-color: var(--pd-blue);
+}
+
+/* Refresh button */
+.pd__refresh-btn {
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--pd-radius-sm);
+  padding: 5px 14px;
+  font-size: 1.25rem;         /* ↑ from 12px */
+  font-weight: 600;
+  color: var(--pd-slate-500);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.pd__refresh-btn:hover {
+  border-color: var(--pd-blue);
+  color: var(--pd-blue);
+}
+
+/* Table wrapper */
+.pd__table-scroll {
+  overflow-x: auto;
+  max-height: 460px;
+  overflow-y: auto;
+}
+.pd__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;       /* ↑ from 13px */
+}
+
+/* Table head */
+.pd__thead {
+  background: var(--pd-slate-50);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.pd__th {
+  padding: 11px 16px;        /* ↑ slightly taller */
+  font-weight: 700;
+  font-size: 15px;        /* ↑ from 11px */
+  color: var(--pd-slate-500);/* ↑ from #6b7280 */
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+.pd__th--left  { text-align: left; }
+.pd__th--center{ text-align: center; }
+.pd__th--right { text-align: right; }
+
+/* Table rows */
+.pd__tr {
+  border-bottom: 1px solid var(--pd-slate-100);
+  transition: background 0.12s;
+}
+.pd__tr:hover {
+  background: var(--pd-slate-50);
+}
+.pd__td {
+  padding: 13px 16px;        /* ↑ slightly taller */
+}
+
+/* Row index cell */
+.pd__td-index {
+  color: var(--pd-slate-400);
+  font-weight: 600;
+  font-size: 0.8rem;
+  width: 36px;
+}
+
+/* Listing name cell */
+.pd__listing-name {
+  font-weight: 600;
+  font-size: 17px;       /* ↑ explicit */
+  color: var(--pd-slate-900);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pd__listing-company {
+  font-size: 1.12rem;        /* ↑ from 11px */
+  color: var(--pd-slate-400);
+  margin-top: 2px;
+}
+
+/* Limit-left cell */
+.pd__limit-left {
+  font-size: 17px;       /* ↑ from 13px */
+  font-weight: 700;
+  text-align: center;
+}
+.pd__limit-none {
+  font-size: 0.8rem;
+  color: var(--pd-slate-400);
+}
+
+/* Preview button */
+.pd__preview-btn {
+  border-radius: 7px;
+  padding: 5px 14px;
+  font-size: 16px;        /* ↑ from 11px */
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.pd__preview-btn:hover {
+  background: var(--pd-blue);
+  color: #fff;
+}
+
+/* Table footer */
+.pd__table-footer {
+  padding: 9px 20px;
+  border-top: 1px solid var(--pd-slate-100);
+  font-size: 0.75rem;        /* ↑ from 11px */
+  color: var(--pd-slate-400);
+}
+
+
+
+.pd__badge {
+  border-radius: 999px;
+  padding: 3px 11px;         /* ↑ slightly more padding */
+  font-size: 16px;        /* ↑ from 11px */
+  font-weight: 700;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+
+
+.pd__modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,.55);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.pd__modal {
+  background: var(--pd-white);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 620px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.18);
+  overflow: hidden;
+  animation: pd-modal-in 0.2s ease;
+}
+@keyframes pd-modal-in {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+.pd__modal-header {
+  padding: 18px 22px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.pd__modal-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.pd__modal-title {
+  margin: 0;
+  font-size: 1rem;           /* ↑ from 15px */
+  font-weight: 700;
+  color: var(--pd-slate-900);
+  line-height: 1.3;
+}
+.pd__modal-close {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: var(--pd-slate-100);
+  border-radius: var(--pd-radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--pd-slate-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.pd__modal-close:hover {
+  background: var(--pd-slate-200);
+}
+.pd__modal-body {
+  padding: 18px 22px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+.pd__modal-desc {
+  font-size: 0.875rem;       /* ↑ from 13px */
+  color: var(--pd-slate-500);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+.pd__modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.pd__modal-field {
+  background: var(--pd-slate-50);
+  border-radius: var(--pd-radius-sm);
+  padding: 10px 12px;
+  border: 1px solid var(--pd-slate-200);
+}
+.pd__modal-field-label {
+  font-size: 0.7rem;         /* ↑ from 10px */
+  font-weight: 700;
+  color: var(--pd-slate-400);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+.pd__modal-field-value {
+  font-size: 0.875rem;       /* ↑ from 13px */
+  font-weight: 600;
+  color: var(--pd-slate-800);/* ↑ from #1e293b */
+}
+.pd__modal-footer {
+  padding: 12px 22px;
+  border-top: 1px solid var(--pd-slate-100);
+  display: flex;
+  justify-content: flex-end;
+}
+.pd__modal-close-btn {
+  background: var(--pd-blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--pd-radius-sm);
+  padding: 9px 22px;
+  font-weight: 600;
+  font-size: 0.875rem;       /* ↑ from 13px */
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.pd__modal-close-btn:hover {
+  opacity: 0.88;
+}
+
+
+
+.pd__click-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+}
+.pd__click-bar-track {
+  flex: 1;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.pd__click-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.5s;
+}
+.pd__click-bar-val {
+  font-size: 1.25rem;         /* ↑ from 12px */
+  font-weight: 700;
+  min-width: 20px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   TOOLTIP (recharts custom)
+══════════════════════════════════════════════════════════════════════════ */
+
+.pd__tooltip {
+  background: var(--pd-white);
+  border: 1px solid #e5e7eb;
+  border-radius: var(--pd-radius-sm);
+  padding: 8px 14px;
+  font-size: 0.875rem;       /* ↑ from 13px */
+  box-shadow: 0 4px 12px rgba(0,0,0,.1);
+}
+.pd__tooltip-label {
+  font-weight: 700;
+  color: var(--pd-slate-900);
+  margin-bottom: 2px;
+}
+.pd__tooltip-value {
+  font-weight: 600;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PUBLISHER DASHBOARD — RESPONSIVE OVERRIDES
+   Add this file after publisher-dashboard.css (or append to it)
+
+   Breakpoints used:
+     Mobile S  : ≤ 480px  (covers 320 – 450 px)
+     Mobile L  : ≤ 640px
+     Tablet    : ≤ 1024px
+     Tablet M  : ≤ 860px
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. OVERVIEW STAT CARDS GRID ─────────────────────────────────────── */
+
+/* Tablet: 3 columns */
+@media (max-width: 1024px) {
+  .pd__overview-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+}
+
+/* Mobile L: 2 columns */
+@media (max-width: 640px) {
+  .pd__overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+}
+
+/* Mobile S: single column */
+@media (max-width: 400px) {
+  .pd__overview-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Shrink oversized font values on smaller screens */
+@media (max-width: 1024px) {
+  .pd__stat-card-value {
+    font-size: 2.2rem;
+  }
+  .pd__stat-card-label {
+    font-size: 0.75rem;
+  }
+  .pd__stat-card-sub {
+    font-size: 0.72rem;
+  }
+  .pd__stat-card {
+    padding: 14px 12px;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .pd__stat-card-value {
+    font-size: 1.8rem;
+  }
+  .pd__stat-card {
+    padding: 12px 10px;
+  }
+}
+
+/* ── 2. ANALYTICS TOP GRID (Overview panel + Clicks panel) ───────────── */
+
+@media (max-width: 1024px) {
+  .pd__analytics-top-grid {
+    grid-template-columns: 1fr;  /* stack vertically */
+  }
+}
+
+/* ── 3. COUNT CARDS INSIDE LISTING OVERVIEW ──────────────────────────── */
+
+@media (max-width: 1024px) {
+  .pd__count-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+}
+
+@media (max-width: 640px) {
+  .pd__count-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 400px) {
+  .pd__count-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Shrink count-card font on small screens */
+@media (max-width: 1024px) {
+  .pd__count-card-value {
+    font-size: 30px;
+  }
+  .pd__count-card-label {
+    font-size: 0.65rem;
+  }
+  .pd__count-card {
+    padding: 10px 12px;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 640px) {
+  .pd__count-card-value {
+    font-size: 22px;
+  }
+}
+
+/* ── 4. BAR CHART WRAPPER ────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .pd__barchart-wrap {
+    padding: 10px 10px 4px;
+  }
+}
+
+/* ── 5. APPLY CLICKS ROWS ────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .pd__clicks-type-label {
+    font-size: 0.8rem;
+  }
+  .pd__clicks-sub-label {
+    font-size: 0.65rem;
+  }
+  .pd__clicks-value {
+    font-size: 0.9rem;
+  }
+}
+
+/* ── 6. ENGAGEMENT FOOTER ────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .pd__engagement-pct {
+    font-size: 1.4rem;
+  }
+  .pd__engagement-footer {
+    padding: 10px 14px;
+  }
+  .pd__engagement-row {
+    gap: 10px;
+  }
+}
+
+/* ── 7. PANEL HEADER / TITLE / META ──────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .pd__panel-header {
+    padding: 12px 14px 10px;
+    gap: 6px;
+  }
+  .pd__panel-title {
+    font-size: 0.75rem;
+  }
+  .pd__panel-subtitle {
+    font-size: 0.65rem;
+    margin-left: 6px;
+  }
+  .pd__panel-meta {
+    font-size: 0.65rem;
+  }
+}
+
+/* ── 8. LISTINGS TABLE PANEL ─────────────────────────────────────────── */
+
+@media (max-width: 860px) {
+  .pd__th,
+  .pd__td {
+    padding: 10px 10px;
+  }
+  .pd__listing-name {
+    font-size: 0.85rem;
+    max-width: 160px;
+  }
+  .pd__listing-company {
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Hide less-critical columns on small screens */
+  .pd__th:nth-child(5),
+  .pd__td:nth-child(5),
+  .pd__th:nth-child(6),
+  .pd__td:nth-child(6) {
+    display: none;
+  }
+
+  .pd__listing-name {
+    font-size: 0.8rem;
+    max-width: 130px;
+  }
+  .pd__th,
+  .pd__td {
+    padding: 8px 8px;
+  }
+  .pd__preview-btn {
+    padding: 4px 10px;
+    font-size: 0.7rem;
+  }
+  .pd__badge {
+    font-size: 0.65rem;
+    padding: 2px 7px;
+  }
+}
+
+@media (max-width: 400px) {
+  /* On very small phones, also hide the status column */
+  .pd__th:nth-child(4),
+  .pd__td:nth-child(4) {
+    display: none;
+  }
+  .pd__listing-name {
+    max-width: 100px;
+  }
+}
+
+/* ── 9. FILTER BAR ───────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .pd__filter-bar {
+    padding: 8px 12px;
+    gap: 5px;
+  }
+  .pd__filter-btn {
+    padding: 4px 10px;
+    font-size: 0.65rem;
+  }
+}
+
+/* ── 10. DETAIL MODAL ────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .pd__modal-overlay {
+    padding: 8px;
+    align-items: flex-end; /* slide-up sheet on mobile */
+  }
+  .pd__modal {
+    border-radius: 16px 16px 0 0;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  .pd__modal-header {
+    padding: 14px 16px;
+    gap: 8px;
+  }
+  .pd__modal-title {
+    font-size: 0.875rem;
+  }
+  .pd__modal-body {
+    padding: 14px 16px;
+    max-height: none;
+  }
+  .pd__modal-grid {
+    grid-template-columns: 1fr; /* single-column on mobile */
+    gap: 8px;
+  }
+  .pd__modal-footer {
+    padding: 10px 16px;
+  }
+}
+
+/* ── 11. LIMIT BANNER & EXPIRED BADGE ───────────────────────────────── */
+
+@media (max-width: 640px) {
+  .pd__limit-banner {
+    flex-direction: column;
+    text-align: center;
+    font-size: 0.8rem;
+    padding: 12px 14px;
+    gap: 6px;
+  }
+  .pd__expired-badge {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    white-space: normal;
+  }
+}
+
+/* ── 12. SECTION HEADER ──────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .pd__section-label {
+    font-size: 0.82rem;
+  }
+}
+
+/* ── 13. TABLE SCROLL AREA HEIGHT ────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .pd__table-scroll {
+    max-height: 320px;
+  }
+}
+
+/* ── 14. PUBLISHER CONTAINER PADDING ─────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .publisher-container {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+}
+
+/* ── 15. CLICK BAR ───────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .pd__click-bar-wrap {
+    min-width: 80px;
+  }
+  .pd__click-bar-val {
+    font-size: 0.75rem;
+  }
+}
+
+/* ── 16. RECHARTS BAR CHART HEIGHT ───────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .pd__barchart-wrap > * {
+    height: 130px !important;
+  }
+}
+
+/* ── 17. ZOOM RESET ──────────────────────────────────────────────────── */
+/* theme.css applies zoom:65% for large desktops — reset on small screens
+   so mobile content isn't zoomed-out */
+
+@media (max-width: 1023px) {
+  .ventic-shell {
+    zoom: 1 !important;
+  }
+}

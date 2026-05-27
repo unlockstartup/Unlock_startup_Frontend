@@ -1,0 +1,1232 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ─── STRICT 2-COLOR DESIGN SYSTEM ─────────────────────────── */
+/* Primary: Blue rgb(30, 176, 228) | Accent: Yellow rgb(255, 207, 10) */
+:root {
+  /* ─── BRAND COLORS ONLY ─── */
+  --blue:             rgb(30, 176, 228);
+  --blue-900:         rgb(10, 80, 110);
+  --blue-800:         rgb(15, 110, 145);
+  --blue-700:         rgb(20, 130, 170);
+  --blue-600:         rgb(25, 155, 200);
+  --blue-500:         rgb(30, 176, 228);
+  --blue-400:         rgb(80, 195, 240);
+  --blue-300:         rgb(130, 210, 245);
+  --blue-200:         rgb(180, 230, 250);
+  --blue-100:         rgb(220, 245, 255);
+  --blue-50:          rgb(240, 250, 255);
+
+  --yellow:           rgb(255, 207, 10);
+  --yellow-900:       rgb(180, 140, 0);
+  --yellow-800:       rgb(200, 160, 0);
+  --yellow-700:       rgb(220, 180, 0);
+  --yellow-600:       rgb(240, 195, 5);
+  --yellow-500:       rgb(255, 207, 10);
+  --yellow-400:       rgb(255, 220, 60);
+  --yellow-300:       rgb(255, 230, 100);
+  --yellow-200:       rgb(255, 240, 150);
+  --yellow-100:       rgb(255, 248, 200);
+  --yellow-50:        rgb(255, 252, 230);
+
+  /* ─── NEUTRALS ─── */
+  --gray-950:         #0a0f1a;
+  --gray-900:         #111827;
+  --gray-800:         #1f2937;
+  --gray-700:         #374151;
+  --gray-600:         #4b5563;
+  --gray-500:         #6b7280;
+  --gray-400:         #9ca3af;
+  --gray-300:         #d1d5db;
+  --gray-200:         #e5e7eb;
+  --gray-100:         #f3f4f6;
+  --gray-50:          #f9fafb;
+  --white:            #ffffff;
+
+  /* ─── SEMANTIC MAPPINGS ─── */
+  --jd-bg:            var(--gray-50);
+  --jd-white:         var(--white);
+  --jd-card-bg:       var(--white);
+  --jd-border:        var(--gray-200);
+  --jd-border-light:  var(--gray-100);
+
+  --jd-text-dark:     var(--gray-900);
+  --jd-text-mid:      var(--gray-700);
+  --jd-text-muted:    var(--gray-600);
+  --jd-text-light:    var(--gray-500);
+
+  /* ALL colors mapped to blue/yellow */
+  --jd-primary:       var(--blue-500);
+  --jd-primary-light: var(--blue-400);
+  --jd-primary-bg:    var(--blue-100);
+  --jd-primary-soft:  var(--blue-50);
+
+  --jd-accent:        var(--yellow-500);
+  --jd-accent-light:  var(--yellow-400);
+  --jd-accent-bg:     var(--yellow-100);
+  --jd-accent-soft:   var(--yellow-50);
+
+  --jd-success:       var(--blue-600);
+  --jd-success-bg:    var(--blue-50);
+  --jd-warning:       var(--yellow-700);
+  --jd-warning-bg:    var(--yellow-100);
+  --jd-danger:        #dc2626;
+  --jd-danger-bg:     #fef2f2;
+
+  --jd-shadow:        0 2px 12px rgba(10, 15, 30, 0.06);
+  --jd-shadow-hover:  0 4px 20px rgba(10, 15, 30, 0.08);
+  --jd-shadow-blue:   0 4px 16px rgba(30, 176, 228, 0.25);
+  --jd-shadow-yellow: 0 4px 16px rgba(255, 207, 10, 0.25);
+
+  --jd-radius:        16px;
+  --jd-radius-sm:     12px;
+  --jd-font:          'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.jobDetailPage {
+  background: #f0f2f7;
+  min-height: 100vh;
+  padding: 40px 0 100px;
+  font-family: var(--font-body);
+  color: var(--sdp-text-primary);
+  -webkit-font-smoothing: antialiased;
+  margin-top: 40px;
+}
+
+.jobDetailPage .container {
+  max-width: 1160px;
+  margin-top: 80px;
+  padding: 0 24px;
+}
+
+/* ─── Back Link ────────────────────────────────────────────────────── */
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--jd-text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 28px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.backLink:hover {
+  color: var(--blue-700);
+  background: var(--blue-50);
+  border-color: var(--blue-200);
+}
+
+/* ─── Hero Section ─────────────────────────────────────────────────── */
+.jd-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  background: var(--jd-white);
+  border-radius: var(--jd-radius);
+  padding: 40px;
+  box-shadow: var(--jd-shadow);
+  margin-bottom: 24px;
+  border: 1px solid var(--jd-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.jd-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--blue-500) 0%, var(--yellow-500) 100%);
+}
+
+.jd-heroLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.jd-logoWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.jd-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--jd-radius-sm);
+  object-fit: fill;
+  border: 1px solid var(--jd-border);
+  box-shadow: var(--jd-shadow);
+}
+
+.jd-logoPlaceholder {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--jd-radius-sm);
+  background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: var(--jd-shadow-blue);
+}
+
+.jd-logoMeta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Actively hiring badge - Blue */
+.jd-activityBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--blue-800);
+  background: var(--blue-50);
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--blue-200);
+}
+
+.jd-activityDot {
+  width: 6px;
+  height: 6px;
+  background: var(--blue-500);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+  box-shadow: 0 0 0 3px rgba(30, 176, 228, 0.2);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+/* Remote badge - Yellow */
+.jd-remoteBadge {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--yellow-900);
+  background: var(--yellow-50);
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--yellow-200);
+}
+
+.jd-titleWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.jd-jobTitle {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--jd-text-dark);
+  line-height: 1.2;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.jd-companyName {
+  font-size: 15px;
+  color: var(--jd-text-muted);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Hero Right - Stats Grid */
+.jd-heroRight {
+  display: flex;
+  align-items: center;
+}
+
+.jd-statsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+.jd-statCard {
+  background: var(--jd-white);
+  border: 1px solid var(--jd-border);
+  border-radius: var(--jd-radius-sm);
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: all 0.3s ease;
+}
+
+.jd-statCard:hover {
+  box-shadow: var(--jd-shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* Stat Card Variants - Blue and Yellow only */
+.jd-statCard--salary {
+  background: var(--blue-50);
+  border-color: var(--blue-200);
+}
+
+.jd-statCard--type {
+  background: var(--yellow-50);
+  border-color: var(--yellow-200);
+}
+
+.jd-statCard--exp {
+  background: var(--blue-50);
+  border-color: var(--blue-200);
+}
+
+.jd-statCard--openings {
+  background: var(--yellow-50);
+  border-color: var(--yellow-200);
+}
+
+.jd-statIconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.jd-statIconWrap--green {
+  background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
+  color: var(--white);
+  box-shadow: var(--jd-shadow-blue);
+}
+
+.jd-statIconWrap--blue {
+  background: linear-gradient(135deg, var(--yellow-500) 0%, var(--yellow-700) 100%);
+  color: var(--white);
+  box-shadow: var(--jd-shadow-yellow);
+}
+
+.jd-statIconWrap--purple {
+  background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-800) 100%);
+  color: var(--white);
+  box-shadow: var(--jd-shadow-blue);
+}
+
+.jd-statIconWrap--orange {
+  background: linear-gradient(135deg, var(--yellow-600) 0%, var(--yellow-800) 100%);
+  color: var(--white);
+  box-shadow: var(--jd-shadow-yellow);
+}
+
+.jd-statContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.jd-statValue {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--jd-text-dark);
+  line-height: 1.3;
+}
+
+.jd-statValue--accent {
+  color: var(--yellow-800);
+}
+
+.jd-statLabel {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--jd-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ─── Info Cards Row ─────────────────────────────────────────────── */
+.jd-infoRow {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 0.8fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.jd-infoCard {
+  background: var(--jd-white);
+  border-radius: var(--jd-radius);
+  border: 1px solid var(--jd-border);
+  box-shadow: var(--jd-shadow);
+  overflow: hidden;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.jd-infoCard:hover {
+  box-shadow: var(--jd-shadow-hover);
+}
+
+.jd-infoCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--blue-500);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.jd-infoCard:hover::before {
+  opacity: 1;
+}
+
+.jd-infoHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  border-bottom: 1px solid var(--jd-border-light);
+}
+
+.jd-infoIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jd-infoIcon--gray {
+  background: var(--blue-50);
+  color: var(--blue-700);
+}
+
+.jd-infoIcon--purple {
+  background: var(--blue-50);
+  color: var(--blue-700);
+}
+
+.jd-infoHeader h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--jd-text-dark);
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.jd-infoBody {
+  padding: 20px;
+  position: relative;
+}
+
+/* Company Details */
+.jd-companyDesc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--jd-text-mid);
+  margin: 0 0 16px 0;
+}
+
+.jd-companyMetaRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--jd-border-light);
+}
+
+.jd-metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.jd-metaLabel {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--jd-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.jd-metaValue {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--jd-text-mid);
+}
+
+/* Hiring Manager with Blur Effect */
+.jd-managerContent {
+  transition: filter 0.3s ease;
+}
+
+.jd-managerContent.jd-blurred {
+  filter: blur(8px);
+  user-select: none;
+  pointer-events: none;
+}
+
+.jd-managerName {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--jd-text-dark);
+  margin: 0 0 16px 0;
+}
+
+.jd-contactRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--gray-50);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  text-decoration: none;
+  color: var(--jd-text-mid);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+  border: 1px solid var(--jd-border-light);
+}
+
+.jd-contactRow:hover {
+  background: var(--blue-50);
+  border-color: var(--blue-200);
+  color: var(--blue-700);
+}
+
+.jd-contactRow svg {
+  flex-shrink: 0;
+  color: var(--jd-text-light);
+}
+
+.jd-contactRow:hover svg {
+  color: var(--blue-500);
+}
+
+/* Blur Overlay */
+.jd-blurOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(2px);
+}
+
+.jd-blurCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.jd-blurCard p {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--jd-text-muted);
+  margin: 0;
+}
+
+.jd-blurLogin {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue-700);
+  text-decoration: none;
+  padding: 8px 16px;
+  background: var(--blue-50);
+  border-radius: 8px;
+  border: 1px solid var(--blue-200);
+  transition: all 0.2s;
+}
+
+.jd-blurLogin:hover {
+  background: var(--blue-100);
+  border-color: var(--blue-300);
+}
+
+/* Timeline */
+.jd-timelineGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.jd-timelineItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 12px;
+  background: var(--blue-50);
+  border-radius: 10px;
+  text-align: center;
+  border: 1px solid var(--blue-200);
+}
+
+.jd-timelineDate {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--jd-text-dark);
+}
+
+.jd-timelineLabel {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--blue-700);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ─── Section Cards ──────────────────────────────────────────────── */
+.jd-sectionCard {
+  background: var(--jd-white);
+  border-radius: var(--jd-radius);
+  border: 1px solid var(--jd-border);
+  box-shadow: var(--jd-shadow);
+  padding: 28px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.jd-sectionCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--blue-500);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.jd-sectionCard:hover {
+  box-shadow: var(--jd-shadow-hover);
+}
+
+.jd-sectionCard:hover::before {
+  opacity: 1;
+}
+
+.jd-sectionCard--compact {
+  padding: 24px;
+}
+
+.jd-sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.jd-sectionHeader--center {
+  justify-content: center;
+}
+
+.jd-sectionIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.jd-sectionIcon--gray {
+  background: var(--blue-50);
+  color: var(--blue-700);
+}
+
+.jd-sectionIcon--purple {
+background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
+    color: var(--white);
+    box-shadow: var(--jd-shadow-blue);
+}
+
+.jd-sectionIcon--green {
+background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
+    color: var(--white);
+    box-shadow: var(--jd-shadow-blue);
+}
+
+.jd-sectionIcon--blue {
+background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
+    color: var(--white);
+    box-shadow: var(--jd-shadow-blue);
+}
+
+.jd-sectionIcon--orange {
+  background: var(--blue-50);
+  color: var(--blue-600);
+}
+
+.jd-sectionCard:hover .jd-sectionIcon {
+  transform: scale(1.05);
+}
+
+.jd-sectionHeader h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--jd-text-dark);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.jd-sectionText {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--jd-text-mid);
+  margin: 0;
+}
+
+/* ─── Split Row ────────────────────────────────────────────────────── */
+.jd-splitRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+/* Requirements */
+.jd-requirementsBody {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.jd-reqItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.jd-reqLabel {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--jd-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.jd-reqValue {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--jd-text-dark);
+}
+
+.jd-skillsWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.jd-skillsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.jd-skillTag {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--blue-800);
+  background: var(--blue-50);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--blue-200);
+  transition: all 0.2s;
+}
+
+.jd-skillTag:hover {
+  background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
+  color: var(--white);
+  border-color: var(--blue-500);
+  transform: translateY(-1px);
+}
+
+/* Location & Salary */
+.jd-locSalBody {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.jd-locSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.jd-locLabel, .jd-salLabel {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--jd-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.jd-locMain {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--jd-text-dark);
+  margin: 0;
+}
+
+.jd-locAddress {
+  font-size: 14px;
+  color: var(--jd-text-muted);
+  margin: 0;
+}
+
+.jd-locMeta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--jd-border-light);
+}
+
+.jd-locMetaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.jd-locMetaLabel {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--jd-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.jd-locMetaValue {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--jd-text-mid);
+}
+
+.jd-salSection {
+  padding-top: 24px;
+  border-top: 1px solid var(--jd-border-light);
+}
+
+.jd-salLabel {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--jd-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.jd-salRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.jd-salAmount {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--blue-700);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.jd-salDash {
+  font-size: 18px;
+  color: var(--jd-text-muted);
+}
+
+.jd-salType {
+  font-size: 13px;
+  color: var(--jd-text-muted);
+  margin: 0 0 16px 0;
+}
+
+.jd-salRange {
+  margin-bottom: 16px;
+}
+
+.jd-salTrack {
+  height: 6px;
+  background: var(--jd-border);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.jd-salFill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--blue-500) 0%, var(--yellow-500) 100%);
+  border-radius: 99px;
+}
+
+.jd-salTicks {
+  display: flex;
+  justify-content: space-between;
+}
+
+.jd-salTick {
+  font-size: 11px;
+  color: var(--jd-text-light);
+}
+
+.jd-salTick--active {
+  color: var(--blue-700);
+  font-weight: 600;
+}
+
+.jd-salPills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 16px;
+  border-top: 1px solid var(--jd-border-light);
+}
+
+.jd-salPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 99px;
+  border: 1px solid;
+}
+
+.jd-salPill--green {
+  color: var(--blue-800);
+  background: var(--blue-50);
+  border-color: var(--blue-200);
+}
+
+.jd-salPill--purple {
+  color: var(--yellow-900);
+  background: var(--yellow-50);
+  border-color: var(--yellow-200);
+}
+
+.jd-salPill--blue {
+  color: var(--blue-700);
+  background: var(--blue-100);
+  border-color: var(--blue-300);
+}
+
+.jd-salPillDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+/* ─── Responsibilities Grid ────────────────────────────────────────── */
+.jd-responsibilitiesGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.jd-respItem {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  background: var(--gray-50);
+  border-radius: var(--jd-radius-sm);
+  border: 1px solid var(--jd-border);
+  transition: all 0.3s ease;
+}
+
+.jd-respItem:hover {
+  border-color: var(--blue-200);
+  background: var(--blue-50);
+  transform: translateX(4px);
+}
+
+.jd-respNumber {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: var(--jd-shadow-blue);
+}
+
+.jd-respText {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--jd-text-mid);
+  margin: 0;
+}
+
+/* ─── Apply Section ────────────────────────────────────────────────── */
+.jd-applySection {
+  background: var(--jd-white);
+  border-radius: var(--jd-radius);
+  border: 1px solid var(--jd-border);
+  box-shadow: var(--jd-shadow);
+  padding: 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.jd-applySection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--blue-500) 0%, var(--yellow-500) 100%);
+}
+
+.jd-applyTitle {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--jd-text-dark);
+  margin: 0 0 24px 0;
+  letter-spacing: -0.02em;
+}
+
+.jd-applyCard {
+  max-width: 500px;
+  margin: 0 auto 24px;
+  padding: 24px;
+  background: var(--blue-50);
+  border-radius: var(--jd-radius-sm);
+  border: 1px solid var(--blue-200);
+}
+
+.jd-applyEmail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--jd-text-mid);
+  margin-bottom: 8px;
+}
+
+.jd-applyEmail a {
+  color: var(--blue-700);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.jd-applyEmail a:hover {
+  text-decoration: underline;
+}
+
+.jd-applySubject {
+  font-size: 13px;
+  color: var(--jd-text-muted);
+  margin: 0 0 4px 0;
+}
+
+.jd-applyNote {
+  font-size: 13px;
+  color: var(--jd-text-light);
+  margin: 0;
+}
+
+.jd-submitBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--jd-shadow-blue);
+  position: relative;
+  overflow: hidden;
+}
+
+.jd-submitBtn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.jd-submitBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(30, 176, 228, 0.4);
+}
+
+.jd-submitBtn:hover::before {
+  left: 100%;
+}
+
+.jd-submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--gray-400);
+}
+
+/* ─── Loading & Not Found ──────────────────────────────────────────── */
+.jd-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 20px;
+}
+
+.jd-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--blue-200);
+  border-top-color: var(--blue-500);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.notFoundWrap {
+  text-align: center;
+  padding: 120px 32px;
+  background: linear-gradient(135deg, var(--blue-50) 0%, var(--yellow-50) 100%);
+  border-radius: var(--jd-radius);
+  border: 1px solid var(--jd-border);
+}
+
+.notFoundWrap h2 {
+  font-size: 32px;
+  color: var(--jd-text-dark);
+  margin: 20px 0 12px;
+  font-weight: 800;
+}
+
+.notFoundWrap p {
+  color: var(--jd-text-muted);
+  margin-bottom: 32px;
+  font-size: 16px;
+}
+
+.jd-btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  box-shadow: var(--jd-shadow-blue);
+}
+
+.jd-btn-back:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(30, 176, 228, 0.4);
+}
+
+/* ─── Responsive ───────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .jd-hero {
+    grid-template-columns: 1fr;
+    padding: 32px;
+  }
+
+  .jd-infoRow {
+    grid-template-columns: 1fr;
+  }
+
+  .jd-splitRow {
+    grid-template-columns: 1fr;
+  }
+
+  .jd-responsibilitiesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .jd-statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .jobDetailPage .container {
+    padding: 0 16px;
+  }
+
+  .jd-hero {
+    padding: 24px;
+  }
+
+  .jd-jobTitle {
+    font-size: 22px;
+  }
+
+  .jd-statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .jd-statCard {
+    padding: 16px;
+  }
+
+  .jd-sectionCard {
+    padding: 20px;
+  }
+
+  .jd-applySection {
+    padding: 28px 20px;
+  }
+
+  .jd-infoRow {
+    grid-template-columns: 1fr;
+  }
+}
