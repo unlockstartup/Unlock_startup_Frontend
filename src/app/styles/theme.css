@@ -129,7 +129,7 @@ h1, h2, h3, h4, h5 {
 
 /* Sidebar */
 .ventic-sidebar {
-  width: 260px;
+  width: 300px;
   background: #ffffff;
   border-right: 1px solid #eef0f4;
   padding: 14px;
@@ -243,6 +243,6 @@ h1, h2, h3, h4, h5 {
 
 @media (min-width: 300px) and (max-width: 2500px) {
     .ventic-sidebar {
-        width: 250px;
+        width: 300px;
     }
 }

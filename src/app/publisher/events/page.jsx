@@ -47,8 +47,8 @@ const defaultForm = {
 const registrationTypes = ["Free", "Paid", "Invite Only"];
 const formats = [
   { value: "in-person", label: "In-Person" },
-  { value: "online", label: "Online" },
-  { value: "hybrid", label: "Hybrid" },
+  { value: "online",    label: "Online"    },
+  { value: "hybrid",    label: "Hybrid"    },
 ];
 
 const statusBadge = (status) => {
@@ -72,30 +72,31 @@ export default function PublisherEventPage() {
   const [planInfo, setPlanInfo]     = useState(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [stateOpen, setStateOpen]   = useState(false);
-  const [status, setStatus] = useState("all");
-const [q, setQ]           = useState("");
+  const [status, setStatus]         = useState("all");
+  const [q, setQ]                   = useState("");
   const [confirmConfig, setConfirmConfig] = useState({
     title: "", message: "",
     confirmText: "Confirm", cancelText: "Cancel",
     confirmVariant: "danger", onConfirm: () => {},
   });
 
-const fetchEvents = async (overrides = {}) => {
-  try {
-    setLoading(true);
-    const params = new URLSearchParams();
-    const s      = overrides.status !== undefined ? overrides.status : status;
-    const search = overrides.q      !== undefined ? overrides.q      : q;
-    if (s !== "all")   params.append("status", s);
-    if (search.trim()) params.append("q", search.trim());
-    const res = await publisherApi.get(`/api/publisher/dashboard/events?${params}`);
-    setEvents(res.data?.items || []);
-  } catch (err) {
-    toast.error(err?.response?.data?.message || "Failed to load events");
-  } finally {
-    setLoading(false);
-  }
-};
+  /* ── Data fetching ─────────────────────────────────────────────────────────── */
+  const fetchEvents = async (overrides = {}) => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams();
+      const s      = overrides.status !== undefined ? overrides.status : status;
+      const search = overrides.q      !== undefined ? overrides.q      : q;
+      if (s !== "all")   params.append("status", s);
+      if (search.trim()) params.append("q", search.trim());
+      const res = await publisherApi.get(`/api/publisher/dashboard/events?${params}`);
+      setEvents(res.data?.items || []);
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Failed to load events");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchEvents();
@@ -138,6 +139,12 @@ const fetchEvents = async (overrides = {}) => {
   };
 
   const openEdit = (ev) => {
+    // Guard: should never be called if editCount >= 1, but double-check
+    if ((ev.editCount ?? 0) >= 1) {
+      toast.warn("This event has already been edited once and cannot be modified further.");
+      return;
+    }
+
     const pad = (n) => String(n).padStart(2, "0");
     const fmt = (iso) => {
       if (!iso) return "";
@@ -165,6 +172,35 @@ const fetchEvents = async (overrides = {}) => {
     setShowModal(true);
   };
 
+  const openReapply = (ev) => {
+  const pad = (n) => String(n).padStart(2, "0");
+  const fmt = (iso) => {
+    if (!iso) return "";
+    const d = new Date(iso);
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  };
+  const arr = (v) => (Array.isArray(v) ? v.join(", ") : v || "");
+
+  // Pre-fill form with existing data but treat as a brand-new listing
+  setForm({
+    ...defaultForm, ...ev,
+    targetAudience:   arr(ev.targetAudience),
+    keyTopics:        arr(ev.keyTopics),
+    attendeeBenefits: arr(ev.attendeeBenefits),
+    eventDescription: ev.eventDescription || "",
+    featuredSpeakers: ev.featuredSpeakers  || "",
+    startDateTime:        fmt(ev.startDateTime),
+    endDateTime:          fmt(ev.endDateTime),
+    registrationDeadline: fmt(ev.registrationDeadline),
+    registrationPrice:    ev.registrationPrice?.toString() || "",
+    eventCategory: Array.isArray(ev.eventCategory) ? ev.eventCategory
+      : ev.eventCategory ? [ev.eventCategory] : [],
+  });
+  setEditId(null);          // null = create mode
+  setMainImage(ev.mainImage || null);
+  setShowModal(true);
+};
+
   const closeModal = () => setShowModal(false);
 
   /* ── Form handlers ─────────────────────────────────────────────────────────── */
@@ -186,10 +222,10 @@ const fetchEvents = async (overrides = {}) => {
 
   /* ── Save / delete / toggle ────────────────────────────────────────────────── */
   const validate = () => {
-    if (!form.title.trim()) return "Event Name is required";
+    if (!form.title.trim())          return "Event Name is required";
     if (!form.eventCategory?.length) return "Event Category is required";
     if (!form.startDateTime || !form.endDateTime) return "Start/End date-time required";
-    if (!form.workEmail) return "Work Email is required";
+    if (!form.workEmail)             return "Work Email is required";
     return null;
   };
 
@@ -222,7 +258,7 @@ const fetchEvents = async (overrides = {}) => {
       }
       setShowModal(false); setEditId(null); fetchEvents();
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Failed to create event");
+      toast.error(err?.response?.data?.message || "Failed to save event");
     } finally {
       setSaving(false);
     }
@@ -236,8 +272,12 @@ const fetchEvents = async (overrides = {}) => {
       setUploadingImage(true);
       const res = await publisherApi.post("/api/uploads", fd, { headers: { "Content-Type": "multipart/form-data" } });
       const uploaded = res.data?.files?.[0];
-      if (uploaded) { setMainImage({ url: uploaded.url, publicId: uploaded.publicId, resourceType: uploaded.resourceType }); toast.success("Image uploaded"); }
-      else toast.error("Upload failed");
+      if (uploaded) {
+        setMainImage({ url: uploaded.url, publicId: uploaded.publicId, resourceType: uploaded.resourceType });
+        toast.success("Image uploaded");
+      } else {
+        toast.error("Upload failed");
+      }
     } catch (err) {
       toast.error(err?.response?.data?.message || "Upload failed");
     } finally {
@@ -264,6 +304,30 @@ const fetchEvents = async (overrides = {}) => {
     setShowConfirm(true);
   };
 
+const confirmToggleEvent = (ev) => {
+  if (!ev?._id) return;
+  const isDeactivating = ev.isActive;
+  setConfirmConfig({
+    title: isDeactivating ? "Deactivate Event" : "Activate Event",
+    message: isDeactivating
+      ? "Are you sure you want to deactivate this event? It will no longer be visible to users."
+      : "Are you sure you want to activate this event? It will become visible to users.",
+    confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
+    cancelText: "Cancel",
+    confirmVariant: isDeactivating ? "warning" : "success",
+    onConfirm: async () => {
+      try {
+        await publisherApi.patch(`/api/publisher/dashboard/${ev._id}/toggle`, {});
+        toast.success(`Event ${ev.isActive ? "deactivated" : "activated"}`);
+        fetchEvents();
+      } catch (err) {
+        toast.error(err?.response?.data?.message || "Toggle failed");
+      }
+    },
+  });
+  setShowConfirm(true);
+};
+
   const toggleEvent = async (ev) => {
     try {
       await publisherApi.patch(`/api/publisher/dashboard/${ev._id}/toggle`, {});
@@ -275,17 +339,20 @@ const fetchEvents = async (overrides = {}) => {
   };
 
   /* ── Plan limits ───────────────────────────────────────────────────────────── */
-  const subscriptionExpired  = planInfo && planInfo.subscriptionStatus !== "active";
-  const eventLimitReached    = planInfo && !subscriptionExpired && planInfo.limits?.eventLimit > 0 && planInfo.usage?.events >= planInfo.limits?.eventLimit;
-  const eventButtonDisabled  = subscriptionExpired || eventLimitReached;
+  const subscriptionExpired = planInfo && planInfo.subscriptionStatus !== "active";
+  const eventLimitReached   = planInfo && !subscriptionExpired && planInfo.limits?.eventLimit > 0 && planInfo.usage?.events >= planInfo.limits?.eventLimit;
+  const eventButtonDisabled = subscriptionExpired || eventLimitReached;
 
-  const addBtnLabel = subscriptionExpired ? "Subscription Expired"
-    : eventLimitReached ? `Limit Reached (${planInfo.usage.events}/${planInfo.limits.eventLimit})`
+  const addBtnLabel = subscriptionExpired
+    ? "Subscription Expired"
+    : eventLimitReached
+    ? `Limit Reached (${planInfo.usage.events}/${planInfo.limits.eventLimit})`
     : "+ Add Event";
 
   /* ── Render ────────────────────────────────────────────────────────────────── */
   return (
     <div className="page">
+
       {/* ── Topbar ── */}
       <header className="topbar">
         <div>
@@ -299,7 +366,7 @@ const fetchEvents = async (overrides = {}) => {
             disabled={eventButtonDisabled}
             title={
               subscriptionExpired ? "Your subscription has expired. Please renew to add events."
-              : eventLimitReached ? `Event limit of ${planInfo.limits.eventLimit} reached for your current plan`
+              : eventLimitReached  ? `Event limit of ${planInfo.limits.eventLimit} reached for your current plan`
               : ""
             }
           >
@@ -307,52 +374,54 @@ const fetchEvents = async (overrides = {}) => {
           </button>
         </div>
       </header>
-{/* ── Filters ── */}
-<div className="tableShell">
-  <div className="tableHead">
-    <h2 className="tableHeadTitle">Filter &amp; Search</h2>
-  </div>
-  <div className="tableBody">
-    <div className="row3" style={{ alignItems: "flex-end" }}>
-      <div className="field">
-        <label className="label">Approval Status</label>
-        <select
-          className="select"
-          value={status}
-          onChange={(e) => { setStatus(e.target.value); fetchEvents({ status: e.target.value }); }}
-        >
-          <option value="all">All</option>
-          <option value="pending">Pending</option>
-          <option value="approved">Approved</option>
-          <option value="rejected">Rejected</option>
-        </select>
-      </div>
-      <div className="field">
-        <label className="label">Search</label>
-        <input
-          className="input"
-          placeholder="Search by title or organizer…"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && fetchEvents()}
-        />
-      </div>
-      <div className="field">
-        <label className="label" style={{ visibility: "hidden" }}>_</label>
-        <div style={{ display: "flex", gap: "0.6rem" }}>
-          <button className="btn btnPrimary btnSm" onClick={() => fetchEvents()} disabled={loading}>Search</button>
-          <button
-            className="btn btnSecondary btnSm"
-            onClick={() => { setStatus("all"); setQ(""); fetchEvents({ status: "all", q: "" }); }}
-            disabled={loading}
-          >
-            Reset
-          </button>
+
+      {/* ── Filters ── */}
+      <div className="tableShell">
+        <div className="tableHead">
+          <h2 className="tableHeadTitle">Filter &amp; Search</h2>
+        </div>
+        <div className="tableBody">
+          <div className="row3" style={{ alignItems: "flex-end" }}>
+            <div className="field">
+              <label className="label">Approval Status</label>
+              <select
+                className="select"
+                value={status}
+                onChange={(e) => { setStatus(e.target.value); fetchEvents({ status: e.target.value }); }}
+              >
+                <option value="all">All</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+            <div className="field">
+              <label className="label">Search</label>
+              <input
+                className="input"
+                placeholder="Search by title or organizer…"
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && fetchEvents()}
+              />
+            </div>
+            <div className="field">
+              <label className="label" style={{ visibility: "hidden" }}>_</label>
+              <div style={{ display: "flex", gap: "0.6rem" }}>
+                <button className="btn btnPrimary btnSm" onClick={() => fetchEvents()} disabled={loading}>Search</button>
+                <button
+                  className="btn btnSecondary btnSm"
+                  onClick={() => { setStatus("all"); setQ(""); fetchEvents({ status: "all", q: "" }); }}
+                  disabled={loading}
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
+
       {/* ── Events table ── */}
       <div className="tableShell">
         <div className="tableHead">
@@ -374,48 +443,84 @@ const fetchEvents = async (overrides = {}) => {
                   <th>Status</th>
                   <th>Start</th>
                   <th>End</th>
-                  <th className="tdRight" style={{textAlign: "center"}}>Actions</th>
+                  <th className="tdRight" style={{ textAlign: "center" }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {events.map((ev, idx) => (
-                  <tr key={ev._id}>
-                    <td className="tdMuted">{idx + 1}</td>
-                    <td className="tdSemibold">{ev.title}</td>
-                    <td>
-                      {ev.mainImage?.url
-                        ? <img src={ev.mainImage.url} alt="banner" className="thumb" />
-                        : <span className="tdMuted">No image</span>}
-                    </td>
-                    <td className="tdNoWrap">{ev.eventType || <span className="tdMuted">—</span>}</td>
-                    <td>
-                      <span className={`badge ${statusBadge(ev.status)}`}>{ev.status}</span>
-                    </td>
-                    <td className="tdMuted tdNoWrap">
-                      {ev.startDateTime
-                        ? new Date(ev.startDateTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }).replace(/am|pm/gi, (m) => m.toUpperCase())
-                        : "—"}
-                    </td>
-                    <td className="tdMuted tdNoWrap">
-                      {ev.endDateTime
-                        ? new Date(ev.endDateTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }).replace(/am|pm/gi, (m) => m.toUpperCase())
-                        : "—"}
-                    </td>
-                    <td>
-                      <div className="actionGroup">
-                        <button className="btn btnSm btnPrimary" onClick={() => openEdit(ev)}>Edit</button>
-                        <button
-                          className={`btn btnSm ${ev.isActive ? "btnWarning" : "btnSuccess"}`}
-                          onClick={() => toggleEvent(ev)}
-                          title={ev.isActive ? "Deactivate" : "Activate"}
-                        >
-                          {ev.isActive ? "Deactivate" : "Activate"}
-                        </button>
-                        <button className="btn btnSm btnDanger" onClick={() => deleteEvent(ev._id)}>Delete</button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {events.map((ev, idx) => {
+                  const editLocked = (ev.editCount ?? 0) >= 1;
+                  return (
+                    <tr key={ev._id}>
+                      <td className="tdMuted">{idx + 1}</td>
+                      <td className="tdSemibold">{ev.title}</td>
+                      <td>
+                        {ev.mainImage?.url
+                          ? <img src={ev.mainImage.url} alt="banner" className="thumb" />
+                          : <span className="tdMuted">No image</span>}
+                      </td>
+                      <td className="tdNoWrap">{ev.eventType || <span className="tdMuted">—</span>}</td>
+
+                      {/* ── Status + edit-lock badge ── */}
+                      <td>
+                        <span className={`badge ${statusBadge(ev.status)}`}>{ev.status}</span>
+                      </td>
+
+                      <td className="tdMuted tdNoWrap">
+                        {ev.startDateTime
+                          ? new Date(ev.startDateTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }).replace(/am|pm/gi, (m) => m.toUpperCase())
+                          : "—"}
+                      </td>
+                      <td className="tdMuted tdNoWrap">
+                        {ev.endDateTime
+                          ? new Date(ev.endDateTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }).replace(/am|pm/gi, (m) => m.toUpperCase())
+                          : "—"}
+                      </td>
+
+{/* ── Actions ── */}
+<td>
+  <div className="actionGroup">
+{editLocked ? (
+  <button
+    className="btn btnSm btnPrimary"
+    onClick={() => {
+      if (eventButtonDisabled) return toast.warn(
+        subscriptionExpired
+          ? "Your subscription has expired. Please renew to re-apply."
+          : `Event limit of ${planInfo.limits.eventLimit} reached for your current plan.`
+      );
+      openReapply(ev);
+    }}
+    title={
+      eventButtonDisabled
+        ? subscriptionExpired
+          ? "Subscription expired"
+          : `Event limit reached (${planInfo?.usage?.events}/${planInfo?.limits?.eventLimit})`
+        : "Edit limit reached. Click to create a new listing based on this one."
+    }
+    style={{ whiteSpace: "nowrap" }}
+  >
+    Re-apply
+  </button>
+) : (
+  <button className="btn btnSm btnPrimary" onClick={() => openEdit(ev)}>
+    Edit
+  </button>
+)}
+    <button
+      className={`btn btnSm ${ev.isActive ? "btnWarning" : "btnSuccess"}`}
+      onClick={() => confirmToggleEvent(ev)}
+      title={ev.isActive ? "Deactivate" : "Activate"}
+    >
+      {ev.isActive ? "Deactivate" : "Activate"}
+    </button>
+    <button className="btn btnSm btnDanger" onClick={() => deleteEvent(ev._id)}>
+      Delete
+    </button>
+  </div>
+</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           )}
@@ -482,22 +587,15 @@ const fetchEvents = async (overrides = {}) => {
                   </div>
                 </div>
 
-<div className="field">
-  <label className="label">Event Format</label>
-  <select
-    className="select"
-    name="eventFormat"
-    value={form.eventFormat}
-    onChange={handleChange}
-  >
-    <option value="">Select Format</option>
-{formats.map((fmt) => (
-  <option key={fmt.value} value={fmt.value}>
-    {fmt.label}
-  </option>
-))}
-  </select>
-</div>
+                <div className="field">
+                  <label className="label">Event Format</label>
+                  <select className="select" name="eventFormat" value={form.eventFormat} onChange={handleChange}>
+                    <option value="">Select Format</option>
+                    {formats.map((fmt) => (
+                      <option key={fmt.value} value={fmt.value}>{fmt.label}</option>
+                    ))}
+                  </select>
+                </div>
               </section>
 
               {/* ── Date & venue ── */}
@@ -676,10 +774,10 @@ const fetchEvents = async (overrides = {}) => {
                     <label className="label">Registration Link / URL</label>
                     <input type="url" className="input" name="registrationUrl" value={form.registrationUrl} onChange={handleChange} placeholder="https://" />
                   </div>
-                  <div className="field">
+                  {/* <div className="field">
                     <label className="label">Event Website</label>
                     <input type="url" className="input" name="eventWebsite" value={form.eventWebsite} onChange={handleChange} placeholder="https://" />
-                  </div>
+                  </div> */}
                 </div>
               </section>
 
@@ -689,7 +787,7 @@ const fetchEvents = async (overrides = {}) => {
             <div className="modalFooter">
               <button className="btn btnSecondary" onClick={closeModal} disabled={saving}>Cancel</button>
               <button className="btn btnPrimary" onClick={saveEvent} disabled={saving}>
-               {saving ? "Submitting…" : editId ? "Update Event" : "Submit Event"}
+                {saving ? "Submitting…" : editId ? "Update Event" : "Submit Event"}
               </button>
             </div>
           </div>

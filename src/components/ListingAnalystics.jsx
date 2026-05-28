@@ -19,11 +19,11 @@ const TYPE_META = {
   investors:    { label: "Investor",    color: BLUE, bg: "#fffbea", icon: "💰" },
 };
 
-/* ── Helpers ────────────────────────────────────────────────────────────── */
+/* ── Helpers  */
 const fmt = (d) =>
   d ? new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "—";
 
-/* ── API fetchers ────────────────────────────────────────────────────────── */
+/* ── API fetchers  */
 const fetchStats    = () => publisherApi.get("/api/listings/apply-stats");
 const fetchPlan     = () => publisherApi.get("/api/publisher/dashboard/getmyplan");
 const fetchJobs     = () => publisherApi.get("/api/publisher/jobs");
@@ -32,7 +32,7 @@ const fetchEvents   = () => publisherApi.get("/api/publisher/dashboard/events");
 const fetchProducts = () => publisherApi.get("/api/publisher/innovation-products/mine");
 const fetchServices = () => publisherApi.get("/api/publisher/service-listings/mine");
 
-/* ── TypeBadge ──────────────────────────────────────────────────────────── */
+/* ── TypeBadge  */
 function TypeBadge({ type }) {
   const m = TYPE_META[type] || { label: type, color: BLUE, bg: "#f1f5f9" };
   return (
@@ -96,57 +96,181 @@ function DetailModal({ item, onClose }) {
   const m = TYPE_META[item._type] || {};
   const clicks = item._clicks ?? 0;
 
-  const rows = [];
-  const push = (label, val) => val != null && val !== "" && rows.push({ label, val: String(val) });
+  // Helper to safely render any field
+  const renderField = (label, val) => {
+    if (val == null || val === "" || (Array.isArray(val) && val.length === 0)) return null;
+    const display = Array.isArray(val) ? val.join(", ") : String(val);
+    return { label, val: display };
+  };
 
+  const rows = [];
+
+  // ─── UNIVERSAL FIELDS ─────────────────────────────────────────────────
+  rows.push(renderField("Title", item._title || item.title || item.productName || item.serviceTitle || item.fundName));
+  rows.push(renderField("Description", item.description || item.detailedDescription || item.companyDescription || item.eventDescription || item.about));
+  rows.push(renderField("Status", item.status || item.approvalStatus));
+  rows.push(renderField("Location", item.location));
+  rows.push(renderField("Apply Clicks", clicks > 0 ? clicks : null));
+
+  // ─── JOB FIELDS ─────────────────────────────────────────────────────────
   if (item._type === "jobs") {
-    push("Company",    item.companyName);
-    push("Job Type",   item.jobType);
-    push("Work Mode",  item.workMode);
-    push("Location",   item.location || [item.jobLocationCity, item.jobLocationState, item.jobLocationCountry].filter(Boolean).join(", "));
-    push("Experience", item.yearsExperienceRequired ? `${item.yearsExperienceRequired}+ yrs` : null);
-    push("Salary",     item.salaryMin ? `₹${(item.salaryMin / 100000).toFixed(0)}L – ₹${(item.salaryMax / 100000).toFixed(0)}L` : null);
-    push("Apply By",   fmt(item.applyLastDate));
-    push("Status",     item.status);
-  } else if (item._type === "competitions") {
-    push("Organizer",     item.organizingCompany);
-    push("Category",      item.challengeCategory);
-    push("Startup Stage", item.startupStage);
-    push("Location",      item.location);
-    push("Deadline",      fmt(item.submissionDeadline || item.deadline));
-    push("App Fee",       item.applicationFee > 0 ? `₹${item.applicationFee}` : "Free");
-    push("Status",        item.status);
-  } else if (item._type === "events") {
-    push("Organization", item.organizationName);
-    push("Format",       item.eventFormat);
-    push("Venue",        item.venueName || item.location);
-    push("Start",        fmt(item.startDateTime));
-    push("End",          fmt(item.endDateTime));
-    push("Reg Deadline", fmt(item.registrationDeadline));
-    push("Status",       item.status);
-  } else if (item._type === "products") {
-    push("Company",           item.companyName);
-    push("Brand",             item.brandName);
-    push("Category",          item.innovationCategory);
-    push("Technology",        item.technology);
-    push("Product Status",    item.productStatus);
-    push("Innovation Status", item.innovationStatus);
-    push("Patent",            item.patentStatus);
-    push("Status",            item.status);
-  } else if (item._type === "services") {
-    push("Company",      item.companyName);
-    push("Category",     item.serviceCategory);
-    push("Service Type", item.serviceType);
-    push("Service Area", item.serviceArea);
-    push("Status",       item.approvalStatus);
-  } else if (item._type === "investors") {
-    push("Fund Name", item.fundName || item.title);
-    push("Type",      item.investorType);
+    rows.push(renderField("Company", item.companyName));
+    rows.push(renderField("Company Website", item.companyWebsite));
+    rows.push(renderField("Company Size", item.companySize));
+    rows.push(renderField("Industry Sector", item.industrySector));
+    rows.push(renderField("Job Category", item.jobCategory));
+    rows.push(renderField("Job Type", item.jobType));
+    rows.push(renderField("Work Mode", item.workMode));
+    rows.push(renderField("Experience Level", item.experienceLevel));
+    rows.push(renderField("Years Experience Required", item.yearsExperienceRequired ? `${item.yearsExperienceRequired}+ yrs` : null));
+    rows.push(renderField("Openings", item.openings));
+    rows.push(renderField("Salary", item.salaryMin ? `₹${(item.salaryMin / 100000).toFixed(0)}L – ₹${(item.salaryMax / 100000).toFixed(0)}L ${item.salaryType || ""}` : null));
+    rows.push(renderField("Location Address", item.jobLocationAddress));
+    rows.push(renderField("City", item.jobLocationCity));
+    rows.push(renderField("State", item.jobLocationState));
+    rows.push(renderField("Country", item.jobLocationCountry));
+    rows.push(renderField("Apply By", fmt(item.applyLastDate)));
+    rows.push(renderField("Application Method", item.applicationMethod));
+    rows.push(renderField("External URL", item.externalApplicationUrl));
+    rows.push(renderField("Hiring Manager", item.hiringManagerName));
+    rows.push(renderField("Hiring Manager Email", item.hiringManagerEmail));
+    rows.push(renderField("Hiring Manager Phone", item.hiringManagerPhone));
+    rows.push(renderField("Role Overview", item.roleOverview));
+    rows.push(renderField("Key Responsibilities", item.keyResponsibilities));
+    rows.push(renderField("Required Education", item.requiredEducation));
+    rows.push(renderField("Must-Have Skills", item.mustHaveSkills));
+    rows.push(renderField("Company Description", item.companyDescription));
+    rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
   }
+
+  // ─── COMPETITION FIELDS ───────────────────────────────────────────────
+  else if (item._type === "competitions") {
+    rows.push(renderField("Organizer", item.organizingCompany));
+    rows.push(renderField("Organizer Type", item.organizerType));
+    rows.push(renderField("Challenge Type", item.challengeType));
+    rows.push(renderField("Category", item.challengeCategory));
+    rows.push(renderField("Objective", item.challengeObjective));
+    rows.push(renderField("Problem Statement", item.problemStatement));
+    rows.push(renderField("Key Focus Areas", item.keyFocusAreas));
+    rows.push(renderField("Who can participate", item.eligibleParticipants));
+    rows.push(renderField("Startup Stage", item.startupStage));
+    rows.push(renderField("Geographic Restrictions", item.geographicRestrictions));
+    rows.push(renderField("Launch Date", fmt(item.launchDate)));
+    rows.push(renderField("Submission Deadline", fmt(item.submissionDeadline || item.deadline)));
+    rows.push(renderField("Result Date", fmt(item.resultDate)));
+    rows.push(renderField("Result Date", fmt(item.applicationType)));
+    rows.push(renderField("Application Fee", item.applicationFee > 0 ? `₹${item.applicationFee}` : "Free"));
+    rows.push(renderField("Registration Link", item.registrationLink));
+    rows.push(renderField("Contact Person", item.contactPersonName));
+    rows.push(renderField("Official Email", item.officialEmail));
+    rows.push(renderField("Contact Phone", item.contactPhone));
+    rows.push(renderField("Additional Rewards", item.additionalRewards));
+    rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
+  }
+
+  else if (item._type === "events") {
+    rows.push(renderField("Organization", item.organizationName));
+    rows.push(renderField("Organization Website", item.organizationWebsite));
+    rows.push(renderField("Event Type", item.eventType));
+    rows.push(renderField("Categories", item.eventCategory));
+    rows.push(renderField("Format", item.eventFormat));
+    rows.push(renderField("Venue", item.venueName));
+    rows.push(renderField("Full Address", item.fullAddress));
+    rows.push(renderField("Start Date", fmt(item.startDateTime || item.startDate)));
+    rows.push(renderField("End Date", fmt(item.endDateTime || item.endDate)));
+    rows.push(renderField("Registration Deadline", fmt(item.registrationDeadline)));
+    rows.push(renderField("Registration Type", item.registrationType));
+    rows.push(renderField("Registration Price", item.registrationPrice ? `₹${item.registrationPrice}` : null));
+    rows.push(renderField("Ticket Tiers", item.ticketPricingTiers?.map(t => `${t.label}: ₹${t.price}`).join(", ")));
+    rows.push(renderField("Registration URL", item.registrationUrl));
+    rows.push(renderField("Target Audience", item.targetAudience));
+    rows.push(renderField("Key Topics", item.keyTopics));
+    rows.push(renderField("Featured Speakers", item.featuredSpeakers));
+    rows.push(renderField("Attendee Benefits", item.attendeeBenefits));
+    rows.push(renderField("Event Website", item.eventWebsite));
+    rows.push(renderField("Organizer Contact", item.organizerContactPerson));
+    rows.push(renderField("Work Email", item.workEmail));
+    rows.push(renderField("Phone Number", item.phoneNumber));
+    rows.push(renderField("Event Description", item.eventDescription));
+    rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
+  }
+
+  // ─── PRODUCT FIELDS ───────────────────────────────────────────────────
+  else if (item._type === "products") {
+    rows.push(renderField("Company", item.companyName));
+    rows.push(renderField("Brand", item.brandName));
+    rows.push(renderField("Established Year", item.establishedYear));
+    rows.push(renderField("Category", item.innovationCategory));
+    rows.push(renderField("Technology", item.technology));
+    rows.push(renderField("Product Status", item.productStatus));
+    rows.push(renderField("Innovation Status", item.innovationStatus));
+    rows.push(renderField("Patent Status", item.patentStatus));
+    rows.push(renderField("Target Industry", item.targetIndustry));
+    rows.push(renderField("Challenge Solved", item.challengeSolved));
+    rows.push(renderField("Company/Institution", item.companyInstitution));
+    rows.push(renderField("Founder Name", item.founderName));
+    rows.push(renderField("Key Features", item.keyFeatures));
+    rows.push(renderField("Product Demo URL", item.productDemoUrl));
+    rows.push(renderField("Awards & Recognition", item.awardsRecognition));
+    rows.push(renderField("Short Description", item.shortProductDescription));
+    rows.push(renderField("Contact Email", item.contactEmail));
+    rows.push(renderField("Contact Number", item.contactNumber));
+    rows.push(renderField("Website", item.websiteUrl));
+    rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
+  }
+
+  // ─── SERVICE FIELDS ───────────────────────────────────────────────────
+  else if (item._type === "services") {
+    rows.push(renderField("Company", item.companyName));
+    rows.push(renderField("Brand", item.brandName));
+    rows.push(renderField("Established Year", item.establishedYear));
+    rows.push(renderField("Service Title", item.serviceTitle));
+    rows.push(renderField("Category", item.serviceCategory));
+    rows.push(renderField("Service Type", item.serviceType));
+    rows.push(renderField("Service Area", item.serviceArea));
+    rows.push(renderField("Target Industry", item.targetIndustry));
+    rows.push(renderField("Team Size", item.teamSize));
+    rows.push(renderField("Certifications", item.certifications));
+    rows.push(renderField("Benefits", item.benefits));
+    rows.push(renderField("Detailed Description", item.detailedDescription));
+    rows.push(renderField("Contact Email", item.contactEmail));
+    rows.push(renderField("Contact Number", item.contactNumber));
+    rows.push(renderField("Contact Address", item.contactAddress));
+    rows.push(renderField("Website", item.websiteUrl));
+    rows.push(renderField("Rejection Reason", item.rejectionReason || null));
+    rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
+  }
+
+  // ─── INVESTOR FIELDS ──────────────────────────────────────────────────
+  else if (item._type === "investors") {
+    rows.push(renderField("Fund Name", item.fundName || item.title));
+    rows.push(renderField("Investor Type", item.investorType));
+    rows.push(renderField("Fund Size", item.fundSize ? `${item.fundSize} ${item.currency || ""}` : null));
+    rows.push(renderField("Currency", item.currency));
+    rows.push(renderField("Years of Experience", item.yearsOfExperience));
+    rows.push(renderField("Ticket Size", item.ticketSize ? `Min: ${item.ticketSize.minimum} – Max: ${item.ticketSize.maximum} ${item.currency || ""}` : null));
+    rows.push(renderField("Preferred Stages", item.preferredStages));
+    rows.push(renderField("Geographic Focus", item.geographicFocus));
+    rows.push(renderField("Industry Sector Focus", item.industrySectorFocus));
+    rows.push(renderField("Portfolio Companies Count", item.portfolioCompaniesCount));
+    rows.push(renderField("Portfolio Companies", item.portfolioCompanies?.map(p => `${p.companyName}${p.description ? ` (${p.description})` : ""}`).join(", ")));
+    rows.push(renderField("About", item.about));
+    rows.push(renderField("Contact Name", item.contact?.name));
+    rows.push(renderField("Contact Title", item.contact?.title));
+    rows.push(renderField("Contact Email", item.contact?.email));
+    rows.push(renderField("Contact Phone", item.contact?.phone));
+    rows.push(renderField("LinkedIn", item.linkedIn));
+    rows.push(renderField("Office Location", item.officeLocation));
+    rows.push(renderField("Profile Visibility", item.profileVisibility));
+    rows.push(renderField("Apply Link", item.applyLink));
+  }
+
+  // Filter out nulls
+  const validRows = rows.filter(Boolean);
 
   return (
     <div className="pd__modal-overlay" onClick={onClose}>
-      <div className="pd__modal" onClick={(e) => e.stopPropagation()}>
+      <div className="pd__modal pd__modal--full" onClick={(e) => e.stopPropagation()}>
 
         {/* Header */}
         <div
@@ -167,7 +291,7 @@ function DetailModal({ item, onClose }) {
           </div>
 
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, flexWrap: "wrap" }}>
               <TypeBadge type={item._type} />
               <span
                 className="pd__badge"
@@ -179,6 +303,17 @@ function DetailModal({ item, onClose }) {
               >
                 {clicks} click{clicks !== 1 ? "s" : ""}
               </span>
+              {item.isActive != null && (
+                <span
+                  className="pd__badge"
+                  style={{
+                    background: item.isActive ? "rgba(29,191,115,.10)" : "rgba(220,38,38,.08)",
+                    color: item.isActive ? "#065f46" : "#7f1d1d",
+                  }}
+                >
+                  {item.isActive ? "Active" : "Inactive"}
+                </span>
+              )}
             </div>
             <h3 className="pd__modal-title">{item._title || "—"}</h3>
           </div>
@@ -186,16 +321,10 @@ function DetailModal({ item, onClose }) {
           <button className="pd__modal-close" onClick={onClose}>✕</button>
         </div>
 
-        {/* Body */}
-        <div className="pd__modal-body">
-          {(item.description || item.detailedDescription || item.companyDescription) && (
-            <p className="pd__modal-desc">
-              {((item.description || item.detailedDescription || item.companyDescription) || "").slice(0, 200)}
-              {((item.description || item.detailedDescription || item.companyDescription) || "").length > 200 ? "…" : ""}
-            </p>
-          )}
-          <div className="pd__modal-grid">
-            {rows.map(({ label, val }) => (
+        {/* Body - Full Details */}
+        <div className="pd__modal-body pd__modal-body--scrollable">
+          <div className="pd__modal-grid pd__modal-grid--full">
+            {validRows.map(({ label, val }) => (
               <div key={label} className="pd__modal-field">
                 <div className="pd__modal-field-label">{label}</div>
                 <div className="pd__modal-field-value">{val}</div>
@@ -213,9 +342,6 @@ function DetailModal({ item, onClose }) {
   );
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   MAIN COMPONENT
-══════════════════════════════════════════════════════════════════════════ */
 export default function ListingsAnalytics() {
   const [stats,   setStats]   = useState(null);
   const [plan,    setPlan]    = useState(null);
@@ -330,7 +456,6 @@ export default function ListingsAnalytics() {
   /* ── Render ──────────────────────────────────────────────────────────── */
   return (
     <>
-      {/* ══ TOP ROW: Overview + Apply Clicks ════════════════════════════ */}
       <div className="pd__analytics-top-grid">
 
         {/* ── Left: Listing Overview ── */}

@@ -91,6 +91,7 @@ export default function Page({ params }) {
             submissionDeadline: fmt(raw.submissionDeadline ?? raw.deadline),
             resultDate: fmt(raw.resultDate),
             applicationFee: raw.applicationFee ?? 0,
+            applicationType: raw.applicationType ?? "",
             registrationLink: raw.registrationLink ?? "",
             image: raw.attachments?.[0]?.url ?? null,
           });
@@ -193,9 +194,13 @@ export default function Page({ params }) {
                     {funding.challengeType}
                   </span>
                 )}
-                {funding.applicationFee > 0 ? (
+                {funding.applicationType === "paid" && funding.applicationFee > 0 ? (
                   <span className="competitionAvailBadge" style={{ background: "var(--yellow-100)", border: "1px solid var(--yellow-400)", color: "var(--yellow-900)" }}>
                     ₹{funding.applicationFee} Fee
+                  </span>
+                ) : funding.applicationType === "invite only" ? (
+                  <span className="competitionAvailBadge" style={{ background: "var(--purple-50)", border: "1px solid var(--purple-200)", color: "var(--purple-800)" }}>
+                    Invite Only
                   </span>
                 ) : (
                   <span className="competitionAvailBadge" style={{ background: "var(--blue-50)", border: "1px solid var(--blue-200)", color: "var(--blue-800)" }}>
@@ -364,18 +369,7 @@ export default function Page({ params }) {
                      <strong> Eligible Participants: </strong> {funding.eligibleParticipants}
                     </p>
                   )}
-                  {funding.eligibilityVerification?.length > 0 && (
-                    <>
-                      <span className="competitionAudienceSectionLabel">Required Documents for Verification</span>
-                      <div className="competitionTagCloud" style={{ marginTop: "8px" }}>
-                        {funding.eligibilityVerification.map((item, i) => (
-                          <span key={i} className="competitionAudienceTag">
-                            <ListChecks size={14} strokeWidth={2} />{item}
-                          </span>
-                        ))}
-                      </div>
-                    </>
-                  )}
+          
                 </div>
               )}
               {/* Key Focus Areas - Yellow themed tags */}
@@ -561,12 +555,23 @@ export default function Page({ params }) {
                   <div className="competitionRegRow">
                     <span className="competitionRegIcon"><BadgeIndianRupee size={16} strokeWidth={2} /></span>
                     <div className="competitionRegMeta">
-                      <span className="competitionRegLabel">Application Fee</span>
-                      <span className="competitionRegValue">
-                        {funding.applicationFee > 0 ? `₹${funding.applicationFee}` : "Free"}
+                      <span className="competitionRegLabel">Application Type</span>
+                      <span className="competitionRegValue" style={{ textTransform: "capitalize" }}>
+                        {funding.applicationType || "Free"}
                       </span>
                     </div>
                   </div>
+                  {funding.applicationType === "paid" && (
+                    <div className="competitionRegRow">
+                      <span className="competitionRegIcon"><BadgeIndianRupee size={16} strokeWidth={2} /></span>
+                      <div className="competitionRegMeta">
+                        <span className="competitionRegLabel">Application Fee</span>
+                        <span className="competitionRegValue">
+                          {funding.applicationFee > 0 ? `₹${funding.applicationFee}` : "—"}
+                        </span>
+                      </div>
+                    </div>
+                  )}
                   {funding.submissionDeadline && (
                     <div className="competitionRegRow">
                       <span className="competitionRegIcon"><CalendarClock size={16} strokeWidth={2} /></span>

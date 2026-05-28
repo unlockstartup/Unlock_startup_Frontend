@@ -250,7 +250,7 @@ function ForgotPasswordModal({ onClose }) {
               <div className="lsb-ctrl">
                 <i>@</i>
                 <input
-                  id="fp-email" type="email" placeholder="name@startup.com"
+                  id="fp-email" type="email" placeholder="Enter Email ID"
                   value={email} onChange={(e) => setEmail(e.target.value)} required
                 />
               </div>
@@ -565,7 +565,7 @@ const handleResendOtp = async () => {
                       <div className="lsb-ctrl">
                         <i>@</i>
                         <input id="l-email" type="email" name="email"
-                          placeholder="name@startup.com" value={email}
+                          placeholder="Enter Email ID" value={email}
                           onChange={(e) => setEmail(e.target.value)} required />
                       </div>
                     </div>
@@ -616,7 +616,7 @@ const handleResendOtp = async () => {
                       <label htmlFor="otp-email">Email</label>
                       <div className="lsb-ctrl">
                         <i>@</i>
-                        <input id="otp-email" type="email" placeholder="name@startup.com"
+                        <input id="otp-email" type="email" placeholder="Enter Email ID"
                           value={email} onChange={(e) => setEmail(e.target.value)}
                           onKeyDown={(e) => e.key === "Enter" && handleSendOtp()} />
                       </div>

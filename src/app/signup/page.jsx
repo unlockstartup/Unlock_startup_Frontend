@@ -438,7 +438,7 @@ const Page = () => {
                       <label htmlFor="s-name">Full Name</label>
                       <div className="lsb-ctrl">
                         <i>A</i>
-                        <input id="s-name" type="text" placeholder="Aarav Mehta"
+                        <input id="s-name" type="text" placeholder="Full Name"
                           value={name} onChange={(e) => setName(e.target.value)} required />
                       </div>
                     </div>
@@ -446,7 +446,7 @@ const Page = () => {
                       <label htmlFor="s-email">Email</label>
                       <div className="lsb-ctrl">
                         <i>@</i>
-                        <input id="s-email" type="email" placeholder="you@company.com"
+                        <input id="s-email" type="email" placeholder="Enter Email ID"
                           value={email} onChange={(e) => setEmail(e.target.value)} required />
                       </div>
                     </div>
@@ -551,7 +551,7 @@ const Page = () => {
                       <label htmlFor="pub-email">Email Address</label>
                       <div className="lsb-ctrl">
                         <Mail size={15} color="var(--lsb-red)" strokeWidth={2} style={{ flexShrink: 0 }} />
-                        <input id="pub-email" type="email" placeholder="name@company.com"
+                        <input id="pub-email" type="email" placeholder="Enter Email ID"
                           value={email} onChange={(e) => setEmail(e.target.value)} required />
                       </div>
                     </div>

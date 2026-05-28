@@ -146,24 +146,51 @@ const fetchJobs = async (overrides = {}) => {
   /* ── Modal helpers ─────────────────────────────────────────────────────────── */
   const openCreate = () => { setForm(defaultForm); setEditId(null); setShowModal(true); };
 
-  const openEdit = (job) => {
-    const fmtDate = (iso) => (iso ? iso.split("T")[0] : "");
-    const normalizeWorkMode = (mode) => {
-      if (!mode) return "";
-      if (Array.isArray(mode)) return String(mode[0] || "").trim();
-      return String(mode).split(",")[0].trim();
-    };
-    setEditId(job._id);
-    setForm({
-      ...defaultForm, ...job,
-      applyLastDate: fmtDate(job.applyLastDate || job.deadline),
-      applyDate:     fmtDate(job.applyDate),
-      jobType:       String(job.jobType || "").trim(),
-      workMode:      normalizeWorkMode(job.workMode),
-      companyLogo:   job.companyLogo || null,
-    });
-    setShowModal(true);
+const openEdit = (job) => {
+  // Guard against locked listings
+  if ((job.editCount ?? 0) >= 1) {
+    toast.warn("This job has already been edited once and cannot be modified further.");
+    return;
+  }
+
+  const fmtDate = (iso) => (iso ? iso.split("T")[0] : "");
+  const normalizeWorkMode = (mode) => {
+    if (!mode) return "";
+    if (Array.isArray(mode)) return String(mode[0] || "").trim();
+    return String(mode).split(",")[0].trim();
   };
+  setEditId(job._id);
+  setForm({
+    ...defaultForm, ...job,
+    applyLastDate: fmtDate(job.applyLastDate || job.deadline),
+    applyDate:     fmtDate(job.applyDate),
+    jobType:       String(job.jobType || "").trim(),
+    workMode:      normalizeWorkMode(job.workMode),
+    companyLogo:   job.companyLogo || null,
+  });
+  setShowModal(true);
+};
+
+const openReapply = (job) => {
+  const fmtDate = (iso) => (iso ? iso.split("T")[0] : "");
+  const normalizeWorkMode = (mode) => {
+    if (!mode) return "";
+    if (Array.isArray(mode)) return String(mode[0] || "").trim();
+    return String(mode).split(",")[0].trim();
+  };
+
+  // Pre-fill form with existing data but treat as a brand-new listing
+  setForm({
+    ...defaultForm, ...job,
+    applyLastDate: fmtDate(job.applyLastDate || job.deadline),
+    applyDate:     fmtDate(job.applyDate),
+    jobType:       String(job.jobType || "").trim(),
+    workMode:      normalizeWorkMode(job.workMode),
+    companyLogo:   job.companyLogo || null,
+  });
+  setEditId(null);          // null = create mode
+  setShowModal(true);
+};
 
   const closeModal = () => setShowModal(false);
 
@@ -246,6 +273,30 @@ const fetchJobs = async (overrides = {}) => {
     });
     setShowConfirm(true);
   };
+
+const confirmToggleJob = (job) => {
+  if (!job?._id) return;
+  const isDeactivating = job.isActive;
+  setConfirmConfig({
+    title: isDeactivating ? "Deactivate Job" : "Activate Job",
+    message: isDeactivating
+      ? "Are you sure you want to deactivate this job? It will no longer be visible to users."
+      : "Are you sure you want to activate this job? It will become visible to users.",
+    confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
+    cancelText: "Cancel",
+    confirmVariant: isDeactivating ? "warning" : "success",
+    onConfirm: async () => {
+      try {
+        await publisherApi.post(`/api/publisher/jobs/${job._id}/toggle`);
+        toast.success(job.isActive ? "Deactivated" : "Activated");
+        fetchJobs();
+      } catch (err) {
+        toast.error(err?.response?.data?.message || "Update failed");
+      }
+    },
+  });
+  setShowConfirm(true);
+};
 
   const toggleActive = async (job) => {
     try {
@@ -362,36 +413,73 @@ const fetchJobs = async (overrides = {}) => {
                   <th className="tdRight" style={{textAlign: "center"}}> Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                {jobs.map((job, idx) => (
-                  <tr key={job._id}>
-                    <td className="tdMuted">{idx + 1}</td>
-                    <td className="tdSemibold">{job.title}</td>
-                    <td className="tdMuted">{job.jobCategory || "—"}</td>
-                    <td>
-                      <span className={`badge ${statusBadge(job.status)}`}>{job.status}</span>
-                    </td>
-                    <td>
-                      <span className={`badge ${job.isActive ? "badgeSuccess" : "badgeNeutral"}`}>
-                        {job.isActive ? "Active" : "Inactive"}
-                      </span>
-                    </td>
-                    <td className="tdMuted">{job.openings || "—"}</td>
-                    <td>
-                      <div className="actionGroup">
-                        <button className="btn btnSm btnPrimary"  onClick={() => openEdit(job)}>Edit</button>
-                        <button
-                          className={`btn btnSm ${job.isActive ? "btnWarning" : "btnSuccess"}`}
-                          onClick={() => toggleActive(job)}
-                        >
-                          {job.isActive ? "Deactivate" : "Activate"}
-                        </button>
-                        <button className="btn btnSm btnDanger" onClick={() => deleteJob(job._id)}>Delete</button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+<tbody>
+  {jobs.map((job, idx) => {
+    const editLocked = (job.editCount ?? 0) >= 1;
+    return (
+      <tr key={job._id}>
+        <td className="tdMuted">{idx + 1}</td>
+        <td className="tdSemibold">{job.title}</td>
+        <td className="tdMuted">{job.jobCategory || "—"}</td>
+
+        {/* ── Status + lock badge ── */}
+        <td>
+          <span className={`badge ${statusBadge(job.status)}`}>{job.status}</span>
+          
+        </td>
+
+        <td>
+          <span className={`badge ${job.isActive ? "badgeSuccess" : "badgeNeutral"}`}>
+            {job.isActive ? "Active" : "Inactive"}
+          </span>
+        </td>
+        <td className="tdMuted">{job.openings || "—"}</td>
+
+{/* ── Actions ── */}
+<td>
+  <div className="actionGroup">
+{editLocked ? (
+  <button
+    className="btn btnSm btnPrimary"
+    onClick={() => {
+      if (jobButtonDisabled) return toast.warn(
+        subscriptionExpired
+          ? "Your subscription has expired. Please renew to re-apply."
+          : `Job limit of ${planInfo.limits.jobLimit} reached for your current plan.`
+      );
+      openReapply(job);
+    }}
+    title={
+      jobButtonDisabled
+        ? subscriptionExpired
+          ? "Subscription expired"
+          : `Job limit reached (${planInfo?.usage?.jobs}/${planInfo?.limits?.jobLimit})`
+        : "Edit limit reached. Click to create a new listing based on this one."
+    }
+    style={{ whiteSpace: "nowrap" }}
+  >
+    Re-apply
+  </button>
+) : (
+  <button className="btn btnSm btnPrimary" onClick={() => openEdit(job)}>
+    Edit
+  </button>
+)}
+    <button
+      className={`btn btnSm ${job.isActive ? "btnWarning" : "btnSuccess"}`}
+      onClick={() => confirmToggleJob(job)}
+    >
+      {job.isActive ? "Deactivate" : "Activate"}
+    </button>
+    <button className="btn btnSm btnDanger" onClick={() => deleteJob(job._id)}>
+      Delete
+    </button>
+  </div>
+</td>
+      </tr>
+    );
+  })}
+</tbody>
             </table>
           )}
         </div>
@@ -414,7 +502,6 @@ const fetchJobs = async (overrides = {}) => {
               {/* ── Core details ── */}
               <section className="section">
                 <h3 className="sectionTitle">Core details</h3>
-
                 <div className="field">
                   <label className="label">Job Title / Position Name *</label>
                   <input className="input" value={form.title} onChange={set("title")} placeholder="Enter job title" />

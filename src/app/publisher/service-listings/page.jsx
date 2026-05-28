@@ -123,12 +123,23 @@ export default function ServiceListings() {
   /* ── Modal helpers ─────────────────────────────────────────────────────────── */
   const openCreate = () => { setMode("create"); setEditing(null); setForm(initialForm); setServiceImages([]); setOpen(true); };
 
-  const openEdit = (listing) => {
-    setMode("edit"); setEditing(listing);
-    setForm({ ...initialForm, ...listing, disclosureConsent: false });
-    setServiceImages(listing.serviceImages || []);
-    setOpen(true);
-  };
+const openEdit = (listing) => {
+  if ((listing.editCount ?? 0) >= 1) {
+    toast.warn("This listing has already been edited once and cannot be modified further.");
+    return;
+  }
+  setMode("edit"); setEditing(listing);
+  setForm({ ...initialForm, ...listing, disclosureConsent: false });
+  setServiceImages(listing.serviceImages || []);
+  setOpen(true);
+};
+
+const openReapply = (listing) => {
+  setMode("create"); setEditing(null);
+  setForm({ ...initialForm, ...listing, disclosureConsent: false });
+  setServiceImages(listing.serviceImages || []);
+  setOpen(true);
+};
 
   const closeModal = () => { if (saving || uploadingIdx !== null) return; setOpen(false); };
 
@@ -217,6 +228,30 @@ export default function ServiceListings() {
     });
     setShowConfirm(true);
   };
+
+const confirmToggleListing = (listing) => {
+  if (!listing?._id) return;
+  const isDeactivating = listing.isActive;
+  setConfirmConfig({
+    title: isDeactivating ? "Deactivate Service" : "Activate Service",
+    message: isDeactivating
+      ? "Are you sure you want to deactivate this service? It will no longer be visible to users."
+      : "Are you sure you want to activate this service? It will become visible to users.",
+    confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
+    cancelText: "Cancel",
+    confirmVariant: isDeactivating ? "warning" : "success",
+    onConfirm: async () => {
+      try {
+        await publisherApi.patch(`/api/publisher/service-listings/${listing._id}/toggle`);
+        toast.success(`Service ${listing.isActive ? "deactivated" : "activated"}`);
+        fetchListings();
+      } catch (err) {
+        toast.error(err?.response?.data?.message || "Toggle failed");
+      }
+    },
+  });
+  setShowConfirm(true);
+};
 
   const toggleListing = async (listing) => {
     try {
@@ -350,18 +385,42 @@ export default function ServiceListings() {
                         {l.isActive ? "Active" : "Inactive"}
                       </span>
                     </td>
-                    <td>
-                      <div className="actionGroup">
-                        <button className="btn btnSm btnPrimary"  onClick={() => openEdit(l)}>Edit</button>
-                        <button
-                          className={`btn btnSm ${l.isActive ? "btnWarning" : "btnSuccess"}`}
-                          onClick={() => toggleListing(l)}
-                        >
-                          {l.isActive ? "Deactivate" : "Activate"}
-                        </button>
-                        <button className="btn btnSm btnDanger" onClick={() => deleteListing(l._id)}>Delete</button>
-                      </div>
-                    </td>
+<td>
+  <div className="actionGroup">
+    {(l.editCount ?? 0) >= 1 ? (
+      <button
+        className="btn btnSm btnPrimary"
+        onClick={() => {
+          if (addButtonDisabled) return toast.warn(
+            subscriptionExpired ? "Your subscription has expired. Please renew to re-apply."
+            : serviceInactive   ? "You need an active service plan to re-apply."
+            : `Service listing limit of ${planInfo.limits.serviceListingLimit} reached.`
+          );
+          openReapply(l);
+        }}
+        title={
+          addButtonDisabled
+            ? subscriptionExpired ? "Subscription expired"
+              : serviceInactive   ? "Service plan required"
+              : "Service listing limit reached"
+            : "Edit limit reached. Click to create a new listing based on this one."
+        }
+        style={{ whiteSpace: "nowrap" }}
+      >
+        Re-apply
+      </button>
+    ) : (
+      <button className="btn btnSm btnPrimary" onClick={() => openEdit(l)}>Edit</button>
+    )}
+    <button
+      className={`btn btnSm ${l.isActive ? "btnWarning" : "btnSuccess"}`}
+      onClick={() => confirmToggleListing(l)}
+    >
+      {l.isActive ? "Deactivate" : "Activate"}
+    </button>
+    <button className="btn btnSm btnDanger" onClick={() => deleteListing(l._id)}>Delete</button>
+  </div>
+</td>
                   </tr>
                 ))}
               </tbody>

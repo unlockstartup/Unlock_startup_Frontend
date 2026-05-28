@@ -1013,3 +1013,30 @@
     zoom: 1 !important;
   }
 }
+
+/* Add to your CSS file */
+.pd__modal--full {
+  max-width: 900px;
+  width: 90vw;
+  max-height: 85vh;
+}
+
+.pd__modal-body--scrollable {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.pd__modal-grid--full {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.pd__modal-field {
+  break-inside: avoid;
+}
+
+.pd__modal-field-value {
+  word-break: break-word;
+  line-height: 1.5;
+}

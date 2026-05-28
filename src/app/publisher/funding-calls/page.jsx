@@ -111,6 +111,7 @@ function FundingCallsCrud() {
     organizationWebsite: "",
     problemStatement: "",
     attachments: [],
+    applicationType: "",
   }), []);
 
   const [form, setForm] = useState(initialForm);
@@ -172,38 +173,74 @@ function FundingCallsCrud() {
   /* ── Modal helpers ─────────────────────────────────────────────────────────── */
   const openCreate = () => { setMode("create"); setEditing(null); setForm(initialForm); setOpen(true); };
 
-  const openEdit = (row) => {
-    const resolveOrgType = (val) => {
-      if (!val) return "";
-      if (typeof val === "object") return val._id || "";
-      const byId = organizerTypes.find((t) => t._id === val);
-      if (byId) return byId._id;
-      return organizerTypes.find((t) => t.name === val)?._id || "";
-    };
-    setMode("edit");
-    setEditing(row);
-    setForm({
-      ...initialForm, ...row,
-      organizerType:      resolveOrgType(row.organizerType),
-      challengeType:      row.challengeType     || "",
-      challengeCategory:  row.challengeCategory || "",
-      launchDate:         toDateInput(row.launchDate),
-      submissionDeadline: toDateInput(row.submissionDeadline),
-      resultDate:         toDateInput(row.resultDate),
-      additionalRewards: Array.isArray(row.additionalRewards)
-        ? row.additionalRewards.join(", ") : row.additionalRewards || "",
-      eligibilityVerification: Array.isArray(row.eligibilityVerification)
-        ? row.eligibilityVerification.join(", ") : row.eligibilityVerification || "",
-      organizationWebsite: row.organizationWebsite || "",
-      problemStatement:    row.problemStatement   || "",
-      attachments:         row.attachments        || [],
-    });
-    setOpen(true);
+const openEdit = (row) => {
+  // Guard against locked listings
+  if ((row.editCount ?? 0) >= 1) {
+    toast.warn("This competition has already been edited once and cannot be modified further.");
+    return;
+  }
+
+  const resolveOrgType = (val) => {
+    if (!val) return "";
+    if (typeof val === "object") return val._id || "";
+    const byId = organizerTypes.find((t) => t._id === val);
+    if (byId) return byId._id;
+    return organizerTypes.find((t) => t.name === val)?._id || "";
+  };
+  setMode("edit");
+  setEditing(row);
+  setForm({
+    ...initialForm, ...row,
+    organizerType:      resolveOrgType(row.organizerType),
+    challengeType:      row.challengeType     || "",
+    challengeCategory:  row.challengeCategory || "",
+    launchDate:         toDateInput(row.launchDate),
+    submissionDeadline: toDateInput(row.submissionDeadline),
+    resultDate:         toDateInput(row.resultDate),
+    additionalRewards: Array.isArray(row.additionalRewards)
+      ? row.additionalRewards.join(", ") : row.additionalRewards || "",
+    eligibilityVerification: Array.isArray(row.eligibilityVerification)
+      ? row.eligibilityVerification.join(", ") : row.eligibilityVerification || "",
+    organizationWebsite: row.organizationWebsite || "",
+    problemStatement:    row.problemStatement   || "",
+    attachments:         row.attachments        || [],
+    applicationType:     row.applicationType    || "",
+  });
+  setOpen(true);
+};
+const openReapply = (row) => {
+  const resolveOrgType = (val) => {
+    if (!val) return "";
+    if (typeof val === "object") return val._id || "";
+    const byId = organizerTypes.find((t) => t._id === val);
+    if (byId) return byId._id;
+    return organizerTypes.find((t) => t.name === val)?._id || "";
   };
 
+  // Pre-fill form with existing data but treat as a brand-new listing
+  setMode("create");        // create mode = no editId
+  setEditing(null);
+  setForm({
+    ...initialForm, ...row,
+    organizerType:      resolveOrgType(row.organizerType),
+    challengeType:      row.challengeType     || "",
+    challengeCategory:  row.challengeCategory || "",
+    launchDate:         toDateInput(row.launchDate),
+    submissionDeadline: toDateInput(row.submissionDeadline),
+    resultDate:         toDateInput(row.resultDate),
+    additionalRewards: Array.isArray(row.additionalRewards)
+      ? row.additionalRewards.join(", ") : row.additionalRewards || "",
+    eligibilityVerification: Array.isArray(row.eligibilityVerification)
+      ? row.eligibilityVerification.join(", ") : row.eligibilityVerification || "",
+    organizationWebsite: row.organizationWebsite || "",
+    problemStatement:    row.problemStatement   || "",
+    attachments:         row.attachments        || [],
+    applicationType:     row.applicationType    || "",
+  });
+  setOpen(true);
+};
   const closeModal = () => { if (saving || attachmentsUploading) return; setOpen(false); };
 
-  /* ── Validate & save ───────────────────────────────────────────────────────── */
   const validate = () => {
     const required = [
       ["title",             "Challenge Name / Title"],
@@ -261,6 +298,7 @@ function FundingCallsCrud() {
         location:                form.location.trim(),
         registrationLink:        form.registrationLink.trim(),
         attachments:             form.attachments?.length ? form.attachments : [],
+        applicationType:         form.applicationType?.trim() || undefined,
       };
       if (mode === "create") {
         await createFundingCall(payload);
@@ -298,6 +336,30 @@ function FundingCallsCrud() {
     });
     setShowConfirm(true);
   };
+
+ const onToggleActiveConfirm = (row) => {
+   if (!row?._id) { toast.error("Invalid Competition ID"); return; }
+   const isDeactivating = row.isActive;
+   setConfirmConfig({
+     title: isDeactivating ? "Deactivate Competition" : "Activate Competition",
+     message: isDeactivating
+       ? "Are you sure you want to deactivate this competition? It will no longer be visible to users."
+       : "Are you sure you want to activate this competition? It will become visible to users.",
+     confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
+     cancelText: "Cancel",
+     confirmVariant: isDeactivating ? "warning" : "success",
+     onConfirm: async () => {
+       try {
+         await toggleFundingCallActive(row._id);
+         toast.success(isDeactivating ? "Deactivated" : "Activated");
+         load();
+       } catch (e) {
+         toast.error(e?.response?.data?.message || "Toggle failed");
+       }
+     },
+   });
+   setShowConfirm(true);
+ };
 
   const onToggleActive = async (row) => {
     try {
@@ -345,7 +407,7 @@ function FundingCallsCrud() {
     : fundingLimitReached ? `Limit Reached (${planInfo.usage.fundingCalls}/${planInfo.limits.fundingCallsLimit})`
     : "+ Add Competition";
 
-  /* ── Render ────────────────────────────────────────────────────────────────── */
+  /* ── Render  */
   return (
     <div className="page">
 
@@ -447,43 +509,86 @@ function FundingCallsCrud() {
                   <th className="tdRight" style={{textAlign: "center"}}>Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                {rows.map((r, idx) => (
-                  <tr key={r._id}>
-                    <td className="tdMuted">{(page - 1) * limit + idx + 1}</td>
-                    <td>
-                      <div className="tdSemibold">{r.title}</div>
-                      {r.organizingCompany && <div className="tdMuted">{r.organizingCompany}</div>}
-                    </td>
-                    <td className="tdMuted">{r.challengeCategory || "—"}</td>
-                    <td><StatusBadge status={r.status} /></td>
-                    <td>
-                      <span className={`badge ${r.isActive ? "badgeSuccess" : "badgeNeutral"}`}>
-                        {r.isActive ? "Active" : "Inactive"}
-                      </span>
-                    </td>
-                    <td className="tdMuted">
-                      {r.submissionDeadline ? new Date(r.submissionDeadline).toLocaleDateString() : "—"}
-                    </td>
-                    <td>
-                      <div className="actionGroup">
-                        <button
-                          className="btn btnSm btnPrimary"
-                          onClick={() => { if (!hasAccess) return toast.info("Subscribe to edit"); openEdit(r); }}
-                        >Edit</button>
-                        <button
-                          className={`btn btnSm ${r.isActive ? "btnWarning" : "btnSuccess"}`}
-                          onClick={() => { if (!hasAccess) return toast.info("Subscribe to change status"); onToggleActive(r); }}
-                        >{r.isActive ? "Deactivate" : "Activate"}</button>
-                        <button
-                          className="btn btnSm btnDanger"
-                          onClick={() => { if (!hasAccess) return toast.info("Subscribe to delete"); onDelete(r); }}
-                        >Delete</button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+<tbody>
+  {rows.map((r, idx) => {
+    const editLocked = (r.editCount ?? 0) >= 1;
+    return (
+      <tr key={r._id}>
+        <td className="tdMuted">{(page - 1) * limit + idx + 1}</td>
+        <td>
+          <div className="tdSemibold">{r.title}</div>
+          {r.organizingCompany && <div className="tdMuted">{r.organizingCompany}</div>}
+        </td>
+        <td className="tdMuted">{r.challengeCategory || "—"}</td>
+
+        {/* ── Status + lock badge ── */}
+        <td>
+          <StatusBadge status={r.status} />
+        
+        </td>
+
+        <td>
+          <span className={`badge ${r.isActive ? "badgeSuccess" : "badgeNeutral"}`}>
+            {r.isActive ? "Active" : "Inactive"}
+          </span>
+        </td>
+        <td className="tdMuted">
+          {r.submissionDeadline ? new Date(r.submissionDeadline).toLocaleDateString() : "—"}
+        </td>
+
+{/* ── Actions ── */}
+<td>
+  <div className="actionGroup">
+{editLocked ? (
+  <button
+    className="btn btnSm btnPrimary"
+    onClick={() => {
+      if (!hasAccess) return toast.warn("Please purchase a subscription to re-apply.");
+      if (fundingLimitReached) return toast.warn(
+        `Competition limit of ${planInfo.limits.fundingCallsLimit} reached for your current plan.`
+      );
+      openReapply(r);
+    }}
+    title={
+      !hasAccess
+        ? "Subscription required"
+        : fundingLimitReached
+        ? `Competition limit reached (${planInfo?.usage?.fundingCalls}/${planInfo?.limits?.fundingCallsLimit})`
+        : "Edit limit reached. Click to create a new listing based on this one."
+    }
+    style={{ whiteSpace: "nowrap" }}
+  >
+    Re-apply
+  </button>
+) : (
+  <button
+    className="btn btnSm btnPrimary"
+    onClick={() => {
+      if (!hasAccess) return toast.info("Subscribe to edit");
+      openEdit(r);
+    }}
+  >
+    Edit
+  </button>
+)}
+    <button
+      className={`btn btnSm ${r.isActive ? "btnWarning" : "btnSuccess"}`}
+      onClick={() => { if (!hasAccess) return toast.info("Subscribe to change status"); onToggleActiveConfirm(r); }}
+    >
+      {r.isActive ? "Deactivate" : "Activate"}
+    </button>
+    <button
+      className="btn btnSm btnDanger"
+      onClick={() => { if (!hasAccess) return toast.info("Subscribe to delete"); onDelete(r); }}
+    >
+      Delete
+    </button>
+  </div>
+</td>
+      </tr>
+    );
+  })}
+</tbody>
             </table>
           )}
 
@@ -568,7 +673,7 @@ function FundingCallsCrud() {
                 <h3 className="sectionTitle">Organizer information</h3>
 
                 <div className="row2">
-                  <Field label="Organizing Company / Institution *">
+                  <Field label="Organizing Name*">
                     <input className="input" value={form.organizingCompany} onChange={sf("organizingCompany")} placeholder="Enter company name" />
                   </Field>
                   <Field label="Company Type *">
@@ -591,14 +696,14 @@ function FundingCallsCrud() {
                   </Field>
                 </div>
 
-                <Field label="Organization Website">
+                <Field label="Website Url">
                   <input type="url" className="input" placeholder="https://…" value={form.organizationWebsite} onChange={sf("organizationWebsite")} />
                 </Field>
               </section>
 
               {/* ── Content ── */}
               <section className="section">
-                <h3 className="sectionTitle">Content</h3>
+                <h3 className="sectionTitle">About Challenges</h3>
 
                 <Field label="Problem Statement">
                   <textarea className="textarea" rows={4} placeholder="Detailed challenge description / problem being solved" value={form.problemStatement} onChange={sf("problemStatement")} />
@@ -616,8 +721,8 @@ function FundingCallsCrud() {
                   <Field label="Key Focus Areas">
                     <input className="input" value={form.keyFocusAreas} onChange={sf("keyFocusAreas")} placeholder="e.g. Climate Tech, FinTech" />
                   </Field>
-                  <Field label="Eligible Participants">
-                    <input className="input" value={form.eligibleParticipants} onChange={sf("eligibleParticipants")} placeholder="e.g. Startups, Students" />
+                  <Field label="Who can participate">
+                    <input className="input" value={form.eligibleParticipants} onChange={sf("eligibleParticipants")} placeholder="e.g. Individual, Company, Startups, Innovators, Students" />
                   </Field>
                 </div>
               </section>
@@ -631,12 +736,33 @@ function FundingCallsCrud() {
                 </Field>
 
                 <div className="row2">
-                  <Field label="Application Fee (₹)">
-                    <input type="number" className="input" value={form.applicationFee} onChange={sf("applicationFee")} min="0" step="1" placeholder="0" />
-                  </Field>
-                  <Field label="Eligibility Verification" note="(comma separated)">
+                 <Field label="Application Type">
+                                      <select
+                     className="select"
+                     value={form.applicationType}
+                     onChange={(e) => {
+                       const val = e.target.value;
+                       setForm((p) => ({
+                         ...p,
+                         applicationType: val,
+                         applicationFee: val === "paid" ? p.applicationFee : 0,
+                       }));
+                     }}
+                   >
+                     <option value="">Select</option>
+                     <option value="free">Free</option>
+                     <option value="paid">Paid</option>
+                     <option value="invite only">Invite Only</option>
+                   </select>
+                 </Field>
+                 {form.applicationType === "paid" && (
+                   <Field label="Application Fee (₹)">
+                     <input type="number" className="input" value={form.applicationFee} onChange={sf("applicationFee")} min="0" step="1" placeholder="0" />
+                   </Field>
+                 )}
+                  {/* <Field label="Eligibility Verification" note="(comma separated)">
                     <input className="input" value={form.eligibilityVerification} onChange={sf("eligibilityVerification")} placeholder="Pitch deck, Business plan, etc." />
-                  </Field>
+                  </Field> */}
                 </div>
               </section>
 

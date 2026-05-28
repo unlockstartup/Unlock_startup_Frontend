@@ -75,50 +75,75 @@ export default function PublisherTopbar({ onToggle }) {
       <button
         className="btn btn-light ventic-icon-btn"
         onClick={onToggle}
-    
       >
         <i className="bi bi-list" style={{ fontSize: "1.6rem" }} />
       </button>
 
-      <div className="ventic-topbar__right">
-
+      {/* Right section: explicit gap + vertical centering */}
+      <div
+        className="ventic-topbar__right"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "0.75rem",   // controls space between bell and profile
+        }}
+      >
         {/* Notifications */}
         <button
-          className="btn btn-light ventic-icon-btn position-relative"
+          className="btn btn-light ventic-icon-btn"
           onClick={() => router.push("/publisher/notifications")}
+          style={{
+            position: "relative",
+            width: 44,
+            height: 44,
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 0,
+          }}
         >
           <i className="bi bi-bell" style={{ fontSize: "1.45rem" }} />
+
           {unreadCount > 0 && (
             <span
-              className="badge bg-danger ventic-badge"
               style={{
-                fontSize: "0.75rem",
-                minWidth: "20px",
-                height: "20px",
+                position: "absolute",
+                top: 2,
+                right: 2,
+                fontSize: "0.7rem",
+                minWidth: 18,
+                height: 18,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 borderRadius: "999px",
-                padding: "0 6px",
-                fontWeight: 600,
+                padding: "0 5px",
+                fontWeight: 700,
+                background: "#dc3545",   // Bootstrap danger red
+                color: "#fff",
+                border: "2px solid #fff", // keeps it separated from dark backgrounds
+                boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                zIndex: 2,
               }}
             >
-              {unreadCount}
+              {unreadCount > 99 ? "99+" : unreadCount}
             </span>
           )}
         </button>
 
-        {/* Profile Dropdown - Enhanced */}
+        {/* Profile Dropdown */}
         <div className="dropdown">
           <button
-            className="btn btn-light d-flex align-items-center gap-3 dropdown-toggle"
+            className="btn btn-light d-flex align-items-center gap-2 dropdown-toggle"
             data-bs-toggle="dropdown"
             style={{
-              fontSize: "1rem",
+              fontSize: "0.95rem",
               fontWeight: 600,
-              padding: "8px 16px",
+              padding: "6px 12px",
               borderRadius: "12px",
               border: "1px solid #e2e8f0",
+              height: 44,          // match bell button height
             }}
           >
             {profileurl ? (
@@ -126,23 +151,23 @@ export default function PublisherTopbar({ onToggle }) {
                 src={profileurl}
                 alt="profile"
                 className="rounded-circle"
-                width={42}
-                height={42}
-                style={{ objectFit: "cover", boxShadow: "0 2px 6px rgba(0,0,0,0.1)" }}
+                width={32}
+                height={32}
+                style={{ objectFit: "cover" }}
               />
             ) : (
-              <NameAvatar name={name} size={42} />
+              <NameAvatar name={name} size={32} />
             )}
-            <span>{name}</span>
+            <span className="d-none d-sm-inline">{name}</span>
           </button>
 
           <ul
             className="dropdown-menu dropdown-menu-end"
             style={{
-              fontSize: "1.25rem",
-              minWidth: "210px",
-              borderRadius: "14px",
-              padding: "8px 0",
+              fontSize: "0.9rem",
+              minWidth: "200px",
+              borderRadius: "12px",
+              padding: "6px 0",
               boxShadow: "0 10px 25px rgba(0, 0, 0, 0.12)",
               border: "1px solid #e2e8f0",
               marginTop: "8px",
@@ -150,37 +175,27 @@ export default function PublisherTopbar({ onToggle }) {
           >
             <li>
               <button
-                className="dropdown-item d-flex align-items-center gap-3"
-                style={{ 
-                  padding: "12px 20px",
-                  borderRadius: "8px",
-                  margin: "2px 6px"
-                }}
+                className="dropdown-item d-flex align-items-center gap-2"
+                style={{ padding: "10px 16px", borderRadius: "6px", margin: "2px 8px" }}
                 onClick={() => router.push("/publisher/profile")}
               >
-                <i className="bi bi-person-circle" style={{ fontSize: "1.25rem", color: "#4338ca" }}></i>
+                <i className="bi bi-person-circle" style={{ fontSize: "1.1rem", color: "#4338ca" }} />
                 My Profile
               </button>
             </li>
-
             <li>
               <hr className="dropdown-divider mx-3 my-1" />
             </li>
-
             <li>
               <button
-                className="dropdown-item d-flex align-items-center gap-3 text-danger"
-                style={{ 
-                  padding: "12px 20px",
-                  borderRadius: "8px",
-                  margin: "2px 6px"
-                }}
+                className="dropdown-item d-flex align-items-center gap-2 text-danger"
+                style={{ padding: "10px 16px", borderRadius: "6px", margin: "2px 8px" }}
                 onClick={() => {
                   logout();
                   window.location.href = "/";
                 }}
               >
-                <i className="bi bi-box-arrow-right" style={{ fontSize: "1.25rem" }}></i>
+                <i className="bi bi-box-arrow-right" style={{ fontSize: "1.1rem" }} />
                 Logout
               </button>
             </li>

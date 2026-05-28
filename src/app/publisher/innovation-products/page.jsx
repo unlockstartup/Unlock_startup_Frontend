@@ -147,22 +147,32 @@ export default function InnovationProducts() {
 
   const addBtnLabel = subscriptionExpired ? "Subscription Expired"
     : productLimitReached ? `Limit Reached (${planInfo.usage.products}/${planInfo.limits.productsLimit})`
-    : "+ Submit Product";
+    : "+ Add Product";
 
   /* ── Modal helpers ─────────────────────────────────────────────────────────── */
   const openCreate = () => {
     setMode("create"); setEditing(null); setForm(initialForm);
     setProductLogo(null); setProductImages([]); setOpen(true);
   };
+const openEdit = (prod) => {
+  if ((prod.editCount ?? 0) >= 1) {
+    toast.warn("This product has already been edited once and cannot be modified further.");
+    return;
+  }
+  setMode("edit"); setEditing(prod);
+  setForm({ ...initialForm, ...prod, shortProductDescription: prod.shortProductDescription || "", awardsRecognition: prod.awardsRecognition || "" });
+  setProductLogo(prod.productLogo || null);
+  setProductImages(prod.productImages || []);
+  setOpen(true);
+};
 
-  const openEdit = (prod) => {
-    setMode("edit"); setEditing(prod);
-    setForm({ ...initialForm, ...prod, shortProductDescription: prod.shortProductDescription || "", awardsRecognition: prod.awardsRecognition || "" });
-    setProductLogo(prod.productLogo || null);
-    setProductImages(prod.productImages || []);
-    setOpen(true);
-  };
-
+const openReapply = (prod) => {
+  setMode("create"); setEditing(null);
+  setForm({ ...initialForm, ...prod, shortProductDescription: prod.shortProductDescription || "", awardsRecognition: prod.awardsRecognition || "", disclosureConsent: false });
+  setProductLogo(prod.productLogo || null);
+  setProductImages(prod.productImages || []);
+  setOpen(true);
+};
   const closeModal = () => { if (saving || uploadingImage || uploadingProductImages) return; setOpen(false); };
 
   /* ── Image uploads ─────────────────────────────────────────────────────────── */
@@ -255,6 +265,29 @@ export default function InnovationProducts() {
     setShowConfirm(true);
   };
 
+  const confirmToggleProduct = (prod) => {
+  if (!prod?._id) { toast.error("Invalid Product ID"); return; }
+  const isDeactivating = prod.isActive;
+  setConfirmConfig({
+    title: isDeactivating ? "Deactivate Product" : "Activate Product",
+    message: isDeactivating
+      ? "Are you sure you want to deactivate this product? It will no longer be visible to users."
+      : "Are you sure you want to activate this product? It will become visible to users.",
+    confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
+    cancelText: "Cancel",
+    confirmVariant: isDeactivating ? "warning" : "success",
+    onConfirm: async () => {
+      try {
+        await publisherApi.patch(`/api/publisher/innovation-products/${prod._id}/toggle`);
+        toast.success(`Product ${isDeactivating ? "deactivated" : "activated"}`);
+        fetchProducts();
+      } catch (err) {
+        toast.error(err?.response?.data?.message || "Toggle failed");
+      }
+    },
+  });
+  setShowConfirm(true);
+};
   /* ── Render ────────────────────────────────────────────────────────────────── */
   return (
     <div className="page">
@@ -371,18 +404,40 @@ export default function InnovationProducts() {
                         {prod.isActive ? "Active" : "Inactive"}
                       </span>
                     </td>
-                    <td>
-                      <div className="actionGroup">
-                        <button className="btn btnSm btnPrimary" onClick={() => openEdit(prod)}>Edit</button>
-                        <button
-                          className={`btn btnSm ${prod.isActive ? "btnWarning" : "btnSuccess"}`}
-                          onClick={() => toggleProduct(prod)}
-                        >
-                          {prod.isActive ? "Deactivate" : "Activate"}
-                        </button>
-                        <button className="btn btnSm btnDanger" onClick={() => deleteProduct(prod._id)}>Delete</button>
-                      </div>
-                    </td>
+<td>
+  <div className="actionGroup">
+    {(prod.editCount ?? 0) >= 1 ? (
+      <button
+        className="btn btnSm btnPrimary"
+        onClick={() => {
+          if (productButtonDisabled) return toast.warn(
+            subscriptionExpired
+              ? "Your subscription has expired. Please renew to re-apply."
+              : `Products limit of ${planInfo.limits.productsLimit} reached for your current plan.`
+          );
+          openReapply(prod);
+        }}
+        title={
+          productButtonDisabled
+            ? subscriptionExpired ? "Subscription expired" : "Products limit reached"
+            : "Edit limit reached. Click to create a new listing based on this one."
+        }
+        style={{ whiteSpace: "nowrap" }}
+      >
+        Re-apply
+      </button>
+    ) : (
+      <button className="btn btnSm btnPrimary" onClick={() => openEdit(prod)}>Edit</button>
+    )}
+    <button
+      className={`btn btnSm ${prod.isActive ? "btnWarning" : "btnSuccess"}`}
+      onClick={() => confirmToggleProduct(prod)}
+    >
+      {prod.isActive ? "Deactivate" : "Activate"}
+    </button>
+    <button className="btn btnSm btnDanger" onClick={() => deleteProduct(prod._id)}>Delete</button>
+  </div>
+</td>
                   </tr>
                 ))}
               </tbody>

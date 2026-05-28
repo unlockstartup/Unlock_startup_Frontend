@@ -237,7 +237,7 @@ export default function Page() {
                       className="pp-field-label"
                       style={{ fontSize: "1.2rem", fontWeight: 600 }}
                     >
-                      Description
+                      About Company
                     </label>
                     <textarea
                       className="pp-input pp-textarea"
@@ -326,7 +326,7 @@ export default function Page() {
                   {formData.description && (
                     <div className="pp-info-cell pp-info-cell--full">
                       <p className="pp-info-label" style={{ fontSize: "1.0rem", fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                        Description
+                        About Company
                       </p>
                       <p className="pp-info-value" style={{ fontSize: "1.2rem", color: "#1e293b" }}>
                         {formData.description}
