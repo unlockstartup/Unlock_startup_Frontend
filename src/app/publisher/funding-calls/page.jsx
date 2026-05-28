@@ -668,12 +668,12 @@ const openReapply = (row) => {
                 </div>
               </section>
 
-              {/* ── Organizer information ── */}
+              {/* ── Company information ── */}
               <section className="section">
-                <h3 className="sectionTitle">Organizer information</h3>
+                <h3 className="sectionTitle">Company information</h3>
 
                 <div className="row2">
-                  <Field label="Organizing Name*">
+                  <Field label="Company Name*">
                     <input className="input" value={form.organizingCompany} onChange={sf("organizingCompany")} placeholder="Enter company name" />
                   </Field>
                   <Field label="Company Type *">

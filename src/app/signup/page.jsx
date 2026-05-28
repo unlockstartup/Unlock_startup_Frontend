@@ -11,9 +11,7 @@ import {
 } from "lucide-react";
 import Select from "react-select";
 
-/* ─────────────────────────────────────
-   OTP MODAL
-───────────────────────────────────── */
+
 function OtpModal({ email, onVerify, onResend, onClose, loading }) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [seconds, setSeconds] = useState(300);
@@ -429,9 +427,7 @@ const Page = () => {
                   </div>
                 </div>
 
-                {/* ════════════════════════
-                    USER FORM
-                ════════════════════════ */}
+             
                 {accountType === "user" && (
                   <form className="lsb-form" onSubmit={handleUserSubmit}>
                     <div className="lsb-field">

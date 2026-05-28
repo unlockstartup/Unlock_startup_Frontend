@@ -467,7 +467,7 @@ export default function Page({ params }) {
                 <div className="competitionInfoBlock">
                   <div className="competitionInfoBlockTitle">
                     <span className="competitionInfoBlockIcon"><Building2 size={18} strokeWidth={2} /></span>
-                    Organizer
+                    Company Details
                   </div>
 
                   {/* Blurred contact content */}
@@ -476,7 +476,7 @@ export default function Page({ params }) {
                       <div className="competitionInfoLine">
                         <span className="competitionRegIcon"><Building2 size={16} strokeWidth={2} /></span>
                         <div className="competitionRegMeta">
-                          <span className="competitionRegLabel">Organization</span>
+                          <span className="competitionRegLabel">Company Name</span>
                           <span>{funding.organizingCompany}</span>
                         </div>
                       </div>

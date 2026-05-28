@@ -593,7 +593,7 @@ const openReapply = (prod) => {
 
               {/* ── Organization & contact ── */}
               <section className="section">
-                <h3 className="sectionTitle">Organization &amp; contact</h3>
+                <h3 className="sectionTitle">Company Details</h3>
 
                 <div className="row2">
                   <Field label="Company / Research Institution *">
