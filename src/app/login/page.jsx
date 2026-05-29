@@ -513,23 +513,23 @@ const handleResendOtp = async () => {
                   </span>
                 </div>
                 <div className="lsb-features">
-                  <div className="lsb-feature" >
-                    <strong>Competitions</strong><span>Submit and track</span>
+                  <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(255,207,10) 0%, rgb(223,88,42) 100%)", color: "#1a1a1a" }}>
+                    <strong>Competitions</strong><span style={{color: "white"}}>Submit and track</span>
                   </div>
-                  <div className="lsb-feature" >
-                    <strong>Events</strong><span>Register and manage</span>
+                  <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(30,176,228) 0%, rgb(255,207,10) 100%)", color: "#1a1a1a" }}>
+                    <strong>Events</strong><span style={{color: "white"}}>Register and manage</span>
                   </div>
-                  <div className="lsb-feature" >
-                    <strong>Jobs</strong><span>Talent and hiring</span>
+                  <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(223,88,42) 0%, rgb(30,176,228) 100%)" }}>
+                    <strong>Jobs</strong><span style={{color: "white"}}>Talent and hiring</span>
                   </div>
-                  <div className="lsb-feature" >
-                    <strong>Investors</strong><span>Pitch and connect</span>
+                  <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(255,207,10) 0%, rgb(30,176,228) 100%)", color: "#1a1a1a" }}>
+                    <strong>Investors</strong><span style={{color: "white"}}>Pitch and connect</span>
                   </div>
-                  <div className="lsb-feature" >
-                    <strong>Products</strong><span>Buy and order</span>
+                  <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(30,176,228) 0%, rgb(223,88,42) 100%)" }}>
+                    <strong>Products</strong><span style={{color: "white"}}>Buy and order</span>
                   </div>
-                  <div className="lsb-feature" >
-                    <strong>Services</strong><span>Let us help</span>
+                  <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(223,88,42) 0%, rgb(255,207,10) 100%)", color: "#1a1a1a" }}>
+                    <strong>Services</strong><span style={{color: "white"}}>Let us help</span>
                   </div>
                 </div>
               </div>
