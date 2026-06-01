@@ -1,12 +1,3 @@
-/* ============================================
-   Profile Dashboard — Extracted Styles
-   Namespace: pd- (Profile Dashboard)
-   Fully responsive: mobile-first
-   Breakpoints:
-     sm  ≥ 480px
-     md  ≥ 640px
-     lg  ≥ 992px
-   ============================================ */
 
 /* ── Root & Layout ── */
 .pd-root {
@@ -25,7 +16,7 @@
 
 /* ── Sidebar ── */
 .pd-sidebar {
-  width: 260px;
+  width: 330px;
   min-width: 260px;
   background: #fff;
   border-right: 1px solid #e9ecef;
@@ -51,7 +42,7 @@
     padding-top: 0 !important;
     height: 100dvh !important;
     height: 100vh !important;       /* fallback for browsers without dvh */
-    width: 280px !important;
+    width: 290px !important;
     min-width: 0 !important;
     box-shadow: 4px 0 32px rgba(0, 0, 0, 0.18);
   }
@@ -1413,4 +1404,212 @@ textarea.pd-form-input {
   padding-top: 16px;
   border-top: 1px solid #f3f4f6;
   flex-wrap: wrap;
+}
+
+/* ══════════════════════════════════════════════
+   Font-size bump (+6px across the board)
+   Paste at the very bottom of profile-dashboard.css
+══════════════════════════════════════════════ */
+
+.pd-section-head__title   { font-size: 30px; }
+.pd-section-head__subtitle{ font-size: 20px; }
+
+.pd-hero-name             { font-size: 28px; }
+.pd-hero-role             { font-size: 20px; }
+.pd-hero-meta,
+.pd-hero-link             { font-size: 19px; }
+.pd-hero-bio             { font-size: 20px; }
+
+.pd-info-card__title      { font-size: 22px; }
+.pd-info-row__label       { font-size: 18px; }
+.pd-info-row__value       { font-size: 20px; }
+
+.pd-form-label            { font-size: 19px; }
+.pd-form-input,
+.pd-form-input::placeholder { font-size: 20px; }
+
+.pd-nav__label            { font-size: 17px; }
+.pd-nav__btn              { font-size: 20px; }
+.pd-avatar-name           { font-size: 21px; }
+.pd-avatar-role           { font-size: 18px; }
+.pd-verified-badge        { font-size: 18px; }
+
+.app-card__title          { font-size: 22px; }
+.app-card__status         { font-size: 18px; }
+.app-card__meta-item      { font-size: 19px; }
+
+.detail-section__heading  { font-size: 20px; }
+.detail-row__label        { font-size: 19px; }
+.detail-row__value,
+.detail-row__value--desc  { font-size: 20px; }
+
+.pd-state-text            { font-size: 20px; }
+.pd-breadcrumb,
+.pd-breadcrumb__link,
+.pd-breadcrumb__current,
+.pd-breadcrumb__sep       { font-size: 19px; }
+
+.pd-save-btn              { font-size: 20px; }
+.pd-saved-msg             { font-size: 19px; }
+.pd-page-info             { font-size: 19px; }
+.pd-page-btn              { font-size: 19px; }
+
+.pd-notif-row__label      { font-size: 21px; }
+.pd-notif-row__desc       { font-size: 19px; }
+
+.pd-sidebar__header span  { font-size: 20px; }
+.pd-topbar__user-name     { font-size: 20px; }
+
+
+/*
+   RESPONSIVE FONT SCALE — Mobile / Tablet / Desktop
+/* ── Mobile base ── */
+.pd-section-head__title    { font-size: 22px; line-height: 1.25; }
+.pd-section-head__subtitle { font-size: 16px; line-height: 1.4; }
+
+.pd-hero-name              { font-size: 20px; line-height: 1.2; }
+.pd-hero-role              { font-size: 16px; line-height: 1.4; }
+.pd-hero-meta,
+.pd-hero-link              { font-size: 15px; line-height: 1.5; }
+.pd-hero-bio               { font-size: 16px; line-height: 1.6; }
+
+.pd-info-card__title       { font-size: 18px; line-height: 1.3; }
+.pd-info-row__label        { font-size: 15px; line-height: 1.4; }
+.pd-info-row__value        { font-size: 16px; line-height: 1.5; }
+
+.pd-form-label             { font-size: 15px; line-height: 1.4; }
+.pd-form-input,
+.pd-form-input::placeholder{ font-size: 16px; line-height: 1.5; }
+
+.pd-nav__label             { font-size: 13px; line-height: 1.3; }
+.pd-nav__btn               { font-size: 16px; line-height: 1.4; }
+.pd-avatar-name            { font-size: 17px; line-height: 1.3; }
+.pd-avatar-role            { font-size: 14px; line-height: 1.4; }
+.pd-verified-badge         { font-size: 14px; line-height: 1.4; }
+
+.app-card__title           { font-size: 18px; line-height: 1.3; }
+.app-card__status         { font-size: 14px; line-height: 1.4; }
+.app-card__meta-item       { font-size: 15px; line-height: 1.5; }
+
+.detail-section__heading  { font-size: 16px; line-height: 1.3; }
+.detail-row__label        { font-size: 15px; line-height: 1.4; }
+.detail-row__value,
+.detail-row__value--desc  { font-size: 16px; line-height: 1.5; }
+
+.pd-state-text            { font-size: 16px; line-height: 1.5; }
+.pd-breadcrumb,
+.pd-breadcrumb__link,
+.pd-breadcrumb__current,
+.pd-breadcrumb__sep       { font-size: 15px; line-height: 1.4; }
+
+.pd-save-btn              { font-size: 16px; line-height: 1.4; }
+.pd-saved-msg             { font-size: 15px; line-height: 1.4; }
+.pd-page-info             { font-size: 15px; line-height: 1.4; }
+.pd-page-btn              { font-size: 15px; line-height: 1.4; }
+
+.pd-notif-row__label      { font-size: 17px; line-height: 1.3; }
+.pd-notif-row__desc       { font-size: 15px; line-height: 1.5; }
+
+.pd-topbar__user-name     { font-size: 16px; line-height: 1.4; }
+
+/* ── Tablet (768px – 1199px) ── */
+@media (min-width: 768px) {
+  .pd-section-head__title    { font-size: 26px; }
+  .pd-section-head__subtitle { font-size: 18px; }
+
+  .pd-hero-name              { font-size: 24px; }
+  .pd-hero-role              { font-size: 18px; }
+  .pd-hero-meta,
+  .pd-hero-link              { font-size: 17px; }
+  .pd-hero-bio               { font-size: 18px; }
+
+  .pd-info-card__title       { font-size: 20px; }
+  .pd-info-row__label        { font-size: 16px; }
+  .pd-info-row__value        { font-size: 18px; }
+
+  .pd-form-label             { font-size: 17px; }
+  .pd-form-input,
+  .pd-form-input::placeholder{ font-size: 18px; }
+
+  .pd-nav__label             { font-size: 15px; }
+  .pd-nav__btn               { font-size: 18px; }
+  .pd-avatar-name            { font-size: 19px; }
+  .pd-avatar-role            { font-size: 16px; }
+  .pd-verified-badge         { font-size: 16px; }
+
+  .app-card__title           { font-size: 20px; }
+  .app-card__status          { font-size: 16px; }
+  .app-card__meta-item       { font-size: 17px; }
+
+  .detail-section__heading  { font-size: 18px; }
+  .detail-row__label        { font-size: 17px; }
+  .detail-row__value,
+  .detail-row__value--desc  { font-size: 18px; }
+
+  .pd-state-text            { font-size: 18px; }
+  .pd-breadcrumb,
+  .pd-breadcrumb__link,
+  .pd-breadcrumb__current,
+  .pd-breadcrumb__sep       { font-size: 17px; }
+
+  .pd-save-btn              { font-size: 18px; }
+  .pd-saved-msg             { font-size: 17px; }
+  .pd-page-info             { font-size: 17px; }
+  .pd-page-btn              { font-size: 17px; }
+
+  .pd-notif-row__label      { font-size: 19px; }
+  .pd-notif-row__desc       { font-size: 17px; }
+
+  .pd-topbar__user-name     { font-size: 18px; }
+}
+
+/* ── Desktop (1200px+) — full +6px bump ── */
+@media (min-width: 1200px) {
+  .pd-section-head__title    { font-size: 30px; }
+  .pd-section-head__subtitle { font-size: 20px; }
+
+  .pd-hero-name              { font-size: 28px; }
+  .pd-hero-role              { font-size: 20px; }
+  .pd-hero-meta,
+  .pd-hero-link              { font-size: 19px; }
+  .pd-hero-bio               { font-size: 20px; }
+
+  .pd-info-card__title       { font-size: 22px; }
+  .pd-info-row__label        { font-size: 18px; }
+  .pd-info-row__value        { font-size: 20px; }
+
+  .pd-form-label             { font-size: 19px; }
+  .pd-form-input,
+  .pd-form-input::placeholder{ font-size: 20px; }
+
+  .pd-nav__label             { font-size: 17px; }
+  .pd-nav__btn               { font-size: 20px; }
+  .pd-avatar-name            { font-size: 21px; }
+  .pd-avatar-role            { font-size: 18px; }
+  .pd-verified-badge         { font-size: 18px; }
+
+  .app-card__title           { font-size: 22px; }
+  .app-card__status          { font-size: 18px; }
+  .app-card__meta-item       { font-size: 19px; }
+
+  .detail-section__heading  { font-size: 20px; }
+  .detail-row__label        { font-size: 19px; }
+  .detail-row__value,
+  .detail-row__value--desc  { font-size: 20px; }
+
+  .pd-state-text            { font-size: 20px; }
+  .pd-breadcrumb,
+  .pd-breadcrumb__link,
+  .pd-breadcrumb__current,
+  .pd-breadcrumb__sep       { font-size: 19px; }
+
+  .pd-save-btn              { font-size: 20px; }
+  .pd-saved-msg             { font-size: 19px; }
+  .pd-page-info             { font-size: 19px; }
+  .pd-page-btn              { font-size: 19px; }
+
+  .pd-notif-row__label      { font-size: 21px; }
+  .pd-notif-row__desc       { font-size: 19px; }
+
+  .pd-topbar__user-name     { font-size: 20px; }
 }

@@ -543,7 +543,7 @@ registrationDeadline: raw.registrationDeadline
   <span className="eventInfoBlockIcon">
     <Building2 size={14} strokeWidth={2} />
   </span>
-  Organizer
+  Company Details
 </div>
 
                   {/* Blurred contact content */}
@@ -552,7 +552,7 @@ registrationDeadline: raw.registrationDeadline
                       <div className="eventInfoLine">
                         <span className="eventRegIcon"><Building2 size={13} strokeWidth={1.75} /></span>
                         <div className="eventRegMeta">
-                          <span className="eventRegLabel">Organization</span>
+                          <span className="eventRegLabel">Company Name</span>
                           <span className="eventRegValue">{event.organization}</span>
                         </div>
                       </div>

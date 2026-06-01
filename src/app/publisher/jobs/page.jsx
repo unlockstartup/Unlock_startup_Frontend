@@ -61,7 +61,7 @@ const statusBadge = (status) => {
 };
 
 /* ─── Component ─────────────────────────────────────────────────────────────── */
-export default function Page() {
+export default function JobPage() {
   const [jobs, setJobs]         = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading]   = useState(true);
@@ -147,28 +147,38 @@ const fetchJobs = async (overrides = {}) => {
   const openCreate = () => { setForm(defaultForm); setEditId(null); setShowModal(true); };
 
 const openEdit = (job) => {
-  // Guard against locked listings
-  if ((job.editCount ?? 0) >= 1) {
-    toast.warn("This job has already been edited once and cannot be modified further.");
-    return;
-  }
+  const alreadyEdited = (job.editCount ?? 0) >= 1;
 
-  const fmtDate = (iso) => (iso ? iso.split("T")[0] : "");
-  const normalizeWorkMode = (mode) => {
-    if (!mode) return "";
-    if (Array.isArray(mode)) return String(mode[0] || "").trim();
-    return String(mode).split(",")[0].trim();
-  };
-  setEditId(job._id);
-  setForm({
-    ...defaultForm, ...job,
-    applyLastDate: fmtDate(job.applyLastDate || job.deadline),
-    applyDate:     fmtDate(job.applyDate),
-    jobType:       String(job.jobType || "").trim(),
-    workMode:      normalizeWorkMode(job.workMode),
-    companyLogo:   job.companyLogo || null,
+  setConfirmConfig({
+    title: alreadyEdited ? "Edit Not Allowed" : "Edit Job",
+    message: alreadyEdited
+      ? "This job has already been edited once and can no longer be modified."
+      : "You can only update this listing once. Please review all details carefully before submitting, as no further edits will be allowed after this.",
+    confirmText: alreadyEdited ? "OK" : "I Understand, Proceed",
+    cancelText: alreadyEdited ? "" : "Cancel",
+    confirmVariant: alreadyEdited ? "danger" : "primary",
+    onConfirm: () => {
+      if (alreadyEdited) return;
+
+      const fmtDate = (iso) => (iso ? iso.split("T")[0] : "");
+      const normalizeWorkMode = (mode) => {
+        if (!mode) return "";
+        if (Array.isArray(mode)) return String(mode[0] || "").trim();
+        return String(mode).split(",")[0].trim();
+      };
+      setEditId(job._id);
+      setForm({
+        ...defaultForm, ...job,
+        applyLastDate: fmtDate(job.applyLastDate || job.deadline),
+        applyDate:     fmtDate(job.applyDate),
+        jobType:       String(job.jobType || "").trim(),
+        workMode:      normalizeWorkMode(job.workMode),
+        companyLogo:   job.companyLogo || null,
+      });
+      setShowModal(true);
+    },
   });
-  setShowModal(true);
+  setShowConfirm(true);
 };
 
 const openReapply = (job) => {
@@ -276,12 +286,29 @@ const openReapply = (job) => {
 
 const confirmToggleJob = (job) => {
   if (!job?._id) return;
+
+  const toggleCount = job.toggleCount ?? 0;
+
+  if (toggleCount >= 2) {
+    setConfirmConfig({
+      title: "Toggle Not Allowed",
+      message: "This job has already been deactivated and reactivated once. No further activation or deactivation is allowed.",
+      confirmText: "OK",
+      cancelText: "",
+      confirmVariant: "danger",
+      onConfirm: () => {},
+    });
+    setShowConfirm(true);
+    return;
+  }
+
   const isDeactivating = job.isActive;
+
   setConfirmConfig({
     title: isDeactivating ? "Deactivate Job" : "Activate Job",
     message: isDeactivating
-      ? "Are you sure you want to deactivate this job? It will no longer be visible to users."
-      : "Are you sure you want to activate this job? It will become visible to users.",
+      ? "You may reactivate this job once after deactivating, but after that no further toggling will be allowed. Are you sure you want to deactivate?"
+      : "You can activate this listing once more. After reactivating, no further deactivation or activation will be permitted. Proceed?",
     confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
     cancelText: "Cancel",
     confirmVariant: isDeactivating ? "warning" : "success",
@@ -461,16 +488,25 @@ const confirmToggleJob = (job) => {
     Re-apply
   </button>
 ) : (
-  <button className="btn btnSm btnPrimary" onClick={() => openEdit(job)}>
+  <button
+    className="btn btnSm btnPrimary"
+    onClick={() => openEdit(job)}
+    title="Edit job"
+  >
     Edit
   </button>
 )}
-    <button
-      className={`btn btnSm ${job.isActive ? "btnWarning" : "btnSuccess"}`}
-      onClick={() => confirmToggleJob(job)}
-    >
-      {job.isActive ? "Deactivate" : "Activate"}
-    </button>
+<button
+  className={`btn btnSm ${job.isActive ? "btnWarning" : "btnSuccess"}`}
+  onClick={() => confirmToggleJob(job)}
+  title={
+    (job.toggleCount ?? 0) >= 2
+      ? "Toggle limit reached"
+      : job.isActive ? "Deactivate" : "Activate"
+  }
+>
+  {job.isActive ? "Deactivate" : "Activate"}
+</button>
     <button className="btn btnSm btnDanger" onClick={() => deleteJob(job._id)}>
       Delete
     </button>
@@ -528,21 +564,22 @@ const confirmToggleJob = (job) => {
                     {jobTypes.length === 0 ? (
                       <span className="labelNote">Loading…</span>
                     ) : (
-                      <div className="radioGroup">
+                      <select 
+                        className="select" 
+                        value={form.jobType} 
+                        onChange={set("jobType")}
+                        required
+                      >
+                        <option value="">Select Job Type</option>
                         {jobTypes.map((t) => (
-                          <label key={t._id ?? itemValue(t)} className="radioLabel">
-                            <input
-                              type="radio"
-                              className="radioInput"
-                              name="jobType"
-                              value={itemValue(t)}
-                              checked={form.jobType === itemValue(t)}
-                              onChange={set("jobType")}
-                            />
+                          <option 
+                            key={t._id ?? itemValue(t)} 
+                            value={itemValue(t)}
+                          >
                             {itemLabel(t)}
-                          </label>
+                          </option>
                         ))}
-                      </div>
+                      </select>
                     )}
                   </div>
 
@@ -551,24 +588,24 @@ const confirmToggleJob = (job) => {
                     {workModes.length === 0 ? (
                       <span className="labelNote">Loading…</span>
                     ) : (
-                      <div className="radioGroup">
+                      <select 
+                        className="select" 
+                        value={form.workMode} 
+                        onChange={set("workMode")}
+                      >
+                        <option value="">Select Work Mode</option>
                         {workModes.map((w) => {
                           const value = itemValue(w);
                           return (
-                            <label key={w._id ?? value} className="radioLabel">
-                              <input
-                                type="radio"
-                                className="radioInput"
-                                name="workMode"
-                                value={value}
-                                checked={form.workMode === value}
-                                onChange={set("workMode")}
-                              />
+                            <option 
+                              key={w._id ?? value} 
+                              value={value}
+                            >
                               {itemLabel(w)}
-                            </label>
+                            </option>
                           );
                         })}
-                      </div>
+                      </select>
                     )}
                   </div>
                 </div>
@@ -798,7 +835,7 @@ const confirmToggleJob = (job) => {
             <div className="modalFooter">
               <button className="btn btnSecondary" onClick={closeModal} disabled={saving}>Cancel</button>
               <button className="btn btnPrimary" onClick={saveJob} disabled={saving}>
-                  {saving ? "Submitting…" : editId ? "Update Job" : "Submit Job"}
+                  {saving ? "Submitting…" : editId ? "Update" : "Submit"}
               </button>
             </div>
 

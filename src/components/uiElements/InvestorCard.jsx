@@ -1,7 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
+import { useAuth } from "@/context/AuthContext";
+
 
 export default function InvestorCard({ investor }) {
+  const { user } = useAuth();
+  const detailHref = user ? `/investors/${investor._id}` : "/login";
   const displayName = investor.fundName || investor.name || "Unnamed Investor";
   const companyName = investor.publisherId?.organizationName || "N/A";
   const location = investor.officeLocation || investor.publisherId?.officeLocation || "N/A";
@@ -30,7 +34,7 @@ export default function InvestorCard({ investor }) {
       {/* Title — fixed height, clamps overflow */}
       <div className="card-title-wrap">
         <h4>
-          <Link href={`/investors/${investor._id}`} className="name fw-500 tran3s">
+          <Link href={detailHref} className="name fw-500 tran3s">
             {displayName}
           </Link>
         </h4>
@@ -46,7 +50,7 @@ export default function InvestorCard({ investor }) {
 
       {/* Button always pinned to bottom */}
       <div className="btn-parent">
-        <Link href={`/investors/${investor._id}`} className="know-more-btn mt-20 theme_button">
+        <Link href={detailHref} className="know-more-btn mt-20 theme_button">
           View Profile
         </Link>
       </div>

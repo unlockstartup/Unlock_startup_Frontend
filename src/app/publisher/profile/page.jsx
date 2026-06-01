@@ -172,7 +172,7 @@ export default function Page() {
               className="pp-card-title"
               style={{ fontSize: "1.35rem", fontWeight: 700 }}
             >
-              Organization
+              Company Info
             </p>
 
             {editMode ? (

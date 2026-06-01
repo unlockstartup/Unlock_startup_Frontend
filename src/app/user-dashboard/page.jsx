@@ -301,9 +301,6 @@ function ProfileView({ user, editData, getInitials, fileInputRef }) {
 
         <InfoCard title="Social Links">
           <InfoRow icon={Link2}     label="LinkedIn"  value={editData.linkedin  || "Not added"} />
-          <InfoRow icon={GitBranch} label="GitHub"    value={editData.github    || "Not added"} />
-          <InfoRow icon={Globe}     label="Instagram" value={editData.instagram || "Not added"} />
-          <InfoRow icon={Globe}     label="Twitter"   value={editData.twitter   || "Not added"} />
         </InfoCard>
       </div>
     </div>
@@ -324,9 +321,6 @@ function EditProfile({ editData, setEditData, handleSave, saving, saveMsg }) {
             <FormField label="Location"     id="address"   value={editData.address}   onChange={set("address")}   placeholder="New York, USA" />
             <FormField label="Website"      id="website"   value={editData.website}   onChange={set("website")}   placeholder="https://yoursite.com" />
             <FormField label="LinkedIn URL" id="linkedin"  value={editData.linkedin}  onChange={set("linkedin")}  placeholder="https://linkedin.com/in/you" />
-            <FormField label="GitHub URL"   id="github"    value={editData.github}    onChange={set("github")}    placeholder="https://github.com/you" />
-            <FormField label="Instagram"    id="instagram" value={editData.instagram} onChange={set("instagram")} placeholder="https://instagram.com/you" />
-            <FormField label="Twitter / X"  id="twitter"   value={editData.twitter}   onChange={set("twitter")}   placeholder="https://twitter.com/you" />
           </div>
 
           <div className="pd-mt-4">

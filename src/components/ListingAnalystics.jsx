@@ -169,8 +169,8 @@ function DetailModal({ item, onClose }) {
   }
 
   else if (item._type === "events") {
-    rows.push(renderField("Organization", item.organizationName));
-    rows.push(renderField("Organization Website", item.organizationWebsite));
+    rows.push(renderField("Company Name", item.organizationName));
+    rows.push(renderField("Company Website", item.organizationWebsite));
     rows.push(renderField("Event Type", item.eventType));
     rows.push(renderField("Categories", item.eventCategory));
     rows.push(renderField("Format", item.eventFormat));
@@ -187,7 +187,6 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Key Topics", item.keyTopics));
     rows.push(renderField("Featured Speakers", item.featuredSpeakers));
     rows.push(renderField("Attendee Benefits", item.attendeeBenefits));
-    rows.push(renderField("Event Website", item.eventWebsite));
     rows.push(renderField("Organizer Contact", item.organizerContactPerson));
     rows.push(renderField("Work Email", item.workEmail));
     rows.push(renderField("Phone Number", item.phoneNumber));

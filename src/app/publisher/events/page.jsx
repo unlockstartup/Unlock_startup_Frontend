@@ -57,7 +57,7 @@ const statusBadge = (status) => {
   return "badgeWarning";
 };
 
-/* ─── Component ─────────────────────────────────────────────────────────────── */
+/* ─── Component */
 export default function PublisherEventPage() {
   const [events, setEvents]         = useState([]);
   const [categories, setCategories] = useState([]);
@@ -138,68 +138,51 @@ export default function PublisherEventPage() {
     setForm(defaultForm); setEditId(null); setMainImage(null); setShowModal(true);
   };
 
-  const openEdit = (ev) => {
-    // Guard: should never be called if editCount >= 1, but double-check
-    if ((ev.editCount ?? 0) >= 1) {
-      toast.warn("This event has already been edited once and cannot be modified further.");
-      return;
-    }
+const openEdit = (ev) => {
+  const alreadyEdited = (ev.editCount ?? 0) >= 1;
 
-    const pad = (n) => String(n).padStart(2, "0");
-    const fmt = (iso) => {
-      if (!iso) return "";
-      const d = new Date(iso);
-      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-    };
-    const arr = (v) => (Array.isArray(v) ? v.join(", ") : v || "");
+  setConfirmConfig({
+    title: alreadyEdited ? "Edit Not Allowed" : "Edit Event",
+    message: alreadyEdited
+      ? "This listing has already been edited once and can no longer be modified."
+      : "You can only update this listing once. Please review all details carefully before submitting, as no further edits will be allowed after this.",
+    confirmText: alreadyEdited ? "OK" : "I Understand, Proceed",
+    cancelText: alreadyEdited ? "" : "Cancel",
+    confirmVariant: alreadyEdited ? "danger" : "primary",
+    onConfirm: () => {
+      if (alreadyEdited) return;
 
-    setForm({
-      ...defaultForm, ...ev,
-      targetAudience:   arr(ev.targetAudience),
-      keyTopics:        arr(ev.keyTopics),
-      attendeeBenefits: arr(ev.attendeeBenefits),
-      eventDescription: ev.eventDescription || "",
-      featuredSpeakers: ev.featuredSpeakers  || "",
-      startDateTime:        fmt(ev.startDateTime),
-      endDateTime:          fmt(ev.endDateTime),
-      registrationDeadline: fmt(ev.registrationDeadline),
-      registrationPrice:    ev.registrationPrice?.toString() || "",
-      eventCategory: Array.isArray(ev.eventCategory) ? ev.eventCategory
-        : ev.eventCategory ? [ev.eventCategory] : [],
-    });
-    setEditId(ev._id);
-    setMainImage(ev.mainImage || null);
-    setShowModal(true);
-  };
+      const pad = (n) => String(n).padStart(2, "0");
+      const fmt = (iso) => {
+        if (!iso) return "";
+        const d = new Date(iso);
+        return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      };
+      const arr = (v) => (Array.isArray(v) ? v.join(", ") : v || "");
 
-  const openReapply = (ev) => {
-  const pad = (n) => String(n).padStart(2, "0");
-  const fmt = (iso) => {
-    if (!iso) return "";
-    const d = new Date(iso);
-    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  };
-  const arr = (v) => (Array.isArray(v) ? v.join(", ") : v || "");
-
-  // Pre-fill form with existing data but treat as a brand-new listing
-  setForm({
-    ...defaultForm, ...ev,
-    targetAudience:   arr(ev.targetAudience),
-    keyTopics:        arr(ev.keyTopics),
-    attendeeBenefits: arr(ev.attendeeBenefits),
-    eventDescription: ev.eventDescription || "",
-    featuredSpeakers: ev.featuredSpeakers  || "",
-    startDateTime:        fmt(ev.startDateTime),
-    endDateTime:          fmt(ev.endDateTime),
-    registrationDeadline: fmt(ev.registrationDeadline),
-    registrationPrice:    ev.registrationPrice?.toString() || "",
-    eventCategory: Array.isArray(ev.eventCategory) ? ev.eventCategory
-      : ev.eventCategory ? [ev.eventCategory] : [],
+      setForm({
+        ...defaultForm, ...ev,
+        targetAudience:   arr(ev.targetAudience),
+        keyTopics:        arr(ev.keyTopics),
+        attendeeBenefits: arr(ev.attendeeBenefits),
+        eventDescription: ev.eventDescription || "",
+        featuredSpeakers: ev.featuredSpeakers  || "",
+        startDateTime:        fmt(ev.startDateTime),
+        endDateTime:          fmt(ev.endDateTime),
+        registrationDeadline: fmt(ev.registrationDeadline),
+        registrationPrice:    ev.registrationPrice?.toString() || "",
+        eventCategory: Array.isArray(ev.eventCategory) ? ev.eventCategory
+          : ev.eventCategory ? [ev.eventCategory] : [],
+      });
+      setEditId(ev._id);
+      setMainImage(ev.mainImage || null);
+      setShowModal(true);
+    },
   });
-  setEditId(null);          // null = create mode
-  setMainImage(ev.mainImage || null);
-  setShowModal(true);
+  setShowConfirm(true);
 };
+
+
 
   const closeModal = () => setShowModal(false);
 
@@ -306,12 +289,29 @@ export default function PublisherEventPage() {
 
 const confirmToggleEvent = (ev) => {
   if (!ev?._id) return;
+
+  const toggleCount = ev.toggleCount ?? 0;
+
+  if (toggleCount >= 2) {
+    setConfirmConfig({
+      title: "Toggle Not Allowed",
+      message: "This event has already been deactivated and reactivated once. No further activation or deactivation is allowed.",
+      confirmText: "OK",
+      cancelText: "",
+      confirmVariant: "danger",
+      onConfirm: () => {},
+    });
+    setShowConfirm(true);
+    return;
+  }
+
   const isDeactivating = ev.isActive;
+
   setConfirmConfig({
     title: isDeactivating ? "Deactivate Event" : "Activate Event",
-message: isDeactivating
-  ? "This action is permanent. Once deactivated, it will no longer be visible as a live listing. A deactivated listing cannot be reactivated. To go live again, a brand new submission will be required."
-  : "Are you sure you want to activate this event? It will become visible to users.",
+    message: isDeactivating
+      ? "You may reactivate this event once after deactivating, but after that no further toggling will be allowed. Are you sure you want to deactivate?"
+      : "You can activate this listing once more. After reactivating, no further deactivation or activation will be permitted. Proceed?",
     confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
     cancelText: "Cancel",
     confirmVariant: isDeactivating ? "warning" : "success",
@@ -399,7 +399,7 @@ message: isDeactivating
               <label className="label">Search</label>
               <input
                 className="input"
-                placeholder="Search by title or organizer…"
+                placeholder="Search by title or company…"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && fetchEvents()}
@@ -479,40 +479,25 @@ message: isDeactivating
 {/* ── Actions ── */}
 <td>
   <div className="actionGroup">
-{editLocked ? (
-  <button
-    className="btn btnSm btnPrimary"
-    onClick={() => {
-      if (eventButtonDisabled) return toast.warn(
-        subscriptionExpired
-          ? "Your subscription has expired. Please renew to re-apply."
-          : `Event limit of ${planInfo.limits.eventLimit} reached for your current plan.`
-      );
-      openReapply(ev);
-    }}
-    title={
-      eventButtonDisabled
-        ? subscriptionExpired
-          ? "Subscription expired"
-          : `Event limit reached (${planInfo?.usage?.events}/${planInfo?.limits?.eventLimit})`
-        : "Edit limit reached. Click to create a new listing based on this one."
-    }
-    style={{ whiteSpace: "nowrap" }}
-  >
-    Re-apply
-  </button>
-) : (
-  <button className="btn btnSm btnPrimary" onClick={() => openEdit(ev)}>
-    Edit
-  </button>
-)}
-    <button
-      className={`btn btnSm ${ev.isActive ? "btnWarning" : "btnSuccess"}`}
-      onClick={() => confirmToggleEvent(ev)}
-      title={ev.isActive ? "Deactivate" : "Activate"}
-    >
-      {ev.isActive ? "Deactivate" : "Activate"}
-    </button>
+<button
+  className={`btn btnSm ${(ev.editCount ?? 0) >= 1 ? "btnSecondary" : "btnPrimary"}`}
+  onClick={() => openEdit(ev)}
+  title={(ev.editCount ?? 0) >= 1 ? "This event has already been edited once" : "Edit event"}
+>
+  Edit
+</button>
+
+<button
+  className={`btn btnSm ${ev.isActive ? "btnWarning" : "btnSuccess"}`}
+  onClick={() => confirmToggleEvent(ev)}
+  title={
+    (ev.toggleCount ?? 0) >= 2
+      ? "Toggle limit reached"
+      : ev.isActive ? "Deactivate" : "Activate"
+  }
+>
+  {ev.isActive ? "Deactivate" : "Activate"}
+</button>
     <button className="btn btnSm btnDanger" onClick={() => deleteEvent(ev._id)}>
       Delete
     </button>
@@ -652,15 +637,15 @@ message: isDeactivating
 
               {/* ── Organizer ── */}
               <section className="section">
-                <h3 className="sectionTitle">Organizer information</h3>
+                <h3 className="sectionTitle">Company information</h3>
 
                 <div className="row2">
                   <div className="field">
-                    <label className="label">Organization Name</label>
-                    <input className="input" name="organizationName" value={form.organizationName} onChange={handleChange} placeholder="Enter organization name" />
+                    <label className="label">Company Name</label>
+                    <input className="input" name="organizationName" value={form.organizationName} onChange={handleChange} placeholder="Enter Company name" />
                   </div>
                   <div className="field">
-                    <label className="label">Organizer Contact Person</label>
+                    <label className="label">Company Contact Person</label>
                     <input className="input" name="organizerContactPerson" value={form.organizerContactPerson} onChange={handleChange} placeholder="Enter contact person name" />
                   </div>
                 </div>
@@ -675,7 +660,7 @@ message: isDeactivating
                     <input className="input" name="phoneNumber" value={form.phoneNumber} onChange={handleChange} placeholder="Enter phone number" />
                   </div>
                   <div className="field">
-                    <label className="label">Organization Website</label>
+                    <label className="label">Company Website</label>
                     <input type="url" className="input" name="organizationWebsite" value={form.organizationWebsite} onChange={handleChange} placeholder="https://" />
                   </div>
                 </div>
@@ -787,7 +772,7 @@ message: isDeactivating
             <div className="modalFooter">
               <button className="btn btnSecondary" onClick={closeModal} disabled={saving}>Cancel</button>
               <button className="btn btnPrimary" onClick={saveEvent} disabled={saving}>
-                {saving ? "Submitting…" : editId ? "Update Event" : "Submit Event"}
+                {saving ? "Submitting…" : editId ? "Update" : "Submit"}
               </button>
             </div>
           </div>

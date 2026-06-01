@@ -22,7 +22,7 @@ export default function Home() {
       <ProductLaunches />
       <ServiceProvider />
       <Testimonial />
-      <Blogs />
+     
       <JobCta />
     </main>
   );

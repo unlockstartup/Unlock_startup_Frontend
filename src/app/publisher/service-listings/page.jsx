@@ -625,7 +625,7 @@ const confirmToggleListing = (listing) => {
             <div className="modalFooter">
               <button className="btn btnSecondary" onClick={closeModal} disabled={saving || uploadingIdx !== null}>Cancel</button>
               <button className="btn btnPrimary" onClick={save} disabled={saving || uploadingIdx !== null}>
-                {saving ? "Submitting…" : mode === "create" ? "Submit Service Listing" : "Update Changes"}
+                {saving ? "Submitting…" : mode === "create" ? "Submit" : "Update"}
               </button>
             </div>
 

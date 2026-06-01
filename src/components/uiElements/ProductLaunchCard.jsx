@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Bookmark, CheckSquare, Cpu, Users, Tag } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 const BLUE = "rgb(232, 131, 58)";
 
@@ -10,6 +11,8 @@ function getInitial(name = "") {
 }
 
 export default function ProductLaunchCard({ product, index }) {
+  const { user } = useAuth();
+  const detailHref = user ? `/products/${product?._id || "#"}` : "/login";
   const title = product?.productName || "Untitled";
   const image = product?.productLogo?.url || null;
   const slug = product?._id || "#";
@@ -43,7 +46,7 @@ export default function ProductLaunchCard({ product, index }) {
         onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
       >
         {/* Image */}
-        <Link href={`/products/${slug}`} style={{
+      <Link href={detailHref} style={{
           display: "block", width: "100%", height: "160px", flexShrink: 0,
           overflow: "hidden", position: "relative", backgroundColor: "#1a1a2e",
         }}>
@@ -105,7 +108,7 @@ export default function ProductLaunchCard({ product, index }) {
           </p>
 
           {/* Title */}
-          <Link href={`/products/${slug}`} style={{ display: "block", marginBottom: "2px" }}>
+          <Link href={detailHref} style={{ display: "block", marginBottom: "2px" }}>
            <h5 style={{fontSize: "20px",  fontWeight: 700, lineHeight: "1.35", margin: 0, color: "#1a1a1a", whiteSpace: "nowrap", overflow: "hidden",textOverflow: "ellipsis"}}>
               {title}
             </h5>
@@ -156,7 +159,7 @@ export default function ProductLaunchCard({ product, index }) {
               {orgName}
             </span>
         <Link
-              href={`/products/${product._id}`}
+               href={detailHref}
               style={{
                 marginLeft: "auto",
                 fontSize: "13px",
