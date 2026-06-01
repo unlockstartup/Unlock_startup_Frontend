@@ -127,9 +127,8 @@ export default function Page() {
     ["Name", formData.name],
     ["Email", profile.userId?.email],
     ["Phone", formData.phone],
-    ["Organization Name", formData.organizationName],
-    ["Organization Type", formData.organizationType],
-    ["Company Name", formData.companyName],
+    ["Company Name", formData.organizationName],
+    ["Company Type", formData.organizationType],
     ["Address", formData.address],
   ];
 

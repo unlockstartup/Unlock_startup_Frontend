@@ -13,7 +13,7 @@ export default function Footer() {
               <div className="logo mb-25">
                 <Link href="/" className="footer-logo">
                   <Image
-                    src="/assets/images/logo/logo_04.jpg"
+                    src="/assets/images/logo/logo_4.jpg"
                     alt="logo"
                     width={150}
                     height={60}

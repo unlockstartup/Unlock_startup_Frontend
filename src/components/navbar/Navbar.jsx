@@ -56,7 +56,7 @@ export default function Header() {
             <div className="logo order-lg-0">
               <Link href="/" className="d-flex align-items-center">
                 <Image
-                  src="/assets/images/logo/logo_04.jpg"
+                  src="/assets/images/logo/logo_4.jpg"
                   alt="logo"
                   width={110}
                   height={60}
@@ -226,7 +226,7 @@ export default function Header() {
                   <li className="d-block d-lg-none">
                     <div className="logo">
                       <Link href="/" className="d-block">
-                        <Image src="/assets/images/logo/logo_04.jpg" alt="logo" width={80} height={50} style={{ height: "auto" }} />
+                        <Image src="/assets/images/logo/logo_4.jpg" alt="logo" width={80} height={50} style={{ height: "auto" }} />
                       </Link>
                     </div>
                   </li>

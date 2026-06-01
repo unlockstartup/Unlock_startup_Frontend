@@ -540,7 +540,7 @@ const handleResendOtp = async () => {
               <div className="lsb-card">
                 <div className="lsb-head">
                   <Image
-                    src="/assets/images/logo/logo_04.jpg" alt="logo"
+                    src="/assets/images/logo/logo_4.jpg" alt="logo"
                     width={150} height={60}
                     style={{ height: "auto", marginBottom: "12px", display: "block", margin: "0 auto 12px" }}
                   />
