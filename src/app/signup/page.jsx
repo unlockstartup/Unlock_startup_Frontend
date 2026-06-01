@@ -387,13 +387,13 @@ const Page = () => {
                   />
                   {/* ── Dynamic heading for all 3 types ── */}
                   {accountType === "publisher" && (
-                    <><h2>Join as a Publisher</h2><p>Register as a publisher to manage events, competitions, jobs, and more.</p></>
+                    <><h2>Join as a Publisher</h2><p>Register as a publisher to manage your dashboard and publish competitions, events, jobs, product listing and services.</p></>
                   )}
                   {accountType === "investor" && (
                     <><h2>Join as an Investor</h2><p>Register as an investor to explore startups, events, and funding opportunities.</p></>
                   )}
                   {accountType === "user" && (
-                    <><h2>Join as a User</h2><p>Register to explore and apply for exclusive events and opportunities.</p></>
+                    <><h2>Join as a User</h2><p>Register to access and participate in exclusive competitions, job opportunities, events, and connect investors.</p></>
                   )}
                 </div>
 

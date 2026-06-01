@@ -209,7 +209,7 @@ export default function Page() {
                     ["email", "Email", "email"],
                     ["phone", "Phone", "text"],
                     ["companyName", "Company Name", "text"],
-                    ["organizationType", "Organization Type", "text"],
+                    ["organizationType", "Company Type", "text"],
                     ["website", "Website", "url"],
                     ["address", "Address", "text"],
                   ].map(([name, label, type]) => (

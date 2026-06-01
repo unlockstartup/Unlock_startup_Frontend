@@ -544,8 +544,8 @@ const handleResendOtp = async () => {
                     width={150} height={60}
                     style={{ height: "auto", marginBottom: "12px", display: "block", margin: "0 auto 12px" }}
                   />
-                  <h2>Welcome to your startup account</h2>
-                  <p>Access your dashboard, browse opportunities, and manage your profile.</p>
+                  <h2>Welcome to Your Unlock Startup Account</h2>
+                  <p>Sign in to access your dashboard, manage your listings and take advantage of all the services and resources available to help grow your startup.</p>
                 </div>
 
                 {error && <div className="lsb-error">{error}</div>}
