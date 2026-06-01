@@ -14,7 +14,7 @@ import {
 
 import "../styles/publishercretepages.css";
 
-/* ─── Constants ─────────────────────────────────────────────────────────────── */
+/* ─── Constants */
 const defaultForm = {
   title: "",
   eventCategory: [],
@@ -309,9 +309,9 @@ const confirmToggleEvent = (ev) => {
   const isDeactivating = ev.isActive;
   setConfirmConfig({
     title: isDeactivating ? "Deactivate Event" : "Activate Event",
-    message: isDeactivating
-      ? "Are you sure you want to deactivate this event? It will no longer be visible to users."
-      : "Are you sure you want to activate this event? It will become visible to users.",
+message: isDeactivating
+  ? "This action is permanent. Once deactivated, it will no longer be visible as a live listing. A deactivated listing cannot be reactivated. To go live again, a brand new submission will be required."
+  : "Are you sure you want to activate this event? It will become visible to users.",
     confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
     cancelText: "Cancel",
     confirmVariant: isDeactivating ? "warning" : "success",

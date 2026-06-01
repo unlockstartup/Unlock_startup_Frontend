@@ -244,7 +244,7 @@ export default function Page() {
             )}
 
             {!serviceLoading && !serviceError && (
-              <div className="pricingPage__pricingGrid">
+              <div className="pricingPage__pricingGrid pricingPage__pricingGrid--centered">
                 {servicePlans.flatMap((plan) =>
                   SERVICE_TIERS.map(({ durationType, label, priceKey, period, desc }) => {
                     const price    = plan[priceKey];

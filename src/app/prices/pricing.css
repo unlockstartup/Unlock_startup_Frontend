@@ -378,3 +378,11 @@
     display: grid;
 }
 }
+
+/* Add this to your pricing.css */
+.pricingPage__pricingGrid--centered {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 260px));
+  gap: 20px;
+  justify-content: center;
+}
