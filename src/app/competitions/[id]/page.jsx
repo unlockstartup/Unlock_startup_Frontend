@@ -323,7 +323,7 @@ export default function Page({ params }) {
                   )}
                   {funding.launchDate && (
                     <div className="competitionMetaItem">
-                      <span className="competitionMetaLabel">Launch Date</span>
+                      <span className="competitionMetaLabel">Start Date</span>
                       <span className="competitionMetaValue">{funding.launchDate}</span>
                     </div>
                   )}

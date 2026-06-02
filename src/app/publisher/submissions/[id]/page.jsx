@@ -8,7 +8,7 @@ import ConfirmationModal from "@/components/ConfirmationModal";
 
 import "../../styles/publishercretepages.css";
 
-/*  Constants  */
+/* ─── Constants ─────────────────────────────────────────────────────────────── */
 const STATUS_BADGE = {
   new:         "badgePrimary",
   reviewing:   "badgeWarning",
@@ -24,11 +24,14 @@ const TYPE_META = {
   service:  { label: "Service",     color: "var(--yellow-hover)" },
 };
 
-function InfoItem({ label, value, isLink = false }) {
+function InfoItem({ label, value, isLink = false, icon }) {
   if (!value) return null;
   return (
     <div className="pubModal__field">
-      <span className="pubModal__label">{label}</span>
+      <span className="pubModal__label">
+        {icon && <span className="pubModal__labelIcon">{icon}</span>}
+        {label}
+      </span>
       {isLink ? (
         <a className="pubModal__value pubModal__value--link" href={value} target="_blank" rel="noopener noreferrer">
           {value} ↗
@@ -64,7 +67,7 @@ export default function Page() {
 
   const limit = 20;
 
-  /*  Data loading  */
+  /* ── Data loading ──────────────────────────────────────────────────────────── */
   const load = async () => {
     if (!listingId) return;
     try {
@@ -90,7 +93,7 @@ export default function Page() {
 
   useEffect(() => { load(); }, [listingId, listingType, page, statusFilter]);
 
-  /*  Helpers  */
+  /* ── Helpers ───────────────────────────────────────────────────────────────── */
   const updateStatus = async (id, status) => {
     try {
       setUpdatingId(id);
@@ -141,11 +144,11 @@ export default function Page() {
     return source.type || source.investorType || source.serviceCategory || "";
   };
 
-  /*  Render  */
+  /* ── Render ────────────────────────────────────────────────────────────────── */
   return (
     <div className="page">
 
-      {/*  Topbar  */}
+      {/* ── Topbar ── */}
       <header className="topbar">
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-4)" }}>
           <button className="btn btnSecondary btnSm" onClick={() => router.back()}>← Back</button>
@@ -163,7 +166,7 @@ export default function Page() {
         </div>
       </header>
 
-      {/*  Filters  */}
+      {/* ── Filters ── */}
       <div className="tableShell">
         <div className="tableHead">
           <h2 className="tableHeadTitle">Filter</h2>
@@ -194,7 +197,7 @@ export default function Page() {
         </div>
       </div>
 
-      {/*  Table  */}
+      {/* ── Table ── */}
       <div className="tableShell">
         <div className="tableHead">
           <h2 className="tableHeadTitle">All Submissions</h2>
@@ -265,7 +268,7 @@ export default function Page() {
         </div>
       </div>
 
-      {/*  Detail modal (full screen)  */}
+      {/* ── Detail modal (full screen) ── */}
 {selected && (
   <div className="pubModal__overlay" onClick={() => setSelected(null)}>
     <div className="pubModal__dialog" onClick={(e) => e.stopPropagation()}>
@@ -317,8 +320,8 @@ export default function Page() {
         )}
 
         {/* Service */}
-        {getSubmissionType(selected) === "service" && (
-          <section className="pubModal__section">
+      {getSubmissionType(selected) === "service" && (
+  <section className="pubModal__section pubModal__section--compact">
             <h3 className="pubModal__sectionTitle">Service requirements</h3>
             <div className="pubModal__grid">
               <InfoItem label="Industry Type" value={selected.industryType} />

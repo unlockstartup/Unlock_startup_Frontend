@@ -155,7 +155,7 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Who can participate", item.eligibleParticipants));
     rows.push(renderField("Startup Stage", item.startupStage));
     rows.push(renderField("Geographic Restrictions", item.geographicRestrictions));
-    rows.push(renderField("Launch Date", fmt(item.launchDate)));
+    rows.push(renderField("Start Date", fmt(item.launchDate)));
     rows.push(renderField("Submission Deadline", fmt(item.submissionDeadline || item.deadline)));
     rows.push(renderField("Result Date", fmt(item.resultDate)));
     rows.push(renderField("Result Date", fmt(item.applicationType)));

@@ -611,7 +611,7 @@ const onToggleActiveConfirm = (row) => {
                 </div>
 
                 <div className="row3">
-                  <Field label="Launch Date">
+                  <Field label="Start Date">
                     <input type="date" className="input" value={form.launchDate} onChange={sf("launchDate")} />
                   </Field>
                   <Field label="Submission Deadline *">
