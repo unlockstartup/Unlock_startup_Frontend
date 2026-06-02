@@ -13,7 +13,7 @@ import { INDIA_STATES } from "@/app/constants";
 
 import "../styles/publishercretepages.css";
 
-/* ─── Field helper ───────────────────────────────────────────────────────────── */
+/*  Field helper */
 function Field({ label, note, children }) {
   return (
     <div className="field">
@@ -26,7 +26,7 @@ function Field({ label, note, children }) {
   );
 }
 
-/* ─── Status badge helper ────────────────────────────────────────────────────── */
+/*  Status badge helper  */
 function StatusBadge({ status }) {
   const cls = status === "approved" ? "badgeSuccess"
     : status === "rejected" ? "badgeDanger"
@@ -34,7 +34,7 @@ function StatusBadge({ status }) {
   return <span className={`badge ${cls}`}>{status}</span>;
 }
 
-/* ─── Constants ─────────────────────────────────────────────────────────────── */
+/*  Constants  */
 const initialForm = {
   companyName: "", brandName: "", establishedYear: "",
   serviceTitle: "", serviceType: "", serviceCategory: "",
@@ -46,7 +46,7 @@ const initialForm = {
 
 const MAX_IMAGES = 3;
 
-/* ─── Main component ─────────────────────────────────────────────────────────── */
+/*  Main component  */
 export default function ServiceListings() {
   const [listings, setListings]             = useState([]);
   const [loading, setLoading]               = useState(true);
@@ -69,7 +69,7 @@ export default function ServiceListings() {
     cancelText: "Cancel", confirmVariant: "danger", onConfirm: () => {},
   });
 
-  /* ── Fetch listings ────────────────────────────────────────────────────────── */
+  /*  Fetch listings  */
   const fetchListings = async (overrides = {}) => {
     try {
       setLoading(true);
@@ -107,7 +107,7 @@ export default function ServiceListings() {
     })();
   }, []);
 
-  /* ── Plan guards ───────────────────────────────────────────────────────────── */
+  /*  Plan guards  */
   const subscriptionExpired  = planInfo && planInfo.subscriptionStatus !== "active";
   const serviceInactive      = planInfo && planInfo.servicePlanActive === false;
   const serviceLimitReached  = planInfo && !subscriptionExpired && !serviceInactive
@@ -120,26 +120,30 @@ export default function ServiceListings() {
     : serviceLimitReached ? `Limit Reached (${planInfo.usage.serviceListings}/${planInfo.limits.serviceListingLimit})`
     : "+ Add Service";
 
-  /* ── Modal helpers ─────────────────────────────────────────────────────────── */
+  /*  Modal helpers  */
   const openCreate = () => { setMode("create"); setEditing(null); setForm(initialForm); setServiceImages([]); setOpen(true); };
 
 const openEdit = (listing) => {
-  if ((listing.editCount ?? 0) >= 1) {
-    toast.warn("This listing has already been edited once and cannot be modified further.");
-    return;
-  }
-  setMode("edit"); setEditing(listing);
-  setForm({ ...initialForm, ...listing, disclosureConsent: false });
-  setServiceImages(listing.serviceImages || []);
-  setOpen(true);
+  const alreadyEdited = (listing.editCount ?? 0) >= 1;
+  setConfirmConfig({
+    title: alreadyEdited ? "Edit Not Allowed" : "Edit Service Listing",
+    message: alreadyEdited
+      ? "This listing has already been edited once and can no longer be modified."
+      : "You can only update this listing once. Please review all details carefully before submitting, as no further edits will be allowed after this.",
+    confirmText: alreadyEdited ? "OK" : "I Understand, Proceed",
+    cancelText: alreadyEdited ? "" : "Cancel",
+    confirmVariant: alreadyEdited ? "danger" : "primary",
+    onConfirm: () => {
+      if (alreadyEdited) return;
+      setMode("edit"); setEditing(listing);
+      setForm({ ...initialForm, ...listing, disclosureConsent: false });
+      setServiceImages(listing.serviceImages || []);
+      setOpen(true);
+    },
+  });
+  setShowConfirm(true);
 };
 
-const openReapply = (listing) => {
-  setMode("create"); setEditing(null);
-  setForm({ ...initialForm, ...listing, disclosureConsent: false });
-  setServiceImages(listing.serviceImages || []);
-  setOpen(true);
-};
 
   const closeModal = () => { if (saving || uploadingIdx !== null) return; setOpen(false); };
 
@@ -148,7 +152,7 @@ const openReapply = (listing) => {
     setForm((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
   };
 
-  /* ── Image upload ──────────────────────────────────────────────────────────── */
+  /*  Image upload  */
   const uploadImage = async (file, idx) => {
     if (!file) return;
     const fd = new FormData();
@@ -169,7 +173,7 @@ const openReapply = (listing) => {
 
   const removeImage = (idx) => setServiceImages((prev) => prev.filter((_, i) => i !== idx));
 
-  /* ── Validate & save ───────────────────────────────────────────────────────── */
+  /*  Validate & save  */
   const validate = () => {
     const checks = [
       [!form.companyName.trim(),         "Company name is required"],
@@ -211,7 +215,7 @@ const openReapply = (listing) => {
     } finally { setSaving(false); }
   };
 
-  /* ── Delete / toggle ───────────────────────────────────────────────────────── */
+  /*  Delete / toggle  */
   const deleteListing = (id) => {
     if (!id) return;
     setConfirmConfig({
@@ -231,19 +235,32 @@ const openReapply = (listing) => {
 
 const confirmToggleListing = (listing) => {
   if (!listing?._id) return;
+  const toggleCount = listing.toggleCount ?? 0;
+  if (toggleCount >= 2) {
+    setConfirmConfig({
+      title: "Toggle Not Allowed",
+      message: "This service has already been deactivated and reactivated once. No further activation or deactivation is allowed.",
+      confirmText: "OK",
+      cancelText: "",
+      confirmVariant: "danger",
+      onConfirm: () => {},
+    });
+    setShowConfirm(true);
+    return;
+  }
   const isDeactivating = listing.isActive;
   setConfirmConfig({
     title: isDeactivating ? "Deactivate Service" : "Activate Service",
     message: isDeactivating
-      ? "Are you sure you want to deactivate this service? It will no longer be visible to users."
-      : "Are you sure you want to activate this service? It will become visible to users.",
+      ? "You may reactivate this service once after deactivating, but after that no further toggling will be allowed. Are you sure you want to deactivate?"
+      : "You can activate this listing once more. After reactivating, no further deactivation or activation will be permitted. Proceed?",
     confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
     cancelText: "Cancel",
     confirmVariant: isDeactivating ? "warning" : "success",
     onConfirm: async () => {
       try {
         await publisherApi.patch(`/api/publisher/service-listings/${listing._id}/toggle`);
-        toast.success(`Service ${listing.isActive ? "deactivated" : "activated"}`);
+        toast.success(`Service ${isDeactivating ? "deactivated" : "activated"}`);
         fetchListings();
       } catch (err) {
         toast.error(err?.response?.data?.message || "Toggle failed");
@@ -253,19 +270,13 @@ const confirmToggleListing = (listing) => {
   setShowConfirm(true);
 };
 
-  const toggleListing = async (listing) => {
-    try {
-      await publisherApi.patch(`/api/publisher/service-listings/${listing._id}/toggle`);
-      toast.success(`Service ${listing.isActive ? "deactivated" : "activated"}`);
-      fetchListings();
-    } catch (err) { toast.error(err?.response?.data?.message || "Toggle failed"); }
-  };
 
-  /* ── Render ────────────────────────────────────────────────────────────────── */
+
+  /*  Render  */
   return (
     <div className="page">
 
-      {/* ── Topbar ── */}
+      {/*  Topbar  */}
       <header className="topbar">
         <div>
           <h1 className="topbarTitle">Service Listings</h1>
@@ -287,7 +298,7 @@ const confirmToggleListing = (listing) => {
         </div>
       </header>
 
-      {/* ── Filters ── */}
+      {/*  Filters  */}
       <div className="tableShell">
         <div className="tableHead">
           <h2 className="tableHeadTitle">Filter &amp; Search</h2>
@@ -324,7 +335,7 @@ const confirmToggleListing = (listing) => {
         </div>
       </div>
 
-      {/* ── Table ── */}
+      {/*  Table  */}
       <div className="tableShell">
         <div className="tableHead">
           <h2 className="tableHeadTitle">All Service Listings</h2>
@@ -387,34 +398,17 @@ const confirmToggleListing = (listing) => {
                     </td>
 <td>
   <div className="actionGroup">
-    {(l.editCount ?? 0) >= 1 ? (
-      <button
-        className="btn btnSm btnPrimary"
-        onClick={() => {
-          if (addButtonDisabled) return toast.warn(
-            subscriptionExpired ? "Your subscription has expired. Please renew to re-apply."
-            : serviceInactive   ? "You need an active service plan to re-apply."
-            : `Service listing limit of ${planInfo.limits.serviceListingLimit} reached.`
-          );
-          openReapply(l);
-        }}
-        title={
-          addButtonDisabled
-            ? subscriptionExpired ? "Subscription expired"
-              : serviceInactive   ? "Service plan required"
-              : "Service listing limit reached"
-            : "Edit limit reached. Click to create a new listing based on this one."
-        }
-        style={{ whiteSpace: "nowrap" }}
-      >
-        Re-apply
-      </button>
-    ) : (
-      <button className="btn btnSm btnPrimary" onClick={() => openEdit(l)}>Edit</button>
-    )}
+    <button
+      className={`btn btnSm ${(l.editCount ?? 0) >= 1 ? "btnSecondary" : "btnPrimary"}`}
+      onClick={() => openEdit(l)}
+      title={(l.editCount ?? 0) >= 1 ? "This listing has already been edited once" : "Edit listing"}
+    >
+      Edit
+    </button>
     <button
       className={`btn btnSm ${l.isActive ? "btnWarning" : "btnSuccess"}`}
       onClick={() => confirmToggleListing(l)}
+      title={(l.toggleCount ?? 0) >= 2 ? "Toggle limit reached" : l.isActive ? "Deactivate" : "Activate"}
     >
       {l.isActive ? "Deactivate" : "Activate"}
     </button>
@@ -429,7 +423,7 @@ const confirmToggleListing = (listing) => {
         </div>
       </div>
 
-      {/* ── Create / Edit modal ── */}
+      {/*  Create / Edit modal  */}
       {open && (
         <div className="modalOverlay">
           <div className="modalDialog">
@@ -445,7 +439,7 @@ const confirmToggleListing = (listing) => {
             {/* Body */}
             <div className="modalBody">
 
-              {/* ── Company information ── */}
+              {/*  Company information  */}
               <section className="section">
                 <h3 className="sectionTitle">Company information</h3>
                 <div className="row3">
@@ -461,7 +455,7 @@ const confirmToggleListing = (listing) => {
                 </div>
               </section>
 
-              {/* ── Service information ── */}
+              {/*  Service information  */}
               <section className="section">
                 <h3 className="sectionTitle">Service information</h3>
 
@@ -498,7 +492,7 @@ const confirmToggleListing = (listing) => {
                 </Field>
               </section>
 
-              {/* ── Service images ── */}
+              {/*  Service images  */}
               <section className="section">
                 <h3 className="sectionTitle">Service images <span className="labelNote">(up to {MAX_IMAGES} — recommended 1300 × 580 px)</span></h3>
                 <div className="row3">
@@ -524,7 +518,7 @@ const confirmToggleListing = (listing) => {
                 </div>
               </section>
 
-              {/* ── Audience & coverage ── */}
+              {/*  Audience & coverage  */}
               <section className="section">
                 <h3 className="sectionTitle">Audience &amp; coverage</h3>
                 <div className="row2">
@@ -557,7 +551,7 @@ const confirmToggleListing = (listing) => {
                 </div>
               </section>
 
-              {/* ── Team & credentials ── */}
+              {/*  Team & credentials  */}
               <section className="section">
                 <h3 className="sectionTitle">Team &amp; credentials</h3>
                 <div className="row2">
@@ -570,7 +564,7 @@ const confirmToggleListing = (listing) => {
                 </div>
               </section>
 
-              {/* ── Contact ── */}
+              {/*  Contact  */}
               <section className="section">
                 <h3 className="sectionTitle">Contact</h3>
                 <div className="row3">
@@ -589,7 +583,7 @@ const confirmToggleListing = (listing) => {
                 </Field>
               </section>
 
-              {/* ── Consent ── */}
+              {/*  Consent  */}
               <section className="section">
                 <h3 className="sectionTitle">Use &amp; disclosure consent</h3>
 

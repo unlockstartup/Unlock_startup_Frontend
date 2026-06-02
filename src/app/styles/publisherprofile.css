@@ -1,10 +1,10 @@
-/* ── Base ───────────────────────────────────────── */
+/*  Base  */
 .pp-page {
   max-width: 100%;
   font-family: "DM Sans", "Segoe UI", sans-serif;
 }
 
-/* ── Page Header ────────────────────────────────── */
+/*  Page Header  */
 .pp-header {
   display: flex;
   align-items: flex-start;
@@ -27,7 +27,7 @@
   margin: 0;
 }
 
-/* ── Layout ─────────────────────────────────────── */
+/*  Layout  */
 .pp-layout {
   display: grid;
   grid-template-columns: 1fr 260px;
@@ -38,7 +38,7 @@
 .pp-main { min-width: 0; }
 .pp-sidebar { min-width: 0; }
 
-/* ── Cards ──────────────────────────────────────── */
+/*  Cards  */
 .pp-card {
   background: #ffffff;
   border: 1px solid #e8e7e2;
@@ -65,7 +65,7 @@
   margin: 0 0 16px;
 }
 
-/* ── Buttons ────────────────────────────────────── */
+/*  Buttons  */
 .pp-btn {
   font-size: 13px;
   font-weight: 600;
@@ -84,7 +84,7 @@
 .pp-btn--primary:hover { background: #333; border-color: #333; }
 .pp-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* ── Avatar row (read view) ─────────────────────── */
+/*  Avatar row (read view)  */
 .pp-avatar-row {
   display: flex;
   align-items: center;
@@ -116,7 +116,7 @@
   color: #9a9891;
 }
 
-/* ── Info grid ──────────────────────────────────── */
+/*  Info grid  */
 .pp-info-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -159,7 +159,7 @@
 }
 .pp-link:hover { text-decoration: underline; }
 
-/* ── Subscription card ──────────────────────────── */
+/*  Subscription card  */
 .pp-sub-row {
   display: flex;
   justify-content: space-between;
@@ -187,7 +187,7 @@
   transition: width 0.4s ease;
 }
 
-/* ── Badges ─────────────────────────────────────── */
+/*  Badges  */
 .pp-badge {
   font-size: 11px;
   font-weight: 600;
@@ -208,7 +208,7 @@
   color: #6d28d9;
 }
 
-/* ── Edit form ──────────────────────────────────── */
+/*  Edit form  */
 .pp-upload-row {
   display: flex;
   align-items: center;
@@ -268,7 +268,7 @@
   padding-top: 4px;
 }
 
-/* ── History table ──────────────────────────────── */
+/*  History table  */
 .pp-table-header {
   display: flex;
   justify-content: space-between;
@@ -342,7 +342,7 @@
 .pp-inv-btn:hover:not(:disabled) { background: #f5f4f0; border-color: #b5b3ac; }
 .pp-inv-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* ── Empty state ────────────────────────────────── */
+/*  Empty state  */
 .pp-empty {
   display: flex;
   flex-direction: column;
@@ -354,7 +354,7 @@
   gap: 8px;
 }
 
-/* ── Spinner ────────────────────────────────────── */
+/*  Spinner  */
 .pp-spinner {
   width: 20px; height: 20px;
   border: 2px solid #e8e7e2;
@@ -365,7 +365,7 @@
 .pp-spinner--sm { width: 12px; height: 12px; border-width: 1.5px; }
 @keyframes pp-spin { to { transform: rotate(360deg); } }
 
-/* ── Responsive ─────────────────────────────────── */
+/*  Responsive  */
 @media (max-width: 860px) {
   .pp-layout { grid-template-columns: 1fr; }
   .pp-info-grid { grid-template-columns: repeat(2, 1fr); }

@@ -119,7 +119,7 @@ export default function ProfileDashboard() {
       {/* Overlay for mobile sidebar */}
       {sidebarOpen && <div className="pd-overlay" onClick={() => setSidebarOpen(false)} />}
 
-      {/* ── Sidebar ── */}
+      {/*  Sidebar  */}
       <aside className={`pd-sidebar ${sidebarOpen ? "pd-sidebar--open" : ""}`}>
         {/* Mobile-only close header */}
         <div className="pd-sidebar__header">
@@ -166,7 +166,7 @@ export default function ProfileDashboard() {
         </div>
       </aside>
 
-      {/* ── Main ── */}
+      {/*  Main  */}
       <main className="pd-main">
         {/* Topbar */}
         <div className="pd-topbar">
@@ -205,9 +205,9 @@ export default function ProfileDashboard() {
   );
 }
 
-/* ══════════════════════════════════════════════
+/* 
    Sub-components
-══════════════════════════════════════════════ */
+ */
 
 function OpportunityDetails({ sub, listingLoc, description, eventDates }) {
   if (sub.investorId) {
@@ -562,7 +562,7 @@ function Applications({ token, tabLabel }) {
   );
 }
 
-/* ── Primitives ── */
+/*  Primitives  */
 
 function DetailSection({ title, children, variant = "blue" }) {
   return (

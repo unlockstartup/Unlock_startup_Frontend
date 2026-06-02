@@ -53,7 +53,7 @@ const ServiceProvider = () => {
 
   return (
     <>
-      {/* ── Responsive carousel styles ───────────────────────────── */}
+      {/*  Responsive carousel styles  */}
       <style>{`
         .services-track {
           display: flex;

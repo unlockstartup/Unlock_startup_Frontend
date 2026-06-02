@@ -13,7 +13,7 @@ import ConfirmationModal from "@/components/ConfirmationModal";
 
 import "../styles/publishercretepages.css";
 
-/* ─── Field helper ───────────────────────────────────────────────────────────── */
+/*  Field helper  */
 function Field({ label, note, children }) {
   return (
     <div className="field">
@@ -26,7 +26,7 @@ function Field({ label, note, children }) {
   );
 }
 
-/* ─── Status badge helper ────────────────────────────────────────────────────── */
+/*  Status badge helper  */
 function StatusBadge({ status = "pending" }) {
   const cls = status === "approved" ? "badgeSuccess"
     : status === "rejected" ? "badgeDanger"
@@ -34,7 +34,7 @@ function StatusBadge({ status = "pending" }) {
   return <span className={`badge ${cls}`}>{status}</span>;
 }
 
-/* ─── Main component ─────────────────────────────────────────────────────────── */
+/*  Main component  */
 export default function InnovationProducts() {
   const [products, setProducts]   = useState([]);
   const [loading, setLoading]     = useState(true);
@@ -96,7 +96,7 @@ export default function InnovationProducts() {
     setForm((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
   };
 
-  /* ── Data fetching ─────────────────────────────────────────────────────────── */
+  /*  Data fetching  */
   const fetchProducts = async (overrides = {}) => {
     try {
       setLoading(true);
@@ -140,7 +140,7 @@ export default function InnovationProducts() {
     })();
   }, []);
 
-  /* ── Plan limits ───────────────────────────────────────────────────────────── */
+  /*  Plan limits  */
   const subscriptionExpired  = planInfo && planInfo.subscriptionStatus !== "active";
   const productLimitReached  = planInfo && !subscriptionExpired && planInfo.limits?.productsLimit > 0 && planInfo.usage?.products >= planInfo.limits?.productsLimit;
   const productButtonDisabled = subscriptionExpired || productLimitReached;
@@ -149,33 +149,37 @@ export default function InnovationProducts() {
     : productLimitReached ? `Limit Reached (${planInfo.usage.products}/${planInfo.limits.productsLimit})`
     : "+ Add Product";
 
-  /* ── Modal helpers ─────────────────────────────────────────────────────────── */
+  /*  Modal helpers  */
   const openCreate = () => {
     setMode("create"); setEditing(null); setForm(initialForm);
     setProductLogo(null); setProductImages([]); setOpen(true);
   };
 const openEdit = (prod) => {
-  if ((prod.editCount ?? 0) >= 1) {
-    toast.warn("This product has already been edited once and cannot be modified further.");
-    return;
-  }
-  setMode("edit"); setEditing(prod);
-  setForm({ ...initialForm, ...prod, shortProductDescription: prod.shortProductDescription || "", awardsRecognition: prod.awardsRecognition || "" });
-  setProductLogo(prod.productLogo || null);
-  setProductImages(prod.productImages || []);
-  setOpen(true);
+  const alreadyEdited = (prod.editCount ?? 0) >= 1;
+  setConfirmConfig({
+    title: alreadyEdited ? "Edit Not Allowed" : "Edit Product",
+    message: alreadyEdited
+      ? "This product has already been edited once and can no longer be modified."
+      : "You can only update this listing once. Please review all details carefully before submitting, as no further edits will be allowed after this.",
+    confirmText: alreadyEdited ? "OK" : "I Understand, Proceed",
+    cancelText: alreadyEdited ? "" : "Cancel",
+    confirmVariant: alreadyEdited ? "danger" : "primary",
+    onConfirm: () => {
+      if (alreadyEdited) return;
+      setMode("edit"); setEditing(prod);
+      setForm({ ...initialForm, ...prod, shortProductDescription: prod.shortProductDescription || "", awardsRecognition: prod.awardsRecognition || "" });
+      setProductLogo(prod.productLogo || null);
+      setProductImages(prod.productImages || []);
+      setOpen(true);
+    },
+  });
+  setShowConfirm(true);
 };
 
-const openReapply = (prod) => {
-  setMode("create"); setEditing(null);
-  setForm({ ...initialForm, ...prod, shortProductDescription: prod.shortProductDescription || "", awardsRecognition: prod.awardsRecognition || "", disclosureConsent: false });
-  setProductLogo(prod.productLogo || null);
-  setProductImages(prod.productImages || []);
-  setOpen(true);
-};
+
   const closeModal = () => { if (saving || uploadingImage || uploadingProductImages) return; setOpen(false); };
 
-  /* ── Image uploads ─────────────────────────────────────────────────────────── */
+  /*  Image uploads  */
   const uploadLogo = async (file) => {
     if (!file) return;
     const fd = new FormData();
@@ -208,7 +212,7 @@ const openReapply = (prod) => {
   const removeProductImage = (publicId) =>
     setProductImages((prev) => prev.filter((img) => img.publicId !== publicId));
 
-  /* ── Validate & save ───────────────────────────────────────────────────────── */
+  /*  Validate & save  */
   const validate = () => {
     if (!form.companyName.trim())              { toast.warn("Company name is required");              return false; }
     if (!form.productName.trim())              { toast.warn("Product name is required");              return false; }
@@ -265,14 +269,27 @@ const openReapply = (prod) => {
     setShowConfirm(true);
   };
 
-  const confirmToggleProduct = (prod) => {
+const confirmToggleProduct = (prod) => {
   if (!prod?._id) { toast.error("Invalid Product ID"); return; }
+  const toggleCount = prod.toggleCount ?? 0;
+  if (toggleCount >= 2) {
+    setConfirmConfig({
+      title: "Toggle Not Allowed",
+      message: "This product has already been deactivated and reactivated once. No further activation or deactivation is allowed.",
+      confirmText: "OK",
+      cancelText: "",
+      confirmVariant: "danger",
+      onConfirm: () => {},
+    });
+    setShowConfirm(true);
+    return;
+  }
   const isDeactivating = prod.isActive;
   setConfirmConfig({
     title: isDeactivating ? "Deactivate Product" : "Activate Product",
     message: isDeactivating
-      ? "Are you sure you want to deactivate this product? It will no longer be visible to users."
-      : "Are you sure you want to activate this product? It will become visible to users.",
+      ? "You may reactivate this product once after deactivating, but after that no further toggling will be allowed. Are you sure you want to deactivate?"
+      : "You can activate this listing once more. After reactivating, no further deactivation or activation will be permitted. Proceed?",
     confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
     cancelText: "Cancel",
     confirmVariant: isDeactivating ? "warning" : "success",
@@ -288,11 +305,11 @@ const openReapply = (prod) => {
   });
   setShowConfirm(true);
 };
-  /* ── Render ────────────────────────────────────────────────────────────────── */
+  /*  Render  */
   return (
     <div className="page">
 
-      {/* ── Topbar ── */}
+      {/*  Topbar  */}
       <header className="topbar">
         <div>
           <h1 className="topbarTitle">Innovation Products</h1>
@@ -314,7 +331,7 @@ const openReapply = (prod) => {
         </div>
       </header>
 
-      {/* ── Filters ── */}
+      {/*  Filters  */}
       <div className="tableShell">
         <div className="tableHead">
           <h2 className="tableHeadTitle">Filter &amp; Search</h2>
@@ -351,7 +368,7 @@ const openReapply = (prod) => {
         </div>
       </div>
 
-      {/* ── Table ── */}
+      {/*  Table  */}
       <div className="tableShell">
         <div className="tableHead">
           <h2 className="tableHeadTitle">All Innovation Products</h2>
@@ -406,32 +423,17 @@ const openReapply = (prod) => {
                     </td>
 <td>
   <div className="actionGroup">
-    {(prod.editCount ?? 0) >= 1 ? (
-      <button
-        className="btn btnSm btnPrimary"
-        onClick={() => {
-          if (productButtonDisabled) return toast.warn(
-            subscriptionExpired
-              ? "Your subscription has expired. Please renew to re-apply."
-              : `Products limit of ${planInfo.limits.productsLimit} reached for your current plan.`
-          );
-          openReapply(prod);
-        }}
-        title={
-          productButtonDisabled
-            ? subscriptionExpired ? "Subscription expired" : "Products limit reached"
-            : "Edit limit reached. Click to create a new listing based on this one."
-        }
-        style={{ whiteSpace: "nowrap" }}
-      >
-        Re-apply
-      </button>
-    ) : (
-      <button className="btn btnSm btnPrimary" onClick={() => openEdit(prod)}>Edit</button>
-    )}
+    <button
+      className={`btn btnSm ${(prod.editCount ?? 0) >= 1 ? "btnSecondary" : "btnPrimary"}`}
+      onClick={() => openEdit(prod)}
+      title={(prod.editCount ?? 0) >= 1 ? "This product has already been edited once" : "Edit product"}
+    >
+      Edit
+    </button>
     <button
       className={`btn btnSm ${prod.isActive ? "btnWarning" : "btnSuccess"}`}
       onClick={() => confirmToggleProduct(prod)}
+      title={(prod.toggleCount ?? 0) >= 2 ? "Toggle limit reached" : prod.isActive ? "Deactivate" : "Activate"}
     >
       {prod.isActive ? "Deactivate" : "Activate"}
     </button>
@@ -446,7 +448,7 @@ const openReapply = (prod) => {
         </div>
       </div>
 
-      {/* ── Create / Edit modal ── */}
+      {/*  Create / Edit modal  */}
       {open && (
         <div className="modalOverlay">
           <div className="modalDialog">
@@ -462,7 +464,7 @@ const openReapply = (prod) => {
             {/* Body */}
             <div className="modalBody">
 
-              {/* ── Company information ── */}
+              {/*  Company information  */}
               <section className="section">
                 <h3 className="sectionTitle">Company information</h3>
                 <div className="row3">
@@ -478,7 +480,7 @@ const openReapply = (prod) => {
                 </div>
               </section>
 
-              {/* ── Product details ── */}
+              {/*  Product details  */}
               <section className="section">
                 <h3 className="sectionTitle">Product details</h3>
 
@@ -578,7 +580,7 @@ const openReapply = (prod) => {
                 </Field>
               </section>
 
-              {/* ── Target market ── */}
+              {/*  Target market  */}
               <section className="section">
                 <h3 className="sectionTitle">Target market</h3>
 
@@ -591,7 +593,7 @@ const openReapply = (prod) => {
                 </Field>
               </section>
 
-              {/* ── Organization & contact ── */}
+              {/*  Organization & contact  */}
               <section className="section">
                 <h3 className="sectionTitle">Company Details</h3>
 
@@ -614,7 +616,7 @@ const openReapply = (prod) => {
                 </div>
               </section>
 
-              {/* ── Product status ── */}
+              {/*  Product status  */}
               <section className="section">
                 <h3 className="sectionTitle">Product status</h3>
 
@@ -641,7 +643,7 @@ const openReapply = (prod) => {
                 </Field>
               </section>
 
-              {/* ── Consent ── */}
+              {/*  Consent  */}
               <section className="section">
                 <h3 className="sectionTitle">Use &amp; disclosure consent</h3>
 

@@ -126,7 +126,7 @@ export default function PublisherDashboard() {
     return Math.min(100, Math.round((totalUsed / totalLimit) * 100));
   })();
 
-  // ── Stat card definitions (dynamic colour values stay inline) ──────────
+  //  Stat card definitions (dynamic colour values stay inline) 
   const statCards = [
     {
       label: "Total Listings",
@@ -173,13 +173,13 @@ export default function PublisherDashboard() {
   return (
     <div className="publisher-container py-4 px-3 px-md-0">
 
-      {/* ── Overview Section Header ── */}
+      {/*  Overview Section Header  */}
       <div className="pd__section-header">
         <span className="pd__section-bar" />
         <span className="pd__section-label">Overview</span>
       </div>
 
-      {/* ── Stat Cards Grid ── */}
+      {/*  Stat Cards Grid  */}
       <div className="pd__overview-grid">
         {statCards.map(({ label, value, icon: Icon, color, bg, sub }) => (
           <div
@@ -216,10 +216,10 @@ export default function PublisherDashboard() {
         ))}
       </div>
 
-      {/* ── Listings Analytics ── */}
+      {/*  Listings Analytics  */}
       <ListingsAnalytics />
 
-      {/* ── Limit reached banner ── */}
+      {/*  Limit reached banner  */}
       {isAnyLimitReached && (
         <div className="pd__limit-banner">
           <span className="pd__limit-banner-icon">⚠</span>
@@ -230,10 +230,10 @@ export default function PublisherDashboard() {
         </div>
       )}
 
-      {/* ── Divider ── */}
+      {/*  Divider  */}
       <hr className="pd__divider" />
 
-      {/* ── Subscription Plans Header ── */}
+      {/*  Subscription Plans Header  */}
       <div className="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3 mt-2">
         <div className="pd__section-header" style={{ marginBottom: 0 }}>
           <span className="pd__section-bar" />
@@ -249,7 +249,7 @@ export default function PublisherDashboard() {
 
       <SubscriptionPlans planInfo={planInfo} onPaymentSuccess={handlePaymentSuccess} />
 
-      {/* ── Service Plans Header ── */}
+      {/*  Service Plans Header  */}
       <div className="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3 mt-2">
         <div className="pd__section-header" style={{ marginBottom: 0 }}>
           <span className="pd__section-bar" />

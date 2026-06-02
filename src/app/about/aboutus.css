@@ -25,7 +25,7 @@
   padding: 0 24px;
 }
 
-/* ─── Hero ──────────────────────────────────────────────────────────────── */
+/*  Hero  */
 .au-hero {
   padding: 80px 0 64px;
 }
@@ -118,7 +118,7 @@
   line-height: 1.6;
 }
 
-/* ─── Section ────────────────────────────────────────────────────────────── */
+/*  Section  */
 .au-section {
   padding: 80px 0;
   border-top: 1px solid #eeeeee;
@@ -152,7 +152,7 @@
   line-height: 1.75;
 }
 
-/* ─── Grids ──────────────────────────────────────────────────────────────── */
+/*  Grids  */
 .au-overview-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -171,7 +171,7 @@
   gap: 20px;
 }
 
-/* ─── Cards ──────────────────────────────────────────────────────────────── */
+/*  Cards  */
 .au-card {
   padding: 28px;
   background: #fafafa;
@@ -220,7 +220,7 @@
   background: #7bbfea;
 }
 
-/* ─── Mission / Vision ───────────────────────────────────────────────────── */
+/*  Mission / Vision  */
 .au-mission-vision {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -251,7 +251,7 @@
   font-weight: 400;
 }
 
-/* ─── CTA Panel ──────────────────────────────────────────────────────────── */
+/*  CTA Panel  */
 .au-cta-panel {
   padding: 48px;
   border-radius: 20px;
@@ -280,7 +280,7 @@
   max-width: 52ch;
 }
 
-/* ─── Buttons ────────────────────────────────────────────────────────────── */
+/*  Buttons  */
 .au-btn {
   display: inline-flex;
   align-items: center;
@@ -324,7 +324,7 @@
 
 .au-btn-light:hover { background: rgba(255, 255, 255, 0.22); }
 
-/* ─── Responsive ─────────────────────────────────────────────────────────── */
+/*  Responsive  */
 @media (max-width: 1024px) {
   .au-values-grid {
     grid-template-columns: repeat(2, 1fr);

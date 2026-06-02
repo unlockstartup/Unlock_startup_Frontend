@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* ─── STRICT 2-COLOR DESIGN SYSTEM ─────────────────────────── */
+/*  STRICT 2-COLOR DESIGN SYSTEM  */
 /* Primary: Blue rgb(30, 176, 228) | Accent: Yellow rgb(255, 207, 10) */
 :root {
-  /* ─── BRAND COLORS ONLY ─── */
+  /*  BRAND COLORS ONLY  */
   --blue:             rgb(30, 176, 228);
   --blue-900:         rgb(10, 80, 110);
   --blue-800:         rgb(15, 110, 145);
@@ -28,7 +28,7 @@
   --yellow-100:       rgb(255, 248, 200);
   --yellow-50:        rgb(255, 252, 230);
 
-  /* ─── NEUTRALS ─── */
+  /*  NEUTRALS  */
   --gray-950:         #0a0f1a;
   --gray-900:         #111827;
   --gray-800:         #1f2937;
@@ -42,7 +42,7 @@
   --gray-50:          #f9fafb;
   --white:            #ffffff;
 
-  /* ─── SEMANTIC MAPPINGS ─── */
+  /*  SEMANTIC MAPPINGS  */
   --jd-bg:            var(--gray-50);
   --jd-white:         var(--white);
   --jd-card-bg:       var(--white);
@@ -98,7 +98,7 @@
   padding: 0 24px;
 }
 
-/* ─── Back Link ────────────────────────────────────────────────────── */
+/*  Back Link  */
 .backLink {
   display: inline-flex;
   align-items: center;
@@ -120,7 +120,7 @@
   border-color: var(--blue-200);
 }
 
-/* ─── Hero Section ─────────────────────────────────────────────────── */
+/*  Hero Section  */
 .jd-hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -354,7 +354,7 @@
   letter-spacing: 0.5px;
 }
 
-/* ─── Info Cards Row ─────────────────────────────────────────────── */
+/*  Info Cards Row  */
 .jd-infoRow {
   display: grid;
   grid-template-columns: 1.2fr 1fr 0.8fr;
@@ -596,7 +596,7 @@
   letter-spacing: 0.5px;
 }
 
-/* ─── Section Cards ──────────────────────────────────────────────── */
+/*  Section Cards  */
 .jd-sectionCard {
   background: var(--jd-white);
   border-radius: var(--jd-radius);
@@ -701,7 +701,7 @@ background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
   margin: 0;
 }
 
-/* ─── Split Row ────────────────────────────────────────────────────── */
+/*  Split Row  */
 .jd-splitRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -948,7 +948,7 @@ background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
   flex-shrink: 0;
 }
 
-/* ─── Responsibilities Grid ────────────────────────────────────────── */
+/*  Responsibilities Grid  */
 .jd-responsibilitiesGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -994,7 +994,7 @@ background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
   margin: 0;
 }
 
-/* ─── Apply Section ────────────────────────────────────────────────── */
+/*  Apply Section  */
 .jd-applySection {
   background: var(--jd-white);
   border-radius: var(--jd-radius);
@@ -1109,7 +1109,7 @@ background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
   background: var(--gray-400);
 }
 
-/* ─── Loading & Not Found ──────────────────────────────────────────── */
+/*  Loading & Not Found  */
 .jd-loader {
   display: flex;
   flex-direction: column;
@@ -1173,7 +1173,7 @@ background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-700) 100%);
   box-shadow: 0 8px 24px rgba(30, 176, 228, 0.4);
 }
 
-/* ─── Responsive ───────────────────────────────────────────────────── */
+/*  Responsive  */
 @media (max-width: 900px) {
   .jd-hero {
     grid-template-columns: 1fr;

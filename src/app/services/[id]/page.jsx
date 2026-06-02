@@ -107,7 +107,7 @@ export default function ServicePage({ params }) {
       <div className="svd-page">
         <div className="svd-container mt-30">
           <Breadcrumb title="Services" dynamicTitle={company?.serviceTitle} />
-          {/* ── Back Link ── */}
+          {/*  Back Link  */}
           <Link href="/services" className="svd-back">
             <ArrowLeft size={14} strokeWidth={2} />
             All Services
@@ -122,7 +122,7 @@ export default function ServicePage({ params }) {
             </div>
           )}
 
-          {/* ── Hero Metadata ── */}
+          {/*  Hero Metadata  */}
           <div className="svd-hero-info">
             <div className="svd-hero-info__top">
               <div className="svd-hero-info__left">
@@ -199,7 +199,7 @@ export default function ServicePage({ params }) {
 
           <div className="svd-layout">
 
-            {/* ── LEFT COLUMN ── */}
+            {/*  LEFT COLUMN  */}
             <div className="svd-layout__main">
               {company.detailedDescription && (
                 <div className="svd-card">
@@ -323,7 +323,7 @@ export default function ServicePage({ params }) {
               )}
             </div>
 
-            {/* ── RIGHT SIDEBAR ── */}
+            {/*  RIGHT SIDEBAR  */}
             <div className="svd-layout__side">
               {/* CTA Card */}
               <div className="svd-cta">

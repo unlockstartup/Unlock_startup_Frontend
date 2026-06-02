@@ -14,7 +14,7 @@ import {
 
 import "../styles/publishercretepages.css";
 
-/* ─── Constants */
+/*  Constants */
 const defaultForm = {
   title: "",
   eventCategory: [],
@@ -57,7 +57,7 @@ const statusBadge = (status) => {
   return "badgeWarning";
 };
 
-/* ─── Component */
+/*  Component */
 export default function PublisherEventPage() {
   const [events, setEvents]         = useState([]);
   const [categories, setCategories] = useState([]);
@@ -80,7 +80,7 @@ export default function PublisherEventPage() {
     confirmVariant: "danger", onConfirm: () => {},
   });
 
-  /* ── Data fetching ─────────────────────────────────────────────────────────── */
+  /*  Data fetching  */
   const fetchEvents = async (overrides = {}) => {
     try {
       setLoading(true);
@@ -133,7 +133,7 @@ export default function PublisherEventPage() {
     })();
   }, [form.eventType, eventTypes]);
 
-  /* ── Modal helpers ─────────────────────────────────────────────────────────── */
+  /*  Modal helpers  */
   const openModal = () => {
     setForm(defaultForm); setEditId(null); setMainImage(null); setShowModal(true);
   };
@@ -186,7 +186,7 @@ const openEdit = (ev) => {
 
   const closeModal = () => setShowModal(false);
 
-  /* ── Form handlers ─────────────────────────────────────────────────────────── */
+  /*  Form handlers  */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({
@@ -203,7 +203,7 @@ const openEdit = (ev) => {
   const addCategoryTag    = (cat) => { if (cat && !form.eventCategory.includes(cat)) setForm((p) => ({ ...p, eventCategory: [...p.eventCategory, cat] })); };
   const removeCategoryTag = (cat) => setForm((p) => ({ ...p, eventCategory: p.eventCategory.filter((c) => c !== cat) }));
 
-  /* ── Save / delete / toggle ────────────────────────────────────────────────── */
+  /*  Save / delete / toggle  */
   const validate = () => {
     if (!form.title.trim())          return "Event Name is required";
     if (!form.eventCategory?.length) return "Event Category is required";
@@ -338,7 +338,7 @@ const confirmToggleEvent = (ev) => {
     }
   };
 
-  /* ── Plan limits ───────────────────────────────────────────────────────────── */
+  /*  Plan limits  */
   const subscriptionExpired = planInfo && planInfo.subscriptionStatus !== "active";
   const eventLimitReached   = planInfo && !subscriptionExpired && planInfo.limits?.eventLimit > 0 && planInfo.usage?.events >= planInfo.limits?.eventLimit;
   const eventButtonDisabled = subscriptionExpired || eventLimitReached;
@@ -349,11 +349,11 @@ const confirmToggleEvent = (ev) => {
     ? `Limit Reached (${planInfo.usage.events}/${planInfo.limits.eventLimit})`
     : "+ Add Event";
 
-  /* ── Render ────────────────────────────────────────────────────────────────── */
+  /*  Render  */
   return (
     <div className="page">
 
-      {/* ── Topbar ── */}
+      {/*  Topbar  */}
       <header className="topbar">
         <div>
           <h1 className="topbarTitle">Events</h1>
@@ -375,7 +375,7 @@ const confirmToggleEvent = (ev) => {
         </div>
       </header>
 
-      {/* ── Filters ── */}
+      {/*  Filters  */}
       <div className="tableShell">
         <div className="tableHead">
           <h2 className="tableHeadTitle">Filter &amp; Search</h2>
@@ -422,7 +422,7 @@ const confirmToggleEvent = (ev) => {
         </div>
       </div>
 
-      {/* ── Events table ── */}
+      {/*  Events table  */}
       <div className="tableShell">
         <div className="tableHead">
           <h2 className="tableHeadTitle">All Events</h2>
@@ -460,7 +460,7 @@ const confirmToggleEvent = (ev) => {
                       </td>
                       <td className="tdNoWrap">{ev.eventType || <span className="tdMuted">—</span>}</td>
 
-                      {/* ── Status + edit-lock badge ── */}
+                      {/*  Status + edit-lock badge  */}
                       <td>
                         <span className={`badge ${statusBadge(ev.status)}`}>{ev.status}</span>
                       </td>
@@ -476,7 +476,7 @@ const confirmToggleEvent = (ev) => {
                           : "—"}
                       </td>
 
-{/* ── Actions ── */}
+{/*  Actions  */}
 <td>
   <div className="actionGroup">
 <button
@@ -512,7 +512,7 @@ const confirmToggleEvent = (ev) => {
         </div>
       </div>
 
-      {/* ── Create / Edit modal ── */}
+      {/*  Create / Edit modal  */}
       {showModal && (
         <div className="modalOverlay">
           <div className="modalDialog">
@@ -525,7 +525,7 @@ const confirmToggleEvent = (ev) => {
             {/* Body */}
             <div className="modalBody">
 
-              {/* ── Core details ── */}
+              {/*  Core details  */}
               <section className="section">
                 <h3 className="sectionTitle">Core details</h3>
 
@@ -583,7 +583,7 @@ const confirmToggleEvent = (ev) => {
                 </div>
               </section>
 
-              {/* ── Date & venue ── */}
+              {/*  Date & venue  */}
               <section className="section">
                 <h3 className="sectionTitle">Date &amp; venue</h3>
 
@@ -635,7 +635,7 @@ const confirmToggleEvent = (ev) => {
                 </div>
               </section>
 
-              {/* ── Organizer ── */}
+              {/*  Organizer  */}
               <section className="section">
                 <h3 className="sectionTitle">Company information</h3>
 
@@ -666,7 +666,7 @@ const confirmToggleEvent = (ev) => {
                 </div>
               </section>
 
-              {/* ── Content ── */}
+              {/*  Content  */}
               <section className="section">
                 <h3 className="sectionTitle">Content information</h3>
 
@@ -715,7 +715,7 @@ const confirmToggleEvent = (ev) => {
                 </div>
               </section>
 
-              {/* ── Registration ── */}
+              {/*  Registration  */}
               <section className="section">
                 <h3 className="sectionTitle">Registration &amp; links</h3>
 

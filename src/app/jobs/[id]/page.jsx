@@ -38,7 +38,7 @@ export default function Page() {
     })();
   }, [id]);
 
-  /* ── loading ── */
+  /*  loading  */
   if (loading) {
     return (
       <main>
@@ -54,7 +54,7 @@ export default function Page() {
     );
   }
 
-  /* ── not found ── */
+  /*  not found  */
   if (!job) {
     return (
       <main>
@@ -72,7 +72,7 @@ export default function Page() {
     );
   }
 
-/* ── derived values ── */
+/*  derived values  */
 const capitalize = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : "";
 
 // Normalize workMode to a deduped array regardless of what the API sends
@@ -138,12 +138,12 @@ const handleApply = () => {
       <div className="jobDetailPage">
         <div className="container">
           <Breadcrumb title="Jobs" dynamicTitle={job?.title} />
-          {/* ── Back link ── */}
+          {/*  Back link  */}
           <a href="/jobs" className="backLink" style={{marginTop : "30px"}}>
             <ArrowLeft size={14} strokeWidth={2} /> All Jobs
           </a>
 
-          {/* ── HERO SECTION ── */}
+          {/*  HERO SECTION  */}
           <div className="jd-hero">
             <div className="jd-heroLeft">
               <div className="jd-logoWrap">
@@ -225,7 +225,7 @@ const handleApply = () => {
             </div>
           </div>
 
-          {/* ── INFO CARDS ROW ── */}
+          {/*  INFO CARDS ROW  */}
           <div className="jd-infoRow">
             {/* Company Details */}
             <div className="jd-infoCard">
@@ -324,7 +324,7 @@ const handleApply = () => {
             </div>
           </div>
 
-          {/* ── ROLE OVERVIEW ── */}
+          {/*  ROLE OVERVIEW  */}
           {job.roleOverview && (
             <div className="jd-sectionCard">
               <div className="jd-sectionHeader">
@@ -337,7 +337,7 @@ const handleApply = () => {
             </div>
           )}
 
-          {/* ── REQUIREMENTS & LOCATION ROW ── */}
+          {/*  REQUIREMENTS & LOCATION ROW  */}
           <div className="jd-splitRow">
             {/* Requirements */}
             <div className="jd-sectionCard jd-sectionCard--compact">
@@ -438,7 +438,7 @@ const handleApply = () => {
             </div>
           </div>
 
-          {/* ── KEY RESPONSIBILITIES ── */}
+          {/*  KEY RESPONSIBILITIES  */}
           <div className="jd-sectionCard">
             <div className="jd-sectionHeader jd-sectionHeader--center">
               <div className="jd-sectionIcon jd-sectionIcon--purple">
@@ -462,8 +462,8 @@ const handleApply = () => {
             )}
           </div>
 
-          {/* ── APPLY NOW ── */}
-{/* ── APPLY NOW ── */}
+          {/*  APPLY NOW  */}
+{/*  APPLY NOW  */}
 <div className="jd-applySection">
   <h2 className="jd-applyTitle">Apply Now</h2>
 

@@ -17,14 +17,14 @@ export const getPublicEventCategories = (eventTypeId = "") =>
 export const getPublicEventTypes = () =>
   publisherApi.get("/api/public/event-types");
 
-// ── Service ───────────────────────────────────────────────────────────────────
+//  Service 
 export const getPublicServiceTypes = () =>
   publisherApi.get("/api/public/service-types");
 
 export const getPublicServiceCategories = () =>
   publisherApi.get("/api/public/service-categories");
 
-// ── Jobs ──────────────────────────────────────────────────────────────────────
+//  Jobs 
 export const getPublicJobTypes = () =>
   publisherApi.get("/api/public/job-types/active");
 
@@ -37,14 +37,14 @@ export const getPublicWorkModes = () =>
 export const getPublicWorkExperiences = () =>
   publisherApi.get("/api/public/work-experiences/active");
 
-// ── Investors ─────────────────────────────────────────────────────────────────
+//  Investors 
 export const getPublicInvestorTypes = () =>
   publisherApi.get("/api/public/investor-types/active");
 
 export const getPublicPreferredStages = () =>
   publisherApi.get("/api/public/preferred-stages/active");
 
-// ── Products Status ───────────────────────────────────────────────────────
+//  Products Status 
 export const getPublicPatentStatuses = () =>
   publisherApi.get("/api/public/patent-status/active");
 

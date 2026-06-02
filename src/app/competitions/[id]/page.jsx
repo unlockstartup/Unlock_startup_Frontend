@@ -155,20 +155,20 @@ export default function Page({ params }) {
       <div className="competitionDetailPage">
         <div className="competitionContainer">
 <Breadcrumb title="Competitions"  dynamicTitle={funding?.title}/>
-          {/* ── Back Link ── */}
+          {/*  Back Link  */}
           <Link href="/competitions" className="competitionBackLink">
             <ArrowLeft size={16} strokeWidth={2} />
             All Competitions
           </Link>
 
-          {/* ── Hero Image ── */}
+          {/*  Hero Image  */}
           {funding.image && (
             <div className="competitionHeroImageContainer">
               <Image src={funding.image} fill style={{ objectFit: "fill" }} alt={funding.title} priority />
             </div>
           )}
 
-          {/* ── Hero Metadata ── */}
+          {/*  Hero Metadata  */}
           <div className="competitionHeroMetadataContainer">
             <div className="competitionHeroMetaTop">
 
@@ -264,7 +264,7 @@ export default function Page({ params }) {
 
           <div className="competitionLayout">
 
-            {/* ── LEFT COLUMN ── */}
+            {/*  LEFT COLUMN  */}
             <div className="competitionLeft">
               {/* Description */}
               {funding.description && (
@@ -409,7 +409,7 @@ export default function Page({ params }) {
 
             </div>
 
-            {/* ── RIGHT SIDEBAR ── */}
+            {/*  RIGHT SIDEBAR  */}
             <div className="competitionRight">
 
 {/* CTA Card */}

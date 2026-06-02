@@ -85,7 +85,7 @@ const UpcomingFundingCalls = () => {
 
   return (
     <>
-      {/* ── Responsive carousel styles ───────────────────────────── */}
+      {/*  Responsive carousel styles  */}
       <style>{`
         .fundings-track {
           display: flex;

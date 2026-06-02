@@ -15,7 +15,7 @@ import { INDIA_STATES } from "@/app/constants";
 
 import "../styles/publishercretepages.css";
 
-/* ─── Constants ─────────────────────────────────────────────────────────────── */
+/*  Constants  */
 const defaultForm = {
   title: "",
   jobCategory: "",
@@ -60,7 +60,7 @@ const statusBadge = (status) => {
   return "badgeWarning";
 };
 
-/* ─── Component ─────────────────────────────────────────────────────────────── */
+/*  Component  */
 export default function JobPage() {
   const [jobs, setJobs]         = useState([]);
   const [categories, setCategories] = useState([]);
@@ -143,7 +143,7 @@ const fetchJobs = async (overrides = {}) => {
     })();
   }, []);
 
-  /* ── Modal helpers ─────────────────────────────────────────────────────────── */
+  /*  Modal helpers  */
   const openCreate = () => { setForm(defaultForm); setEditId(null); setShowModal(true); };
 
 const openEdit = (job) => {
@@ -181,32 +181,13 @@ const openEdit = (job) => {
   setShowConfirm(true);
 };
 
-const openReapply = (job) => {
-  const fmtDate = (iso) => (iso ? iso.split("T")[0] : "");
-  const normalizeWorkMode = (mode) => {
-    if (!mode) return "";
-    if (Array.isArray(mode)) return String(mode[0] || "").trim();
-    return String(mode).split(",")[0].trim();
-  };
 
-  // Pre-fill form with existing data but treat as a brand-new listing
-  setForm({
-    ...defaultForm, ...job,
-    applyLastDate: fmtDate(job.applyLastDate || job.deadline),
-    applyDate:     fmtDate(job.applyDate),
-    jobType:       String(job.jobType || "").trim(),
-    workMode:      normalizeWorkMode(job.workMode),
-    companyLogo:   job.companyLogo || null,
-  });
-  setEditId(null);          // null = create mode
-  setShowModal(true);
-};
 
   const closeModal = () => setShowModal(false);
 
   const set = (field) => (e) => setForm((p) => ({ ...p, [field]: e.target.value }));
 
-  /* ── Save / delete / toggle ────────────────────────────────────────────────── */
+  /*  Save / delete / toggle  */
   const validate = () => {
     if (!form.title.trim())        return "Job Title is required";
     if (!form.jobCategory)         return "Job Category is required";
@@ -335,7 +316,7 @@ const confirmToggleJob = (job) => {
     }
   };
 
-  /* ── Plan limits ───────────────────────────────────────────────────────────── */
+  /*  Plan limits  */
   const subscriptionExpired = planInfo && planInfo.subscriptionStatus !== "active";
   const jobLimitReached     = planInfo && !subscriptionExpired && planInfo.limits?.jobLimit > 0 && planInfo.usage?.jobs >= planInfo.limits?.jobLimit;
   const jobButtonDisabled   = subscriptionExpired || jobLimitReached;
@@ -346,11 +327,11 @@ const confirmToggleJob = (job) => {
     ? `Limit Reached (${planInfo.usage.jobs}/${planInfo.limits.jobLimit})`
     : "+ Post a Job";
 
-  /* ── Render ────────────────────────────────────────────────────────────────── */
+  /*  Render  */
   return (
     <div className="page">
 
-      {/* ── Topbar ── */}
+      {/*  Topbar  */}
       <header className="topbar">
         <div>
           <h1 className="topbarTitle">Jobs</h1>
@@ -371,7 +352,7 @@ const confirmToggleJob = (job) => {
           </button>
         </div>
       </header>
-{/* ── Filters ── */}
+{/*  Filters  */}
 <div className="tableShell">
   <div className="tableHead">
     <h2 className="tableHeadTitle">Filter &amp; Search</h2>
@@ -417,7 +398,7 @@ const confirmToggleJob = (job) => {
     </div>
   </div>
 </div>
-      {/* ── Jobs table ── */}
+      {/*  Jobs table  */}
       <div className="tableShell">
         <div className="tableHead">
           <h2 className="tableHeadTitle">All Jobs</h2>
@@ -449,7 +430,7 @@ const confirmToggleJob = (job) => {
         <td className="tdSemibold">{job.title}</td>
         <td className="tdMuted">{job.jobCategory || "—"}</td>
 
-        {/* ── Status + lock badge ── */}
+        {/*  Status + lock badge  */}
         <td>
           <span className={`badge ${statusBadge(job.status)}`}>{job.status}</span>
           
@@ -462,54 +443,24 @@ const confirmToggleJob = (job) => {
         </td>
         <td className="tdMuted">{job.openings || "—"}</td>
 
-{/* ── Actions ── */}
+{/*  Actions  */}
 <td>
   <div className="actionGroup">
-{editLocked ? (
-  <button
-    className="btn btnSm btnPrimary"
-    onClick={() => {
-      if (jobButtonDisabled) return toast.warn(
-        subscriptionExpired
-          ? "Your subscription has expired. Please renew to re-apply."
-          : `Job limit of ${planInfo.limits.jobLimit} reached for your current plan.`
-      );
-      openReapply(job);
-    }}
-    title={
-      jobButtonDisabled
-        ? subscriptionExpired
-          ? "Subscription expired"
-          : `Job limit reached (${planInfo?.usage?.jobs}/${planInfo?.limits?.jobLimit})`
-        : "Edit limit reached. Click to create a new listing based on this one."
-    }
-    style={{ whiteSpace: "nowrap" }}
-  >
-    Re-apply
-  </button>
-) : (
-  <button
-    className="btn btnSm btnPrimary"
-    onClick={() => openEdit(job)}
-    title="Edit job"
-  >
-    Edit
-  </button>
-)}
-<button
-  className={`btn btnSm ${job.isActive ? "btnWarning" : "btnSuccess"}`}
-  onClick={() => confirmToggleJob(job)}
-  title={
-    (job.toggleCount ?? 0) >= 2
-      ? "Toggle limit reached"
-      : job.isActive ? "Deactivate" : "Activate"
-  }
->
-  {job.isActive ? "Deactivate" : "Activate"}
-</button>
-    <button className="btn btnSm btnDanger" onClick={() => deleteJob(job._id)}>
-      Delete
+    <button
+      className={`btn btnSm ${(job.editCount ?? 0) >= 1 ? "btnSecondary" : "btnPrimary"}`}
+      onClick={() => openEdit(job)}
+      title={(job.editCount ?? 0) >= 1 ? "This job has already been edited once" : "Edit job"}
+    >
+      Edit
     </button>
+    <button
+      className={`btn btnSm ${job.isActive ? "btnWarning" : "btnSuccess"}`}
+      onClick={() => confirmToggleJob(job)}
+      title={(job.toggleCount ?? 0) >= 2 ? "Toggle limit reached" : job.isActive ? "Deactivate" : "Activate"}
+    >
+      {job.isActive ? "Deactivate" : "Activate"}
+    </button>
+    <button className="btn btnSm btnDanger" onClick={() => deleteJob(job._id)}>Delete</button>
   </div>
 </td>
       </tr>
@@ -521,7 +472,7 @@ const confirmToggleJob = (job) => {
         </div>
       </div>
 
-      {/* ── Create / Edit modal ── */}
+      {/*  Create / Edit modal  */}
       {showModal && (
         <div className="modalOverlay">
           <div className="modalDialog">
@@ -535,7 +486,7 @@ const confirmToggleJob = (job) => {
             {/* Body */}
             <div className="modalBody">
 
-              {/* ── Core details ── */}
+              {/*  Core details  */}
               <section className="section">
                 <h3 className="sectionTitle">Core details</h3>
                 <div className="field">
@@ -631,7 +582,7 @@ const confirmToggleJob = (job) => {
                 </div>
               </section>
 
-              {/* ── Company information ── */}
+              {/*  Company information  */}
               <section className="section">
                 <h3 className="sectionTitle">Company information</h3>
 
@@ -690,7 +641,7 @@ const confirmToggleJob = (job) => {
                 </div>
               </section>
 
-              {/* ── Hiring manager ── */}
+              {/*  Hiring manager  */}
               <section className="section">
                 <h3 className="sectionTitle">Hiring manager</h3>
 
@@ -710,7 +661,7 @@ const confirmToggleJob = (job) => {
                 </div>
               </section>
 
-              {/* ── Role details ── */}
+              {/*  Role details  */}
               <section className="section">
                 <h3 className="sectionTitle">Role details</h3>
 
@@ -736,7 +687,7 @@ const confirmToggleJob = (job) => {
                 </div>
               </section>
 
-              {/* ── Salary ── */}
+              {/*  Salary  */}
               <section className="section">
                 <h3 className="sectionTitle">Salary</h3>
 
@@ -759,7 +710,7 @@ const confirmToggleJob = (job) => {
                 </div>
               </section>
 
-              {/* ── Location ── */}
+              {/*  Location  */}
               <section className="section">
                 <h3 className="sectionTitle">Location</h3>
 
@@ -808,7 +759,7 @@ const confirmToggleJob = (job) => {
                 </div>
               </section>
 
-              {/* ── Application ── */}
+              {/*  Application  */}
               <section className="section">
                 <h3 className="sectionTitle">Application</h3>
 

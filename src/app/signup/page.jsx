@@ -105,9 +105,9 @@ function OtpModal({ email, onVerify, onResend, onClose, loading }) {
   );
 }
 
-/* ─────────────────────────────────────
+/* 
    SUCCESS MODAL
-───────────────────────────────────── */
+ */
 function SuccessModal({ role }) {
   return (
     <div className="lsb-modal-overlay">
@@ -153,9 +153,9 @@ function SuccessModal({ role }) {
   );
 }
 
-/* ─────────────────────────────────────
+/* 
    SIGNUP PAGE
-───────────────────────────────────── */
+ */
 const Page = () => {
   const router = useRouter();
 
@@ -192,7 +192,7 @@ const Page = () => {
     setPortalTarget(document.body);
   }, []);
 
-  // ── Load organizer types for both publisher AND investor ──
+  //  Load organizer types for both publisher AND investor 
   useEffect(() => {
     if (accountType !== "publisher" && accountType !== "investor") return;
     if (publisherTypes.length > 0) return;
@@ -243,7 +243,7 @@ const Page = () => {
     setTimeout(() => router.push(path), 2000);
   };
 
-  /* ── USER: direct register (no OTP) ── */
+  /*  USER: direct register (no OTP)  */
   const handleUserSubmit = async (e) => {
     e.preventDefault();
     const msg = validateUser();
@@ -260,7 +260,7 @@ const Page = () => {
     }
   };
 
-  /* ── PUBLISHER / INVESTOR: send OTP first ── */
+  /*  PUBLISHER / INVESTOR: send OTP first  */
   const handlePublisherSendOtp = async (e) => {
     e.preventDefault();
     const msg = validatePublisher();
@@ -278,7 +278,7 @@ const Page = () => {
     }
   };
 
-  /* ── PUBLISHER / INVESTOR: verify OTP + create account ── */
+  /*  PUBLISHER / INVESTOR: verify OTP + create account  */
   const handleVerifyOtp = async (otpValue) => {
     if (otpValue.length !== 6) return setError("Enter complete 6-digit OTP.");
     setVerifying(true);
@@ -320,7 +320,7 @@ const Page = () => {
     }
   };
 
-  // ── Helper: is it a publisher-type account? ──
+  //  Helper: is it a publisher-type account? 
   const isPublisherType = accountType === "publisher" || accountType === "investor";
 
   return (
@@ -340,7 +340,7 @@ const Page = () => {
         <div className="lsb-page">
           <main className="lsb-shell" id="main">
 
-            {/* ── LEFT PANEL ── */}
+            {/*  LEFT PANEL  */}
             <section className="lsb-left">
               <div className="lsb-bar" />
               <div className="lsb-hero">
@@ -375,7 +375,7 @@ const Page = () => {
               </div>
             </section>
 
-            {/* ── RIGHT PANEL ── */}
+            {/*  RIGHT PANEL  */}
             <section className="lsb-right">
               <div className="lsb-card">
 
@@ -385,7 +385,7 @@ const Page = () => {
                     width={150} height={60}
                     style={{ height: "auto", display: "block", margin: "0 auto 12px" }}
                   />
-                  {/* ── Dynamic heading for all 3 types ── */}
+                  {/*  Dynamic heading for all 3 types  */}
                   {accountType === "publisher" && (
                     <><h2>Join as a Publisher</h2><p>Register as a publisher to manage your dashboard and publish competitions, events, jobs, product listing and services.</p></>
                   )}
@@ -399,7 +399,7 @@ const Page = () => {
 
                 {error && <div className="lsb-error">{error}</div>}
 
-                {/* ── Account type dropdown ── */}
+                {/*  Account type dropdown  */}
                 <div className="lsb-field">
                   <label>Account Type</label>
                   <div className="lsb-ctrl lsb-ctrl--select">
@@ -410,7 +410,7 @@ const Page = () => {
                         { value: "publisher", label: "Publisher" },
                         { value: "investor",  label: "Investor"  },
                       ]}
-                      // ── Fixed: correct label for all 3 types ──
+                      //  Fixed: correct label for all 3 types 
                       value={{
                         value: accountType,
                         label: accountType === "user" ? "User"
@@ -495,9 +495,9 @@ const Page = () => {
                   </form>
                 )}
 
-                {/* ════════════════════════════════════════
+                {/* 
                     PUBLISHER + INVESTOR FORM (shared)
-                ════════════════════════════════════════ */}
+                 */}
                 {isPublisherType && (
                   <form className="lsb-form" onSubmit={handlePublisherSendOtp}>
 

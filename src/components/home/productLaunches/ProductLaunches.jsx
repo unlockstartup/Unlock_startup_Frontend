@@ -56,7 +56,7 @@ const ProductLaunches = () => {
 
   return (
     <>
-      {/* ── Responsive carousel styles ───────────────────────────── */}
+      {/*  Responsive carousel styles  */}
       <style>{`
         .products-track {
           display: flex;

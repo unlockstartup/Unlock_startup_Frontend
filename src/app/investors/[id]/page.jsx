@@ -33,7 +33,7 @@ import "./investorProfile.css";
 import ApplyModal from "@/components/uiElements/ApplyModal";
 import Breadcrumb from "@/components/breadcrumb/Breadcrumb";
  
-// ─── Amount Formatter ─────────────────────────────────────────
+//  Amount Formatter 
 // Converts raw INR numbers to human-readable Lakh / Cr / K format
 function formatINR(amount) {
   if (!amount || isNaN(amount)) return "N/A";
@@ -214,7 +214,7 @@ export default function InvestorPage({ params }) {
             All Investors
           </Link>
 
-          {/* ── Hero ── */}
+          {/*  Hero  */}
           <div className="serviceHeroPlaceholder">
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "24px" }}>
 
@@ -256,7 +256,7 @@ export default function InvestorPage({ params }) {
                 </div>
               </div>
 
-              {/* ── Right: Investor Type Badge (like eventAvailBadge) ── */}
+              {/*  Right: Investor Type Badge (like eventAvailBadge)  */}
               <div style={{ flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "10px" }}>
                 <span className="availBadge">
                   <span className="availDot" />
@@ -281,7 +281,7 @@ export default function InvestorPage({ params }) {
           {/* Two-column layout */}
           <div className="sdpLayout">
 
-            {/* ── LEFT COLUMN ── */}
+            {/*  LEFT COLUMN  */}
             <div className="sdpLeft">
 
               {/* About the Fund */}
@@ -295,7 +295,7 @@ export default function InvestorPage({ params }) {
                 </div>
               )}
 
-              {/* ── Investment Profile — eventMetaItem grid style ── */}
+              {/*  Investment Profile — eventMetaItem grid style  */}
               <div className="sdpCard">
                 <div className="sdpSectionHeader">
                   <div className="sdpSectionIcon"><TrendingUp size={15} strokeWidth={1.8} /></div>
@@ -321,7 +321,7 @@ export default function InvestorPage({ params }) {
                 </div>
               </div>
 
-              {/* ── Portfolio & Experience — eventMetaItem grid style ── */}
+              {/*  Portfolio & Experience — eventMetaItem grid style  */}
               <div className="sdpCard">
                 <div className="sdpSectionHeader">
                   <div className="sdpSectionIcon sdpSectionIcon--highlight"><Trophy size={15} strokeWidth={1.8} /></div>
@@ -443,7 +443,7 @@ export default function InvestorPage({ params }) {
               )}
             </div>
 
-            {/* ── RIGHT SIDEBAR ── */}
+            {/*  RIGHT SIDEBAR  */}
             <div className="sdpRight">
 
               {/* CTA */}

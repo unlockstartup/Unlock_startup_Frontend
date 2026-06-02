@@ -13543,7 +13543,7 @@ background: linear-gradient(
   color: #fff;
 }
 
-/* ─── FOOTER TABLET (768px – 850px) ────────────────────────── */
+/*  FOOTER TABLET (768px – 850px)  */
 
 /* Default: nav cols sit inline with intro (desktop behaviour) */
 .footer-nav-grid {
@@ -13596,7 +13596,7 @@ background: linear-gradient(
   }
 }
 
-/* ─── MOBILE (below 768px) — stack everything single column ── */
+/*  MOBILE (below 768px) — stack everything single column  */
 @media (max-width: 767px) {
   .footer-nav-grid {
     display: grid;
@@ -13626,7 +13626,7 @@ background: linear-gradient(
 }
 
 
-/* ── Modal scroll + positioning fix ───────────────────────── */
+/*  Modal scroll + positioning fix  */
 .modal {
   overflow-y: auto !important;
 }

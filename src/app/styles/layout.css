@@ -3,7 +3,7 @@
 html, body, #root { height: 100%; width: 100%; }
 body { margin: 0; background: #f6f7fb; }
 
-/* ── Shell ───────────────────────────────────────────────── */
+/*  Shell  */
 .ventic-shell {
   display: flex;
   height: 100vh;
@@ -11,7 +11,7 @@ body { margin: 0; background: #f6f7fb; }
   width: 100%;
 }
 
-/* ── Sidebar ─────────────────────────────────────────────── */
+/*  Sidebar  */
 .ventic-sidebar {
   width: 260px;
   flex-shrink: 0;
@@ -43,7 +43,7 @@ body { margin: 0; background: #f6f7fb; }
 .ventic-sidebar.collapsed .ventic-sidebar__brand { justify-content: center; }
 .ventic-sidebar.collapsed .ventic-nav { justify-content: center; padding: 12px 0; }
 
-/* ── Sidebar Brand ───────────────────────────────────────── */
+/*  Sidebar Brand  */
 .ventic-sidebar__brand {
   display: flex;
   align-items: center;
@@ -65,7 +65,7 @@ body { margin: 0; background: #f6f7fb; }
 
 .ventic-brand-text { font-size: 18px; font-weight: 800; }
 
-/* ── Nav Links ───────────────────────────────────────────── */
+/*  Nav Links  */
 .ventic-nav {
   display: flex;
   align-items: center;
@@ -82,7 +82,7 @@ body { margin: 0; background: #f6f7fb; }
 .ventic-nav.active { background: #e8f6f0; color: #0f8a65; font-weight: 700; }
 .ventic-nav__icon { font-size: 18px; flex-shrink: 0; }
 
-/* ── Main ────────────────────────────────────────────────── */
+/*  Main  */
 .ventic-main {
   flex: 1;
   display: flex;
@@ -100,7 +100,7 @@ body { margin: 0; background: #f6f7fb; }
   min-height: 0;
 }
 
-/* ── Topbar ──────────────────────────────────────────────── */
+/*  Topbar  */
 .ventic-topbar {
   height: 64px;
   flex-shrink: 0;
@@ -131,7 +131,7 @@ body { margin: 0; background: #f6f7fb; }
   padding: 3px 6px;
 }
 
-/* ── Mobile Backdrop ─────────────────────────────────────── */
+/*  Mobile Backdrop  */
 .ventic-backdrop {
   display: none;
   position: fixed;
@@ -147,7 +147,7 @@ body { margin: 0; background: #f6f7fb; }
   to   { opacity: 1; }
 }
 
-/* ── Modal overrides ─────────────────────────────────────── */
+/*  Modal overrides  */
 @media (min-width: 992px) {
   .modal-lg, .modal-xl {
     --bs-modal-width: 100% !important;
@@ -157,11 +157,11 @@ body { margin: 0; background: #f6f7fb; }
 .modal-dialog-scrollable .modal-content { max-height: none; }
 .modal-body { padding: 10px 70px 0 70px; }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    RESPONSIVE BREAKPOINTS
-   ══════════════════════════════════════════════════════════ */
+    */
 
-/* ── Tablet (768px – 1199px): icon-only sidebar ──────────── */
+/*  Tablet (768px – 1199px): icon-only sidebar  */
 @media (max-width: 1199px) and (min-width: 768px) {
   .ventic-sidebar {
     width: 72px;
@@ -183,7 +183,7 @@ body { margin: 0; background: #f6f7fb; }
   .modal-body { padding: 10px 24px 0; }
 }
 
-/* ── Mobile (< 768px): overlay drawer ───────────────────── */
+/*  Mobile (< 768px): overlay drawer  */
 @media (max-width: 767px) {
   /* Sidebar slides in from the left as a fixed drawer */
   .ventic-sidebar {
@@ -220,14 +220,14 @@ body { margin: 0; background: #f6f7fb; }
   .modal-body { padding: 10px 16px 0; }
 }
 
-/* ── Large desktop (≥ 1200px) ────────────────────────────── */
+/*  Large desktop (≥ 1200px)  */
 @media (min-width: 1200px) {
   /* Optionally scale down the whole shell slightly */
   /* .ventic-shell { zoom: 90%; } */
 }
 
 
-        /* ── Header row ── */
+        /*  Header row  */
         .sl-header {
           display: flex;
           align-items: flex-start;
@@ -238,7 +238,7 @@ body { margin: 0; background: #f6f7fb; }
         }
         .sl-header__titles h2 { margin-bottom: 2px; }
 
-        /* ── Filter card ── */
+        /*  Filter card  */
         .sl-filters {
           display: grid;
           grid-template-columns: 180px 1fr auto;
@@ -247,11 +247,11 @@ body { margin: 0; background: #f6f7fb; }
         }
         .sl-filters__actions { display: flex; gap: 8px; }
 
-        /* ── Desktop table ── */
+        /*  Desktop table  */
         .sl-table-wrap { display: block; }
         .sl-cards-wrap  { display: none; }
 
-        /* ── Service card (tablet / mobile) ── */
+        /*  Service card (tablet / mobile)  */
         .sl-card {
           background: #fff;
           border: 1px solid #e9ecef;
@@ -291,7 +291,7 @@ body { margin: 0; background: #f6f7fb; }
         }
         .sl-card__actions .btn { flex: 1; min-width: 80px; font-size: 13px; }
 
-        /* ── Breakpoints ── */
+        /*  Breakpoints  */
         @media (max-width:  768px) {
           .sl-table-wrap { display: none; }
           .sl-cards-wrap  { display: block; }

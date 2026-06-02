@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 
-/* ── Overlay ── */
+/*  Overlay  */
 .am-overlay {
   position: fixed;
   inset: 0;
@@ -20,7 +20,7 @@
   to   { opacity: 1; }
 }
 
-/* ── Modal ── */
+/*  Modal  */
 .am-modal {
   background: #fff;
   border-radius: 14px;
@@ -40,7 +40,7 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Header ── */
+/*  Header  */
 .am-header {
   display: flex;
   align-items: flex-start;
@@ -93,7 +93,7 @@
 
 .am-close:hover { background: #f0f2ff; color: #3a5bd9; }
 
-/* ── Step Indicator ── */
+/*  Step Indicator  */
 .am-steps {
   display: flex;
   align-items: center;
@@ -160,7 +160,7 @@
   pointer-events: none;
 }
 
-/* ── Body ── */
+/*  Body  */
 .am-body {
   overflow-y: auto;
   flex: 1;
@@ -182,7 +182,7 @@
   .am-grid-2 { grid-template-columns: 1fr; }
 }
 
-/* ── Field ── */
+/*  Field  */
 .am-field {
   display: flex;
   flex-direction: column;
@@ -237,7 +237,7 @@
   color: #e05252;
 }
 
-/* ── Dropzone ── */
+/*  Dropzone  */
 .am-dropzone {
   border: 1.5px dashed #d0d5ee;
   border-radius: 8px;
@@ -299,7 +299,7 @@
   margin: 0;
 }
 
-/* ── Success ── */
+/*  Success  */
 .am-success {
   display: flex;
   flex-direction: column;
@@ -338,7 +338,7 @@
 
 .am-success-msg strong { color: #1a1a2e; font-weight: 700; }
 
-/* ── Footer ── */
+/*  Footer  */
 .am-footer {
   display: flex;
   align-items: center;
@@ -383,7 +383,7 @@
 
 .am-btn-ghost:hover { background: #f4f6ff; color: #3a5bd9; border-color: #c8d0f0; }
 
-/* ── Toggle Row (Individual/Company) ── */
+/*  Toggle Row (Individual/Company)  */
 .am-toggle-row {
   display: flex;
   gap: 8px;

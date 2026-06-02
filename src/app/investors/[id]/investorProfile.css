@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* ─── STRICT 2-COLOR DESIGN SYSTEM ─────────────────────────── */
+/*  STRICT 2-COLOR DESIGN SYSTEM  */
 /* Primary: Blue rgb(30, 176, 228) | Accent: Yellow rgb(255, 207, 10) */
 :root {
-  /* ─── BRAND COLORS ONLY ─── */
+  /*  BRAND COLORS ONLY  */
   --blue:             rgb(30, 176, 228);
   --blue-900:         rgb(10, 80, 110);      /* Deepest blue - headings */
   --blue-800:         rgb(15, 110, 145);     /* Dark blue - primary text */
@@ -28,7 +28,7 @@
   --yellow-100:       rgb(255, 248, 200);    /* Soft background */
   --yellow-50:        rgb(255, 252, 230);     /* Lightest background */
 
-  /* ─── NEUTRALS (Grays only, no other hues) ─── */
+  /*  NEUTRALS (Grays only, no other hues)  */
   --gray-950:         #0a0f1a;               /* Almost black */
   --gray-900:         #111827;               /* Deep text */
   --gray-800:         #1f2937;               /* Primary text */
@@ -42,7 +42,7 @@
   --gray-50:          #f9fafb;               /* Lightest bg */
   --white:            #ffffff;
 
-  /* ─── SEMANTIC MAPPINGS (Strictly Blue/Yellow/Gray only) ─── */
+  /*  SEMANTIC MAPPINGS (Strictly Blue/Yellow/Gray only)  */
   --sdp-bg:           var(--gray-50);
   --sdp-white:        var(--white);
   --sdp-border:       var(--gray-200);
@@ -72,7 +72,7 @@
   --sdp-danger:       #dc2626;               /* Red for errors only - unavoidable */
   --sdp-danger-bg:    #fef2f2;
 
-  /* ─── EFFECTS ─── */
+  /*  EFFECTS  */
   --shadow-sm:        0 1px 2px rgba(10, 15, 30, 0.05), 0 2px 8px rgba(10, 15, 30, 0.04);
   --shadow-md:        0 4px 12px rgba(10, 15, 30, 0.08), 0 16px 40px rgba(10, 15, 30, 0.06);
   --shadow-blue:      0 4px 16px rgba(30, 176, 228, 0.25);
@@ -86,7 +86,7 @@
   --font-body:        'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* ─── Page Wrapper ─────────────────────────────────────────── */
+/*  Page Wrapper  */
 .serviceDetailPage {
   background: #f0f2f7;
   min-height: 100vh;
@@ -123,7 +123,7 @@
   border-color: var(--blue-200);
 }
 
-/* ─── Hero ──────────────────────────────────────────────────── */
+/*  Hero  */
 .serviceHero {
   position: relative;
   width: 100%;
@@ -182,7 +182,7 @@
   font-family: var(--font-display);
 }
 
-/* ─── Category Badge ────────────────────────────────────────── */
+/*  Category Badge  */
 .badgeCategory {
   display: inline-flex;
   align-items: center;
@@ -202,7 +202,7 @@
   font-family: var(--font-body);
 }
 
-/* ─── Two-Column Grid ───────────────────────────────────────── */
+/*  Two-Column Grid  */
 .sdpLayout {
   display: grid;
   grid-template-columns: 1fr 340px;
@@ -210,14 +210,14 @@
   align-items: start;
 }
 
-/* ─── LEFT COLUMN ───────────────────────────────────────────── */
+/*  LEFT COLUMN  */
 .sdpLeft {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-/* ─── Generic Card ──────────────────────────────────────────── */
+/*  Generic Card  */
 .sdpCard {
   background: var(--sdp-white);
   border-radius: var(--radius-lg);
@@ -247,7 +247,7 @@
 }
 .sdpCard:hover::before { opacity: 1; }
 
-/* ─── Section Headers with Blue/Yellow Icons ────────────────────── */
+/*  Section Headers with Blue/Yellow Icons  */
 .sdpSectionHeader {
   display: flex;
   align-items: center;
@@ -300,7 +300,7 @@
   line-height: 1.2;
 }
 
-/* ─── Body Text ─────────────────────────────────────────────── */
+/*  Body Text  */
 .sdpBodyText {
   font-size: 15px;
   line-height: 1.8;
@@ -310,7 +310,7 @@
   font-family: var(--font-body);
 }
 
-/* ─── Bullet / Numbered List ──────────────────────────────────── */
+/*  Bullet / Numbered List  */
 .sdpNumberedList {
   list-style: none;
   margin: 0;
@@ -356,7 +356,7 @@
   box-shadow: 0 0 8px rgba(30, 176, 228, 0.4);
 }
 
-/* ─── Pill Tags ─────────────────────────────────────────────── */
+/*  Pill Tags  */
 .sdpTagGroupLabel {
   font-size: 11px;
   font-weight: 700;
@@ -442,7 +442,7 @@
   cursor: default;
 }
 
-/* ─── RIGHT SIDEBAR ─────────────────────────────────────────── */
+/*  RIGHT SIDEBAR  */
 .sdpRight {
   display: flex;
   flex-direction: column;
@@ -451,7 +451,7 @@
   top: 24px;
 }
 
-/* ─── CTA Card ──────────────────────────────────────────────── */
+/*  CTA Card  */
 .sdpCtaCard {
   background: linear-gradient(135deg, var(--white) 0%, var(--yellow-50) 100%);
   border-radius: var(--radius-lg);
@@ -552,7 +552,7 @@
   transform: translateY(-1px);
 }
 
-/* ─── Sidebar Info Card ─────────────────────────────────────── */
+/*  Sidebar Info Card  */
 .sdpInfoCard {
   background: var(--white);
   border-radius: var(--radius-lg);
@@ -646,7 +646,7 @@ background: var(--yellow-100); color: var(--yellow-900);
   text-decoration: underline;
 }
 
-/* ─── Registration / Info Rows ───────────────────────────────── */
+/*  Registration / Info Rows  */
 .sdpRegRow {
   display: flex;
   align-items: flex-start;
@@ -718,7 +718,7 @@ background: var(--yellow-100); color: var(--yellow-900);
 .icontag{
   margin-left: 4px;
 }
-/* ─── Availability Badge ────────────────────────────────────── */
+/*  Availability Badge  */
 .availBadge {
   display: inline-flex;
   align-items: center;
@@ -747,12 +747,12 @@ background: var(--yellow-100); color: var(--yellow-900);
   50%      { opacity:.6; transform:scale(1.2); }
 }
 
-/* ─── Ticket-size value highlight in sidebar ────────────────── */
+/*  Ticket-size value highlight in sidebar  */
 .sdpRegValue.highlight {
   color: var(--blue-800);
 }
 
-/* ─── Registration Divider ────────────────────────────────── */
+/*  Registration Divider  */
 .regDivider {
   display: flex;
   align-items: center;
@@ -772,7 +772,7 @@ background: var(--yellow-100); color: var(--yellow-900);
   letter-spacing: 1px;
 }
 
-/* ─── Not Found ─────────────────────────────────────────────── */
+/*  Not Found  */
 .notFoundWrap { 
   text-align: center; 
   padding: 120px 32px; 
@@ -795,7 +795,7 @@ background: var(--yellow-100); color: var(--yellow-900);
   font-weight: 500;
 }
 
-/* ─── Loading State ─────────────────────────────────────────── */
+/*  Loading State  */
 .loadingSpinner {
   width: 48px;
   height: 48px;
@@ -805,7 +805,7 @@ background: var(--yellow-100); color: var(--yellow-900);
   animation: spin 1s linear infinite;
 }
 
-/* ─── Portfolio Companies Box ─────────────────────────────── */
+/*  Portfolio Companies Box  */
 .portfolioCompanyBox {
   background: var(--blue-50);
   border-radius: var(--radius-md);
@@ -831,7 +831,7 @@ background: var(--yellow-100); color: var(--yellow-900);
   color: var(--sdp-text-secondary);
 }
 
-/* ─── Responsive ────────────────────────────────────────────── */
+/*  Responsive  */
 @media (max-width: 1024px) {
   .serviceDetailPage .container { padding: 0 20px; }
   .sdpLayout { gap: 28px; }

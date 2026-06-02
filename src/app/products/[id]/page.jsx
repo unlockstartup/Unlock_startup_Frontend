@@ -120,13 +120,13 @@ export default function Page({ params }) {
         <div className="container mt-30">
           <Breadcrumb title="Products" dynamicTitle={product?.productName} />
 
-          {/* ── Back Link ── */}
+          {/*  Back Link  */}
           <Link href="/products" className="backLink">
             <ArrowLeft size={14} strokeWidth={2} />
             All Products
           </Link>
 
-          {/* ── Hero Section ── */}
+          {/*  Hero Section  */}
           {hasImages && (
             <div className="pdHero">
               <div className="pdCarouselWrap">
@@ -139,7 +139,7 @@ export default function Page({ params }) {
             </div>
           )}
 
-          {/* ── Hero Info ── */}
+          {/*  Hero Info  */}
           <div className="pdHeroInfo">
             <div className="pdHeroLogo">
               {hasLogo ? (
@@ -179,12 +179,12 @@ export default function Page({ params }) {
             </div>
           </div>
 
-          {/* ── Two-Column Layout ── */}
+          {/*  Two-Column Layout  */}
           <div className="pdLayout">
 
-            {/* ── LEFT COLUMN ── */}
+            {/*  LEFT COLUMN  */}
             <div className="pdLeft">
-              {/* ── Product Overview (matches Event Information card) ── */}
+              {/*  Product Overview (matches Event Information card)  */}
               <div className="sdpCard">
                 <div className="sdpSectionHeader">
                   <div className="sdpSectionIcon"><Info size={15} strokeWidth={1.8} /></div>
@@ -302,7 +302,7 @@ export default function Page({ params }) {
 
             </div>
 
-            {/* ── RIGHT SIDEBAR ── */}
+            {/*  RIGHT SIDEBAR  */}
             <div className="pdRight">
 
               {/* CTA Card */}

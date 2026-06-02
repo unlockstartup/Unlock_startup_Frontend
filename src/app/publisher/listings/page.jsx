@@ -7,7 +7,7 @@ import publisherApi from "@/app/publisherapi";
 
 import "../styles/publishercretepages.css";
 
-/* ─── Constants ─────────────────────────────────────────────────────────────── */
+/*  Constants  */
 const STATUS_BADGE = {
   approved: "badgeSuccess",
   rejected: "badgeDanger",
@@ -20,7 +20,7 @@ const TYPE_META = {
   service:  { label: "Service",  color: "var(--yellow-hover)" },
 };
 
-/* ─── Main component ─────────────────────────────────────────────────────────── */
+/*  Main component  */
 export default function AllListingandSubmissions() {
   const router = useRouter();
 
@@ -31,7 +31,7 @@ export default function AllListingandSubmissions() {
   const [counts, setCounts]             = useState({});
   const [error, setError]               = useState(null);
 
-  /* ── Data loading ──────────────────────────────────────────────────────────── */
+  /*  Data loading  */
   const load = async () => {
     try {
       setLoading(true);
@@ -94,14 +94,14 @@ export default function AllListingandSubmissions() {
   useEffect(() => { load(); }, []);
   useEffect(() => { if (listings.length > 0) loadCounts(listings); }, [listings]);
 
-  /* ── Filtering ─────────────────────────────────────────────────────────────── */
+  /*  Filtering  */
   const filtered = listings.filter((l) => {
     if (typeFilter   && l._type   !== typeFilter)   return false;
     if (statusFilter && l._status !== statusFilter) return false;
     return true;
   });
 
-  /* ── Error state ───────────────────────────────────────────────────────────── */
+  /*  Error state  */
   if (error) {
     return (
       <div className="page">
@@ -117,11 +117,11 @@ export default function AllListingandSubmissions() {
     );
   }
 
-  /* ── Render ────────────────────────────────────────────────────────────────── */
+  /*  Render  */
   return (
     <div className="page">
 
-      {/* ── Topbar ── */}
+      {/*  Topbar  */}
       <header className="topbar">
         <div>
           <h1 className="topbarTitle">All Listings</h1>
@@ -134,7 +134,7 @@ export default function AllListingandSubmissions() {
         </div>
       </header>
 
-      {/* ── Filters ── */}
+      {/*  Filters  */}
       <div className="tableShell">
         <div className="tableHead">
           <h2 className="tableHeadTitle">Filter</h2>
@@ -172,7 +172,7 @@ export default function AllListingandSubmissions() {
         </div>
       </div>
 
-      {/* ── Table ── */}
+      {/*  Table  */}
       <div className="tableShell">
         <div className="tableHead">
           <h2 className="tableHeadTitle">Listings &amp; Submission Counts</h2>

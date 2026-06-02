@@ -74,7 +74,7 @@ const UpcomingEvents = () => {
 
   return (
     <>
-      {/* ── Responsive carousel styles ───────────────────────────── */}
+      {/*  Responsive carousel styles  */}
       <style>{`
         .events-track {
           display: flex;

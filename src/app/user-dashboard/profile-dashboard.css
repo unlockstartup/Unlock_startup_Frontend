@@ -1,5 +1,5 @@
 
-/* ── Root & Layout ── */
+/*  Root & Layout  */
 .pd-root {
   display: flex;
   min-height: 100vh;
@@ -14,7 +14,7 @@
   z-index: 200;
 }
 
-/* ── Sidebar ── */
+/*  Sidebar  */
 .pd-sidebar {
   width: 330px;
   min-width: 260px;
@@ -234,7 +234,7 @@
   background: rgba(226, 92, 38, 0.06);
 }
 
-/* ── Main Content ── */
+/*  Main Content  */
 .pd-main {
   flex: 1;
   display: flex;
@@ -243,7 +243,7 @@
   margin-top: 90px;
 }
 
-/* ── Topbar ── */
+/*  Topbar  */
 .pd-topbar {
   display: flex;
   align-items: center;
@@ -364,7 +364,7 @@
   white-space: nowrap;
 }
 
-/* ── Page Body ── */
+/*  Page Body  */
 .pd-page-body {
   flex: 1;
   padding: 24px 16px;
@@ -381,7 +381,7 @@
   .pd-page-body { padding: 48px 28px; }
 }
 
-/* ── Section Heading ── */
+/*  Section Heading  */
 .pd-section-head {
   margin-bottom: 16px;
 }
@@ -403,7 +403,7 @@
   font-size: 13px;
 }
 
-/* ── Profile Hero ── */
+/*  Profile Hero  */
 .pd-hero-card {
   background: #fff;
   border-radius: 14px;
@@ -579,7 +579,7 @@
   font-size: 13px;
 }
 
-/* ── Stats Row ── */
+/*  Stats Row  */
 .pd-stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -618,7 +618,7 @@
   text-align: center;
 }
 
-/* ── Info Grid ── */
+/*  Info Grid  */
 .pd-info-grid {
   display: flex;
   gap: 12px;
@@ -651,7 +651,7 @@
   gap: 10px;
 }
 
-/* ── Info Row ── */
+/*  Info Row  */
 .pd-info-row {
   display: flex;
   align-items: flex-start;
@@ -680,7 +680,7 @@
   word-break: break-word;
 }
 
-/* ── Forms ── */
+/*  Forms  */
 .pd-form-card {
   background: #fff;
   border-radius: 12px;
@@ -795,7 +795,7 @@ textarea.pd-form-input {
   color: #1f2937;
 }
 
-/* ── Notification Toggles ── */
+/*  Notification Toggles  */
 .pd-notif-row {
   display: flex;
   align-items: center;
@@ -851,7 +851,7 @@ textarea.pd-form-input {
 
 .pd-toggle__knob--on { left: 23px; }
 
-/* ── Table ── */
+/*  Table  */
 .pd-table-wrap {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -892,7 +892,7 @@ textarea.pd-form-input {
   white-space: nowrap;
 }
 
-/* ── Job Cards ── */
+/*  Job Cards  */
 .pd-job-card {
   background: #fff;
   border-radius: 10px;
@@ -961,7 +961,7 @@ textarea.pd-form-input {
   min-height: 36px;
 }
 
-/* ── Resume Upload ── */
+/*  Resume Upload  */
 .pd-upload-zone {
   border: 2px dashed #d1d5db;
   border-radius: 10px;
@@ -989,7 +989,7 @@ textarea.pd-form-input {
   flex-wrap: wrap;
 }
 
-/* ── Privacy / Radio ── */
+/*  Privacy / Radio  */
 .pd-radio-row {
   display: flex;
   align-items: flex-start;
@@ -999,7 +999,7 @@ textarea.pd-form-input {
   cursor: pointer;
 }
 
-/* ── Pagination ── */
+/*  Pagination  */
 .pd-pagination {
   display: flex;
   align-items: center;
@@ -1039,7 +1039,7 @@ textarea.pd-form-input {
   color: #6b7280;
 }
 
-/* ── Empty / Loading states ── */
+/*  Empty / Loading states  */
 .pd-state-center {
   display: flex;
   flex-direction: column;
@@ -1056,7 +1056,7 @@ textarea.pd-form-input {
   color: #6b7280;
 }
 
-/* ── Utilities ── */
+/*  Utilities  */
 .pd-flex          { display: flex; }
 .pd-flex-col      { display: flex; flex-direction: column; }
 .pd-items-center  { align-items: center; }
@@ -1068,14 +1068,14 @@ textarea.pd-form-input {
 .pd-mt-5          { margin-top: 20px; }
 .pd-gap-2_5       { gap: 10px; }
 
-/* ── Small avatar placeholder modifier ── */
+/*  Small avatar placeholder modifier  */
 .pd-avatar-placeholder--sm {
   width: 32px !important;
   height: 32px !important;
   font-size: 13px !important;
 }
 
-/* ── Topbar avatar placeholder ── */
+/*  Topbar avatar placeholder  */
 .pd-topbar__avatar-placeholder {
   width: 32px;
   height: 32px;
@@ -1090,13 +1090,13 @@ textarea.pd-form-input {
   flex-shrink: 0;
 }
 
-/* ── Table company name ── */
+/*  Table company name  */
 .pd-table__company {
   font-weight: 600;
   color: #0194df;
 }
 
-/* ── Spinner ── */
+/*  Spinner  */
 @keyframes pd-spin {
   to { transform: rotate(360deg); }
 }
@@ -1105,9 +1105,9 @@ textarea.pd-form-input {
   animation: pd-spin 0.75s linear infinite;
 }
 
-/* ═══════════════════════════════════════════
+/* 
    APPLICATION CARDS
-   ═══════════════════════════════════════════ */
+    */
 
 .app-list {
   display: flex;
@@ -1115,7 +1115,7 @@ textarea.pd-form-input {
   gap: 12px;
 }
 
-/* ── Application Card ── */
+/*  Application Card  */
 .app-card {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
@@ -1129,7 +1129,7 @@ textarea.pd-form-input {
   box-shadow: 0 2px 12px rgba(1, 148, 223, 0.08);
 }
 
-/* ── Card Header ── */
+/*  Card Header  */
 .app-card__header {
   display: flex;
   justify-content: space-between;
@@ -1224,7 +1224,7 @@ textarea.pd-form-input {
   transform: rotate(180deg);
 }
 
-/* ── Expanded Body ── */
+/*  Expanded Body  */
 .app-card__body {
   border-top: 1px solid #f0f0f0;
   padding: 12px;
@@ -1247,7 +1247,7 @@ textarea.pd-form-input {
   }
 }
 
-/* ── Detail Section ── */
+/*  Detail Section  */
 .detail-section {
   border-radius: 10px;
   overflow: hidden;
@@ -1273,7 +1273,7 @@ textarea.pd-form-input {
   flex-direction: column;
 }
 
-/* ── Detail Row ── */
+/*  Detail Row  */
 .detail-row {
   display: flex;
   flex-direction: column;
@@ -1325,7 +1325,7 @@ textarea.pd-form-input {
   line-height: 1.55;
 }
 
-/* ── Color variants ── */
+/*  Color variants  */
 .detail-section--blue   .detail-section__heading { background: #0194df; color: #fff; }
 .detail-section--orange .detail-section__heading { background: #e25c26; color: #fff; }
 .detail-section--yellow .detail-section__heading { background: #fccf02; color: #7a5f00; }
@@ -1346,7 +1346,7 @@ textarea.pd-form-input {
 .detail-section--orange .detail-row:hover::before { background: #e25c26; }
 .detail-section--yellow .detail-row:hover::before { background: #fccf02; }
 
-/* ── 2×2 grid rows — Your Submission section ── */
+/*  2×2 grid rows — Your Submission section  */
 .detail-section__rows-grid {
   background: #fff;
   display: grid;
@@ -1387,14 +1387,14 @@ textarea.pd-form-input {
   .detail-section__rows-grid .detail-row:last-child  { border-bottom: none; }
 }
 
-/* ── App-card body inner column wrapper ── */
+/*  App-card body inner column wrapper  */
 .app-card__body > div {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-/* ── App pagination (alias) ── */
+/*  App pagination (alias)  */
 .app-pagination {
   display: flex;
   align-items: center;
@@ -1406,10 +1406,10 @@ textarea.pd-form-input {
   flex-wrap: wrap;
 }
 
-/* ══════════════════════════════════════════════
+/* 
    Font-size bump (+6px across the board)
    Paste at the very bottom of profile-dashboard.css
-══════════════════════════════════════════════ */
+ */
 
 .pd-section-head__title   { font-size: 30px; }
 .pd-section-head__subtitle{ font-size: 20px; }
@@ -1463,7 +1463,7 @@ textarea.pd-form-input {
 
 /*
    RESPONSIVE FONT SCALE — Mobile / Tablet / Desktop
-/* ── Mobile base ── */
+/*  Mobile base  */
 .pd-section-head__title    { font-size: 22px; line-height: 1.25; }
 .pd-section-head__subtitle { font-size: 16px; line-height: 1.4; }
 
@@ -1512,7 +1512,7 @@ textarea.pd-form-input {
 
 .pd-topbar__user-name     { font-size: 16px; line-height: 1.4; }
 
-/* ── Tablet (768px – 1199px) ── */
+/*  Tablet (768px – 1199px)  */
 @media (min-width: 768px) {
   .pd-section-head__title    { font-size: 26px; }
   .pd-section-head__subtitle { font-size: 18px; }
@@ -1563,7 +1563,7 @@ textarea.pd-form-input {
   .pd-topbar__user-name     { font-size: 18px; }
 }
 
-/* ── Desktop (1200px+) — full +6px bump ── */
+/*  Desktop (1200px+) — full +6px bump  */
 @media (min-width: 1200px) {
   .pd-section-head__title    { font-size: 30px; }
   .pd-section-head__subtitle { font-size: 20px; }

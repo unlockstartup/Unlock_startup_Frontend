@@ -20,7 +20,7 @@ const Field = ({ label, icon: Icon, error, children }) => (
   </div>
 );
 
-// ── Indian states list ────────────────────────────────────────
+//  Indian states list 
 const INDIA_STATES = [
   "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
   "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
@@ -86,7 +86,7 @@ const ApplyModal = ({
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  // ── Validation ───────────────────────────────────────────────
+  //  Validation 
   const validate = () => {
     const e = {};
     if (!form.fullName.trim()) e.fullName = "Required";
@@ -113,7 +113,7 @@ const ApplyModal = ({
     return Object.keys(e).length === 0;
   };
 
-  // ── Build payload ────────────────────────────────────────────
+  //  Build payload 
   const buildPayload = () => {
     const base = {
       fullName: form.fullName,
@@ -147,7 +147,7 @@ const ApplyModal = ({
     };
   };
 
-  // ── Submit ───────────────────────────────────────────────────
+  //  Submit 
   const handleSubmit = async () => {
     if (!validate()) return;
 

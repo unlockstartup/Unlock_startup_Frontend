@@ -135,7 +135,7 @@ export default function Page() {
   return (
     <div className="pp-page">
 
-      {/* ── Page Header ── */}
+      {/*  Page Header  */}
       <div className="pp-header">
         <div>
           <h1
@@ -164,7 +164,7 @@ export default function Page() {
 
       <div className="pp-layout">
 
-        {/* ── Left: Organization ── */}
+        {/*  Left: Organization  */}
         <div className="pp-main">
           <div className="pp-card">
 
@@ -338,7 +338,7 @@ export default function Page() {
           </div>
         </div>
 
-        {/* ── Right: Subscription sidebar ── */}
+        {/*  Right: Subscription sidebar  */}
         <div className="pp-sidebar">
           <div className="pp-mini-card">
             <p
@@ -390,7 +390,7 @@ export default function Page() {
         </div>
       </div>
 
-      {/* ── Subscription History ── */}
+      {/*  Subscription History  */}
       <div className="pp-card pp-card--full mt-3">
         <div className="pp-table-header">
           <div>

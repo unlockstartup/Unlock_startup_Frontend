@@ -1,4 +1,4 @@
-/* ─── Design Tokens ────────────────────────────────────────────────────────── */
+/*  Design Tokens  */
 :root {
     --text-xs: clamp(1.3rem, 1.0rem + .15vw, .92rem);
     --text-sm: clamp(1.5rem, 0.85rem + .22vw, 1rem);
@@ -21,7 +21,7 @@
   --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
   --font-body:  'Satoshi', Inter, sans-serif;
 
-  /* ── Brand palette ── */
+  /*  Brand palette  */
   --blue:          #0194df;
   --blue-hover:    #0178b8;
   --blue-soft:     rgba(1, 148, 223, 0.12);
@@ -32,7 +32,7 @@
   --yellow-hover:  #d9b000;
   --yellow-soft:   rgba(252, 207, 2, 0.15);
 
-  /* ── Surface / text ── */
+  /*  Surface / text  */
   --color-bg:           #f4f7fb;
   --color-surface:      #ffffff;
   --color-surface-2:    #eef4fa;
@@ -43,7 +43,7 @@
   --color-text-faint:   #8fa0b0;
   --color-glass:        rgba(255, 255, 255, 0.82);
 
-  /* ── Semantic aliases ── */
+  /*  Semantic aliases  */
   --color-primary:      var(--blue);
   --color-primary-hover:var(--blue-hover);
   --color-primary-soft: var(--blue-soft);
@@ -55,7 +55,7 @@
   --color-success-soft: var(--blue-soft);
 }
 
-/* ─── Page wrapper ─────────────────────────────────────────────────────────── */
+/*  Page wrapper  */
 .page {
   font-family: var(--font-body);
   font-size: var(--text-base);
@@ -69,7 +69,7 @@
   align-content: start;
 }
 
-/* ─── Topbar ────────────────────────────────────────────────────────────────── */
+/*  Topbar  */
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -102,7 +102,7 @@
   flex-shrink: 0;
 }
 
-/* ─── Buttons ───────────────────────────────────────────────────────────────── */
+/*  Buttons  */
 .btn {
   min-height: 44px;
   padding: 0.82rem 1.25rem;
@@ -164,7 +164,7 @@
   font-size: var(--text-xs);
 }
 
-/* ─── Table card ────────────────────────────────────────────────────────────── */
+/*  Table card  */
 .tableShell {
   border: 1px solid var(--color-border);
   border-radius: calc(var(--radius-xl) + 0.3rem);
@@ -189,7 +189,7 @@
   color: var(--blue);
 }
 
-/* ─── Scroll wrapper inside tableBody ──────────────────────────────────────── */
+/*  Scroll wrapper inside tableBody  */
 .tableBody {
   padding: var(--space-6) var(--space-8);
   max-height: 520px;   
@@ -217,7 +217,7 @@
   background: var(--blue);
 }
 
-/* ─── Data table ────────────────────────────────────────────────────────────── */
+/*  Data table  */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -249,7 +249,7 @@
 .tdSemibold { font-weight: 600; }
 .tdRight    { text-align: right; }
 
-/* ─── Thumbnail ─────────────────────────────────────────────────────────────── */
+/*  Thumbnail  */
 .thumb {
   width: 72px;
   height: 48px;
@@ -259,7 +259,7 @@
   display: block;
 }
 
-/* ─── Badges ────────────────────────────────────────────────────────────────── */
+/*  Badges  */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -275,7 +275,7 @@
 .badgeWarning { background: var(--yellow-soft); color: var(--yellow-hover); }
 .badgeNeutral { background: rgba(26, 37, 51, 0.07); color: var(--color-text-muted); }
 
-/* ─── Action button group ────────────────────────────────────────────────────── */
+/*  Action button group  */
 .actionGroup {
   display: flex;
   justify-content: flex-end;
@@ -283,7 +283,7 @@
   flex-wrap: wrap;
 }
 
-/* ─── Modal — full screen ────────────────────────────────────────────────────── */
+/*  Modal — full screen  */
 .modalOverlay {
   position: fixed;
   inset: 0;
@@ -356,7 +356,7 @@
   background: linear-gradient(90deg, var(--blue-soft), transparent);
 }
 
-/* ─── Form sections ─────────────────────────────────────────────────────────── */
+/*  Form sections  */
 .section {
   display: grid;
   gap: var(--space-4);
@@ -381,7 +381,7 @@
 .row3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
 .row4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
 
-/* ─── Field ──────────────────────────────────────────────────────────────────── */
+/*  Field  */
 .field { display: grid; gap: 0.42rem; }
 
 .label {
@@ -396,7 +396,7 @@
   margin-left: 6px;
 }
 
-/* ─── Inputs ─────────────────────────────────────────────────────────────── */
+/*  Inputs  */
 .input,
 .select,
 .textarea {
@@ -473,7 +473,7 @@
   font-size: var(--text-xs);
 }
 
-/* ─── Radio group ────────────────────────────────────────────────────────────── */
+/*  Radio group  */
 .radioGroup {
   display: flex;
   gap: var(--space-4);
@@ -496,7 +496,7 @@
   cursor: pointer;
 }
 
-/* ─── Tag / category chips ──────────────────────────────────────────────────── */
+/*  Tag / category chips  */
 .tagList {
   display: flex;
   flex-wrap: wrap;
@@ -533,7 +533,7 @@
 }
 .tagRemove:hover { background: var(--orange-soft); }
 
-/* ─── Custom state dropdown ──────────────────────────────────────────────────── */
+/*  Custom state dropdown  */
 .stateDropdownWrapper { position: relative; }
 .stateDropdownMenu {
   position: absolute;
@@ -568,7 +568,7 @@
   color: var(--color-text-faint);
 }
 
-/* ─── Tier table ─────────────────────────────────────────────────────────────── */
+/*  Tier table  */
 .tierTable {
   width: 100%;
   border-collapse: collapse;
@@ -592,7 +592,7 @@
 }
 .tierTable tbody tr:last-child td { border-bottom: none; }
 
-/* ─── Image preview ──────────────────────────────────────────────────────────── */
+/*  Image preview  */
 .imagePreview {
   width: 88px;
   height: 88px;
@@ -607,7 +607,7 @@
   align-items: center;
 }
 
-/* ─── Empty / loading states ──────────────────────────────────────────────────── */
+/*  Empty / loading states  */
 .emptyState {
   padding: var(--space-10);
   text-align: center;
@@ -620,18 +620,18 @@
   font-size: var(--text-sm);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* 
    RESPONSIVE BREAKPOINTS
-   ═══════════════════════════════════════════════════════════════════════════ */
+    */
 
-/* ─── iPad Pro (1024px) ─────────────────────────────────────────────────────── */
+/*  iPad Pro (1024px)  */
 @media (max-width: 1100px) {
   .page {
     padding: var(--space-6);
   }
 }
 
-/* ─── Tablet landscape / iPad Pro (≤ 1024px) ───────────────────────────────── */
+/*  Tablet landscape / iPad Pro (≤ 1024px)  */
 @media (max-width: 1024px) {
   .page {
     padding: var(--space-5) var(--space-6);
@@ -651,7 +651,7 @@
   }
 }
 
-/* ─── iPad Air / iPad Mini / Tablets (≤ 960px) ─────────────────────────────── */
+/*  iPad Air / iPad Mini / Tablets (≤ 960px)  */
 @media (max-width: 960px) {
   .page {
     padding: var(--space-5);
@@ -696,7 +696,7 @@
   }
 }
 
-/* ─── Small tablets / large phones (≤ 820px — iPad Air width) ──────────────── */
+/*  Small tablets / large phones (≤ 820px — iPad Air width)  */
 @media (max-width: 820px) {
   .topbar {
     flex-direction: column;
@@ -731,7 +731,7 @@
   }
 }
 
-/* ─── Mobile landscape / large phones (≤ 768px) ────────────────────────────── */
+/*  Mobile landscape / large phones (≤ 768px)  */
 @media (max-width: 768px) {
   .page {
     padding: var(--space-4);
@@ -827,7 +827,7 @@
   }
 }
 
-/* ─── Mobile portrait / iPhone XR (≤ 480px) ────────────────────────────────── */
+/*  Mobile portrait / iPhone XR (≤ 480px)  */
 @media (max-width: 480px) {
   .page {
     padding: var(--space-3) var(--space-4);
@@ -945,7 +945,7 @@
   }
 }
 
-/* ─── Extra small mobile (≤ 375px) ─────────────────────────────────────────── */
+/*  Extra small mobile (≤ 375px)  */
 @media (max-width: 375px) {
   .page {
     padding: var(--space-3);
@@ -1014,7 +1014,7 @@
   }
 }
 
-/* ─── Minimum width / 320px ─────────────────────────────────────────────────── */
+/*  Minimum width / 320px  */
 @media (max-width: 320px) {
   .page {
     padding: var(--space-2);
@@ -1034,11 +1034,11 @@
 }
 
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* 
    PUBLICATION MODAL STYLES (unchanged)
-   ═══════════════════════════════════════════════════════════════════════════ */
+    */
 
-/* ── Overlay ── */
+/*  Overlay  */
 .pubModal__overlay {
   position: fixed;
   inset: 0;
@@ -1051,7 +1051,7 @@
   animation: pubModalFadeIn 0.2s ease;
 }
 
-/* ── Dialog shell (full screen) ── */
+/*  Dialog shell (full screen)  */
 .pubModal__dialog {
   background: #ffffff;
   border-radius: 0;
@@ -1066,7 +1066,7 @@
   overflow: hidden;
 }
 
-/* ── Header ── */
+/*  Header  */
 .pubModal__header {
   position: relative;
   padding: 1.5rem 2.5rem;
@@ -1107,7 +1107,7 @@
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* ── Close button ── */
+/*  Close button  */
 .pubModal__close {
   width: 2.5rem;
   height: 2.5rem;
@@ -1132,7 +1132,7 @@
   transform: rotate(90deg);
 }
 
-/* ── Body ── */
+/*  Body  */
 .pubModal__body {
   padding: 2.5rem;
   overflow-y: auto;
@@ -1147,7 +1147,7 @@
 .pubModal__body::-webkit-scrollbar-thumb { background: #e5e5e5; border-radius: 4px; }
 .pubModal__body::-webkit-scrollbar-thumb:hover { background: #0194df; }
 
-/* ── Section ── */
+/*  Section  */
 .pubModal__section { margin: 0; }
 
 .pubModal__sectionTitle {
@@ -1173,7 +1173,7 @@
   border-radius: 2px;
 }
 
-/* ── Info grid ── */
+/*  Info grid  */
 .pubModal__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -1213,7 +1213,7 @@
   text-decoration: underline;
 }
 
-/* ── Status buttons (pills) ── */
+/*  Status buttons (pills)  */
 .pubModal__statusGroup {
   display: flex;
   gap: 0.6rem;
@@ -1279,7 +1279,7 @@
   cursor: not-allowed;
 }
 
-/* ── Badges ── */
+/*  Badges  */
 .pubModal__badge {
   display: inline-flex;
   align-items: center;
@@ -1315,7 +1315,7 @@
   border: 1px solid #e5e5e5;
 }
 
-/* ── Requirement highlight box ── */
+/*  Requirement highlight box  */
 .pubModal__requirementBox {
   margin-top: 1rem;
   padding: 1.25rem 1.5rem;
@@ -1327,7 +1327,7 @@
   line-height: 1.7;
 }
 
-/* ── Footer ── */
+/*  Footer  */
 .pubModal__footer {
   padding: 1.25rem 2.5rem;
   background: #fafafa;
@@ -1339,7 +1339,7 @@
   flex-shrink: 0;
 }
 
-/* ── Responsive pubModal ── */
+/*  Responsive pubModal  */
 @media (max-width: 768px) {
   .pubModal__header {
     padding: 1.25rem 1.5rem;
@@ -1381,7 +1381,7 @@
   }
 }
 
-/* ── Animations ── */
+/*  Animations  */
 @keyframes pubModalFadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }

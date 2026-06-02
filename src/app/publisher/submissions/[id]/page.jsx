@@ -8,7 +8,7 @@ import ConfirmationModal from "@/components/ConfirmationModal";
 
 import "../../styles/publishercretepages.css";
 
-/* ─── Constants ─────────────────────────────────────────────────────────────── */
+/*  Constants  */
 const STATUS_BADGE = {
   new:         "badgePrimary",
   reviewing:   "badgeWarning",
@@ -64,7 +64,7 @@ export default function Page() {
 
   const limit = 20;
 
-  /* ── Data loading ──────────────────────────────────────────────────────────── */
+  /*  Data loading  */
   const load = async () => {
     if (!listingId) return;
     try {
@@ -90,7 +90,7 @@ export default function Page() {
 
   useEffect(() => { load(); }, [listingId, listingType, page, statusFilter]);
 
-  /* ── Helpers ───────────────────────────────────────────────────────────────── */
+  /*  Helpers  */
   const updateStatus = async (id, status) => {
     try {
       setUpdatingId(id);
@@ -141,11 +141,11 @@ export default function Page() {
     return source.type || source.investorType || source.serviceCategory || "";
   };
 
-  /* ── Render ────────────────────────────────────────────────────────────────── */
+  /*  Render  */
   return (
     <div className="page">
 
-      {/* ── Topbar ── */}
+      {/*  Topbar  */}
       <header className="topbar">
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-4)" }}>
           <button className="btn btnSecondary btnSm" onClick={() => router.back()}>← Back</button>
@@ -163,7 +163,7 @@ export default function Page() {
         </div>
       </header>
 
-      {/* ── Filters ── */}
+      {/*  Filters  */}
       <div className="tableShell">
         <div className="tableHead">
           <h2 className="tableHeadTitle">Filter</h2>
@@ -194,7 +194,7 @@ export default function Page() {
         </div>
       </div>
 
-      {/* ── Table ── */}
+      {/*  Table  */}
       <div className="tableShell">
         <div className="tableHead">
           <h2 className="tableHeadTitle">All Submissions</h2>
@@ -265,7 +265,7 @@ export default function Page() {
         </div>
       </div>
 
-      {/* ── Detail modal (full screen) ── */}
+      {/*  Detail modal (full screen)  */}
 {selected && (
   <div className="pubModal__overlay" onClick={() => setSelected(null)}>
     <div className="pubModal__dialog" onClick={(e) => e.stopPropagation()}>

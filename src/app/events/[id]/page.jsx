@@ -172,20 +172,20 @@ registrationDeadline: raw.registrationDeadline
       <div className="eventDetailPage">
         <div className="eventContainer">
 <Breadcrumb title="Events" dynamicTitle={event?.title}/>
-          {/* ── Back Link ── */}
+          {/*  Back Link  */}
           <Link href="/events" className="eventBackLink">
             <ArrowLeft size={14} strokeWidth={2} />
             All Events
           </Link>
 
-          {/* ── Hero Image ── */}
+          {/*  Hero Image  */}
           {event.image && (
             <div className="eventHeroImageContainer">
               <Image src={event.image} fill style={{ objectFit: "cover" }} alt={event.title} priority />
             </div>
           )}
 
-          {/* ── Hero Metadata ── */}
+          {/*  Hero Metadata  */}
           <div className="eventHeroMetadataContainer">
             <div className="eventHeroMetaTop">
               {/* Left: badge + title + org */}
@@ -265,7 +265,7 @@ registrationDeadline: raw.registrationDeadline
 
           <div className="eventLayout">
 
-            {/* ── LEFT COLUMN ── */}
+            {/*  LEFT COLUMN  */}
             <div className="eventLeft">
               {/* About this Event */}
               {event.content && (
@@ -433,10 +433,10 @@ registrationDeadline: raw.registrationDeadline
               )}
             </div>
 
-            {/* ── RIGHT SIDEBAR ── */}
+            {/*  RIGHT SIDEBAR  */}
             <div className="eventRight">
 
-              {/* ── CTA Card ── */}
+              {/*  CTA Card  */}
               <div className="eventCtaCard">
                 <p className="eventCtaTitle">Join this Event</p>
 

@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* ─── BRAND COLORS ONLY ─── */
+  /*  BRAND COLORS ONLY  */
   --blue: rgb(30, 176, 228);
   --blue-900: rgb(10, 80, 110);
   --blue-800: rgb(15, 110, 145);
@@ -29,7 +29,7 @@
   --yellow-50: rgb(255, 252, 230);
   /* Lightest background */
 
-  /* ─── NEUTRALS (Grays only, no other hues) ─── */
+  /*  NEUTRALS (Grays only, no other hues)  */
   --gray-950: #0a0f1a;
   /* Almost black */
   --gray-900: #111827;
@@ -54,7 +54,7 @@
   /* Lightest bg */
   --white: #ffffff;
 
-  /* ─── SEMANTIC MAPPINGS (Strictly Blue/Yellow/Gray only) ─── */
+  /*  SEMANTIC MAPPINGS (Strictly Blue/Yellow/Gray only)  */
   --sdp-bg: var(--gray-50);
   --sdp-white: var(--white);
   --sdp-border: var(--gray-200);
@@ -86,7 +86,7 @@
   /* Red for errors only - unavoidable */
   --sdp-danger-bg: #fef2f2;
 
-  /* ─── EFFECTS ─── */
+  /*  EFFECTS  */
   --shadow-sm: 0 1px 2px rgba(10, 15, 30, 0.05), 0 2px 8px rgba(10, 15, 30, 0.04);
   --shadow-md: 0 4px 12px rgba(10, 15, 30, 0.08), 0 16px 40px rgba(10, 15, 30, 0.06);
   --shadow-blue: 0 4px 16px rgba(30, 176, 228, 0.25);
@@ -116,7 +116,7 @@
   padding: 0 24px;
 }
 
-/* ─── BACK LINK ─────────────────────────────────────────────── */
+/*  BACK LINK  */
 .eventBackLink {
   display: inline-flex;
   align-items: center;
@@ -139,7 +139,7 @@
   border-color: var(--blue-200);
 }
 
-/* ─── HERO IMAGE ────────────────────────────────────────────── */
+/*  HERO IMAGE  */
 .eventHeroImageContainer {
   position: relative;
   width: 100%;
@@ -159,7 +159,7 @@
   pointer-events: none;
 }
 
-/* ─── HERO METADATA ───────────────────────────────────────── */
+/*  HERO METADATA  */
 .eventHeroMetadataContainer {
   background: var(--white);
   border-radius: var(--radius-lg);
@@ -318,7 +318,7 @@
   }
 }
 
-/* ─── HERO STATS STRIP ──────────────────────────────────────── */
+/*  HERO STATS STRIP  */
 .eventHeroStatsStrip {
   display: flex;
   align-items: stretch;
@@ -401,7 +401,7 @@
   color: var(--sdp-danger);
 }
 
-/* ─── LAYOUT ────────────────────────────────────────────────── */
+/*  LAYOUT  */
 .eventLayout {
   display: grid;
   grid-template-columns: 1fr 340px;
@@ -423,7 +423,7 @@
   top: 24px;
 }
 
-/* ─── CARDS ─────────────────────────────────────────────────── */
+/*  CARDS  */
 .eventCard {
   background: var(--white);
   border-radius: var(--radius-lg);
@@ -492,7 +492,7 @@
   box-shadow: var(--shadow-md);
 }
 
-/* ─── SECTION HEADERS ─────────────────────────────────────── */
+/*  SECTION HEADERS  */
 .eventSectionHeader {
   display: flex;
   align-items: center;
@@ -557,7 +557,7 @@
   font-family: var(--font-display);
 }
 
-/* ─── CONTENT ───────────────────────────────────────────────── */
+/*  CONTENT  */
 .eventBodyText {
   font-size: 15px;
   line-height: 1.8;
@@ -566,7 +566,7 @@
   font-weight: 400;
 }
 
-/* ─── META GRID ───────────────────────────────────────────── */
+/*  META GRID  */
 .eventMetaGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -609,7 +609,7 @@
   color: var(--yellow-900);
 }
 
-/* ─── SPEAKERS ──────────────────────────────────────────────── */
+/*  SPEAKERS  */
 .eventSpeakerList {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -654,7 +654,7 @@
   color: var(--sdp-text-secondary);
 }
 
-/* ─── BENEFITS ──────────────────────────────────────────────── */
+/*  BENEFITS  */
 .eventBenefitsList {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -694,7 +694,7 @@
   color: var(--sdp-text-secondary);
 }
 
-/* ─── PRICING TIERS ───────────────────────────────────────── */
+/*  PRICING TIERS  */
 .eventTierList {
   display: flex;
   flex-direction: column;
@@ -731,7 +731,7 @@
   color: var(--blue-800);
 }
 
-/* ─── ATTACHMENTS ─────────────────────────────────────────── */
+/*  ATTACHMENTS  */
 .eventAttachmentList {
   display: flex;
   flex-direction: column;
@@ -795,7 +795,7 @@
   flex-shrink: 0;
 }
 
-/* ─── SIDEBAR COMPONENTS ──────────────────────────────────── */
+/*  SIDEBAR COMPONENTS  */
 .eventCtaTitle {
   font-size: 22px;
   font-weight: 800;
@@ -883,7 +883,7 @@
   transform: translateY(-1px);
 }
 
-/* ─── INFO BLOCKS ──────────────────────────────────────────── */
+/*  INFO BLOCKS  */
 .eventInfoBlock {
   padding: 24px 28px;
   border-bottom: 1px solid var(--sdp-border);
@@ -1019,7 +1019,7 @@
   text-decoration: underline;
 }
 
-/* ─── DEADLINE ALERT ──────────────────────────────────────── */
+/*  DEADLINE ALERT  */
 .eventDeadlineAlert {
   display: flex;
   align-items: center;
@@ -1063,7 +1063,7 @@
   color: #b91c1c;
 }
 
-/* ─── VENUE BLOCK ──────────────────────────────────────────── */
+/*  VENUE BLOCK  */
 .eventVenueBlock {
   display: flex;
   align-items: flex-start;
@@ -1109,7 +1109,7 @@
   line-height: 1.6;
 }
 
-/* ─── TAG CLOUD ───────────────────────────────────────────── */
+/*  TAG CLOUD  */
 .eventTagCloud {
   display: flex;
   flex-wrap: wrap;
@@ -1180,7 +1180,7 @@
   gap: 12px;
 }
 
-/* ─── REGISTRATION DIVIDER ────────────────────────────────── */
+/*  REGISTRATION DIVIDER  */
 .eventRegDivider {
   display: flex;
   align-items: center;
@@ -1202,7 +1202,7 @@
   letter-spacing: 1px;
 }
 
-/* ─── NOT FOUND ───────────────────────────────────────────── */
+/*  NOT FOUND  */
 .eventNotFoundWrap {
   text-align: center;
   padding: 120px 32px;
@@ -1227,7 +1227,7 @@
   font-weight: 500;
 }
 
-/* ─── LOADING STATE ─────────────────────────────────────────── */
+/*  LOADING STATE  */
 .eventLoadingSpinner {
   width: 48px;
   height: 48px;
@@ -1237,7 +1237,7 @@
   animation: spin 1s linear infinite;
 }
 
-/* ─── RESPONSIVE ────────────────────────────────────────────── */
+/*  RESPONSIVE  */
 @media (max-width: 1024px) {
   .eventDetailPage .eventContainer {
     padding: 0 20px;
@@ -1398,7 +1398,7 @@
   white-space: nowrap;
 }
 
-/* ─── CONTACT DETAILS – LOGIN BLUR EFFECT (REUSABLE) ───────────────────── */
+/*  CONTACT DETAILS – LOGIN BLUR EFFECT (REUSABLE)  */
 .eventInfoBlock {
   position: relative;
 }
@@ -1464,7 +1464,7 @@
   border-color: var(--blue-300);
 }
 
-/* ─── TABLET (821px – 1024px)*/
+/*  TABLET (821px – 1024px)*/
 @media (min-width: 821px) and (max-width: 1024px) {
   .eventDetailPage {
     padding: 28px 0 80px;
@@ -1602,7 +1602,7 @@
 }
 
 
-/* ─── MOBILE ── */
+/*  MOBILE  */
 @media (max-width: 640px) {
 
   .eventHeroStatsStrip {
@@ -1637,7 +1637,7 @@
   }
 }
 
-/* ─── SMALL MOBILE  ── */
+/*  SMALL MOBILE   */
 @media (max-width: 480px) {
   .eventHeroStatValue {
     font-size: 13px;
@@ -1709,12 +1709,12 @@
 }
 
 
-/* ─── CENTERED BLOCK TITLE ──────────────────────────────────── */
+/*  CENTERED BLOCK TITLE  */
 /* .eventInfoBlockTitle--center {
   justify-content: center;
 } */
 
-/* ─── REGISTRATION GRID ─────────────────────────────────────── */
+/*  REGISTRATION GRID  */
 /* .eventRegGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1768,7 +1768,7 @@
 
 }
 
-/* ─── ORGANIZER CONTACT — single column on mobile ──────────── */
+/*  ORGANIZER CONTACT — single column on mobile  */
 @media (max-width: 640px) {
   .eventContactContent {
     display: flex;

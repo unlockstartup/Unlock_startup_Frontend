@@ -22,7 +22,7 @@ const API_OPTION_MAP = {
   productStatus:     { url: "/api/public/product-status/active",    dataKey: "statuses"         },
 };
 
-// ── Cascade map: selecting a type re-fetches its child categories ─────────────
+//  Cascade map: selecting a type re-fetches its child categories 
 // typeKey         → which filter key triggers the cascade
 // categoryKey     → which filter key receives the filtered results
 // categoryParam   → query param name expected by the categories endpoint
@@ -93,7 +93,7 @@ function getDynamicOptions(config, items = []) {
   return options;
 }
 
-// ── Sub-components ────────────────────────────────────────────────────────────
+//  Sub-components 
 function CheckboxGroup({ config, values, onChange }) {
   return (
     <div className="sf-group">
@@ -194,7 +194,7 @@ function ActivePills({ filters, configs, onRemove }) {
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
+//  Main component 
 export default function SidebarFilter({ pageType, onFilterChange, searchPlaceholder, items = [] }) {
   const configs = FILTER_CONFIGS[pageType] || [];
 
@@ -213,7 +213,7 @@ export default function SidebarFilter({ pageType, onFilterChange, searchPlacehol
   // Track previous type selections so we only re-fetch on actual change
   const prevTypeFilters = useRef({});
 
-  // ── Initial fetch: all types + all categories (unfiltered) ─────────────────
+  //  Initial fetch: all types + all categories (unfiltered) 
   useEffect(() => {
     if (!configs.length) return;
 
@@ -253,7 +253,7 @@ export default function SidebarFilter({ pageType, onFilterChange, searchPlacehol
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageType]);
 
-  // ── Cascade: re-fetch category options whenever a type filter changes ───────
+  //  Cascade: re-fetch category options whenever a type filter changes 
   useEffect(() => {
     const cascadeEntries = Object.entries(CASCADE_MAP).filter(([typeKey]) =>
       configs.some((c) => c.key === typeKey)
@@ -323,7 +323,7 @@ export default function SidebarFilter({ pageType, onFilterChange, searchPlacehol
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pendingFilters, rawTypeObjects]);
 
-  // ── Configs with resolved options ─────────────────────────────────────────
+  //  Configs with resolved options 
   const configsWithOptions = useMemo(() => {
     return configs.map((config) => {
       if (apiOptions[config.key]?.length) {
@@ -334,7 +334,7 @@ export default function SidebarFilter({ pageType, onFilterChange, searchPlacehol
     });
   }, [configs, items, apiOptions]);
 
-  // ── Pending change detection ───────────────────────────────────────────────
+  //  Pending change detection 
   const hasPendingChanges = useMemo(() => {
     if (pendingSearch !== appliedSearch) return true;
     const allKeys = new Set([...Object.keys(pendingFilters), ...Object.keys(appliedFilters)]);
@@ -348,7 +348,7 @@ export default function SidebarFilter({ pageType, onFilterChange, searchPlacehol
     pendingSearch ||
     Object.values(pendingFilters).some((v) => (Array.isArray(v) ? v.length > 0 : Boolean(v)));
 
-  // ── Filter update helpers ──────────────────────────────────────────────────
+  //  Filter update helpers 
   const updatePendingFilter = (key, value) => {
     const next = { ...pendingFilters, [key]: value };
     const config = configs.find((c) => c.key === key);
@@ -387,7 +387,7 @@ export default function SidebarFilter({ pageType, onFilterChange, searchPlacehol
 
   const toggleCollapse = (key) => setCollapsed((prev) => ({ ...prev, [key]: !prev[key] }));
 
-  // ── Inner render ───────────────────────────────────────────────────────────
+  //  Inner render 
   const renderInnerContent = () => (
     <>
       <div className="sf-scroll-body">

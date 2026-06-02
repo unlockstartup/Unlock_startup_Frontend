@@ -44,7 +44,7 @@ function TagButton({ label, selected, onClick }) {
   );
 }
 
-/* ─── Main component ─────────────────────────────────────────────────────────── */
+/*  Main component  */
 export default function Page() {
   const [isEdit, setIsEdit]   = useState(false);
   const [loading, setLoading] = useState(false);
@@ -87,7 +87,7 @@ export default function Page() {
   const itemValue = (item) => item.value ?? item.name ?? item._id;
   const itemLabel = (item) => item.name  ?? item.value ?? item._id;
 
-  /* ── Data loading ──────────────────────────────────────────────────────────── */
+  /*  Data loading  */
   useEffect(() => {
     fetchProfile();
 
@@ -140,7 +140,7 @@ export default function Page() {
     }
   };
 
-  /* ── Helpers ───────────────────────────────────────────────────────────────── */
+  /*  Helpers  */
   const toggleMultiSelect = (value, selected, setSelected) =>
     selected.includes(value)
       ? setSelected(selected.filter((v) => v !== value))
@@ -158,7 +158,7 @@ export default function Page() {
     setPortfolioCompanies(updated);
   };
 
-  /* ── Submit / delete ───────────────────────────────────────────────────────── */
+  /*  Submit / delete  */
   const handleSubmit = async () => {
     setLoading(true);
     const payload = {
@@ -216,7 +216,7 @@ export default function Page() {
     setShowConfirm(true);
   };
 
-  /* ── Loading skeleton ──────────────────────────────────────────────────────── */
+  /*  Loading skeleton  */
   if (fetching) {
     return (
       <div className="page" style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60dvh" }}>
@@ -225,11 +225,11 @@ export default function Page() {
     );
   }
 
-  /* ── Render ────────────────────────────────────────────────────────────────── */
+  /*  Render  */
   return (
     <div className="page">
 
-      {/* ── Page header ── */}
+      {/*  Page header  */}
       <header className="topbar">
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem" }}>
@@ -244,7 +244,7 @@ export default function Page() {
         </div>
       </header>
 
-      {/* ── Basic information ── */}
+      {/*  Basic information  */}
       <section className="section">
         <SectionHeader title="Basic information" subtitle="Firm identity and public-facing details" />
 
@@ -279,7 +279,7 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ── Fund details ── */}
+      {/*  Fund details  */}
       <section className="section">
         <SectionHeader title="Fund details" subtitle="Investment capacity and experience" />
 
@@ -316,7 +316,7 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ── Portfolio companies ── */}
+      {/*  Portfolio companies  */}
       <section className="section">
         <SectionHeader title="Portfolio companies" subtitle="Details of companies you have invested in" />
 
@@ -354,7 +354,7 @@ export default function Page() {
         </button>
       </section>
 
-      {/* ── Investment preferences ── */}
+      {/*  Investment preferences  */}
       <section className="section">
         <SectionHeader title="Investment preferences" subtitle="Stages, geographies, and sectors you focus on" />
 
@@ -401,7 +401,7 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ── Contact details ── */}
+      {/*  Contact details  */}
       <section className="section">
         <SectionHeader title="Contact details" subtitle="Primary point of contact for founders" />
 
@@ -428,7 +428,7 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ── Profile details ── */}
+      {/*  Profile details  */}
       <section className="section">
         <SectionHeader title="Profile details" subtitle="Online presence and visibility settings" />
 
@@ -481,7 +481,7 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ── Sticky action bar ── */}
+      {/*  Sticky action bar  */}
       <div style={{
         position: "sticky", bottom: "1rem",
         display: "flex", justifyContent: "space-between", alignItems: "center",

@@ -27,7 +27,7 @@ import { uploadFiles } from "@/app/apiServices/uploads";
 
 import "../styles/publishercretepages.css";
 
-/* ─── Field helper ───────────────────────────────────────────────────────────── */
+/*  Field helper  */
 function Field({ label, children, note }) {
   return (
     <div className="field">
@@ -40,7 +40,7 @@ function Field({ label, children, note }) {
   );
 }
 
-/* ─── Status badge helper ────────────────────────────────────────────────────── */
+/*  Status badge helper  */
 function StatusBadge({ status = "pending" }) {
   const cls = status === "approved" ? "badgeSuccess"
     : status === "rejected" ? "badgeDanger"
@@ -48,7 +48,7 @@ function StatusBadge({ status = "pending" }) {
   return <span className={`badge ${cls}`}>{status}</span>;
 }
 
-/* ─── Date helpers ───────────────────────────────────────────────────────────── */
+/*  Date helpers  */
 function toDateInput(v) {
   if (!v) return "";
   const d = new Date(v);
@@ -56,7 +56,7 @@ function toDateInput(v) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-/* ─── Main component ─────────────────────────────────────────────────────────── */
+/*  Main component  */
 function FundingCallsCrud() {
   const [loading, setLoading]   = useState(true);
   const [saving, setSaving]     = useState(false);
@@ -119,7 +119,7 @@ function FundingCallsCrud() {
 
   const sf = (field) => (e) => setForm((p) => ({ ...p, [field]: e.target.value }));
 
-  /* ── Meta / data loading ───────────────────────────────────────────────────── */
+  /*  Meta / data loading  */
   const loadMeta = async () => {
     try {
       const [types, orgs, stages] = await Promise.all([
@@ -170,75 +170,54 @@ function FundingCallsCrud() {
     })();
   }, [form.challengeType, competitionTypes]);
 
-  /* ── Modal helpers ─────────────────────────────────────────────────────────── */
+  /*  Modal helpers  */
   const openCreate = () => { setMode("create"); setEditing(null); setForm(initialForm); setOpen(true); };
 
 const openEdit = (row) => {
-  // Guard against locked listings
-  if ((row.editCount ?? 0) >= 1) {
-    toast.warn("This competition has already been edited once and cannot be modified further.");
-    return;
-  }
+  const alreadyEdited = (row.editCount ?? 0) >= 1;
+  setConfirmConfig({
+    title: alreadyEdited ? "Edit Not Allowed" : "Edit Competition",
+    message: alreadyEdited
+      ? "This competition has already been edited once and can no longer be modified."
+      : "You can only update this listing once. Please review all details carefully before submitting, as no further edits will be allowed after this.",
+    confirmText: alreadyEdited ? "OK" : "I Understand, Proceed",
+    cancelText: alreadyEdited ? "" : "Cancel",
+    confirmVariant: alreadyEdited ? "danger" : "primary",
+    onConfirm: () => {
+      if (alreadyEdited) return;
 
-  const resolveOrgType = (val) => {
-    if (!val) return "";
-    if (typeof val === "object") return val._id || "";
-    const byId = organizerTypes.find((t) => t._id === val);
-    if (byId) return byId._id;
-    return organizerTypes.find((t) => t.name === val)?._id || "";
-  };
-  setMode("edit");
-  setEditing(row);
-  setForm({
-    ...initialForm, ...row,
-    organizerType:      resolveOrgType(row.organizerType),
-    challengeType:      row.challengeType     || "",
-    challengeCategory:  row.challengeCategory || "",
-    launchDate:         toDateInput(row.launchDate),
-    submissionDeadline: toDateInput(row.submissionDeadline),
-    resultDate:         toDateInput(row.resultDate),
-    additionalRewards: Array.isArray(row.additionalRewards)
-      ? row.additionalRewards.join(", ") : row.additionalRewards || "",
-    eligibilityVerification: Array.isArray(row.eligibilityVerification)
-      ? row.eligibilityVerification.join(", ") : row.eligibilityVerification || "",
-    organizationWebsite: row.organizationWebsite || "",
-    problemStatement:    row.problemStatement   || "",
-    attachments:         row.attachments        || [],
-    applicationType:     row.applicationType    || "",
+      const resolveOrgType = (val) => {
+        if (!val) return "";
+        if (typeof val === "object") return val._id || "";
+        const byId = organizerTypes.find((t) => t._id === val);
+        if (byId) return byId._id;
+        return organizerTypes.find((t) => t.name === val)?._id || "";
+      };
+      setMode("edit");
+      setEditing(row);
+      setForm({
+        ...initialForm, ...row,
+        organizerType:      resolveOrgType(row.organizerType),
+        challengeType:      row.challengeType     || "",
+        challengeCategory:  row.challengeCategory || "",
+        launchDate:         toDateInput(row.launchDate),
+        submissionDeadline: toDateInput(row.submissionDeadline),
+        resultDate:         toDateInput(row.resultDate),
+        additionalRewards: Array.isArray(row.additionalRewards)
+          ? row.additionalRewards.join(", ") : row.additionalRewards || "",
+        eligibilityVerification: Array.isArray(row.eligibilityVerification)
+          ? row.eligibilityVerification.join(", ") : row.eligibilityVerification || "",
+        organizationWebsite: row.organizationWebsite || "",
+        problemStatement:    row.problemStatement   || "",
+        attachments:         row.attachments        || [],
+        applicationType:     row.applicationType    || "",
+      });
+      setOpen(true);
+    },
   });
-  setOpen(true);
+  setShowConfirm(true);
 };
-const openReapply = (row) => {
-  const resolveOrgType = (val) => {
-    if (!val) return "";
-    if (typeof val === "object") return val._id || "";
-    const byId = organizerTypes.find((t) => t._id === val);
-    if (byId) return byId._id;
-    return organizerTypes.find((t) => t.name === val)?._id || "";
-  };
 
-  // Pre-fill form with existing data but treat as a brand-new listing
-  setMode("create");        // create mode = no editId
-  setEditing(null);
-  setForm({
-    ...initialForm, ...row,
-    organizerType:      resolveOrgType(row.organizerType),
-    challengeType:      row.challengeType     || "",
-    challengeCategory:  row.challengeCategory || "",
-    launchDate:         toDateInput(row.launchDate),
-    submissionDeadline: toDateInput(row.submissionDeadline),
-    resultDate:         toDateInput(row.resultDate),
-    additionalRewards: Array.isArray(row.additionalRewards)
-      ? row.additionalRewards.join(", ") : row.additionalRewards || "",
-    eligibilityVerification: Array.isArray(row.eligibilityVerification)
-      ? row.eligibilityVerification.join(", ") : row.eligibilityVerification || "",
-    organizationWebsite: row.organizationWebsite || "",
-    problemStatement:    row.problemStatement   || "",
-    attachments:         row.attachments        || [],
-    applicationType:     row.applicationType    || "",
-  });
-  setOpen(true);
-};
   const closeModal = () => { if (saving || attachmentsUploading) return; setOpen(false); };
 
   const validate = () => {
@@ -317,7 +296,7 @@ const openReapply = (row) => {
     }
   };
 
-  /* ── Delete / toggle ───────────────────────────────────────────────────────── */
+  /*  Delete / toggle  */
   const onDelete = (row) => {
     if (!row?._id) { toast.error("Invalid Competition ID"); return; }
     setConfirmConfig({
@@ -337,41 +316,46 @@ const openReapply = (row) => {
     setShowConfirm(true);
   };
 
- const onToggleActiveConfirm = (row) => {
-   if (!row?._id) { toast.error("Invalid Competition ID"); return; }
-   const isDeactivating = row.isActive;
-   setConfirmConfig({
-     title: isDeactivating ? "Deactivate Competition" : "Activate Competition",
-     message: isDeactivating
-       ? "Are you sure you want to deactivate this competition? It will no longer be visible to users."
-       : "Are you sure you want to activate this competition? It will become visible to users.",
-     confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
-     cancelText: "Cancel",
-     confirmVariant: isDeactivating ? "warning" : "success",
-     onConfirm: async () => {
-       try {
-         await toggleFundingCallActive(row._id);
-         toast.success(isDeactivating ? "Deactivated" : "Activated");
-         load();
-       } catch (e) {
-         toast.error(e?.response?.data?.message || "Toggle failed");
-       }
-     },
-   });
-   setShowConfirm(true);
- };
+const onToggleActiveConfirm = (row) => {
+  if (!row?._id) { toast.error("Invalid Competition ID"); return; }
+  const toggleCount = row.toggleCount ?? 0;
+  if (toggleCount >= 2) {
+    setConfirmConfig({
+      title: "Toggle Not Allowed",
+      message: "This competition has already been deactivated and reactivated once. No further activation or deactivation is allowed.",
+      confirmText: "OK",
+      cancelText: "",
+      confirmVariant: "danger",
+      onConfirm: () => {},
+    });
+    setShowConfirm(true);
+    return;
+  }
+  const isDeactivating = row.isActive;
+  setConfirmConfig({
+    title: isDeactivating ? "Deactivate Competition" : "Activate Competition",
+    message: isDeactivating
+      ? "You may reactivate this competition once after deactivating, but after that no further toggling will be allowed. Are you sure you want to deactivate?"
+      : "You can activate this listing once more. After reactivating, no further deactivation or activation will be permitted. Proceed?",
+    confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
+    cancelText: "Cancel",
+    confirmVariant: isDeactivating ? "warning" : "success",
+    onConfirm: async () => {
+      try {
+        await toggleFundingCallActive(row._id);
+        toast.success(isDeactivating ? "Deactivated" : "Activated");
+        load();
+      } catch (e) {
+        toast.error(e?.response?.data?.message || "Toggle failed");
+      }
+    },
+  });
+  setShowConfirm(true);
+};
 
-  const onToggleActive = async (row) => {
-    try {
-      await toggleFundingCallActive(row._id);
-      toast.success(row.isActive ? "Deactivated" : "Activated");
-      load();
-    } catch (e) {
-      toast.error(e?.response?.data?.message || "Toggle failed");
-    }
-  };
 
-  /* ── Attachments ───────────────────────────────────────────────────────────── */
+
+  /*  Attachments  */
   const onAttachmentsPick = async (files) => {
     if (!files?.length) return;
     try {
@@ -397,7 +381,7 @@ const openReapply = (row) => {
   const removeAttachment = (publicId) =>
     setForm((p) => ({ ...p, attachments: p.attachments.filter((a) => a.publicId !== publicId) }));
 
-  /* ── Plan limits ───────────────────────────────────────────────────────────── */
+  /*  Plan limits  */
   const hasAccess            = planInfo ? planInfo.subscriptionStatus === "active" : false;
   const subscriptionExpired  = planInfo && planInfo.subscriptionStatus !== "active";
   const fundingLimitReached  = planInfo && !subscriptionExpired && planInfo.limits?.fundingCallsLimit > 0 && planInfo.usage?.fundingCalls >= planInfo.limits?.fundingCallsLimit;
@@ -407,11 +391,11 @@ const openReapply = (row) => {
     : fundingLimitReached ? `Limit Reached (${planInfo.usage.fundingCalls}/${planInfo.limits.fundingCallsLimit})`
     : "+ Add Competition";
 
-  /* ── Render  */
+  /*  Render  */
   return (
     <div className="page">
 
-      {/* ── Topbar ── */}
+      {/*  Topbar  */}
       <header className="topbar">
         <div>
           <h1 className="topbarTitle">Competitions</h1>
@@ -437,7 +421,7 @@ const openReapply = (row) => {
         </div>
       </header>
 
-      {/* ── Filters ── */}
+      {/*  Filters  */}
       <div className="tableShell">
         <div className="tableHead">
           <h2 className="tableHeadTitle">Filter &amp; Search</h2>
@@ -486,7 +470,7 @@ const openReapply = (row) => {
         </div>
       </div>
 
-      {/* ── Table ── */}
+      {/*  Table  */}
       <div className="tableShell">
         <div className="tableHead">
           <h2 className="tableHeadTitle">All Competitions</h2>
@@ -521,7 +505,7 @@ const openReapply = (row) => {
         </td>
         <td className="tdMuted">{r.challengeCategory || "—"}</td>
 
-        {/* ── Status + lock badge ── */}
+        {/*  Status + lock badge  */}
         <td>
           <StatusBadge status={r.status} />
         
@@ -536,53 +520,24 @@ const openReapply = (row) => {
           {r.submissionDeadline ? new Date(r.submissionDeadline).toLocaleDateString() : "—"}
         </td>
 
-{/* ── Actions ── */}
+{/*  Actions  */}
 <td>
   <div className="actionGroup">
-{editLocked ? (
-  <button
-    className="btn btnSm btnPrimary"
-    onClick={() => {
-      if (!hasAccess) return toast.warn("Please purchase a subscription to re-apply.");
-      if (fundingLimitReached) return toast.warn(
-        `Competition limit of ${planInfo.limits.fundingCallsLimit} reached for your current plan.`
-      );
-      openReapply(r);
-    }}
-    title={
-      !hasAccess
-        ? "Subscription required"
-        : fundingLimitReached
-        ? `Competition limit reached (${planInfo?.usage?.fundingCalls}/${planInfo?.limits?.fundingCallsLimit})`
-        : "Edit limit reached. Click to create a new listing based on this one."
-    }
-    style={{ whiteSpace: "nowrap" }}
-  >
-    Re-apply
-  </button>
-) : (
-  <button
-    className="btn btnSm btnPrimary"
-    onClick={() => {
-      if (!hasAccess) return toast.info("Subscribe to edit");
-      openEdit(r);
-    }}
-  >
-    Edit
-  </button>
-)}
+    <button
+      className={`btn btnSm ${(r.editCount ?? 0) >= 1 ? "btnSecondary" : "btnPrimary"}`}
+      onClick={() => openEdit(r)}
+      title={(r.editCount ?? 0) >= 1 ? "This competition has already been edited once" : "Edit competition"}
+    >
+      Edit
+    </button>
     <button
       className={`btn btnSm ${r.isActive ? "btnWarning" : "btnSuccess"}`}
-      onClick={() => { if (!hasAccess) return toast.info("Subscribe to change status"); onToggleActiveConfirm(r); }}
+      onClick={() => onToggleActiveConfirm(r)}
+      title={(r.toggleCount ?? 0) >= 2 ? "Toggle limit reached" : r.isActive ? "Deactivate" : "Activate"}
     >
       {r.isActive ? "Deactivate" : "Activate"}
     </button>
-    <button
-      className="btn btnSm btnDanger"
-      onClick={() => { if (!hasAccess) return toast.info("Subscribe to delete"); onDelete(r); }}
-    >
-      Delete
-    </button>
+    <button className="btn btnSm btnDanger" onClick={() => onDelete(r)}>Delete</button>
   </div>
 </td>
       </tr>
@@ -602,7 +557,7 @@ const openReapply = (row) => {
         </div>
       </div>
 
-      {/* ── Create / Edit modal ── */}
+      {/*  Create / Edit modal  */}
       {open && (
         <div className="modalOverlay">
           <div className="modalDialog">
@@ -616,7 +571,7 @@ const openReapply = (row) => {
             {/* Body */}
             <div className="modalBody">
 
-              {/* ── Core details ── */}
+              {/*  Core details  */}
               <section className="section">
                 <h3 className="sectionTitle">Core details</h3>
 
@@ -668,7 +623,7 @@ const openReapply = (row) => {
                 </div>
               </section>
 
-              {/* ── Company information ── */}
+              {/*  Company information  */}
               <section className="section">
                 <h3 className="sectionTitle">Company information</h3>
 
@@ -701,7 +656,7 @@ const openReapply = (row) => {
                 </Field>
               </section>
 
-              {/* ── Content ── */}
+              {/*  Content  */}
               <section className="section">
                 <h3 className="sectionTitle">About Challenges</h3>
 
@@ -727,7 +682,7 @@ const openReapply = (row) => {
                 </div>
               </section>
 
-              {/* ── Requirements & rewards ── */}
+              {/*  Requirements & rewards  */}
               <section className="section">
                 <h3 className="sectionTitle">Requirements &amp; rewards</h3>
 
@@ -766,7 +721,7 @@ const openReapply = (row) => {
                 </div>
               </section>
 
-              {/* ── Location & registration ── */}
+              {/*  Location & registration  */}
               <section className="section">
                 <h3 className="sectionTitle">Location &amp; registration</h3>
 
@@ -808,7 +763,7 @@ const openReapply = (row) => {
                 </div>
               </section>
 
-              {/* ── Attachments ── */}
+              {/*  Attachments  */}
               <section className="section">
                 <h3 className="sectionTitle">Main image / attachments</h3>
 
@@ -836,7 +791,7 @@ const openReapply = (row) => {
                 </Field>
               </section>
 
-              {/* ── Notice ── */}
+              {/*  Notice  */}
               <div style={{ padding: "0.9rem 1rem", borderRadius: "0.85rem", background: "var(--yellow-soft)", border: "1px solid rgba(252,207,2,0.4)", color: "var(--yellow-hover)", fontSize: "var(--text-sm)" }}>
                 Note: Creating or updating a competition sets its status to <strong>Pending</strong> until an admin approves it.
               </div>

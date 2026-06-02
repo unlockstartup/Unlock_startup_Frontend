@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* ─── STRICT 2-COLOR DESIGN SYSTEM ─────────────────────────── */
+/*  STRICT 2-COLOR DESIGN SYSTEM  */
 /* Primary: Blue rgb(30, 176, 228) | Accent: Yellow rgb(255, 207, 10) */
 :root {
   --blue:             rgb(30, 176, 228);
@@ -95,7 +95,7 @@
   --sdp-icon-color:     var(--blue-700);
 }
 
-/* ─── BASE ──────────────────────────────────────────────────── */
+/*  BASE  */
 .productDetailPage {
   background: #f0f2f7;
   min-height: 100vh;
@@ -113,7 +113,7 @@
   padding: 0 24px;
 }
 
-/* ─── BACK LINK ─────────────────────────────────────────────── */
+/*  BACK LINK  */
 .backLink {
   display: inline-flex;
   align-items: center;
@@ -136,7 +136,7 @@
   border-color: var(--blue-200);
 }
 
-/* ─── HERO SECTION ──────────────────────────────────────────── */
+/*  HERO SECTION  */
 .pdHero {
   width: 100%;
   border-radius: var(--radius-lg);
@@ -240,7 +240,7 @@
   font-weight: 500;
 }
 
-/* ─── HERO INFO SECTION ─────────────────────────────────────── */
+/*  HERO INFO SECTION  */
 .pdHeroInfo {
   display: flex;
   align-items: flex-start;
@@ -267,7 +267,7 @@
   background: linear-gradient(90deg, var(--blue-500) 0%, var(--yellow-500) 100%);
 }
 
-/* ─── HERO LOGO ─────────────────────────────────────────────── */
+/*  HERO LOGO  */
 .pdHeroLogo {
   flex-shrink: 0;
   display: flex;
@@ -300,7 +300,7 @@
   box-shadow: var(--shadow-blue);
 }
 
-/* ─── HERO CONTENT ───────────────────────────────────────────── */
+/*  HERO CONTENT  */
 .pdHeroContent {
   flex: 1;
   min-width: 0;
@@ -493,7 +493,7 @@
   border-radius: 50%;
 }
 
-/* ─── TWO-COLUMN LAYOUT ─────────────────────────────────────── */
+/*  TWO-COLUMN LAYOUT  */
 .pdLayout {
   display: grid;
   grid-template-columns: 1fr 340px;
@@ -515,7 +515,7 @@
   top: 24px;
 }
 
-/* ─── CARDS ─────────────────────────────────────────────────── */
+/*  CARDS  */
 .sdpCard {
   background: var(--white);
   border-radius: var(--radius-lg);
@@ -546,7 +546,7 @@
 
 .sdpCard:hover::before { opacity: 1; }
 
-/* ─── SECTION HEADER ────────────────────────────────────────── */
+/*  SECTION HEADER  */
 .sdpSectionHeader {
   display: flex;
   align-items: center;
@@ -582,7 +582,7 @@
   font-family: var(--font-display);
 }
 
-/* ─── BODY TEXT ─────────────────────────────────────────────── */
+/*  BODY TEXT  */
 .sdpBodyText {
   font-size: 15px;
   line-height: 1.8;
@@ -601,7 +601,7 @@
   margin: 0;
 }
 
-/* ─── KEY FEATURES CHECKLIST ────────────────────────────────── */
+/*  KEY FEATURES CHECKLIST  */
 .sdpFeatureList {
   list-style: none;
   padding: 0;
@@ -644,7 +644,7 @@
   color: var(--sdp-text-secondary);
 }
 
-/* ─── PROBLEM CALLOUT ────────────────────────────────────────── */
+/*  PROBLEM CALLOUT  */
 .sdpProblemCallout {
   display: flex;
   gap: 14px;
@@ -684,7 +684,7 @@
   margin: 0;
 }
 
-/* ─── TAGS ──────────────────────────────────────────────────── */
+/*  TAGS  */
 .sdpTagGroupLabel {
   font-size: 11px;
   font-weight: 700;
@@ -724,7 +724,7 @@
   transform: translateY(-1px);
 }
 
-/* ─── CTA CARD ──────────────────────────────────────────────── */
+/*  CTA CARD  */
 .sdpCtaCard {
   background: linear-gradient(135deg, var(--white) 0%, var(--yellow-50) 100%);
   border-radius: var(--radius-lg);
@@ -832,7 +832,7 @@
   transform: translateY(-1px);
 }
 
-/* ─── INFO CARDS ────────────────────────────────────────────── */
+/*  INFO CARDS  */
 .sdpInfoCard {
   background: var(--white);
   border-radius: var(--radius-lg);
@@ -907,7 +907,7 @@
   color: var(--yellow-700);
 }
 
-/* ─── REG ROWS ───────────────────────────────────────────────── */
+/*  REG ROWS  */
 .sdpRegRow {
   display: flex;
   align-items: flex-start;
@@ -948,7 +948,7 @@
   font-weight: 600;
 }
 
-/* ─── CONTACT CARD ───────────────────────────────────────────── */
+/*  CONTACT CARD  */
 .pdContactRow {
   display: flex;
   align-items: center;
@@ -987,7 +987,7 @@
   line-height: 1.6;
 }
 
-/* ─── COMPANY TABLE ──────────────────────────────────────────── */
+/*  COMPANY TABLE  */
 .pdCompanyTable {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -1028,7 +1028,7 @@
   letter-spacing: -0.01em;
 }
 
-/* ─── META GRID ─────────────────────────────────────────────── */
+/*  META GRID  */
 .pdMetaGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1058,14 +1058,14 @@
   letter-spacing: -0.01em;
 }
 
-/* ─── DIVIDER ────────────────────────────────────────────────── */
+/*  DIVIDER  */
 .pdDivider {
   height: 1px;
   background: var(--sdp-border);
   margin: 4px 0 10px;
 }
 
-/* ─── AVAILABILITY BADGE ────────────────────────────────────── */
+/*  AVAILABILITY BADGE  */
 .availBadge {
   display: inline-flex;
   align-items: center;
@@ -1093,7 +1093,7 @@
   50%       { opacity: 0.6; transform: scale(1.2); }
 }
 
-/* ─── NOT FOUND ─────────────────────────────────────────────── */
+/*  NOT FOUND  */
 .notFoundWrap {
   text-align: center;
   padding: 120px 32px;
@@ -1118,7 +1118,7 @@
   font-weight: 500;
 }
 
-/* ─── CONTACT BLUR EFFECT ────────────────────────────────────── */
+/*  CONTACT BLUR EFFECT  */
 .sdpContactContent {
   transition: filter 0.3s ease;
 }
@@ -1181,11 +1181,11 @@
 }
 
 
-/* ═══════════════════════════════════════════════════════════════
+/* 
    RESPONSIVE BREAKPOINTS
-   ═══════════════════════════════════════════════════════════════ */
+    */
 
-/* ─── LARGE TABLET (1024px and below) ───────────────────────── */
+/*  LARGE TABLET (1024px and below)  */
 @media (max-width: 1024px) {
   .productDetailPage .container {
     padding: 0 20px;
@@ -1203,7 +1203,7 @@
   
 }
 
-/* ─── TABLET (821px – 1024px) ───────────────────────────────── */
+/*  TABLET (821px – 1024px)  */
 @media (min-width: 821px) and (max-width: 1024px) {
   .productDetailPage {
     padding: 28px 0 80px;
@@ -1306,7 +1306,7 @@
   }
 }
 
-/* ─── MOBILE (820px and below) ───────────────────────────────── */
+/*  MOBILE (820px and below)  */
 @media (max-width: 820px) {
   /* Switch to flex so we can reorder children */
   .pdLayout {
@@ -1378,7 +1378,7 @@
   }
 }
 
-/* ─── SMALL MOBILE (640px and below) ─────────────────────────── */
+/*  SMALL MOBILE (640px and below)  */
 @media (max-width: 640px) {
   .sdpCard,
   .sdpCtaCard,
@@ -1452,7 +1452,7 @@
   }
 }
 
-/* ─── EXTRA SMALL MOBILE (480px and below) ───────────────────── */
+/*  EXTRA SMALL MOBILE (480px and below)  */
 @media (max-width: 480px) {
   .productDetailPage .container {
     padding: 0 16px;
@@ -1529,7 +1529,7 @@
   }
 }
 
-/* ─── ULTRA SMALL (380px and below) ──────────────────────────── */
+/*  ULTRA SMALL (380px and below)  */
 @media (max-width: 380px) {
   .pdMetaGrid {
     grid-template-columns: 1fr;
@@ -1544,7 +1544,7 @@
     font-size: 1.15rem;
   }
 }
-/* ─── PRODUCT OVERVIEW — meta grid (mirrors eventMetaGrid) ─── */
+/*  PRODUCT OVERVIEW — meta grid (mirrors eventMetaGrid)  */
 .sdpMetaGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1578,7 +1578,7 @@
 .sdpMetaValue--blue   { color: var(--blue-800); }
 .sdpMetaValue--yellow { color: var(--yellow-900); }
 
-/* ─── Responsive ─────────────────────────────────────────────── */
+/*  Responsive  */
 /* Tablet (821px – 1024px): keep 2-col, just tighten spacing */
 @media (min-width: 821px) and (max-width: 1024px) {
   .sdpMetaGrid {
@@ -1617,7 +1617,7 @@
     grid-template-columns: 1fr !important;
   }
 }
-/* ─── KEY FEATURES — 2×2 grid (mirrors svd-benefits style) ──── */
+/*  KEY FEATURES — 2×2 grid (mirrors svd-benefits style)  */
 .sdpFeatureList {
   list-style: none;
   padding: 0;
@@ -1679,7 +1679,7 @@
   }
 }
 
-/* ─── MOBILE ORDER — matches services page sequence ─────────── */
+/*  MOBILE ORDER — matches services page sequence  */
 @media (max-width: 820px) {
   .pdLayout {
     display: flex;

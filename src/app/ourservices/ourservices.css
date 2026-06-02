@@ -1,4 +1,4 @@
-/* ─── Color Tokens ──────────────────────────────────────────── */
+/*  Color Tokens  */
 :root {
   --sp-blue:         rgb(30, 176, 228);
   --sp-blue-light:   rgba(30, 176, 228, 0.10);
@@ -11,7 +11,7 @@
   --sp-yellow-dark:   rgb(160, 128, 0);
 }
 
-/* ─── Our Services Page ─────────────────────────────────────── */
+/*  Our Services Page  */
 .services-page {
   font-family: 'gordita', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 16px;
@@ -29,7 +29,7 @@
   padding: 0;
 }
 
-/* ─── Container ─────────────────────────────────────────────── */
+/*  Container  */
 .services-page .container {
   width: 100%;
   max-width: 1180px;
@@ -37,7 +37,7 @@
   padding: 0 24px;
 }
 
-/* ─── Typography scale ──────────────────────────────────────── */
+/*  Typography scale  */
 .services-page h1 {
   font-size: 44px;
   line-height: 1.06;
@@ -80,7 +80,7 @@
   line-height: 1.75;
 }
 
-/* ─── Hero ──────────────────────────────────────────────────── */
+/*  Hero  */
 .services-page .hero {
   padding: 80px 0 64px;
   background: #ffffff;
@@ -168,7 +168,7 @@
   transform: none;
 }
 
-/* ─── Services Section ──────────────────────────────────────── */
+/*  Services Section  */
 section#services {
   padding: 80px 0;
   border-top: 1px solid #e4dfd7;
@@ -199,14 +199,14 @@ section#services {
   line-height: 1.75;
 }
 
-/* ─── Services Grid ─────────────────────────────────────────── */
+/*  Services Grid  */
 .services-page .services-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
 
-/* ─── Service Card ──────────────────────────────────────────── */
+/*  Service Card  */
 .services-page .service-card {
   padding: 28px;
   border-radius: 16px;
@@ -244,7 +244,7 @@ section#services {
   margin-bottom: 20px;
 }
 
-/* ─── Feature Items ─────────────────────────────────────────── */
+/*  Feature Items  */
 .services-page .features-grid {
   display: grid;
   gap: 0;
@@ -276,7 +276,7 @@ section#services {
   margin-top: 2px;
 }
 
-/* ─── Sub Section (Use Cases / Benefits) ───────────────────── */
+/*  Sub Section (Use Cases / Benefits)  */
 .services-page .sub-section {
   margin-top: 20px;
   padding-top: 20px;
@@ -321,7 +321,7 @@ section#services {
   transform: none;
 }
 
-/* ─── Responsive ────────────────────────────────────────────── */
+/*  Responsive  */
 @media (max-width: 1024px) {
   .services-page .services-grid {
     grid-template-columns: 1fr;

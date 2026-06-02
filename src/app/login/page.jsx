@@ -85,9 +85,9 @@ function OtpModal({ email, onVerify, onResend, onClose, loading }) {
   );
 }
 
-/* ─────────────────────────────────────
+/* 
    FORGOT PASSWORD MODAL  (new)
-───────────────────────────────────── */
+ */
 function ForgotPasswordModal({ onClose }) {
   const [step, setStep]         = useState("email");   // "email" | "otp" | "reset"
   const [email, setEmail]       = useState("");
@@ -201,7 +201,7 @@ function ForgotPasswordModal({ onClose }) {
     >
       <div className="lsb-modal" role="dialog" aria-modal="true" aria-labelledby="fp-title" style={{ maxWidth: 420 }}>
 
-        {/* ── Header ── */}
+        {/*  Header  */}
         <div className="lsb-modal-header" style={{ marginBottom: 20 }}>
           <div className="lsb-modal-icon">
             {stepMeta[stepIndex].icon}
@@ -220,7 +220,7 @@ function ForgotPasswordModal({ onClose }) {
           </div>
         </div>
 
-        {/* ── Step bar ── */}
+        {/*  Step bar  */}
         <div style={{ display: "flex", gap: 6, marginBottom: 22 }}>
           {stepMeta.map((_, i) => (
             <div
@@ -234,7 +234,7 @@ function ForgotPasswordModal({ onClose }) {
           ))}
         </div>
 
-        {/* ── Messages ── */}
+        {/*  Messages  */}
         {error   && <div className="lsb-error" style={{ marginBottom: 14 }}>{error}</div>}
         {success && (
           <div style={{ background: "#dcfce7", color: "#166534", borderRadius: 8, padding: "10px 14px", fontSize: 13, marginBottom: 14 }}>
@@ -242,7 +242,7 @@ function ForgotPasswordModal({ onClose }) {
           </div>
         )}
 
-        {/* ── Step 1: Email ── */}
+        {/*  Step 1: Email  */}
         {step === "email" && !success && (
           <form onSubmit={handleSendOtp}>
             <div className="lsb-field">
@@ -261,7 +261,7 @@ function ForgotPasswordModal({ onClose }) {
           </form>
         )}
 
-        {/* ── Step 2: OTP ── */}
+        {/*  Step 2: OTP  */}
         {step === "otp" && !success && (
           <form onSubmit={handleVerifyOtp}>
             <div className="lsb-field">
@@ -307,7 +307,7 @@ function ForgotPasswordModal({ onClose }) {
           </form>
         )}
 
-        {/* ── Step 3: New password ── */}
+        {/*  Step 3: New password  */}
         {step === "reset" && !success && (
           <form onSubmit={handleReset}>
             <div className="lsb-field">
@@ -358,14 +358,14 @@ function ForgotPasswordModal({ onClose }) {
           </form>
         )}
 
-        {/* ── Success: close / back to login ── */}
+        {/*  Success: close / back to login  */}
         {success && (
           <button className="lsb-btn" type="button" onClick={onClose}>
             Back to login
           </button>
         )}
 
-        {/* ── Back link (email & reset steps only) ── */}
+        {/*  Back link (email & reset steps only)  */}
         {!success && step !== "otp" && (
           <button className="lsb-modal-back" type="button" onClick={onClose}>
             <ArrowLeft size={13} style={{ marginRight: 4, verticalAlign: -1 }} />
@@ -384,9 +384,9 @@ function ForgotPasswordModal({ onClose }) {
   );
 }
 
-/* ─────────────────────────────────────
+/* 
    LOGIN PAGE
-───────────────────────────────────── */
+ */
 const Page = () => {
   const router = useRouter();
   const { login } = useAuth();
@@ -405,7 +405,7 @@ const Page = () => {
     router.refresh();
   };
 
-/* ── Password login ── */
+/*  Password login  */
 const handlePasswordSubmit = async (e) => {
   e.preventDefault();
   setLoading(true); setError("");
@@ -431,7 +431,7 @@ const handlePasswordSubmit = async (e) => {
 
 
 
-  /* ── Send OTP ── */
+  /*  Send OTP  */
 const handleSendOtp = async () => {
   if (!email) { setError("Please enter your email."); return; }
   setError(""); setLoading(true);
@@ -446,8 +446,8 @@ const handleSendOtp = async () => {
   }
 };
 
-  /* ── Verify OTP ── */
-/* ── Verify OTP ── */
+  /*  Verify OTP  */
+/*  Verify OTP  */
 const handleVerifyOtp = async (otpValue) => {
   if (otpValue.length !== 6) { setError("Please enter all 6 digits."); return; }
   setLoading(true); setError("");
@@ -476,7 +476,7 @@ const handleVerifyOtp = async (otpValue) => {
   }
 };
 
-  /* ── Resend OTP ── */
+  /*  Resend OTP  */
 const handleResendOtp = async () => {
   try { await api.post("/api/auth/send-otp", { email, type: "login" }); } 
   catch (err) { setError(err?.response?.data?.message || "Resend failed."); }
@@ -500,7 +500,7 @@ const handleResendOtp = async () => {
         <div className="lsb-page">
           <main className="lsb-shell" id="main">
 
-            {/* ── LEFT PANEL ── */}
+            {/*  LEFT PANEL  */}
             <section className="lsb-left">
               <div className="lsb-bar" />
               <div className="lsb-hero">
@@ -535,7 +535,7 @@ const handleResendOtp = async () => {
               </div>
             </section>
 
-            {/* ── RIGHT PANEL ── */}
+            {/*  RIGHT PANEL  */}
             <section className="lsb-right">
               <div className="lsb-card">
                 <div className="lsb-head">
@@ -557,7 +557,7 @@ const handleResendOtp = async () => {
                     onClick={() => { setMethod("otp"); setError(""); }}>OTP</button>
                 </div>
 
-                {/* ── Password method ── */}
+                {/*  Password method  */}
                 {method === "password" && (
                   <form className="lsb-form" onSubmit={handlePasswordSubmit}>
                     <div className="lsb-field">
@@ -573,7 +573,7 @@ const handleResendOtp = async () => {
                     <div className="lsb-field">
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                         <label htmlFor="l-pass" style={{ margin: 0 }}>Password</label>
-                        {/* ── Forgot password link ── */}
+                        {/*  Forgot password link  */}
                         <button
                           type="button"
                           onClick={() => { setError(""); setShowFpModal(true); }}
@@ -609,7 +609,7 @@ const handleResendOtp = async () => {
                   </form>
                 )}
 
-                {/* ── OTP method ── */}
+                {/*  OTP method  */}
                 {method === "otp" && (
                   <div className="lsb-form">
                     <div className="lsb-field">

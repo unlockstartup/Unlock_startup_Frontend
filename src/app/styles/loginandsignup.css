@@ -25,7 +25,7 @@
   --lsb-transition: 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ── Page Wrapper ── */
+/*  Page Wrapper  */
 .lsb-page {
   min-height: 100vh;
   display: grid;
@@ -35,7 +35,7 @@
   font-family: inter, sans-serif;
 }
 
-/* ── Shell (two-column grid) ── */
+/*  Shell (two-column grid)  */
 .lsb-shell {
   width: min(1320px, 100%);
   display: grid;
@@ -48,9 +48,9 @@
   box-shadow: var(--lsb-shadow);
 }
 
-/* ══════════════════════════════════
+/* 
    LEFT PANEL
-   ══════════════════════════════════ */
+    */
 .lsb-left {
   padding: clamp(12px, 2.4vw, 31px);   /* was clamp(20px,4vw,52px) */
   border-right: 1px solid var(--lsb-border);
@@ -76,7 +76,7 @@
   pointer-events: none;
 }
 
-/* ── Top Bar ── */
+/*  Top Bar  */
 .lsb-bar {
   display: flex;
   align-items: center;
@@ -96,7 +96,7 @@
   color: var(--lsb-text);
 }
 
-/* ── Hero Content ── */
+/*  Hero Content  */
 .lsb-hero {
   display: grid;
   align-content: center;
@@ -136,7 +136,7 @@
   margin: 0;
 }
 
-/* ── Orbit Card ── */
+/*  Orbit Card  */
 .lsb-orbit {
   position: relative;
   border-radius: var(--lsb-radius-md);
@@ -177,7 +177,7 @@
   z-index: 1;
 }
 
-/* ── Feature Cards ── */
+/*  Feature Cards  */
 .lsb-features {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -223,7 +223,7 @@
   color: #707070;
 }
 
-/* ── Ticker Chips ── */
+/*  Ticker Chips  */
 .lsb-ticker {
   display: flex;
   gap: 5px;
@@ -251,9 +251,9 @@
   color: #96700a;
 }
 
-/* ══════════════════════════════════
+/* 
    RIGHT PANEL
-   ══════════════════════════════════ */
+    */
 .lsb-right {
   padding: clamp(12px, 2.4vw, 31px);   /* was clamp(20px,4vw,52px) */
   display: grid;
@@ -269,7 +269,7 @@
   gap: 13px;          /* was 22px */
 }
 
-/* ── Card Header ── */
+/*  Card Header  */
 .lsb-head {
   display: grid;
   gap: 4px;           /* was 7px */
@@ -295,7 +295,7 @@
   
 }
 
-/* ── Form ── */
+/*  Form  */
 .lsb-form {
   display: grid;
   gap: 15px;           /* was 13px */
@@ -367,7 +367,7 @@
 .lsb-ctrl input::placeholder { color: #bbb0a8; }
 .lsb-ctrl select { cursor: pointer; }
 
-/* ── Password Toggle ── */
+/*  Password Toggle  */
 .lsb-eye-toggle {
   background: none;
   border: none;
@@ -382,7 +382,7 @@
 
 .lsb-eye-toggle:hover { color: var(--lsb-blue); }
 
-/* ── Assist Row ── */
+/*  Assist Row  */
 .lsb-assist {
   display: flex;
   justify-content: space-between;
@@ -411,7 +411,7 @@
   flex-shrink: 0;
 }
 
-/* ── Error Alert ── */
+/*  Error Alert  */
 .lsb-error {
   padding: 7px 10px;  /* was 10px 14px */
   border-radius: var(--lsb-radius-sm);
@@ -423,7 +423,7 @@
   text-align: center;
 }
 
-/* ── Links ── */
+/*  Links  */
 .lsb-link {
   color: var(--lsb-blue);
   font-weight: 900;
@@ -433,7 +433,7 @@
 
 .lsb-link:hover { opacity: 0.75; }
 
-/* ── Primary Button ── */
+/*  Primary Button  */
 .lsb-btn {
   min-height: 38px;   /* was 48px */
   border-radius: var(--lsb-radius-md);
@@ -473,7 +473,7 @@
 .lsb-btn:active:not(:disabled) { transform: translateY(0px); }
 .lsb-btn:disabled { opacity: 0.65; cursor: not-allowed; }
 
-/* ── Divider ── */
+/*  Divider  */
 .lsb-divider {
   display: flex;
   align-items: center;
@@ -493,7 +493,7 @@
   background: var(--lsb-border);
 }
 
-/* ── Social Buttons ── */
+/*  Social Buttons  */
 .lsb-social {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -526,7 +526,7 @@
   box-shadow: 0 3px 9px rgba(28, 20, 16, 0.08);
 }
 
-/* ── Note text ── */
+/*  Note text  */
 .lsb-note {
   font-size: 16px;    /* was 12px */
   color: var(--lsb-muted);
@@ -534,7 +534,7 @@
   margin: 0;
 }
 
-/* ── Skip link (accessibility) ── */
+/*  Skip link (accessibility)  */
 .lsb-skip { position: absolute; left: -9999px; }
 
 .lsb-skip:focus {
@@ -548,9 +548,9 @@
   color: var(--lsb-text);
 }
 
-/* ══════════════════════════════════
+/* 
    ANIMATIONS
-   ══════════════════════════════════ */
+    */
 @keyframes lsb-spin {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
@@ -568,9 +568,9 @@
 
 .lsb-card { animation: lsb-fade-in 0.45s var(--lsb-transition) both; }
 
-/* ══════════════════════════════════
+/* 
    RESPONSIVE
-   ══════════════════════════════════ */
+    */
 @media (max-width: 1040px) {
   .lsb-shell { grid-template-columns: 1fr; }
   .lsb-left  { border-right: 0; border-bottom: 1px solid var(--lsb-border); }
@@ -595,9 +595,9 @@
   }
 }
 
-/* ─────────────────────────────────────
+/* 
    METHOD TOGGLE
-───────────────────────────────────── */
+ */
 .lsb-method-toggle {
   display: flex;
   gap: 5px;
@@ -632,9 +632,9 @@
   background: rgba(255, 255, 255, 0.5);
 }
 
-/* ─────────────────────────────────────
+/* 
    OTP MODAL OVERLAY
-───────────────────────────────────── */
+ */
 .lsb-modal-overlay {
   position: fixed;
   inset: 0;
@@ -654,9 +654,9 @@
   to   { opacity: 1; }
 }
 
-/* ─────────────────────────────────────
+/* 
    OTP MODAL CARD
-───────────────────────────────────── */
+ */
 .lsb-modal {
   background: #ffffff;
   border-radius: 14px;    /* was 20px */
@@ -675,9 +675,9 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ─────────────────────────────────────
+/* 
    MODAL HEADER
-───────────────────────────────────── */
+ */
 .lsb-modal-header {
   display: flex;
   align-items: center;
@@ -711,9 +711,9 @@
 
 .lsb-modal-sub strong { color: #374151; font-weight: 600; }
 
-/* ─────────────────────────────────────
+/* 
    OTP INPUT ROW
-───────────────────────────────────── */
+ */
 .lsb-otp-row {
   display: flex;
   gap: 7px;               /* was 10px */
@@ -747,9 +747,9 @@
   background: #fffdf0;
 }
 
-/* ─────────────────────────────────────
+/* 
    TIMER + RESEND
-───────────────────────────────────── */
+ */
 .lsb-modal-timer {
   display: flex;
   align-items: center;
@@ -775,9 +775,9 @@
 
 .lsb-modal-resend:hover { color: rgb(223, 88, 42); }
 
-/* ─────────────────────────────────────
+/* 
    BACK BUTTON
-───────────────────────────────────── */
+ */
 .lsb-modal-back {
   background: none;
   border: none;
@@ -793,9 +793,9 @@
 
 .lsb-modal-back:hover { color: #374151; }
 
-/* ─────────────────────────────────────
+/* 
    PROGRESS DOTS
-───────────────────────────────────── */
+ */
 .lsb-modal-progress {
   display: flex;
   justify-content: center;
@@ -816,9 +816,9 @@
   background: var(--lsb-red);
 }
 
-/* ─────────────────────────────────────
+/* 
    RESPONSIVE MODAL
-───────────────────────────────────── */
+ */
 @media (max-width: 480px) {
   .lsb-modal {
     padding: 18px 14px 15px;
@@ -834,9 +834,9 @@
   .lsb-otp-row { gap: 5px; }
 }
 
-/* ─────────────────────────────────────
+/* 
    NATIVE SELECT
-───────────────────────────────────── */
+ */
 .lsb-ctrl--icon-select { position: relative; }
 
 .lsb-native-select {
@@ -865,7 +865,7 @@
   color: #9ca3af;
 }
 
-/* ── react-select ── */
+/*  react-select  */
 .lsb-ctrl--select { padding: 0 10px; }   /* was 0 14px */
 .lsb-rs-wrap { flex: 1; min-width: 0; }
 

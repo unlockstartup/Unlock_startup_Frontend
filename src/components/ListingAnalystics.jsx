@@ -19,11 +19,11 @@ const TYPE_META = {
   investors:    { label: "Investor",    color: BLUE, bg: "#fffbea", icon: "💰" },
 };
 
-/* ── Helpers  */
+/*  Helpers  */
 const fmt = (d) =>
   d ? new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "—";
 
-/* ── API fetchers  */
+/*  API fetchers  */
 const fetchStats    = () => publisherApi.get("/api/listings/apply-stats");
 const fetchPlan     = () => publisherApi.get("/api/publisher/dashboard/getmyplan");
 const fetchJobs     = () => publisherApi.get("/api/publisher/jobs");
@@ -32,7 +32,7 @@ const fetchEvents   = () => publisherApi.get("/api/publisher/dashboard/events");
 const fetchProducts = () => publisherApi.get("/api/publisher/innovation-products/mine");
 const fetchServices = () => publisherApi.get("/api/publisher/service-listings/mine");
 
-/* ── TypeBadge  */
+/*  TypeBadge  */
 function TypeBadge({ type }) {
   const m = TYPE_META[type] || { label: type, color: BLUE, bg: "#f1f5f9" };
   return (
@@ -49,7 +49,7 @@ function TypeBadge({ type }) {
   );
 }
 
-/* ── StatusBadge ────────────────────────────────────────────────────────── */
+/*  StatusBadge  */
 function StatusBadge({ status }) {
   const s = status || "—";
   const color = s === "approved" ? "#065f46" : s === "rejected" ? "#7f1d1d" : "#78350f";
@@ -61,7 +61,7 @@ function StatusBadge({ status }) {
   );
 }
 
-/* ── ClickBar ───────────────────────────────────────────────────────────── */
+/*  ClickBar  */
 function ClickBar({ value, max, color }) {
   const pct = max > 0 ? Math.min(100, Math.round((value / max) * 100)) : 0;
   return (
@@ -77,7 +77,7 @@ function ClickBar({ value, max, color }) {
   );
 }
 
-/* ── Custom Recharts Tooltip ────────────────────────────────────────────── */
+/*  Custom Recharts Tooltip  */
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
   return (
@@ -90,7 +90,7 @@ function CustomTooltip({ active, payload, label }) {
   );
 }
 
-/* ── Detail Modal ───────────────────────────────────────────────────────── */
+/*  Detail Modal  */
 function DetailModal({ item, onClose }) {
   if (!item) return null;
   const m = TYPE_META[item._type] || {};
@@ -105,14 +105,14 @@ function DetailModal({ item, onClose }) {
 
   const rows = [];
 
-  // ─── UNIVERSAL FIELDS ─────────────────────────────────────────────────
+  //  UNIVERSAL FIELDS 
   rows.push(renderField("Title", item._title || item.title || item.productName || item.serviceTitle || item.fundName));
   rows.push(renderField("Description", item.description || item.detailedDescription || item.companyDescription || item.eventDescription || item.about));
   rows.push(renderField("Status", item.status || item.approvalStatus));
   rows.push(renderField("Location", item.location));
   rows.push(renderField("Apply Clicks", clicks > 0 ? clicks : null));
 
-  // ─── JOB FIELDS ─────────────────────────────────────────────────────────
+  //  JOB FIELDS 
   if (item._type === "jobs") {
     rows.push(renderField("Company", item.companyName));
     rows.push(renderField("Company Website", item.companyWebsite));
@@ -143,7 +143,7 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
   }
 
-  // ─── COMPETITION FIELDS ───────────────────────────────────────────────
+  //  COMPETITION FIELDS 
   else if (item._type === "competitions") {
     rows.push(renderField("Organizer", item.organizingCompany));
     rows.push(renderField("Organizer Type", item.organizerType));
@@ -194,7 +194,7 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
   }
 
-  // ─── PRODUCT FIELDS ───────────────────────────────────────────────────
+  //  PRODUCT FIELDS 
   else if (item._type === "products") {
     rows.push(renderField("Company", item.companyName));
     rows.push(renderField("Brand", item.brandName));
@@ -218,7 +218,7 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
   }
 
-  // ─── SERVICE FIELDS ───────────────────────────────────────────────────
+  //  SERVICE FIELDS 
   else if (item._type === "services") {
     rows.push(renderField("Company", item.companyName));
     rows.push(renderField("Brand", item.brandName));
@@ -240,7 +240,7 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
   }
 
-  // ─── INVESTOR FIELDS ──────────────────────────────────────────────────
+  //  INVESTOR FIELDS 
   else if (item._type === "investors") {
     rows.push(renderField("Fund Name", item.fundName || item.title));
     rows.push(renderField("Investor Type", item.investorType));
@@ -405,7 +405,7 @@ export default function ListingsAnalytics() {
 
   useEffect(() => { load(); }, [load]);
 
-  /* ── Derived values ──────────────────────────────────────────────────── */
+  /*  Derived values  */
   const summary = stats?.summary ?? {};
   const grand   = stats?.grandTotal ?? 0;
   const usage   = plan?.usage  ?? {};
@@ -452,12 +452,12 @@ export default function ListingsAnalytics() {
   const filtered  = filter === "all" ? allRows : allRows.filter(r => r._type === filter);
   const maxClicks = Math.max(1, ...allRows.map(r => r._clicks || 0));
 
-  /* ── Render ──────────────────────────────────────────────────────────── */
+  /*  Render  */
   return (
     <>
       <div className="pd__analytics-top-grid">
 
-        {/* ── Left: Listing Overview ── */}
+        {/*  Left: Listing Overview  */}
         <div className="pd__panel">
           <div className="pd__panel-header">
             <div className="pd__panel-header-left">
@@ -517,7 +517,7 @@ export default function ListingsAnalytics() {
           </div>
         </div>
 
-        {/* ── Right: Apply Clicks ── */}
+        {/*  Right: Apply Clicks  */}
         <div className="pd__panel" style={{ display: "flex", flexDirection: "column" }}>
           <div className="pd__panel-header">
             <div className="pd__panel-header-left">
@@ -569,7 +569,7 @@ export default function ListingsAnalytics() {
         </div>
       </div>
 
-      {/* ══ BOTTOM ROW: Listings Details table ══════════════════════════ */}
+      {/*  BOTTOM ROW: Listings Details table  */}
       <div className="pd__table-panel">
 
         {/* Header */}

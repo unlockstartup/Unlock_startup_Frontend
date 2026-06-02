@@ -183,9 +183,9 @@
   margin-bottom: 2rem;
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
+/* 
    LISTINGS ANALYTICS — top row panels
-══════════════════════════════════════════════════════════════════════════ */
+ */
 
 .pd__analytics-top-grid {
   display: grid;
@@ -653,9 +653,9 @@
   min-width: 20px;
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
+/* 
    TOOLTIP (recharts custom)
-══════════════════════════════════════════════════════════════════════════ */
+ */
 
 .pd__tooltip {
   background: var(--pd-white);
@@ -675,7 +675,7 @@
 }
 
 
-/* ═══════════════════════════════════════════════════════════════════════
+/* 
    PUBLISHER DASHBOARD — RESPONSIVE OVERRIDES
    Add this file after publisher-dashboard.css (or append to it)
 
@@ -684,9 +684,9 @@
      Mobile L  : ≤ 640px
      Tablet    : ≤ 1024px
      Tablet M  : ≤ 860px
-   ═══════════════════════════════════════════════════════════════════════ */
+    */
 
-/* ── 1. OVERVIEW STAT CARDS GRID ─────────────────────────────────────── */
+/*  1. OVERVIEW STAT CARDS GRID  */
 
 /* Tablet: 3 columns */
 @media (max-width: 1024px) {
@@ -738,7 +738,7 @@
   }
 }
 
-/* ── 2. ANALYTICS TOP GRID (Overview panel + Clicks panel) ───────────── */
+/*  2. ANALYTICS TOP GRID (Overview panel + Clicks panel)  */
 
 @media (max-width: 1024px) {
   .pd__analytics-top-grid {
@@ -746,7 +746,7 @@
   }
 }
 
-/* ── 3. COUNT CARDS INSIDE LISTING OVERVIEW ──────────────────────────── */
+/*  3. COUNT CARDS INSIDE LISTING OVERVIEW  */
 
 @media (max-width: 1024px) {
   .pd__count-grid {
@@ -789,7 +789,7 @@
   }
 }
 
-/* ── 4. BAR CHART WRAPPER ────────────────────────────────────────────── */
+/*  4. BAR CHART WRAPPER  */
 
 @media (max-width: 640px) {
   .pd__barchart-wrap {
@@ -797,7 +797,7 @@
   }
 }
 
-/* ── 5. APPLY CLICKS ROWS ────────────────────────────────────────────── */
+/*  5. APPLY CLICKS ROWS  */
 
 @media (max-width: 640px) {
   .pd__clicks-type-label {
@@ -811,7 +811,7 @@
   }
 }
 
-/* ── 6. ENGAGEMENT FOOTER ────────────────────────────────────────────── */
+/*  6. ENGAGEMENT FOOTER  */
 
 @media (max-width: 640px) {
   .pd__engagement-pct {
@@ -825,7 +825,7 @@
   }
 }
 
-/* ── 7. PANEL HEADER / TITLE / META ──────────────────────────────────── */
+/*  7. PANEL HEADER / TITLE / META  */
 
 @media (max-width: 640px) {
   .pd__panel-header {
@@ -844,7 +844,7 @@
   }
 }
 
-/* ── 8. LISTINGS TABLE PANEL ─────────────────────────────────────────── */
+/*  8. LISTINGS TABLE PANEL  */
 
 @media (max-width: 860px) {
   .pd__th,
@@ -898,7 +898,7 @@
   }
 }
 
-/* ── 9. FILTER BAR ───────────────────────────────────────────────────── */
+/*  9. FILTER BAR  */
 
 @media (max-width: 640px) {
   .pd__filter-bar {
@@ -911,7 +911,7 @@
   }
 }
 
-/* ── 10. DETAIL MODAL ────────────────────────────────────────────────── */
+/*  10. DETAIL MODAL  */
 
 @media (max-width: 640px) {
   .pd__modal-overlay {
@@ -943,7 +943,7 @@
   }
 }
 
-/* ── 11. LIMIT BANNER & EXPIRED BADGE ───────────────────────────────── */
+/*  11. LIMIT BANNER & EXPIRED BADGE  */
 
 @media (max-width: 640px) {
   .pd__limit-banner {
@@ -960,7 +960,7 @@
   }
 }
 
-/* ── 12. SECTION HEADER ──────────────────────────────────────────────── */
+/*  12. SECTION HEADER  */
 
 @media (max-width: 640px) {
   .pd__section-label {
@@ -968,7 +968,7 @@
   }
 }
 
-/* ── 13. TABLE SCROLL AREA HEIGHT ────────────────────────────────────── */
+/*  13. TABLE SCROLL AREA HEIGHT  */
 
 @media (max-width: 640px) {
   .pd__table-scroll {
@@ -976,7 +976,7 @@
   }
 }
 
-/* ── 14. PUBLISHER CONTAINER PADDING ─────────────────────────────────── */
+/*  14. PUBLISHER CONTAINER PADDING  */
 
 @media (max-width: 640px) {
   .publisher-container {
@@ -985,7 +985,7 @@
   }
 }
 
-/* ── 15. CLICK BAR ───────────────────────────────────────────────────── */
+/*  15. CLICK BAR  */
 
 @media (max-width: 640px) {
   .pd__click-bar-wrap {
@@ -996,7 +996,7 @@
   }
 }
 
-/* ── 16. RECHARTS BAR CHART HEIGHT ───────────────────────────────────── */
+/*  16. RECHARTS BAR CHART HEIGHT  */
 
 @media (max-width: 640px) {
   .pd__barchart-wrap > * {
@@ -1004,7 +1004,7 @@
   }
 }
 
-/* ── 17. ZOOM RESET ──────────────────────────────────────────────────── */
+/*  17. ZOOM RESET  */
 /* theme.css applies zoom:65% for large desktops — reset on small screens
    so mobile content isn't zoomed-out */
 
