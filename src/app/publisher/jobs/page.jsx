@@ -12,7 +12,6 @@ import {
 } from "@/app/apiServices/publicapi";
 import ConfirmationModal from "@/components/ConfirmationModal";
 import { INDIA_STATES } from "@/app/constants";
-
 import "../styles/publishercretepages.css";
 
 /*  Constants  */
@@ -741,7 +740,7 @@ const confirmToggleJob = (job) => {
                             className="statePlaceholder"
                             onClick={() => { setForm((p) => ({ ...p, jobLocationState: "" })); setStateOpen(false); }}
                           >
-                            Select State
+                            
                           </div>
                           {INDIA_STATES.map((state) => (
                             <div

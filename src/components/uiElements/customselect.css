@@ -1,0 +1,171 @@
+
+
+.customSelect__wrap {
+  position: relative;
+  width: 100%;
+}
+
+.customSelect__trigger {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.95rem 2.6rem 0.95rem 1.1rem;
+  border-radius: 1rem;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  transition:
+    border-color var(--transition),
+    box-shadow  var(--transition);
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  /* remove the native select arrow so our chevron shows */
+  background-image: none;
+}
+
+.customSelect__trigger:hover:not(:disabled) {
+  border-color: var(--blue);
+}
+
+.customSelect__trigger--open,
+.customSelect__trigger:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px var(--blue-soft);
+}
+
+.customSelect__trigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--color-surface-2);
+}
+
+.customSelect__triggerText {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text);
+}
+
+.customSelect__triggerPlaceholder {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-faint);
+}
+
+/* Chevron icon */
+.customSelect__chevron {
+  flex-shrink: 0;
+  color: var(--blue);
+  transition: transform var(--transition);
+}
+
+.customSelect__chevron--up {
+  transform: rotate(180deg);
+}
+
+/* Dropdown menu */
+.customSelect__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 1060;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  margin: 0;
+  padding: 0.3rem;
+  /* smooth scroll */
+  scroll-behavior: smooth;
+  /* thin scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--blue) transparent;
+  animation: csDropIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.customSelect__menu::-webkit-scrollbar {
+  width: 4px;
+}
+.customSelect__menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+.customSelect__menu::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+}
+.customSelect__menu::-webkit-scrollbar-thumb:hover {
+  background: var(--blue);
+}
+
+/* Option row */
+.customSelect__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  height: 42px;
+  padding: 0 0.9rem;
+  border-radius: 0.6rem;
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background var(--transition);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+}
+
+.customSelect__option:hover {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.customSelect__option--placeholder {
+  color: var(--color-text-faint);
+  font-size: var(--text-xs);
+}
+
+.customSelect__option--active {
+  background: var(--blue);
+  color: #fff;
+  font-weight: 600;
+}
+
+.customSelect__option--active:hover {
+  background: var(--blue-hover);
+  color: #fff;
+}
+
+.customSelect__check {
+  flex-shrink: 0;
+  color: #fff;
+}
+
+/* Drop-in animation */
+@keyframes csDropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

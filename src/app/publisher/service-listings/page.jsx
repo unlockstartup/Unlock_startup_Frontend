@@ -530,7 +530,7 @@ const confirmToggleListing = (listing) => {
                       {stateOpen && (
                         <div className="stateDropdownMenu">
                           <div className="statePlaceholder" onClick={() => { setForm((p) => ({ ...p, serviceArea: "" })); setStateOpen(false); }}>
-                            Select State
+                          
                           </div>
                           {["Pan India", ...INDIA_STATES].map((state) => (
                             <div

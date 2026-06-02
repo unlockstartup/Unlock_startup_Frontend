@@ -119,21 +119,24 @@ function FundingCallsCrud() {
 
   const sf = (field) => (e) => setForm((p) => ({ ...p, [field]: e.target.value }));
 
-  /*  Meta / data loading  */
-  const loadMeta = async () => {
-    try {
-      const [types, orgs, stages] = await Promise.all([
-        getPublicCompetitionTypes(),
-        getPublicOrganizerTypes(),
-        getPublicStartupStages(),
-      ]);
-      setCompetitionTypes(types.data?.competitionTypes || types.data?.types || []);
-      setOrganizerTypes(orgs.data?.organizerTypes     || orgs.data?.types   || []);
-      setStartupStages(stages.data?.startupStages     || stages.data?.stages || []);
-    } catch {
-      toast.error("Failed to load dropdown data");
-    }
-  };
+// In loadMeta — add categories to the parallel fetch
+const loadMeta = async () => {
+  try {
+    const [types, orgs, stages, cats] = await Promise.all([
+      getPublicCompetitionTypes(),
+      getPublicOrganizerTypes(),
+      getPublicStartupStages(),
+      getPublicChallengeCategories(),          // no typeId argument
+    ]);
+    setCompetitionTypes(types.data?.competitionTypes || types.data?.types || []);
+    setOrganizerTypes(orgs.data?.organizerTypes     || orgs.data?.types   || []);
+    setStartupStages(stages.data?.startupStages     || stages.data?.stages || []);
+    setChallengeCategories(cats.data?.categories    || []);
+  } catch {
+    toast.error("Failed to load dropdown data");
+  }
+};
+
 
   const load = async () => {
     try {
@@ -158,17 +161,6 @@ function FundingCallsCrud() {
 
   useEffect(() => { load(); }, [status, page, limit]);
 
-  useEffect(() => {
-    if (!form.challengeType) { setChallengeCategories([]); return; }
-    const selectedType = competitionTypes.find((t) => t.name === form.challengeType);
-    if (!selectedType) return;
-    (async () => {
-      try {
-        const cats = await getPublicChallengeCategories(selectedType._id);
-        setChallengeCategories(cats.data?.categories || []);
-      } catch { toast.error("Failed to load challenge categories"); }
-    })();
-  }, [form.challengeType, competitionTypes]);
 
   /*  Modal helpers  */
   const openCreate = () => { setMode("create"); setEditing(null); setForm(initialForm); setOpen(true); };
@@ -587,20 +579,18 @@ const onToggleActiveConfirm = (row) => {
                     </select>
                   </Field>
 
-                  <Field label="Challenge Category *">
-                    {!form.challengeType && <span className="labelNote">Select a type first</span>}
-                    <select
-                      className="select"
-                      value={form.challengeCategory}
-                      disabled={!form.challengeType || challengeCategories.length === 0}
-                      onChange={sf("challengeCategory")}
-                    >
-                      <option value="">
-                        {!form.challengeType ? "Select a type first" : challengeCategories.length === 0 ? "No categories" : "Select Category"}
-                      </option>
-                      {challengeCategories.map((c) => <option key={c._id} value={c.name}>{c.name}</option>)}
-                    </select>
-                  </Field>
+<Field label="Challenge Category *">
+  <select
+    className="select"
+    value={form.challengeCategory}
+    onChange={sf("challengeCategory")}
+  >
+    <option value="">Select Category</option>
+    {challengeCategories.map((c) => (
+      <option key={c._id} value={c.name}>{c.name}</option>
+    ))}
+  </select>
+</Field>
 
                   <Field label="Startup Stage Requirements *">
                     <select className="select" value={form.startupStage} onChange={sf("startupStage")}>
@@ -741,7 +731,7 @@ const onToggleActiveConfirm = (row) => {
                             className="statePlaceholder"
                             onClick={() => { setForm((p) => ({ ...p, location: "" })); setStateOpen(false); }}
                           >
-                            Select State
+                            
                           </div>
                           {INDIA_STATES.map((state) => (
                             <div

@@ -98,40 +98,28 @@ export default function PublisherEventPage() {
     }
   };
 
-  useEffect(() => {
-    fetchEvents();
+useEffect(() => {
+  fetchEvents();
 
-    (async () => {
-      try {
-        const types = await getPublicEventTypes();
-        setEventTypes(types.data?.eventTypes || []);
-      } catch (err) {
-        toast.error(err?.response?.data?.message || "Failed to load event types");
-      }
-    })();
+  (async () => {
+    try {
+      const [types, cats] = await Promise.all([
+        getPublicEventTypes(),
+        getPublicEventCategories(),   // no typeId argument
+      ]);
+      setEventTypes(types.data?.eventTypes || []);
+      setCategories(cats.data?.categories || []);
+    } catch (err) {
+      toast.error("Failed to load dropdown data");
+    }
+  })();
 
-    (async () => {
-      try {
-        const res = await getPublisherPlanInfo();
-        setPlanInfo(res.data);
-      } catch {}
-    })();
-  }, []);
+  (async () => {
+    try { const res = await getPublisherPlanInfo(); setPlanInfo(res.data); } catch {}
+  })();
+}, []);
 
-  useEffect(() => {
-    if (!form.eventType) { setCategories([]); return; }
-    const selectedType = eventTypes.find((t) => t.name === form.eventType);
-    if (!selectedType) return;
 
-    (async () => {
-      try {
-        const cats = await getPublicEventCategories(selectedType._id);
-        setCategories(cats.data?.categories || []);
-      } catch {
-        toast.error("Failed to load categories");
-      }
-    })();
-  }, [form.eventType, eventTypes]);
 
   /*  Modal helpers  */
   const openModal = () => {
@@ -186,14 +174,10 @@ const openEdit = (ev) => {
 
   const closeModal = () => setShowModal(false);
 
-  /*  Form handlers  */
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({
-      ...prev, [name]: value,
-      ...(name === "eventType" ? { eventCategory: [] } : {}),
-    }));
-  };
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setForm((prev) => ({ ...prev, [name]: value }));
+};
 
   const addTier    = () => setForm((p) => ({ ...p, ticketPricingTiers: [...p.ticketPricingTiers, { label: "", price: "" }] }));
   const removeTier = (idx) => setForm((p) => ({ ...p, ticketPricingTiers: p.ticketPricingTiers.filter((_, i) => i !== idx) }));
@@ -543,33 +527,32 @@ const confirmToggleEvent = (ev) => {
                     </select>
                   </div>
 
-                  <div className="field">
-                    <label className="label">Event Category *</label>
-                    {!form.eventType && <span className="labelNote">Select an Event Type first</span>}
-                    <select
-                      className="select"
-                      disabled={!form.eventType || categories.length === 0}
-                      value=""
-                      onChange={(e) => { if (e.target.value) addCategoryTag(e.target.value); }}
-                    >
-                      <option value="">
-                        {!form.eventType ? "Select a type first" : categories.length === 0 ? "No categories available" : "Add a category…"}
-                      </option>
-                      {categories.filter((c) => !form.eventCategory.includes(c.name)).map((c) => (
-                        <option key={c._id || c.name} value={c.name}>{c.name}</option>
-                      ))}
-                    </select>
-                    {form.eventCategory.length > 0 && (
-                      <div className="tagList">
-                        {form.eventCategory.map((cat) => (
-                          <span key={cat} className="tag">
-                            {cat}
-                            <button type="button" className="tagRemove" onClick={() => removeCategoryTag(cat)}>✕</button>
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+<div className="field">
+  <label className="label">Event Category *</label>
+  <select
+    className="select"
+    disabled={categories.length === 0}
+    value=""
+    onChange={(e) => { if (e.target.value) addCategoryTag(e.target.value); }}
+  >
+    <option value="">
+      {categories.length === 0 ? "No categories available" : "Add a category…"}
+    </option>
+    {categories.filter((c) => !form.eventCategory.includes(c.name)).map((c) => (
+      <option key={c._id || c.name} value={c.name}>{c.name}</option>
+    ))}
+  </select>
+  {form.eventCategory.length > 0 && (
+    <div className="tagList">
+      {form.eventCategory.map((cat) => (
+        <span key={cat} className="tag">
+          {cat}
+          <button type="button" className="tagRemove" onClick={() => removeCategoryTag(cat)}>✕</button>
+        </span>
+      ))}
+    </div>
+  )}
+</div>
                 </div>
 
                 <div className="field">
@@ -612,7 +595,7 @@ const confirmToggleEvent = (ev) => {
                       {stateOpen && (
                         <div className="stateDropdownMenu">
                           <div className="statePlaceholder" onClick={() => { setForm({ ...form, jobLocationState: "" }); setStateOpen(false); }}>
-                            Select State
+                           
                           </div>
                           {INDIA_STATES.map((state) => (
                             <div
