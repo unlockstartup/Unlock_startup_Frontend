@@ -8,7 +8,7 @@ import ConfirmationModal from "@/components/ConfirmationModal";
 
 import "../../styles/publishercretepages.css";
 
-/* ─── Constants ─────────────────────────────────────────────────────────────── */
+/* ─── Constants  */
 const STATUS_BADGE = {
   new:         "badgePrimary",
   reviewing:   "badgeWarning",

@@ -1051,21 +1051,19 @@
   animation: pubModalFadeIn 0.2s ease;
 }
 
-/*  Dialog shell (full screen)  */
 .pubModal__dialog {
   background: #ffffff;
-  border-radius: 0;
-  width: 100%;
-  height: 100%;
-  max-width: 100%;
-  max-height: 100%;
+  border-radius: 1.25rem;        
+  width: 90vw;                  
+  max-width: 860px;             
+  max-height: 90vh;           
+  height: auto;               
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
   animation: pubModalSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
 }
-
 /*  Header  */
 .pubModal__header {
   position: relative;
@@ -1173,12 +1171,7 @@
   border-radius: 2px;
 }
 
-/*  Info grid  */
-.pubModal__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.25rem 2rem;
-}
+
 
 .pubModal__field {
   display: flex;
@@ -1410,10 +1403,9 @@
 color: black;
 }
 
-/*  Info grid  */
 .pubModal__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(2, 1fr);  /* ← was repeat(auto-fit, minmax(220px, 1fr)) */
   gap: 0.85rem 1.25rem;
 }
 
@@ -1494,7 +1486,7 @@ color: black;
 }
 
 .pubModal__sectionTitle {
-  font-size: 0.72rem;
+  font-size: 1.22rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -1537,9 +1529,36 @@ color: black;
 }
 
 .pubModal__label {
-  font-size: 0.73rem;  /* was 0.68rem */
+  font-size: 1.03rem;  /* was 0.68rem */
 }
 
 .pubModal__value {
   font-size: 1.0625rem;  /* was 0.9375rem */
+}
+
+
+
+
+.pubModal__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(10, 15, 30, 0.55);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;       
+  justify-content: center;    
+  animation: pubModalFadeIn 0.2s ease;
+}
+
+@media (max-width: 600px) {
+  .pubModal__dialog {
+    width: 96vw;
+    max-height: 94vh;
+    border-radius: 0.85rem;
+  }
+
+  .pubModal__grid {
+    grid-template-columns: 1fr;   /* stack on mobile */
+  }
 }
