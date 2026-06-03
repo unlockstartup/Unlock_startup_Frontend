@@ -9,7 +9,7 @@ export default function Breadcrumb({ title, dynamicTitle }) {
   const pathSegments = pathname.split("/").filter((item) => item);
 
   return (
-    <div className="inner-banner-one position-relative" style={{ padding: "0px", backgroundColor: "transparent" }}>
+    <div className="inner-banner-one" style={{ padding: "0px", backgroundColor: "transparent" }}>
       <div className="container">
         <div className="position-relative">
           <div className="row">
