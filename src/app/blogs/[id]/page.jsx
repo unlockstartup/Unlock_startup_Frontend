@@ -109,7 +109,7 @@ const Page = async ({ params }) => {
 
                         <div className="input-wrapper mb-40">
                           <label>Email*</label>
-                          <input type="email" placeholder="john@gmail.com" />
+                          <input type="email" placeholder="Email id" />
                         </div>
 
                         <div className="input-wrapper mb-30">

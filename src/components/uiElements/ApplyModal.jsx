@@ -192,7 +192,7 @@ const ApplyModal = ({ isOpen, onClose, jobTitle, companyName, listingId, listing
                   </Field>
 
                   <Field label="Email Address *" icon={Mail} error={errors.email}>
-                    <input className={`am-input${errors.email ? " am-input--err" : ""}`} type="email" placeholder="john@example.com" value={form.email} onChange={set("email")} />
+                    <input className={`am-input${errors.email ? " am-input--err" : ""}`} type="email" placeholder="Email id" value={form.email} onChange={set("email")} />
                   </Field>
 
                   <Field label="Phone Number *" icon={Phone} error={errors.phone}>
@@ -232,7 +232,7 @@ const ApplyModal = ({ isOpen, onClose, jobTitle, companyName, listingId, listing
                   </Field>
 
                   <Field label="Email Address *" icon={Mail} error={errors.email}>
-                    <input className={`am-input${errors.email ? " am-input--err" : ""}`} type="email" placeholder="john@example.com" value={form.email} onChange={set("email")} />
+                    <input className={`am-input${errors.email ? " am-input--err" : ""}`} type="email" placeholder="Email id" value={form.email} onChange={set("email")} />
                   </Field>
 
                   <Field label="Phone Number *" icon={Phone} error={errors.phone}>
@@ -261,7 +261,7 @@ const ApplyModal = ({ isOpen, onClose, jobTitle, companyName, listingId, listing
                   </Field>
 
                   <Field label="Email Address *" icon={Mail} error={errors.email}>
-                    <input className={`am-input${errors.email ? " am-input--err" : ""}`} type="email" placeholder="john@example.com" value={form.email} onChange={set("email")} />
+                    <input className={`am-input${errors.email ? " am-input--err" : ""}`} type="email" placeholder="Email id" value={form.email} onChange={set("email")} />
                   </Field>
 
                   <Field label="Phone Number *" icon={Phone} error={errors.phone}>
