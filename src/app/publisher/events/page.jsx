@@ -45,6 +45,18 @@ const defaultForm = {
 };
 
 const registrationTypes = ["Free", "Paid", "Invite Only"];
+const applicationMethods = [
+  {
+    value: "platform",
+    label: "Apply by Platform",
+    tooltip: "Attendees register directly through our platform. All applications are tracked and managed here.",
+  },
+  {
+    value: "external",
+    label: "Apply by External Link",
+    tooltip: "Attendees are redirected to an external URL (e.g. your own website or Eventbrite) to complete registration.",
+  },
+];
 const formats = [
   { value: "in-person", label: "In-Person" },
   { value: "online",    label: "Online"    },
@@ -74,6 +86,7 @@ export default function PublisherEventPage() {
   const [stateOpen, setStateOpen]   = useState(false);
   const [status, setStatus]         = useState("all");
   const [q, setQ]                   = useState("");
+  const [applicationMethod, setApplicationMethod] = useState("");
   const [confirmConfig, setConfirmConfig] = useState({
     title: "", message: "",
     confirmText: "Confirm", cancelText: "Cancel",
@@ -121,11 +134,13 @@ useEffect(() => {
 
 
 
-  /*  Modal helpers  */
-  const openModal = () => {
-    setForm(defaultForm); setEditId(null); setMainImage(null); setShowModal(true);
-  };
-
+const openModal = () => {
+  setForm(defaultForm);
+  setEditId(null);
+  setMainImage(null);
+  setApplicationMethod(""); 
+  setShowModal(true);
+};
 const openEdit = (ev) => {
   const alreadyEdited = (ev.editCount ?? 0) >= 1;
 
@@ -164,6 +179,7 @@ const openEdit = (ev) => {
       });
       setEditId(ev._id);
       setMainImage(ev.mainImage || null);
+      setApplicationMethod("");
       setShowModal(true);
     },
   });
@@ -214,6 +230,7 @@ const handleChange = (e) => {
         startDateTime:        toUTC(form.startDateTime),
         endDateTime:          toUTC(form.endDateTime),
         registrationDeadline: toUTC(form.registrationDeadline),
+        registrationUrl: applicationMethod === "platform" ? "" : form.registrationUrl,
       };
 
       if (editId) {
@@ -312,15 +329,6 @@ const confirmToggleEvent = (ev) => {
   setShowConfirm(true);
 };
 
-  const toggleEvent = async (ev) => {
-    try {
-      await publisherApi.patch(`/api/publisher/dashboard/${ev._id}/toggle`, {});
-      toast.success(`Event ${ev.isActive ? "deactivated" : "activated"}`);
-      fetchEvents();
-    } catch (err) {
-      toast.error(err?.response?.data?.message || "Toggle failed");
-    }
-  };
 
   /*  Plan limits  */
   const subscriptionExpired = planInfo && planInfo.subscriptionStatus !== "active";
@@ -678,7 +686,7 @@ const confirmToggleEvent = (ev) => {
 
                 <div className="field">
                   <label className="label">Featured Speakers</label>
-                  <RichTextEditor value={form.featuredSpeakers} onChange={(val) => setForm((p) => ({ ...p, featuredSpeakers: val }))} placeholder="List the featured speakers with their credentials" />
+                  <RichTextEditor value={form.featuredSpeakers} onChange={(val) => setForm((p) => ({ ...p, featuredSpeakers: val }))} placeholder="List the featured speakers" />
                 </div>
 
                 <div className="row2">
@@ -701,7 +709,29 @@ const confirmToggleEvent = (ev) => {
               {/*  Registration  */}
               <section className="section">
                 <h3 className="sectionTitle">Registration &amp; links</h3>
+{/* Application Method — UI only, not persisted */}
+<div className="field">
+  <label className="label">Application Method</label>
+  <select
+    className="select"
+    value={applicationMethod}
+    onChange={(e) => setApplicationMethod(e.target.value)}
+  >
+    <option value="">Select Application Method</option>
+    {applicationMethods.map((method) => (
+      <option key={method.value} value={method.value} title={method.tooltip}>
+        {method.label}
+      </option>
+    ))}
+  </select>
 
+  {/* Inline hint for the selected option */}
+  {applicationMethod && (
+    <p style={{ marginTop: "0.4rem", fontSize: "0.8rem", color: "#6b7280" }}>
+      ℹ️ {applicationMethods.find((m) => m.value === applicationMethod)?.tooltip}
+    </p>
+  )}
+</div>
                 <div className="row2">
                   <div className="field">
                     <label className="label">Registration Type</label>
@@ -716,37 +746,62 @@ const confirmToggleEvent = (ev) => {
                   </div>
                 </div>
 
-                {form.registrationType === "Paid" && (
-                  <div className="field">
-                    <label className="label">Ticket Pricing Tiers</label>
-                    <table className="tierTable">
-                      <thead>
-                        <tr><th>Tier Label</th><th>Price (₹)</th><th></th></tr>
-                      </thead>
-                      <tbody>
-                        {form.ticketPricingTiers.map((tier, idx) => (
-                          <tr key={idx}>
-                            <td><input className="inputSm" placeholder="e.g. Early Bird" value={tier.label} onChange={(e) => updateTier(idx, "label", e.target.value)} /></td>
-                            <td><input type="number" className="inputSm" placeholder="0" min="0" value={tier.price} onChange={(e) => updateTier(idx, "price", e.target.value)} /></td>
-                            <td><button type="button" className="btn btnSm btnDanger" onClick={() => removeTier(idx)}>Remove</button></td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                    <button type="button" className="btn btnSm btnSecondary" onClick={addTier}>+ Add tier</button>
-                  </div>
-                )}
+{form.registrationType === "Paid" && (
+  <div className="field">
+    <label className="label">Ticket Pricing Tiers</label>
 
-                <div className="row2">
-                  <div className="field">
-                    <label className="label">Registration Link / URL</label>
-                    <input type="url" className="input" name="registrationUrl" value={form.registrationUrl} onChange={handleChange} placeholder="https://" />
-                  </div>
-                  {/* <div className="field">
-                    <label className="label">Event Website</label>
-                    <input type="url" className="input" name="eventWebsite" value={form.eventWebsite} onChange={handleChange} placeholder="https://" />
-                  </div> */}
-                </div>
+    <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+      {form.ticketPricingTiers.map((tier, idx) => (
+        <div key={idx} style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+          <input
+            className="input"
+            placeholder="e.g. Early Bird"
+            value={tier.label}
+            onChange={(e) => updateTier(idx, "label", e.target.value)}
+            style={{ flex: 2 }}
+          />
+          <input
+            type="number"
+            className="input"
+            placeholder="Price (₹)"
+            min="0"
+            value={tier.price}
+            onChange={(e) => updateTier(idx, "price", e.target.value)}
+            style={{ flex: 1 }}
+          />
+          <button
+            type="button"
+            className="btn btnSm btnDanger"
+            onClick={() => removeTier(idx)}
+            style={{ whiteSpace: "nowrap", flexShrink: 0 }}
+          >
+            Remove
+          </button>
+        </div>
+      ))}
+    </div>
+
+<div style={{ marginTop: "0.5rem" }}>
+  <button
+    type="button"
+    className="btn btnSm btnPrimary"
+    onClick={addTier}
+    style={{ width: "auto" }}
+  >
+    + Add Tier
+  </button>
+</div>
+  </div>
+)}
+
+{applicationMethod !== "platform" && (
+  <div className="row2">
+    <div className="field">
+      <label className="label">Registration Link / URL</label>
+      <input type="url" className="input" name="registrationUrl" value={form.registrationUrl} onChange={handleChange} placeholder="https://" />
+    </div>
+  </div>
+)}
               </section>
 
             </div>{/* /modalBody */}

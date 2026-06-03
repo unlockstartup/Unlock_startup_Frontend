@@ -40,7 +40,7 @@ import {
 import Image from "next/image";
 import ApplyModal from "@/components/uiElements/ApplyModal";
 
-export default function Page({ params }) {
+export default function CompetitionPage({ params }) {
   const [funding, setFunding] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);

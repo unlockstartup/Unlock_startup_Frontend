@@ -20,7 +20,6 @@ const Field = ({ label, icon: Icon, error, children }) => (
   </div>
 );
 
-//  Indian states list 
 const INDIA_STATES = [
   "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
   "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
@@ -32,38 +31,24 @@ const INDIA_STATES = [
 ];
 
 const TYPE_CONFIG = {
-  investor: { ctaTitle: "Applying to", submitLabel: "Submit Application" },
+  investor: { ctaTitle: "Applying to",     submitLabel: "Submit Application" },
   event:    { ctaTitle: "Registering for", submitLabel: "Register Now" },
   services: { ctaTitle: "Enquiring about", submitLabel: "Send Enquiry" },
 };
 
-const ApplyModal = ({
-  isOpen,
-  onClose,
-  jobTitle,
-  companyName,
-  listingId,
-  listingType = "event",
-}) => {
+const EMPTY_FORM = {
+  fullName: "", organisation: "", orgType: "company",
+  role: "", email: "", phone: "", location: "",
+  fundingStage: "", website: "", industryType: "",
+};
+
+const ApplyModal = ({ isOpen, onClose, jobTitle, companyName, listingId, listingType = "event" }) => {
   const config = TYPE_CONFIG[listingType] ?? TYPE_CONFIG.event;
 
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-
-  const [form, setForm] = useState({
-    fullName: "",
-    organisation: "",
-    orgType: "company",        // event only
-    role: "",                  // event only
-    email: "",
-    phone: "",
-    location: "",              // event & services
-    fundingStage: "",          // investor only
-    website: "",               // investor only
-    industryType: "",          // services only
-  });
-
-  const [errors, setErrors] = useState({});
+  const [submitted,  setSubmitted]  = useState(false);
+  const [form,       setForm]       = useState(EMPTY_FORM);
+  const [errors,     setErrors]     = useState({});
 
   useEffect(() => {
     if (isOpen) {
@@ -71,11 +56,7 @@ const ApplyModal = ({
       setErrors({});
       setSubmitted(false);
       setSubmitting(false);
-      setForm({
-        fullName: "", organisation: "", orgType: "company",
-        role: "", email: "", phone: "", location: "",
-        fundingStage: "", website: "", industryType: "",
-      });
+      setForm(EMPTY_FORM);
     } else {
       document.body.style.overflow = "";
     }
@@ -86,7 +67,6 @@ const ApplyModal = ({
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  //  Validation 
   const validate = () => {
     const e = {};
     if (!form.fullName.trim()) e.fullName = "Required";
@@ -107,50 +87,32 @@ const ApplyModal = ({
 
     if (listingType === "services") {
       if (!form.organisation.trim()) e.organisation = "Required";
+      if (!form.location) e.location = "Required";
     }
 
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
-  //  Build payload 
   const buildPayload = () => {
     const base = {
-      fullName: form.fullName,
-      email: form.email,
-      phone: form.phone,
+      fullName:     form.fullName,
+      email:        form.email,
+      phone:        form.phone,
       organisation: form.organisation,
     };
 
     if (listingType === "event") {
-      return {
-        ...base,
-        orgType: form.orgType,
-        role: form.role,
-        location: form.location,
-      };
+      return { ...base, orgType: form.orgType, role: form.role, location: form.location };
     }
-
     if (listingType === "investor") {
-      return {
-        ...base,
-        fundingStage: form.fundingStage,
-        website: form.website,
-      };
+      return { ...base, fundingStage: form.fundingStage, website: form.website };
     }
-
-    // services
-    return {
-      ...base,
-      industryType: form.industryType,
-      location: form.location,
-    };
+    return { ...base, industryType: form.industryType, location: form.location };
   };
 
-  //  Submit 
   const handleSubmit = async () => {
     if (!validate()) return;
-
     try {
       setSubmitting(true);
       const { data } = await api.post(`/api/submissions/${listingId}`, buildPayload());
@@ -190,8 +152,9 @@ const ApplyModal = ({
                 <CheckCircle2 size={34} strokeWidth={1.8} color="#1a7a48" />
               </div>
               <h3 className="am-success-title">
-                {listingType === "event" ? "Registration Submitted!" :
-                 listingType === "services" ? "Enquiry Sent!" : "Application Submitted!"}
+                {listingType === "event"    ? "Registration Submitted!" :
+                 listingType === "services" ? "Enquiry Sent!" :
+                                             "Application Submitted!"}
               </h3>
               <p className="am-success-msg">
                 {listingType === "event" ? (
@@ -206,6 +169,7 @@ const ApplyModal = ({
             </div>
           ) : (
             <div className="am-section">
+
               {/* EVENT FORM */}
               {listingType === "event" && (
                 <div className="am-grid-2">
@@ -217,7 +181,7 @@ const ApplyModal = ({
                     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                       <div className="am-toggle-row">
                         <button type="button" className={`am-toggle-btn${form.orgType === "individual" ? " am-toggle-btn--active" : ""}`} onClick={() => setForm(f => ({ ...f, orgType: "individual" }))}>Individual</button>
-                        <button type="button" className={`am-toggle-btn${form.orgType === "company" ? " am-toggle-btn--active" : ""}`} onClick={() => setForm(f => ({ ...f, orgType: "company" }))}>Company</button>
+                        <button type="button" className={`am-toggle-btn${form.orgType === "company"    ? " am-toggle-btn--active" : ""}`} onClick={() => setForm(f => ({ ...f, orgType: "company" }))}>Company</button>
                       </div>
                       <input className={`am-input${errors.organisation ? " am-input--err" : ""}`} placeholder={form.orgType === "individual" ? "Your name / N/A" : "Company / Institution"} value={form.organisation} onChange={set("organisation")} />
                     </div>
@@ -304,8 +268,8 @@ const ApplyModal = ({
                     <input className={`am-input${errors.phone ? " am-input--err" : ""}`} placeholder="+91 98765 43210" value={form.phone} onChange={set("phone")} />
                   </Field>
 
-                  <Field label="Location (State)" icon={MapPin} error={errors.location}>
-                    <select className="am-input am-select" value={form.location} onChange={set("location")}>
+                  <Field label="Location (State) *" icon={MapPin} error={errors.location}>
+                    <select className={`am-input am-select${errors.location ? " am-input--err" : ""}`} value={form.location} onChange={set("location")}>
                       <option value="">Select state</option>
                       {INDIA_STATES.map(s => <option key={s} value={s}>{s}</option>)}
                     </select>
@@ -321,11 +285,7 @@ const ApplyModal = ({
         {/* Footer */}
         {!submitted && (
           <div className="am-footer">
-            <button
-              className="am-btn-primary"
-              onClick={handleSubmit}
-              disabled={submitting}
-            >
+            <button className="am-btn-primary" onClick={handleSubmit} disabled={submitting}>
               {submitting ? (
                 <><Loader2 size={14} className="am-spin" /> Submitting...</>
               ) : (
