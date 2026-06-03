@@ -740,7 +740,6 @@ const confirmToggleJob = (job) => {
                             className="statePlaceholder"
                             onClick={() => { setForm((p) => ({ ...p, jobLocationState: "" })); setStateOpen(false); }}
                           >
-                            
                           </div>
                           {INDIA_STATES.map((state) => (
                             <div

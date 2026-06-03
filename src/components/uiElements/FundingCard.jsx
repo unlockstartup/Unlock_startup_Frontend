@@ -169,7 +169,7 @@ export default function FundingCard({ funding, index }) {
           <div style={{ display: "flex", alignItems: "center", gap: "7px", fontSize: "12px", color: "#555", overflow: "hidden" }}>
             <Layers {...iconProps} />
             <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              Launches: {launchFormatted}
+              Start Date: {launchFormatted}
             </span>
           </div>
         )}
