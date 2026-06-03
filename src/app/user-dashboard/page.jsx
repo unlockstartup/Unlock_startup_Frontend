@@ -316,9 +316,9 @@ function EditProfile({ editData, setEditData, handleSave, saving, saveMsg }) {
       <div className="pd-form-card">
         <form onSubmit={handleSave}>
           <div className="pd-form-grid">
-            <FormField label="Full Name"    id="name"      value={editData.name}      onChange={set("name")}      placeholder="John Doe" />
-            <FormField label="Phone"        id="phone"     value={editData.phone}     onChange={set("phone")}     placeholder="+1 555 000 0000" type="tel" />
-            <FormField label="Location"     id="address"   value={editData.address}   onChange={set("address")}   placeholder="New York, USA" />
+            <FormField label="Full Name"    id="name"      value={editData.name}      onChange={set("name")}      placeholder="Full Name" />
+            <FormField label="Phone"        id="phone"     value={editData.phone}     onChange={set("phone")}     placeholder="+9999 999 999" type="tel" />
+            <FormField label="Location"     id="address"   value={editData.address}   onChange={set("address")}   placeholder="Address" />
             <FormField label="Website"      id="website"   value={editData.website}   onChange={set("website")}   placeholder="https://yoursite.com" />
             <FormField label="LinkedIn URL" id="linkedin"  value={editData.linkedin}  onChange={set("linkedin")}  placeholder="https://linkedin.com/in/you" />
           </div>

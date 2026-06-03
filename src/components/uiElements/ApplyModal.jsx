@@ -174,7 +174,7 @@ const ApplyModal = ({ isOpen, onClose, jobTitle, companyName, listingId, listing
               {listingType === "event" && (
                 <div className="am-grid-2">
                   <Field label="Full Name *" icon={User} error={errors.fullName}>
-                    <input className={`am-input${errors.fullName ? " am-input--err" : ""}`} placeholder="John Doe" value={form.fullName} onChange={set("fullName")} />
+                    <input className={`am-input${errors.fullName ? " am-input--err" : ""}`} placeholder="Full Name" value={form.fullName} onChange={set("fullName")} />
                   </Field>
 
                   <Field label="Organization / Company Name *" icon={Building2} error={errors.organisation}>
@@ -212,7 +212,7 @@ const ApplyModal = ({ isOpen, onClose, jobTitle, companyName, listingId, listing
               {listingType === "investor" && (
                 <div className="am-grid-2">
                   <Field label="Full Name *" icon={User} error={errors.fullName}>
-                    <input className={`am-input${errors.fullName ? " am-input--err" : ""}`} placeholder="John Doe" value={form.fullName} onChange={set("fullName")} />
+                    <input className={`am-input${errors.fullName ? " am-input--err" : ""}`} placeholder="Full Name" value={form.fullName} onChange={set("fullName")} />
                   </Field>
 
                   <Field label="Organization / Company Name *" icon={Building2} error={errors.organisation}>
@@ -249,7 +249,7 @@ const ApplyModal = ({ isOpen, onClose, jobTitle, companyName, listingId, listing
               {listingType === "services" && (
                 <div className="am-grid-2">
                   <Field label="Full Name *" icon={User} error={errors.fullName}>
-                    <input className={`am-input${errors.fullName ? " am-input--err" : ""}`} placeholder="John Doe" value={form.fullName} onChange={set("fullName")} />
+                    <input className={`am-input${errors.fullName ? " am-input--err" : ""}`} placeholder="Full Name" value={form.fullName} onChange={set("fullName")} />
                   </Field>
 
                   <Field label="Organization / Company Name *" icon={Building2} error={errors.organisation}>
