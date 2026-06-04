@@ -613,8 +613,8 @@ const confirmToggleListing = (listing) => {
                 </div>
               </section>
               <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>
-              <button className="btn btnSecondary" onClick={closeModal} disabled={saving || uploadingIdx !== null}>Cancel</button>
-              <button className="btn btnPrimary" onClick={save} disabled={saving || uploadingIdx !== null}>
+              <button className="btn btnSecondary bt_submit" onClick={closeModal} disabled={saving || uploadingIdx !== null}>Cancel</button>
+              <button className="btn btnPrimary bt_submit" onClick={save} disabled={saving || uploadingIdx !== null}>
                 {saving ? "Submitting…" : mode === "create" ? "Submit" : "Update"}
               </button>
             </div>
