@@ -298,6 +298,7 @@ export default function Page() {
             <InfoItem label="Organisation" value={selected.organisation} />
             <InfoItem label="Org Type"     value={selected.orgType} />
             <InfoItem label="Role"         value={selected.role} />
+            <InfoItem label="Location"         value={selected.location} />
           </div>
         </section>
 
