@@ -183,7 +183,7 @@ const ApplyModal = ({ isOpen, onClose, jobTitle, companyName, listingId, listing
                         <button type="button" className={`am-toggle-btn${form.orgType === "individual" ? " am-toggle-btn--active" : ""}`} onClick={() => setForm(f => ({ ...f, orgType: "individual" }))}>Individual</button>
                         <button type="button" className={`am-toggle-btn${form.orgType === "company"    ? " am-toggle-btn--active" : ""}`} onClick={() => setForm(f => ({ ...f, orgType: "company" }))}>Company</button>
                       </div>
-                      <input className={`am-input${errors.organisation ? " am-input--err" : ""}`} placeholder={form.orgType === "individual" ? "Your name / N/A" : "Company / Institution"} value={form.organisation} onChange={set("organisation")} />
+                      <input className={`am-input${errors.organisation ? " am-input--err" : ""}`} placeholder={form.orgType === "individual" ? "Gender" : "Company / Institution"} value={form.organisation} onChange={set("organisation")} />
                     </div>
                   </Field>
 
@@ -240,7 +240,7 @@ const ApplyModal = ({ isOpen, onClose, jobTitle, companyName, listingId, listing
                   </Field>
 
                   <Field label="Website *" icon={Globe} error={errors.website}>
-                    <input className={`am-input${errors.website ? " am-input--err" : ""}`} placeholder="https://yourstartup.com" value={form.website} onChange={set("website")} />
+                    <input className={`am-input${errors.website ? " am-input--err" : ""}`} placeholder="https://" value={form.website} onChange={set("website")} />
                   </Field>
                 </div>
               )}

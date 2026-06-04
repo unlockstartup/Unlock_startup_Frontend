@@ -186,14 +186,51 @@ const openEdit = (job) => {
 
   const set = (field) => (e) => setForm((p) => ({ ...p, [field]: e.target.value }));
 
-  /*  Save / delete / toggle  */
-  const validate = () => {
-    if (!form.title.trim())        return "Job Title is required";
-    if (!form.jobCategory)         return "Job Category is required";
-    if (!form.jobType)             return "Job Type is required";
-    if (!form.hiringManagerEmail)  return "Hiring Manager Email is required";
-    return null;
-  };
+const handleNumberOnly = (field) => (e) => {
+  const value = e.target.value;
+  if (/^\d*$/.test(value)) setForm((p) => ({ ...p, [field]: value }));
+};
+
+const handleTextOnly = (field) => (e) => {
+  const value = e.target.value;
+  if (/^[a-zA-Z\s]*$/.test(value)) setForm((p) => ({ ...p, [field]: value }));
+};
+
+const isValidUrl = (url) => {
+  try { new URL(url); return true; } catch { return false; }
+};
+
+const validate = () => {
+  if (!form.title.trim())                return "Job Title is required";
+  if (!form.jobType)                     return "Job Type is required";
+  if (!form.workMode)                    return "Work Mode is required";
+  if (!form.experienceLevel)             return "Experience Level is required";
+  if (!form.openings || Number(form.openings) < 1) return "Number of Openings is required";
+  if (!form.companyName?.trim())         return "Company Name is required";
+  if (!form.companyDescription?.trim())  return "Company Description is required";
+  if (!form.companySize)                 return "Company Size is required";
+  if (!form.industrySector?.trim())      return "Industry / Sector is required";
+  if (!form.hiringManagerName?.trim())   return "Hiring Manager Name is required";
+  if (!form.hiringManagerEmail?.trim())  return "Hiring Manager Email is required";
+  if (!form.roleOverview?.trim())        return "Role Overview is required";
+  if (!form.keyResponsibilities?.trim()) return "Key Responsibilities is required";
+  if (!form.requiredEducation)           return "Required Education is required";
+  if (!form.yearsExperienceRequired)     return "Years of Experience is required";
+  if (!form.mustHaveSkills?.trim())      return "Must-Have Skills is required";
+  if (!form.salaryType)                  return "Salary Type is required";
+  if (!form.jobLocationAddress?.trim())  return "Job Location - Full Address is required";
+  if (!form.jobLocationCity?.trim())     return "Job Location - City is required";
+  if (!form.jobLocationState?.trim())    return "Job Location - State is required";
+  if (!form.jobLocationCountry?.trim())  return "Job Location - Country is required";
+  if (!form.applyLastDate)               return "Application Deadline is required";
+  if (!form.applyDate)                   return "Expected Start Date is required";
+  if (!form.applicationMethod)           return "Application Method is required";
+  if (form.companyWebsite && !isValidUrl(form.companyWebsite))
+    return "Enter a valid Company Website URL";
+  if (form.externalApplicationUrl && !isValidUrl(form.externalApplicationUrl))
+    return "Enter a valid External Application URL";
+  return null;
+};
 
   const saveJob = async () => {
     const msg = validate();
@@ -647,7 +684,7 @@ const confirmToggleJob = (job) => {
                 <div className="row3">
                   <div className="field">
                     <label className="label">Name</label>
-                    <input className="input" value={form.hiringManagerName} onChange={set("hiringManagerName")} placeholder="Enter name" />
+<input className="input" value={form.hiringManagerName} onChange={handleTextOnly("hiringManagerName")} placeholder="Enter name" />
                   </div>
                   <div className="field">
                     <label className="label">Email *</label>
@@ -655,7 +692,7 @@ const confirmToggleJob = (job) => {
                   </div>
                   <div className="field">
                     <label className="label">Phone</label>
-                    <input className="input" value={form.hiringManagerPhone} onChange={set("hiringManagerPhone")} placeholder="Enter phone" />
+                    <input className="input" value={form.hiringManagerPhone} onChange={handleNumberOnly("hiringManagerPhone")} placeholder="Enter phone" maxLength={10} />
                   </div>
                 </div>
               </section>
@@ -721,7 +758,7 @@ const confirmToggleJob = (job) => {
                 <div className="row2">
                   <div className="field">
                     <label className="label">City</label>
-                    <input className="input" value={form.jobLocationCity} onChange={set("jobLocationCity")} placeholder="Enter city" />
+                   <input className="input" value={form.jobLocationCity} onChange={handleTextOnly("jobLocationCity")} placeholder="Enter city" />
                   </div>
 
                   <div className="field">

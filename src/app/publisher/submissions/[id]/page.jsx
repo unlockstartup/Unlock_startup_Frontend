@@ -144,7 +144,6 @@ export default function Page() {
     return source.type || source.investorType || source.serviceCategory || "";
   };
 
-  /* ── Render ────────────────────────────────────────────────────────────────── */
   return (
     <div className="page">
 
@@ -154,9 +153,6 @@ export default function Page() {
           <button className="btn btnSecondary btnSm" onClick={() => router.back()}>← Back</button>
           <div>
             <h1 className="topbarTitle">Submissions</h1>
-            <p className="topbarSub">
-              {listingId ? `Filtered by ID: …${listingId.slice(-8)}` : "All submissions"}
-            </p>
           </div>
         </div>
         <div className="topbarActions">
@@ -240,7 +236,6 @@ export default function Page() {
                         <td className="tdMuted">{sub.organisation || "—"}</td>
                         <td>
                           <div className="tdSemibold" style={{ fontSize: "var(--text-xs)" }}>{getSourceTitle(sub)}</div>
-                          {getSourceSubtitle(sub) && <div className="tdMuted">{getSourceSubtitle(sub)}</div>}
                         </td>
                         <td className="tdMuted">{new Date(sub.createdAt).toLocaleDateString()}</td>
                         <td onClick={(e) => e.stopPropagation()}>

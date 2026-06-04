@@ -137,6 +137,15 @@ const loadMeta = async () => {
   }
 };
 
+const handleNumberOnly = (field) => (e) => {
+  const value = e.target.value;
+  if (/^\d*$/.test(value)) setForm((p) => ({ ...p, [field]: value }));
+};
+
+const handleTextOnly = (field) => (e) => {
+  const value = e.target.value;
+  if (/^[a-zA-Z\s]*$/.test(value)) setForm((p) => ({ ...p, [field]: value }));
+};
 
   const load = async () => {
     try {
@@ -234,6 +243,11 @@ const openEdit = (row) => {
     if (form.registrationLink && !/^https?:\/\//i.test(form.registrationLink.trim())) {
       toast.error("Registration link must start with http:// or https://"); return false;
     }
+      if (!form.attachments?.length) { toast.error("Please upload at least one image/attachment"); return false; }  // ← add this
+
+  if (form.organizationWebsite && !/^https?:\/\//i.test(form.organizationWebsite.trim())) {
+    toast.error("Website URL must start with http:// or https://"); return false;
+  }
     return true;
   };
 
@@ -631,13 +645,13 @@ const onToggleActiveConfirm = (row) => {
 
                 <div className="row3">
                   <Field label="Contact Person Name">
-                    <input className="input" value={form.contactPersonName} onChange={sf("contactPersonName")} placeholder="Enter name" />
+                  <input className="input" value={form.contactPersonName} onChange={handleTextOnly("contactPersonName")} placeholder="Enter name" />
                   </Field>
                   <Field label="Official Email *">
                     <input type="email" className="input" value={form.officialEmail} onChange={sf("officialEmail")} placeholder="Enter email" />
                   </Field>
                   <Field label="Contact Phone">
-                    <input className="input" value={form.contactPhone} onChange={sf("contactPhone")} placeholder="Enter phone" />
+                  <input className="input" value={form.contactPhone} onChange={handleNumberOnly("contactPhone")} placeholder="Enter phone" maxLength={10} />
                   </Field>
                 </div>
 

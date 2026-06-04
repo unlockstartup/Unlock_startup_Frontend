@@ -194,7 +194,15 @@ const handleChange = (e) => {
   const { name, value } = e.target;
   setForm((prev) => ({ ...prev, [name]: value }));
 };
+const handleNumberOnly = (e) => {
+  const { name, value } = e.target;
+  if (/^\d*$/.test(value)) setForm((prev) => ({ ...prev, [name]: value }));
+};
 
+const handleTextOnly = (e) => {
+  const { name, value } = e.target;
+  if (/^[a-zA-Z\s]*$/.test(value)) setForm((prev) => ({ ...prev, [name]: value }));
+};
   const addTier    = () => setForm((p) => ({ ...p, ticketPricingTiers: [...p.ticketPricingTiers, { label: "", price: "" }] }));
   const removeTier = (idx) => setForm((p) => ({ ...p, ticketPricingTiers: p.ticketPricingTiers.filter((_, i) => i !== idx) }));
   const updateTier = (idx, field, value) =>
@@ -203,13 +211,19 @@ const handleChange = (e) => {
   const addCategoryTag    = (cat) => { if (cat && !form.eventCategory.includes(cat)) setForm((p) => ({ ...p, eventCategory: [...p.eventCategory, cat] })); };
   const removeCategoryTag = (cat) => setForm((p) => ({ ...p, eventCategory: p.eventCategory.filter((c) => c !== cat) }));
 
+
+  const isValidUrl = (url) => {
+  try { new URL(url); return true; } catch { return false; }
+};
   /*  Save / delete / toggle  */
   const validate = () => {
     if (!form.title.trim())          return "Event Name is required";
     if (!form.eventCategory?.length) return "Event Category is required";
     if (!form.startDateTime || !form.endDateTime) return "Start/End date-time required";
     if (!form.workEmail)             return "Work Email is required";
-    return null;
+    if (!mainImage?.url)             return "Main image / banner is required";
+    if (form.organizationWebsite && !isValidUrl(form.organizationWebsite)) return "Enter a valid Company Website URL";
+  return null;
   };
 
   const saveEvent = async () => {
@@ -633,11 +647,23 @@ const confirmToggleEvent = (ev) => {
                 <div className="row2">
                   <div className="field">
                     <label className="label">Company Name</label>
-                    <input className="input" name="organizationName" value={form.organizationName} onChange={handleChange} placeholder="Enter Company name" />
+                    <input
+  className="input"
+  name="organizationName"
+  value={form.organizationName}
+  onChange={handleTextOnly}
+  placeholder="Enter Company name"
+/>
                   </div>
                   <div className="field">
                     <label className="label">Company Contact Person</label>
-                    <input className="input" name="organizerContactPerson" value={form.organizerContactPerson} onChange={handleChange} placeholder="Enter contact person name" />
+                    <input
+  className="input"
+  name="organizerContactPerson"
+  value={form.organizerContactPerson}
+  onChange={handleTextOnly}
+  placeholder="Enter contact person name"
+/>
                   </div>
                 </div>
 
@@ -648,7 +674,14 @@ const confirmToggleEvent = (ev) => {
                   </div>
                   <div className="field">
                     <label className="label">Phone Number</label>
-                    <input className="input" name="phoneNumber" value={form.phoneNumber} onChange={handleChange} placeholder="Enter phone number" />
+                    <input
+  className="input"
+  name="phoneNumber"
+  value={form.phoneNumber}
+  onChange={handleNumberOnly}
+  placeholder="Enter phone number"
+  maxLength={10}
+/>
                   </div>
                   <div className="field">
                     <label className="label">Company Website</label>
