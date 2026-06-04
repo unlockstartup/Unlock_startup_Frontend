@@ -677,8 +677,8 @@ const confirmToggleProduct = (prod) => {
                 </div>
               </section>
               <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>
-              <button className="btn btnSecondary bt_cancel" onClick={closeModal} disabled={saving || uploadingImage || uploadingProductImages}>Cancel</button>
-              <button className="btn btnPrimary bt_submit" onClick={save} disabled={saving || uploadingImage || uploadingProductImages}>
+              <button className="btn btnSecondary btcancel" onClick={closeModal} disabled={saving || uploadingImage || uploadingProductImages}>Cancel</button>
+              <button className="btn btnPrimary btsubmit" onClick={save} disabled={saving || uploadingImage || uploadingProductImages}>
                 {saving ? "Submitting…" : mode === "create" ? "Submit" : "Update"}
               </button>
               </div>

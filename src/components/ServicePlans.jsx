@@ -165,7 +165,7 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
                 (isServiceActive && !isActivePlan && !isServiceLimitReached);
 
               return (
-                <div className="col-12 col-sm-6 col-xl-3" key={key}>
+                <div className="col-12 col-sm- col-xl-3" key={key}>
                   <div
                     className="h-100 d-flex flex-column rounded-3"
                     style={{

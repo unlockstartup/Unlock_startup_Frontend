@@ -213,7 +213,7 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
           </div>
         )}
 
-        <div className="row g-4 align-items-stretch justify-content-center">
+        <div className="row g-4 align-items-stretch justify-content-center grid-mob">
           {plans.map((plan) => {
             const { name, desc } = planLabels(plan.durationInMonths);
             const planDetails    = buildPlanDetails(plan);
@@ -226,7 +226,7 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
             const isDisabled = isThisLoading || isOtherLoading || (planLocked && !isActivePlan);
 
             return (
-              <div className="col-12 col-sm-6 col-xl-3" key={plan._id}>
+              <div className="col-12 col-sm-12 col-xl-3" key={plan._id}>
                 <div
                   className="h-100 d-flex flex-column rounded-3"
                   style={{
