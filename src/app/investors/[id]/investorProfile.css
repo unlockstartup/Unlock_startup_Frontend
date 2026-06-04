@@ -640,6 +640,7 @@ background: var(--yellow-100); color: var(--yellow-900);
   display: inline-block;
   font-family: var(--font-body);
   transition: all 0.2s ease;
+  word-break: break-all;
 }
 .sdpInfoLineLink:hover { 
   color: var(--blue-500);
@@ -699,7 +700,7 @@ background: var(--yellow-100); color: var(--yellow-900);
 .sdpInfoBlock .sdpRegRow:nth-child(6) .sdpContactIcon { background: var(--yellow-100); color: var(--yellow-900); }
 
 
-.sdpRegMeta { display: flex; flex-direction: column; gap: 4px; }
+.sdpRegMeta { display: flex; flex-direction: column; gap: 4px; min-width: 0;}
 .sdpRegLabel {
   font-size: 11px;
   color: var(--sdp-text-faint);
