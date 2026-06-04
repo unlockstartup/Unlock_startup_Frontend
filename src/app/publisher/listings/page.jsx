@@ -125,7 +125,7 @@ export default function AllListingandSubmissions() {
       <header className="topbar">
         <div>
           <h1 className="topbarTitle">All Listings</h1>
-          <p className="topbarSub">Click "View Submissions" to see applicants for any listing</p>
+          <p className="topbarSub tdNoWrap">Click "View Submissions" to see applicants for any listing</p>
         </div>
         <div className="topbarActions">
           <span className="badge badgeNeutral" style={{ fontSize: "var(--text-xs)" }}>
@@ -184,64 +184,88 @@ export default function AllListingandSubmissions() {
             <p className="emptyState">No listings found.</p>
           ) : (
             <table className="table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Title</th>
-                  <th>Type</th>
-                  <th>Status</th>
-                  <th>Submissions</th>
-                  <th>Created</th>
-                  <th className="tdRight" style={{textAlign: "right"}}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((listing, idx) => {
-                  const typeMeta = TYPE_META[listing._type] || { label: listing._type, color: "var(--blue)" };
-                  const count    = counts[listing._id];
-                  return (
-                    <tr key={listing._id}>
-                      <td className="tdMuted">{idx + 1}</td>
-                      <td>
-                        <div className="tdSemibold">{listing._title}</div>
-                        {listing._subtitle && <div className="tdMuted">{listing._subtitle}</div>}
-                      </td>
-                      <td>
-                        <span className="badge" style={{ background: typeMeta.color, color: "#fff" }}>
-                          {typeMeta.label}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={`badge ${STATUS_BADGE[listing._status] || "badgeNeutral"}`}>
-                          {listing._status}
-                        </span>
-                      </td>
-                      <td>
-                        {count !== undefined ? (
-                          <span className="badge badgePrimary">
-                            {count} applicant{count !== 1 ? "s" : ""}
-                          </span>
-                        ) : (
-                          <span className="tdMuted">Loading…</span>
-                        )}
-                      </td>
-                      <td className="tdMuted">
-                        {listing.createdAt ? new Date(listing.createdAt).toLocaleDateString() : "—"}
-                      </td>
-                      <td>
-                        <div className="actionGroup">
-                          <button
-                            className="btn btnSm btnPrimary"
-                            onClick={() => router.push(`/publisher/submissions/${listing._id}?type=${listing._type}`)}
-                          >
-                            View Submissions
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
+<thead>
+  <tr>
+    <th>#</th>
+    <th>Title</th>
+    <th>Type</th>
+    <th>Status</th>
+    <th>Submissions</th>
+    <th>Created</th>
+    <th className="tdRight" style={{ textAlign: "center" }}>Actions</th>
+  </tr>
+</thead>
+<tbody>
+  {filtered.map((listing, idx) => {
+    const typeMeta = TYPE_META[listing._type] || { label: listing._type, color: "var(--blue)" };
+    const count    = counts[listing._id];
+    return (
+      <tr key={listing._id}>
+        <td className="tdMuted" data-label="#">{idx + 1}</td>
+
+        <td className="tdSemibold" data-label="Title">
+          {listing._title}
+          {listing._subtitle && <div className="tdMuted">{listing._subtitle}</div>}
+        </td>
+
+        <td data-label="Type">
+          <span className="badge" style={{ background: typeMeta.color, color: "#fff" }}>
+            {typeMeta.label}
+          </span>
+        </td>
+
+        <td data-label="Status">
+          <span className={`badge ${STATUS_BADGE[listing._status] || "badgeNeutral"}`}>
+            {listing._status}
+          </span>
+        </td>
+
+        <td data-label="Submissions">
+          {count !== undefined ? (
+            <span className="badge badgePrimary">
+              {count} applicant{count !== 1 ? "s" : ""}
+            </span>
+          ) : (
+            <span className="tdMuted">Loading…</span>
+          )}
+        </td>
+
+        <td className="tdMuted tdNoWrap" data-label="Created">
+          {listing.createdAt ? (
+            <>
+              <span className="dateOnly">
+                {new Date(listing.createdAt).toLocaleDateString("en-IN", {
+                  timeZone: "Asia/Kolkata",
                 })}
-              </tbody>
+              </span>
+              <span className="timeOnly">
+                {", " +
+                  new Date(listing.createdAt)
+                    .toLocaleTimeString("en-IN", {
+                      timeZone: "Asia/Kolkata",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                    .replace(/am|pm/gi, (m) => m.toUpperCase())}
+              </span>
+            </>
+          ) : "—"}
+        </td>
+
+        <td data-label="Actions">
+          <div className="actionGroup">
+            <button
+              className="btn btnSm btnPrimary"
+              onClick={() => router.push(`/publisher/submissions/${listing._id}?type=${listing._type}`)}
+            >
+              View Submissions
+            </button>
+          </div>
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
             </table>
           )}
         </div>

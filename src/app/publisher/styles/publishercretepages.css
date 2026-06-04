@@ -84,12 +84,7 @@
   z-index: 1;
 }
 
-.topbarTitle {
-  margin: 0;
-  font-size: clamp(1.125rem, 0.90rem + 1.15vw, 2.00rem);
-  font-weight: 700;
-  color: var(--color-text);
-}
+
 
 .topbarSub {
   margin: 0.25rem 0 0;
@@ -783,8 +778,11 @@
     padding: var(--space-4) var(--space-5);
     border-radius: var(--radius-xl);
   }
+.specific{
+  gap: 0px !important;
+}
 
-  .tableShell  { border-radius: var(--radius-xl); }
+  .tableShell  { border-radius: var(--radius-xl);  margin-top: 50px; }
   .tableHead   { padding: var(--space-4) var(--space-5); border-radius: var(--radius-xl) var(--radius-xl) 0 0; }
   .tableBody   { padding: var(--space-3) var(--space-4); }
 
@@ -1160,11 +1158,17 @@
 
 @media (max-width: 768px) {
   .pubModal__grid { grid-template-columns: 1fr; }
+    .topbarTitle{
+  font-size: clamp(1.123rem, 1.066rem + 0.288vw, 1.35rem);
+ }
 }
 
 @media (max-width: 600px) {
   .pubModal__dialog { width: 96vw; max-height: 94vh; border-radius: 0.85rem; }
   .pubModal__grid   { grid-template-columns: 1fr; }
+   .topbarTitle{
+  font-size: clamp(1.123rem, 1.066rem + 0.288vw, 1.35rem);
+ }
 }
 
 @media (max-width: 480px) {
@@ -1199,10 +1203,7 @@
   font-size: clamp(1.045rem, 0.902rem + 0.715vw, 1.65rem); /* was: 0.95/0.82/1.50 */
 }
 
-/* Top bar */
-.topbarTitle {
-  font-size: clamp(1.2375rem, 0.99rem + 1.265vw, 2.20rem); /* was: 1.125/0.90/2.00 */
-}
+
 
 .topbarSub {
   font-size: clamp(0.759rem, 0.704rem + 0.275vw, 0.9625rem); /* was: 0.69/0.64/0.875 */
@@ -1227,7 +1228,10 @@
 .pubModal__title {
   font-size: clamp(1.03125rem, 0.88rem + 0.759vw, 1.65rem); /* was: 0.9375/0.80/1.50 */
 }
-
+ .topbarTitle{
+  font-size: clamp(1.123rem, 1.066rem + 0.288vw, 1.35rem);
+ }
+ 
 /* pubModal subtitle */
 .pubModal__subtitle {
   font-size: clamp(0.825rem, 0.77rem + 0.275vw, 1.03125rem); /* was: 0.75/0.70/0.9375 */
@@ -1282,11 +1286,14 @@
   .input, .select, .textarea, .label {
      font-size: clamp(1.123rem, 1.066rem + 0.288vw, 1.35rem);
   }
- 
+
 }
 
 @media (min-width: 1600px) and (max-width: 2500px) {
  .btnSm {
   font-size: clamp(1.123rem, 1.066rem + 0.288vw, 1.35rem);
+}
+.spec-font{
+   font-size: clamp(1.123rem, 1.066rem + 0.288vw, 1.35rem);
 }
 }

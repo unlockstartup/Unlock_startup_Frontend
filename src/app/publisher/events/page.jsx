@@ -363,7 +363,7 @@ const confirmToggleEvent = (ev) => {
       <header className="topbar">
         <div>
           <h1 className="topbarTitle">Events</h1>
-          <p className="topbarSub">Create and manage your events (pending admin approval)</p>
+          <p className="topbarSub tdNoWrap">Create and manage your events (pending admin approval)</p>
         </div>
         <div className="topbarActions">
           <button

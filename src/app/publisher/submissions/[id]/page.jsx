@@ -206,48 +206,83 @@ export default function Page() {
           ) : (
             <>
               <table className="table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Type</th>
-                    <th>Applicant</th>
-                    <th>Organisation</th>
-                    <th>Applied For</th>
-                    <th>Date</th>
-                    <th className="tdRight" style={{textAlign: "right"}}>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {submissions.map((sub, idx) => {
-                    const type     = getSubmissionType(sub);
-                    const typeMeta = TYPE_META[type] || TYPE_META.listing;
-                    return (
-                      <tr key={sub._id} style={{ cursor: "pointer" }} onClick={() => setSelected(sub)}>
-                        <td className="tdMuted">{(page - 1) * limit + idx + 1}</td>
-                        <td>
-                          <span className="badge" style={{ background: typeMeta.color, color: "#fff" }}>
-                            {typeMeta.label}
-                          </span>
-                        </td>
-                        <td>
-                          <div className="tdSemibold">{sub.fullName}</div>
-                          <div className="tdMuted">{sub.email}</div>
-                        </td>
-                        <td className="tdMuted">{sub.organisation || "—"}</td>
-                        <td>
-                          <div className="tdSemibold" style={{ fontSize: "var(--text-xs)" }}>{getSourceTitle(sub)}</div>
-                        </td>
-                        <td className="tdMuted">{new Date(sub.createdAt).toLocaleDateString()}</td>
-                        <td onClick={(e) => e.stopPropagation()}>
-                          <div className="actionGroup">
-                            <button className="btn btnSm btnPrimary"  onClick={() => setSelected(sub)}>View</button>
-                            <button className="btn btnSm btnDanger"   onClick={() => deleteSubmission(sub._id)}>Delete</button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
+<thead>
+  <tr>
+    <th>#</th>
+    <th>Type</th>
+    <th>Applicant</th>
+    <th>Organisation</th>
+    <th>Applied For</th>
+    <th>Status</th>
+    <th>Date</th>
+    <th className="tdRight" style={{ textAlign: "center" }}>Actions</th>
+  </tr>
+</thead>
+<tbody>
+  {submissions.map((sub, idx) => {
+    const type     = getSubmissionType(sub);
+    const typeMeta = TYPE_META[type] || TYPE_META.listing;
+    return (
+      <tr key={sub._id} style={{ cursor: "pointer" , gap: 0}} onClick={() => setSelected(sub)}>
+        <td className="tdMuted" data-label="#">{(page - 1) * limit + idx + 1}</td>
+
+        <td data-label="Type">
+          <span className="badge" style={{ background: typeMeta.color, color: "#fff" }}>
+            {typeMeta.label}
+          </span>
+        </td>
+
+        <td className="tdSemibold" data-label="Applicant">
+          {sub.fullName}
+          {sub.email && <div className="tdMuted">{sub.email}</div>}
+        </td>
+
+        <td className="tdMuted tdNoWrap" data-label="Organisation">
+          {sub.organisation || "—"}
+        </td>
+
+        <td data-label="Applied For">
+          <div className="tdSemibold spec-font">{getSourceTitle(sub)}</div>
+        </td>
+
+        <td data-label="Status">
+          <span className={`badge ${STATUS_BADGE[sub.status] || "badgeNeutral"}`}>
+            {sub.status || "new"}
+          </span>
+        </td>
+
+        <td className="tdMuted tdNoWrap" data-label="Date">
+          {sub.createdAt ? (
+            <>
+              <span className="dateOnly">
+                {new Date(sub.createdAt).toLocaleDateString("en-IN", {
+                  timeZone: "Asia/Kolkata",
+                })}
+              </span>
+              <span className="timeOnly">
+                {", " +
+                  new Date(sub.createdAt)
+                    .toLocaleTimeString("en-IN", {
+                      timeZone: "Asia/Kolkata",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                    .replace(/am|pm/gi, (m) => m.toUpperCase())}
+              </span>
+            </>
+          ) : "—"}
+        </td>
+
+        <td data-label="Actions" onClick={(e) => e.stopPropagation()}>
+          <div className="actionGroup">
+            <button className="btn btnSm btnPrimary" onClick={() => setSelected(sub)}>View</button>
+            <button className="btn btnSm btnDanger" onClick={() => deleteSubmission(sub._id)}>Delete</button>
+          </div>
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
               </table>
 
               {/* Pagination */}

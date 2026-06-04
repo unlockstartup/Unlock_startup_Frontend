@@ -313,7 +313,7 @@ const confirmToggleProduct = (prod) => {
       <header className="topbar">
         <div>
           <h1 className="topbarTitle">Innovation Products</h1>
-          <p className="topbarSub">Submit and manage your innovation products</p>
+          <p className="topbarSub tdNoWrap">Submit and manage your innovation products</p>
         </div>
         <div className="topbarActions">
           <button

@@ -402,7 +402,7 @@ function FundingCallsCrud() {
       <header className="topbar">
         <div>
           <h1 className="topbarTitle">Competitions</h1>
-          <p className="topbarSub">Publish competitions (pending admin approval)</p>
+          <p className="topbarSub tdNoWrap">Publish competitions (pending admin approval)</p>
         </div>
         <div className="topbarActions">
           <button

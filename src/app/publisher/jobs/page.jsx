@@ -371,7 +371,7 @@ const confirmToggleJob = (job) => {
       <header className="topbar">
         <div>
           <h1 className="topbarTitle">Jobs</h1>
-          <p className="topbarSub">Create and manage job postings (pending admin approval)</p>
+          <p className="topbarSub tdNoWrap">Create and manage job postings (pending admin approval)</p>
         </div>
         <div className="topbarActions">
           <button

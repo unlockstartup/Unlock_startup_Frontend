@@ -280,7 +280,7 @@ const confirmToggleListing = (listing) => {
       <header className="topbar">
         <div>
           <h1 className="topbarTitle">Service Listings</h1>
-          <p className="topbarSub">Submit and manage your service offerings</p>
+          <p className="topbarSub tdNoWrap">Submit and manage your service offerings</p>
         </div>
         <div className="topbarActions">
           <button
