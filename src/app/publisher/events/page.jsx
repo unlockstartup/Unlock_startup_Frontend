@@ -367,7 +367,7 @@ const confirmToggleEvent = (ev) => {
         </div>
         <div className="topbarActions">
           <button
-            className={`btn ${eventButtonDisabled ? "btnSecondary" : "btnPrimary"}`}
+            className={`btn ${eventButtonDisabled ? "btnSecondary btnSm" : "btnPrimary btnSm"}`}
             onClick={eventButtonDisabled ? undefined : openModal}
             disabled={eventButtonDisabled}
             title={
@@ -453,65 +453,116 @@ const confirmToggleEvent = (ev) => {
                 </tr>
               </thead>
               <tbody>
-                {events.map((ev, idx) => {
-                  const editLocked = (ev.editCount ?? 0) >= 1;
-                  return (
-                    <tr key={ev._id}>
-                      <td className="tdMuted">{idx + 1}</td>
-                      <td className="tdSemibold">{ev.title}</td>
-                      <td>
-                        {ev.mainImage?.url
-                          ? <img src={ev.mainImage.url} alt="banner" className="thumb" />
-                          : <span className="tdMuted">No image</span>}
-                      </td>
-                      <td className="tdNoWrap">{ev.eventType || <span className="tdMuted">—</span>}</td>
+{events.map((ev, idx) => {
+  const editLocked = (ev.editCount ?? 0) >= 1;
+  return (
+    <tr key={ev._id}>
 
-                      {/*  Status + edit-lock badge  */}
-                      <td>
-                        <span className={`badge ${statusBadge(ev.status)}`}>{ev.status}</span>
-                      </td>
+      {/* 1 */}
+      <td className="tdMuted" data-label="#">
+        {idx + 1}
+      </td>
 
-                      <td className="tdMuted tdNoWrap">
-                        {ev.startDateTime
-                          ? new Date(ev.startDateTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }).replace(/am|pm/gi, (m) => m.toUpperCase())
-                          : "—"}
-                      </td>
-                      <td className="tdMuted tdNoWrap">
-                        {ev.endDateTime
-                          ? new Date(ev.endDateTime).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }).replace(/am|pm/gi, (m) => m.toUpperCase())
-                          : "—"}
-                      </td>
+      <td className="tdSemibold" data-label="Title">
+        {ev.title}
+      </td>
 
-{/*  Actions  */}
-<td>
-  <div className="actionGroup">
-<button
-  className={`btn btnSm ${(ev.editCount ?? 0) >= 1 ? "btnSecondary" : "btnPrimary"}`}
-  onClick={() => openEdit(ev)}
-  title={(ev.editCount ?? 0) >= 1 ? "This event has already been edited once" : "Edit event"}
->
-  Edit
-</button>
+      {/* 3 – Banner */}
+      <td data-label="Banner">
+        {ev.mainImage?.url
+          ? <img src={ev.mainImage.url} alt="banner" className="thumb" />
+          : <span className="tdMuted">No image</span>}
+      </td>
 
-<button
-  className={`btn btnSm ${ev.isActive ? "btnWarning" : "btnSuccess"}`}
-  onClick={() => confirmToggleEvent(ev)}
-  title={
-    (ev.toggleCount ?? 0) >= 2
-      ? "Toggle limit reached"
-      : ev.isActive ? "Deactivate" : "Activate"
-  }
->
-  {ev.isActive ? "Deactivate" : "Activate"}
-</button>
-    <button className="btn btnSm btnDanger" onClick={() => deleteEvent(ev._id)}>
-      Delete
-    </button>
-  </div>
+      {/* 4 – Type */}
+      <td className="tdNoWrap" data-label="Type">
+        {ev.eventType || <span className="tdMuted">—</span>}
+      </td>
+
+      {/* 5 – Status */}
+      <td data-label="Status">
+        <span className={`badge ${statusBadge(ev.status)}`}>{ev.status}</span>
+      </td>
+
+{/* 6 – Start */}
+<td className="tdMuted tdNoWrap" data-label="Start">
+  {ev.startDateTime ? (
+    <>
+      <span className="dateOnly">
+        {new Date(ev.startDateTime).toLocaleDateString("en-IN", {
+          timeZone: "Asia/Kolkata",
+        })}
+      </span>
+      <span className="timeOnly">
+        {", " +
+          new Date(ev.startDateTime)
+            .toLocaleTimeString("en-IN", {
+              timeZone: "Asia/Kolkata",
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+            .replace(/am|pm/gi, (m) => m.toUpperCase())}
+      </span>
+    </>
+  ) : "—"}
 </td>
-                    </tr>
-                  );
-                })}
+
+{/* 7 – End */}
+<td className="tdMuted tdNoWrap" data-label="End">
+  {ev.endDateTime ? (
+    <>
+      <span className="dateOnly">
+        {new Date(ev.endDateTime).toLocaleDateString("en-IN", {
+          timeZone: "Asia/Kolkata",
+        })}
+      </span>
+      <span className="timeOnly">
+        {", " +
+          new Date(ev.endDateTime)
+            .toLocaleTimeString("en-IN", {
+              timeZone: "Asia/Kolkata",
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+            .replace(/am|pm/gi, (m) => m.toUpperCase())}
+      </span>
+    </>
+  ) : "—"}
+</td>
+
+      {/* 8 – Actions */}
+      <td data-label="Actions">
+        <div className="actionGroup">
+          <button
+            className={`btn btnSm ${(ev.editCount ?? 0) >= 1 ? "btnSecondary" : "btnPrimary"}`}
+            onClick={() => openEdit(ev)}
+            title={(ev.editCount ?? 0) >= 1 ? "Already edited once" : "Edit event"}
+          >
+            Edit
+          </button>
+          <button
+            className={`btn btnSm ${ev.isActive ? "btnWarning" : "btnSuccess"}`}
+            onClick={() => confirmToggleEvent(ev)}
+            title={
+              (ev.toggleCount ?? 0) >= 2
+                ? "Toggle limit reached"
+                : ev.isActive ? "Deactivate" : "Activate"
+            }
+          >
+            {ev.isActive ? "Deactivate" : "Activate"}
+          </button>
+          <button
+            className="btn btnSm btnDanger"
+            onClick={() => deleteEvent(ev._id)}
+          >
+            Delete
+          </button>
+        </div>
+      </td>
+
+    </tr>
+  );
+})}
               </tbody>
             </table>
           )}

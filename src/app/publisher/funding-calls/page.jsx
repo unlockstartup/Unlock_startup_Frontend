@@ -56,6 +56,11 @@ function toDateInput(v) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
+/*  URL helper  */
+const isValidUrl = (url) => {
+  try { new URL(url); return true; } catch { return false; }
+};
+
 /*  Main component  */
 function FundingCallsCrud() {
   const [loading, setLoading]   = useState(true);
@@ -119,33 +124,32 @@ function FundingCallsCrud() {
 
   const sf = (field) => (e) => setForm((p) => ({ ...p, [field]: e.target.value }));
 
-// In loadMeta — add categories to the parallel fetch
-const loadMeta = async () => {
-  try {
-    const [types, orgs, stages, cats] = await Promise.all([
-      getPublicCompetitionTypes(),
-      getPublicOrganizerTypes(),
-      getPublicStartupStages(),
-      getPublicChallengeCategories(),          // no typeId argument
-    ]);
-    setCompetitionTypes(types.data?.competitionTypes || types.data?.types || []);
-    setOrganizerTypes(orgs.data?.organizerTypes     || orgs.data?.types   || []);
-    setStartupStages(stages.data?.startupStages     || stages.data?.stages || []);
-    setChallengeCategories(cats.data?.categories    || []);
-  } catch {
-    toast.error("Failed to load dropdown data");
-  }
-};
+  const loadMeta = async () => {
+    try {
+      const [types, orgs, stages, cats] = await Promise.all([
+        getPublicCompetitionTypes(),
+        getPublicOrganizerTypes(),
+        getPublicStartupStages(),
+        getPublicChallengeCategories(),
+      ]);
+      setCompetitionTypes(types.data?.competitionTypes || types.data?.types || []);
+      setOrganizerTypes(orgs.data?.organizerTypes     || orgs.data?.types   || []);
+      setStartupStages(stages.data?.startupStages     || stages.data?.stages || []);
+      setChallengeCategories(cats.data?.categories    || []);
+    } catch {
+      toast.error("Failed to load dropdown data");
+    }
+  };
 
-const handleNumberOnly = (field) => (e) => {
-  const value = e.target.value;
-  if (/^\d*$/.test(value)) setForm((p) => ({ ...p, [field]: value }));
-};
+  const handleNumberOnly = (field) => (e) => {
+    const value = e.target.value;
+    if (/^\d*$/.test(value)) setForm((p) => ({ ...p, [field]: value }));
+  };
 
-const handleTextOnly = (field) => (e) => {
-  const value = e.target.value;
-  if (/^[a-zA-Z\s]*$/.test(value)) setForm((p) => ({ ...p, [field]: value }));
-};
+  const handleTextOnly = (field) => (e) => {
+    const value = e.target.value;
+    if (/^[a-zA-Z\s]*$/.test(value)) setForm((p) => ({ ...p, [field]: value }));
+  };
 
   const load = async () => {
     try {
@@ -170,89 +174,84 @@ const handleTextOnly = (field) => (e) => {
 
   useEffect(() => { load(); }, [status, page, limit]);
 
-
   /*  Modal helpers  */
   const openCreate = () => { setMode("create"); setEditing(null); setForm(initialForm); setOpen(true); };
 
-const openEdit = (row) => {
-  const alreadyEdited = (row.editCount ?? 0) >= 1;
-  setConfirmConfig({
-    title: alreadyEdited ? "Edit Not Allowed" : "Edit Competition",
-    message: alreadyEdited
-      ? "This competition has already been edited once and can no longer be modified."
-      : "You can only update this listing once. Please review all details carefully before submitting, as no further edits will be allowed after this.",
-    confirmText: alreadyEdited ? "OK" : "I Understand, Proceed",
-    cancelText: alreadyEdited ? "" : "Cancel",
-    confirmVariant: alreadyEdited ? "danger" : "primary",
-    onConfirm: () => {
-      if (alreadyEdited) return;
+  const openEdit = (row) => {
+    const alreadyEdited = (row.editCount ?? 0) >= 1;
+    setConfirmConfig({
+      title: alreadyEdited ? "Edit Not Allowed" : "Edit Competition",
+      message: alreadyEdited
+        ? "This competition has already been edited once and can no longer be modified."
+        : "You can only update this listing once. Please review all details carefully before submitting, as no further edits will be allowed after this.",
+      confirmText: alreadyEdited ? "OK" : "I Understand, Proceed",
+      cancelText: alreadyEdited ? "" : "Cancel",
+      confirmVariant: alreadyEdited ? "danger" : "primary",
+      onConfirm: () => {
+        if (alreadyEdited) return;
 
-      const resolveOrgType = (val) => {
-        if (!val) return "";
-        if (typeof val === "object") return val._id || "";
-        const byId = organizerTypes.find((t) => t._id === val);
-        if (byId) return byId._id;
-        return organizerTypes.find((t) => t.name === val)?._id || "";
-      };
-      setMode("edit");
-      setEditing(row);
-      setForm({
-        ...initialForm, ...row,
-        organizerType:      resolveOrgType(row.organizerType),
-        challengeType:      row.challengeType     || "",
-        challengeCategory:  row.challengeCategory || "",
-        launchDate:         toDateInput(row.launchDate),
-        submissionDeadline: toDateInput(row.submissionDeadline),
-        resultDate:         toDateInput(row.resultDate),
-        additionalRewards: Array.isArray(row.additionalRewards)
-          ? row.additionalRewards.join(", ") : row.additionalRewards || "",
-        eligibilityVerification: Array.isArray(row.eligibilityVerification)
-          ? row.eligibilityVerification.join(", ") : row.eligibilityVerification || "",
-        organizationWebsite: row.organizationWebsite || "",
-        problemStatement:    row.problemStatement   || "",
-        attachments:         row.attachments        || [],
-        applicationType:     row.applicationType    || "",
-      });
-      setOpen(true);
-    },
-  });
-  setShowConfirm(true);
-};
+        const resolveOrgType = (val) => {
+          if (!val) return "";
+          if (typeof val === "object") return val._id || "";
+          const byId = organizerTypes.find((t) => t._id === val);
+          if (byId) return byId._id;
+          return organizerTypes.find((t) => t.name === val)?._id || "";
+        };
+        setMode("edit");
+        setEditing(row);
+        setForm({
+          ...initialForm, ...row,
+          organizerType:      resolveOrgType(row.organizerType),
+          challengeType:      row.challengeType     || "",
+          challengeCategory:  row.challengeCategory || "",
+          launchDate:         toDateInput(row.launchDate),
+          submissionDeadline: toDateInput(row.submissionDeadline),
+          resultDate:         toDateInput(row.resultDate),
+          additionalRewards: Array.isArray(row.additionalRewards)
+            ? row.additionalRewards.join(", ") : row.additionalRewards || "",
+          eligibilityVerification: Array.isArray(row.eligibilityVerification)
+            ? row.eligibilityVerification.join(", ") : row.eligibilityVerification || "",
+          organizationWebsite: row.organizationWebsite || "",
+          problemStatement:    row.problemStatement   || "",
+          attachments:         row.attachments        || [],
+          applicationType:     row.applicationType    || "",
+        });
+        setOpen(true);
+      },
+    });
+    setShowConfirm(true);
+  };
 
   const closeModal = () => { if (saving || attachmentsUploading) return; setOpen(false); };
 
   const validate = () => {
-    const required = [
-      ["title",             "Challenge Name / Title"],
-      ["challengeCategory", "Challenge Category"],
-      ["submissionDeadline","Submission Deadline"],
-      ["organizingCompany", "Organizing Company / Institution"],
-      ["organizerType",     "Company Type"],
-      ["officialEmail",     "Official Email"],
-      ["description",       "Description"],
-      ["startupStage",      "Startup Stage Requirements"],
-      ["location",          "Location"],
-      ["registrationLink",  "Registration Link"],
-    ];
-    for (const [k, label] of required) {
-      if (!String(form[k] || "").trim()) { toast.error(`${label} is required`); return false; }
-    }
+    if (!form.title.trim()) return "Challenge Name / Title is required";
+    if (!form.challengeCategory.trim()) return "Challenge Category is required";
+    if (!form.submissionDeadline) return "Submission Deadline is required";
+    if (!form.organizingCompany.trim()) return "Organizing Company / Institution is required";
+    if (!form.organizerType.trim()) return "Company Type is required";
+    if (!form.officialEmail.trim()) return "Official Email is required";
+    if (!form.description.trim()) return "Description is required";
+    if (!form.startupStage.trim()) return "Startup Stage Requirements is required";
+    if (!form.location.trim()) return "Location is required";
+    if (!form.registrationLink.trim()) return "Registration Link is required";
     if (form.officialEmail && !/^\S+@\S+\.\S+$/.test(form.officialEmail.trim())) {
-      toast.error("Enter a valid official email"); return false;
+      return "Enter a valid official email";
     }
-    if (form.registrationLink && !/^https?:\/\//i.test(form.registrationLink.trim())) {
-      toast.error("Registration link must start with http:// or https://"); return false;
+    if (form.registrationLink && !isValidUrl(form.registrationLink.trim())) {
+      return "Enter a valid registration link URL";
     }
-      if (!form.attachments?.length) { toast.error("Please upload at least one image/attachment"); return false; }  // ← add this
-
-  if (form.organizationWebsite && !/^https?:\/\//i.test(form.organizationWebsite.trim())) {
-    toast.error("Website URL must start with http:// or https://"); return false;
-  }
-    return true;
+    if (!form.attachments?.length) return "Please upload at least one image/attachment";
+    if (form.organizationWebsite && !isValidUrl(form.organizationWebsite.trim())) {
+      return "Enter a valid website URL";
+    }
+    return null;
   };
 
   const save = async () => {
-    if (!validate()) return;
+    const msg = validate();
+    if (msg) return toast.warn(msg);
+
     try {
       setSaving(true);
       const toISO = (s) => { if (!s) return undefined; const d = new Date(s + "T00:00:00"); return isNaN(d.getTime()) ? undefined : d.toISOString(); };
@@ -322,44 +321,42 @@ const openEdit = (row) => {
     setShowConfirm(true);
   };
 
-const onToggleActiveConfirm = (row) => {
-  if (!row?._id) { toast.error("Invalid Competition ID"); return; }
-  const toggleCount = row.toggleCount ?? 0;
-  if (toggleCount >= 2) {
+  const onToggleActiveConfirm = (row) => {
+    if (!row?._id) { toast.error("Invalid Competition ID"); return; }
+    const toggleCount = row.toggleCount ?? 0;
+    if (toggleCount >= 2) {
+      setConfirmConfig({
+        title: "Toggle Not Allowed",
+        message: "This competition has already been deactivated and reactivated once. No further activation or deactivation is allowed.",
+        confirmText: "OK",
+        cancelText: "",
+        confirmVariant: "danger",
+        onConfirm: () => {},
+      });
+      setShowConfirm(true);
+      return;
+    }
+    const isDeactivating = row.isActive;
     setConfirmConfig({
-      title: "Toggle Not Allowed",
-      message: "This competition has already been deactivated and reactivated once. No further activation or deactivation is allowed.",
-      confirmText: "OK",
-      cancelText: "",
-      confirmVariant: "danger",
-      onConfirm: () => {},
+      title: isDeactivating ? "Deactivate Competition" : "Activate Competition",
+      message: isDeactivating
+        ? "You may reactivate this competition once after deactivating, but after that no further toggling will be allowed. Are you sure you want to deactivate?"
+        : "You can activate this listing once more. After reactivating, no further deactivation or activation will be permitted. Proceed?",
+      confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
+      cancelText: "Cancel",
+      confirmVariant: isDeactivating ? "warning" : "success",
+      onConfirm: async () => {
+        try {
+          await toggleFundingCallActive(row._id);
+          toast.success(isDeactivating ? "Deactivated" : "Activated");
+          load();
+        } catch (e) {
+          toast.error(e?.response?.data?.message || "Toggle failed");
+        }
+      },
     });
     setShowConfirm(true);
-    return;
-  }
-  const isDeactivating = row.isActive;
-  setConfirmConfig({
-    title: isDeactivating ? "Deactivate Competition" : "Activate Competition",
-    message: isDeactivating
-      ? "You may reactivate this competition once after deactivating, but after that no further toggling will be allowed. Are you sure you want to deactivate?"
-      : "You can activate this listing once more. After reactivating, no further deactivation or activation will be permitted. Proceed?",
-    confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
-    cancelText: "Cancel",
-    confirmVariant: isDeactivating ? "warning" : "success",
-    onConfirm: async () => {
-      try {
-        await toggleFundingCallActive(row._id);
-        toast.success(isDeactivating ? "Deactivated" : "Activated");
-        load();
-      } catch (e) {
-        toast.error(e?.response?.data?.message || "Toggle failed");
-      }
-    },
-  });
-  setShowConfirm(true);
-};
-
-
+  };
 
   /*  Attachments  */
   const onAttachmentsPick = async (files) => {
@@ -456,22 +453,16 @@ const onToggleActiveConfirm = (row) => {
             </div>
 
             <div className="field">
-              <label className="label">Per page</label>
-              <select className="select" value={limit} onChange={(e) => setLimit(Number(e.target.value))}>
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-                <option value={50}>50</option>
-              </select>
+              <label className="label" style={{ visibility: "hidden" }}>_</label>
+              <div style={{ display: "flex", gap: "0.6rem" }}>
+                <button className="btn btnPrimary btnSm" onClick={() => { setPage(1); load(); }} disabled={loading}>
+                  Search
+                </button>
+                <button className="btn btnSecondary btnSm" onClick={() => { setStatus("all"); setQ(""); setPage(1); setLimit(10); setTimeout(load, 0); }} disabled={loading}>
+                  Reset
+                </button>
+              </div>
             </div>
-          </div>
-
-          <div style={{ display: "flex", gap: "0.6rem", marginTop: "1rem" }}>
-            <button className="btn btnPrimary btnSm" onClick={() => { setPage(1); load(); }} disabled={loading}>
-              Search
-            </button>
-            <button className="btn btnSecondary btnSm" onClick={() => { setStatus("all"); setQ(""); setPage(1); setLimit(10); setTimeout(load, 0); }} disabled={loading}>
-              Reset
-            </button>
           </div>
         </div>
       </div>
@@ -485,71 +476,88 @@ const onToggleActiveConfirm = (row) => {
           {loading ? (
             <p className="loadingState">Loading…</p>
           ) : rows.length === 0 ? (
-            <p className="emptyState">No competitions found.</p>
+            <p className="emptyState">No competitions yet. Click "Add Competition" to get started.</p>
           ) : (
             <table className="table">
               <thead>
                 <tr>
                   <th>#</th>
                   <th>Title</th>
+                  <th>Banner</th>
                   <th>Category</th>
                   <th>Status</th>
                   <th>Active</th>
                   <th>Deadline</th>
-                  <th className="tdRight" style={{textAlign: "center"}}>Actions</th>
+                  <th className="tdRight" style={{ textAlign: "center" }}>Actions</th>
                 </tr>
               </thead>
-<tbody>
-  {rows.map((r, idx) => {
-    const editLocked = (r.editCount ?? 0) >= 1;
-    return (
-      <tr key={r._id}>
-        <td className="tdMuted">{(page - 1) * limit + idx + 1}</td>
-        <td>
-          <div className="tdSemibold">{r.title}</div>
-          {r.organizingCompany && <div className="tdMuted">{r.organizingCompany}</div>}
-        </td>
-        <td className="tdMuted">{r.challengeCategory || "—"}</td>
+              <tbody>
+                {rows.map((r, idx) => {
+                  const editLocked = (r.editCount ?? 0) >= 1;
+                  return (
+                    <tr key={r._id}>
+                      <td className="tdMuted" data-label="#">{(page - 1) * limit + idx + 1}</td>
 
-        {/*  Status + lock badge  */}
-        <td>
-          <StatusBadge status={r.status} />
-        
-        </td>
+                      <td className="tdSemibold" data-label="Title">
+                        <div>{r.title}</div>
+                        {r.organizingCompany && <div className="tdMuted">{r.organizingCompany}</div>}
+                      </td>
 
-        <td>
-          <span className={`badge ${r.isActive ? "badgeSuccess" : "badgeNeutral"}`}>
-            {r.isActive ? "Active" : "Inactive"}
-          </span>
-        </td>
-        <td className="tdMuted">
-          {r.submissionDeadline ? new Date(r.submissionDeadline).toLocaleDateString() : "—"}
-        </td>
+                      <td data-label="Banner">
+                        {r.attachments?.[0]?.url ? (
+                          <img src={r.attachments[0].url} alt="banner" className="thumb" />
+                        ) : (
+                          <span className="tdMuted">No image</span>
+                        )}
+                      </td>
 
-{/*  Actions  */}
-<td>
-  <div className="actionGroup">
-    <button
-      className={`btn btnSm ${(r.editCount ?? 0) >= 1 ? "btnSecondary" : "btnPrimary"}`}
-      onClick={() => openEdit(r)}
-      title={(r.editCount ?? 0) >= 1 ? "This competition has already been edited once" : "Edit competition"}
-    >
-      Edit
-    </button>
-    <button
-      className={`btn btnSm ${r.isActive ? "btnWarning" : "btnSuccess"}`}
-      onClick={() => onToggleActiveConfirm(r)}
-      title={(r.toggleCount ?? 0) >= 2 ? "Toggle limit reached" : r.isActive ? "Deactivate" : "Activate"}
-    >
-      {r.isActive ? "Deactivate" : "Activate"}
-    </button>
-    <button className="btn btnSm btnDanger" onClick={() => onDelete(r)}>Delete</button>
-  </div>
-</td>
-      </tr>
-    );
-  })}
-</tbody>
+                      <td className="tdMuted tdNoWrap" data-label="Category">
+                        {r.challengeCategory || "—"}
+                      </td>
+
+                      <td data-label="Status">
+                        <StatusBadge status={r.status} />
+                      </td>
+
+                      <td data-label="Active">
+                        <span className={`badge ${r.isActive ? "badgeSuccess" : "badgeNeutral"}`}>
+                          {r.isActive ? "Active" : "Inactive"}
+                        </span>
+                      </td>
+
+                      <td className="tdMuted tdNoWrap" data-label="Deadline">
+                        {r.submissionDeadline ? (
+                          <>
+                            <span className="dateOnly">
+                              {r.submissionDeadline ? new Date(r.submissionDeadline).toLocaleDateString() : "—"}
+                            </span>
+                          </>
+                        ) : "—"}
+                      </td>
+
+                      <td data-label="Actions">
+                        <div className="actionGroup">
+                          <button
+                            className={`btn btnSm ${editLocked ? "btnSecondary" : "btnPrimary"}`}
+                            onClick={() => openEdit(r)}
+                            title={editLocked ? "Already edited once" : "Edit competition"}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className={`btn btnSm ${r.isActive ? "btnWarning" : "btnSuccess"}`}
+                            onClick={() => onToggleActiveConfirm(r)}
+                            title={(r.toggleCount ?? 0) >= 2 ? "Toggle limit reached" : r.isActive ? "Deactivate" : "Activate"}
+                          >
+                            {r.isActive ? "Deactivate" : "Activate"}
+                          </button>
+                          <button className="btn btnSm btnDanger" onClick={() => onDelete(r)}>Delete</button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
             </table>
           )}
 
@@ -593,18 +601,18 @@ const onToggleActiveConfirm = (row) => {
                     </select>
                   </Field>
 
-<Field label="Challenge Category *">
-  <select
-    className="select"
-    value={form.challengeCategory}
-    onChange={sf("challengeCategory")}
-  >
-    <option value="">Select Category</option>
-    {challengeCategories.map((c) => (
-      <option key={c._id} value={c.name}>{c.name}</option>
-    ))}
-  </select>
-</Field>
+                  <Field label="Challenge Category *">
+                    <select
+                      className="select"
+                      value={form.challengeCategory}
+                      onChange={sf("challengeCategory")}
+                    >
+                      <option value="">Select Category</option>
+                      {challengeCategories.map((c) => (
+                        <option key={c._id} value={c.name}>{c.name}</option>
+                      ))}
+                    </select>
+                  </Field>
 
                   <Field label="Startup Stage Requirements *">
                     <select className="select" value={form.startupStage} onChange={sf("startupStage")}>
@@ -645,13 +653,13 @@ const onToggleActiveConfirm = (row) => {
 
                 <div className="row3">
                   <Field label="Contact Person Name">
-                  <input className="input" value={form.contactPersonName} onChange={handleTextOnly("contactPersonName")} placeholder="Enter name" />
+                    <input className="input" value={form.contactPersonName} onChange={handleTextOnly("contactPersonName")} placeholder="Enter name" />
                   </Field>
                   <Field label="Official Email *">
                     <input type="email" className="input" value={form.officialEmail} onChange={sf("officialEmail")} placeholder="Enter email" />
                   </Field>
                   <Field label="Contact Phone">
-                  <input className="input" value={form.contactPhone} onChange={handleNumberOnly("contactPhone")} placeholder="Enter phone" maxLength={10} />
+                    <input className="input" value={form.contactPhone} onChange={handleNumberOnly("contactPhone")} placeholder="Enter phone" maxLength={10} />
                   </Field>
                 </div>
 
@@ -695,33 +703,30 @@ const onToggleActiveConfirm = (row) => {
                 </Field>
 
                 <div className="row2">
-                 <Field label="Application Type">
-                                      <select
-                     className="select"
-                     value={form.applicationType}
-                     onChange={(e) => {
-                       const val = e.target.value;
-                       setForm((p) => ({
-                         ...p,
-                         applicationType: val,
-                         applicationFee: val === "paid" ? p.applicationFee : 0,
-                       }));
-                     }}
-                   >
-                     <option value="">Select</option>
-                     <option value="free">Free</option>
-                     <option value="paid">Paid</option>
-                     <option value="invite only">Invite Only</option>
-                   </select>
-                 </Field>
-                 {form.applicationType === "paid" && (
-                   <Field label="Application Fee (₹)">
-                     <input type="number" className="input" value={form.applicationFee} onChange={sf("applicationFee")} min="0" step="1" placeholder="0" />
-                   </Field>
-                 )}
-                  {/* <Field label="Eligibility Verification" note="(comma separated)">
-                    <input className="input" value={form.eligibilityVerification} onChange={sf("eligibilityVerification")} placeholder="Pitch deck, Business plan, etc." />
-                  </Field> */}
+                  <Field label="Application Type">
+                    <select
+                      className="select"
+                      value={form.applicationType}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setForm((p) => ({
+                          ...p,
+                          applicationType: val,
+                          applicationFee: val === "paid" ? p.applicationFee : 0,
+                        }));
+                      }}
+                    >
+                      <option value="">Select</option>
+                      <option value="free">Free</option>
+                      <option value="paid">Paid</option>
+                      <option value="invite only">Invite Only</option>
+                    </select>
+                  </Field>
+                  {form.applicationType === "paid" && (
+                    <Field label="Application Fee (₹)">
+                      <input type="number" className="input" value={form.applicationFee} onChange={sf("applicationFee")} min="0" step="1" placeholder="0" />
+                    </Field>
+                  )}
                 </div>
               </section>
 
@@ -745,7 +750,6 @@ const onToggleActiveConfirm = (row) => {
                             className="statePlaceholder"
                             onClick={() => { setForm((p) => ({ ...p, location: "" })); setStateOpen(false); }}
                           >
-                            
                           </div>
                           {INDIA_STATES.map((state) => (
                             <div
@@ -799,7 +803,8 @@ const onToggleActiveConfirm = (row) => {
               <div style={{ padding: "0.9rem 1rem", borderRadius: "0.85rem", background: "var(--yellow-soft)", border: "1px solid rgba(252,207,2,0.4)", color: "var(--yellow-hover)", fontSize: "var(--text-sm)" }}>
                 Note: Creating or updating a competition sets its status to <strong>Pending</strong> until an admin approves it.
               </div>
-          <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>
+
+              <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>
                 <button className="btn btnSecondary btcancel" onClick={closeModal} disabled={saving || attachmentsUploading}>Cancel</button>
                 <button className="btn btnPrimary btsubmit" onClick={save} disabled={saving || attachmentsUploading}>
                   {saving ? "Submitting…" : mode === "create" ? "Submit Competition" : "Update Competition"}

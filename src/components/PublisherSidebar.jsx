@@ -13,8 +13,8 @@ const menu = [
   { label: "Jobs",                icon: "bi-briefcase",       to: "/publisher/jobs" },
   { label: "Investor Details",    icon: "bi-currency-dollar", to: "/publisher/investor-details", hideFor: ["publisher"] },  //  hidden for publishers
   { label: "Innovation Products", icon: "bi-lightbulb",       to: "/publisher/innovation-products", hideFor: ["investor"] }, // hidden for investors
-  { label: "Submissions",         icon: "bi-speedometer2",    to: "/publisher/listings" },
   { label: "Service Listings",    icon: "bi-gear",            to: "/publisher/service-listings" },
+  { label: "Submissions",         icon: "bi-speedometer2",    to: "/publisher/listings" },
 ];
 
 export default function PublisherSidebar({ collapsed, mobileOpen, onClose }) {

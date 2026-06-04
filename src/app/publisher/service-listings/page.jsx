@@ -360,64 +360,84 @@ const confirmToggleListing = (listing) => {
             </div>
           ) : (
             <table className="table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Service Title</th>
-                  <th>Company / Brand</th>
-                  <th style={{textAlign: "center"}}>Plan</th>
-                  <th>Status</th>
-                  <th>Active</th>
-                  <th className="tdRight" style={{textAlign: "center"}}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {listings.map((l, idx) => (
-                  <tr key={l._id}>
-                    <td className="tdMuted">{idx + 1}</td>
-                    <td className="tdSemibold">{l.serviceTitle}</td>
-                    <td>
-                      <div>{l.companyName || "—"}</div>
-                      {l.brandName && <div className="tdMuted">{l.brandName}</div>}
-                    </td>
-                    <td>
-                      <span className="badge badgePrimary">{l.serviceCategory}</span>
-                    </td>
-                    <td>
-                      <StatusBadge status={l.approvalStatus} />
-                      {l.approvalStatus === "rejected" && l.rejectionReason && (
-                        <div style={{ color: "var(--orange)", fontSize: "var(--text-xs)", marginTop: "0.25rem" }}>
-                          {l.rejectionReason}
-                        </div>
-                      )}
-                    </td>
-                    <td>
-                      <span className={`badge ${l.isActive ? "badgeSuccess" : "badgeNeutral"}`}>
-                        {l.isActive ? "Active" : "Inactive"}
-                      </span>
-                    </td>
-<td>
-  <div className="actionGroup">
-    <button
-      className={`btn btnSm ${(l.editCount ?? 0) >= 1 ? "btnSecondary" : "btnPrimary"}`}
-      onClick={() => openEdit(l)}
-      title={(l.editCount ?? 0) >= 1 ? "This listing has already been edited once" : "Edit listing"}
-    >
-      Edit
-    </button>
-    <button
-      className={`btn btnSm ${l.isActive ? "btnWarning" : "btnSuccess"}`}
-      onClick={() => confirmToggleListing(l)}
-      title={(l.toggleCount ?? 0) >= 2 ? "Toggle limit reached" : l.isActive ? "Deactivate" : "Activate"}
-    >
-      {l.isActive ? "Deactivate" : "Activate"}
-    </button>
-    <button className="btn btnSm btnDanger" onClick={() => deleteListing(l._id)}>Delete</button>
-  </div>
-</td>
-                  </tr>
-                ))}
-              </tbody>
+<thead>
+  <tr>
+    <th>#</th>
+    <th>Service Title</th>
+    <th>Image</th>
+    <th>Company / Brand</th>
+    <th>Plan</th>
+    <th>Status</th>
+    <th>Active</th>
+    <th className="tdRight" style={{ textAlign: "center" }}>Actions</th>
+  </tr>
+</thead>
+<tbody>
+  {listings.map((l, idx) => {
+    const editLocked = (l.editCount ?? 0) >= 1;
+    return (
+      <tr key={l._id}>
+        <td className="tdMuted" data-label="#">{idx + 1}</td>
+
+        <td className="tdSemibold" data-label="Service Title">
+          {l.serviceTitle}
+        </td>
+
+        <td data-label="Image">
+          {l.serviceImages?.[0]?.url ? (
+            <img src={l.serviceImages[0].url} alt="service" className="thumb" />
+          ) : (
+            <span className="tdMuted">No image</span>
+          )}
+        </td>
+
+        <td className="tdMuted" data-label="Company / Brand">
+          <div>{l.companyName || "—"}</div>
+          {l.brandName && <div className="tdMuted">{l.brandName}</div>}
+        </td>
+
+        <td data-label="Plan">
+          <span className="badge badgePrimary">{l.serviceCategory || "—"}</span>
+        </td>
+
+        <td data-label="Status">
+          <StatusBadge status={l.approvalStatus} />
+          {l.approvalStatus === "rejected" && l.rejectionReason && (
+            <div style={{ color: "var(--orange)", fontSize: "var(--text-xs)", marginTop: "0.25rem" }}>
+              {l.rejectionReason}
+            </div>
+          )}
+        </td>
+
+        <td data-label="Active">
+          <span className={`badge ${l.isActive ? "badgeSuccess" : "badgeNeutral"}`}>
+            {l.isActive ? "Active" : "Inactive"}
+          </span>
+        </td>
+
+        <td data-label="Actions">
+          <div className="actionGroup">
+            <button
+              className={`btn btnSm ${editLocked ? "btnSecondary" : "btnPrimary"}`}
+              onClick={() => openEdit(l)}
+              title={editLocked ? "Already edited once" : "Edit listing"}
+            >
+              Edit
+            </button>
+            <button
+              className={`btn btnSm ${l.isActive ? "btnWarning" : "btnSuccess"}`}
+              onClick={() => confirmToggleListing(l)}
+              title={(l.toggleCount ?? 0) >= 2 ? "Toggle limit reached" : l.isActive ? "Deactivate" : "Activate"}
+            >
+              {l.isActive ? "Deactivate" : "Activate"}
+            </button>
+            <button className="btn btnSm btnDanger" onClick={() => deleteListing(l._id)}>Delete</button>
+          </div>
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
             </table>
           )}
         </div>

@@ -462,43 +462,50 @@ const confirmToggleJob = (job) => {
     const editLocked = (job.editCount ?? 0) >= 1;
     return (
       <tr key={job._id}>
-        <td className="tdMuted">{idx + 1}</td>
-        <td className="tdSemibold">{job.title}</td>
-        <td className="tdMuted">{job.jobCategory || "—"}</td>
+        <td className="tdMuted" data-label="#">{idx + 1}</td>
 
-        {/*  Status + lock badge  */}
-        <td>
-          <span className={`badge ${statusBadge(job.status)}`}>{job.status}</span>
-          
+        <td className="tdSemibold sp-font" data-label="Title">
+          {job.title}
+          {job.companyName && <div className="tdMuted">{job.companyName}</div>}
         </td>
 
-        <td>
+        <td className="tdMuted tdNoWrap" data-label="Category">
+          {job.jobCategory || "—"}
+        </td>
+
+        <td data-label="Status">
+          <span className={`badge ${statusBadge(job.status)}`}>{job.status}</span>
+        </td>
+
+        <td data-label="Active">
           <span className={`badge ${job.isActive ? "badgeSuccess" : "badgeNeutral"}`}>
             {job.isActive ? "Active" : "Inactive"}
           </span>
         </td>
-        <td className="tdMuted">{job.openings || "—"}</td>
 
-{/*  Actions  */}
-<td>
-  <div className="actionGroup">
-    <button
-      className={`btn btnSm ${(job.editCount ?? 0) >= 1 ? "btnSecondary" : "btnPrimary"}`}
-      onClick={() => openEdit(job)}
-      title={(job.editCount ?? 0) >= 1 ? "This job has already been edited once" : "Edit job"}
-    >
-      Edit
-    </button>
-    <button
-      className={`btn btnSm ${job.isActive ? "btnWarning" : "btnSuccess"}`}
-      onClick={() => confirmToggleJob(job)}
-      title={(job.toggleCount ?? 0) >= 2 ? "Toggle limit reached" : job.isActive ? "Deactivate" : "Activate"}
-    >
-      {job.isActive ? "Deactivate" : "Activate"}
-    </button>
-    <button className="btn btnSm btnDanger" onClick={() => deleteJob(job._id)}>Delete</button>
-  </div>
-</td>
+        <td className="tdMuted tdNoWrap" data-label="Openings">
+          {job.openings || "—"}
+        </td>
+
+        <td data-label="Actions">
+          <div className="actionGroup">
+            <button
+              className={`btn btnSm ${editLocked ? "btnSecondary" : "btnPrimary"}`}
+              onClick={() => openEdit(job)}
+              title={editLocked ? "Already edited once" : "Edit job"}
+            >
+              Edit
+            </button>
+            <button
+              className={`btn btnSm ${job.isActive ? "btnWarning" : "btnSuccess"}`}
+              onClick={() => confirmToggleJob(job)}
+              title={(job.toggleCount ?? 0) >= 2 ? "Toggle limit reached" : job.isActive ? "Deactivate" : "Activate"}
+            >
+              {job.isActive ? "Deactivate" : "Activate"}
+            </button>
+            <button className="btn btnSm btnDanger" onClick={() => deleteJob(job._id)}>Delete</button>
+          </div>
+        </td>
       </tr>
     );
   })}
