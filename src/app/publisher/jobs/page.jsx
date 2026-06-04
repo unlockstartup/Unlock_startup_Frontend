@@ -814,17 +814,13 @@ const confirmToggleJob = (job) => {
                   <input type="url" className="input" value={form.externalApplicationUrl} onChange={set("externalApplicationUrl")} placeholder="https://" />
                 </div>
               </section>
-
-            </div>{/* /modalBody */}
-
-            {/* Footer */}
-            <div className="modalFooter">
+              <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>
               <button className="btn btnSecondary" onClick={closeModal} disabled={saving}>Cancel</button>
               <button className="btn btnPrimary" onClick={saveJob} disabled={saving}>
                   {saving ? "Submitting…" : editId ? "Update" : "Submit"}
               </button>
-            </div>
-
+            </div>  
+            </div>{/* /modalBody */}
           </div>
         </div>
       )}

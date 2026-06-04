@@ -676,16 +676,13 @@ const confirmToggleProduct = (prod) => {
                   <strong>Note:</strong> Submitting an application does not guarantee product listing. Our team will review all company and product information, and only approved applications will be updated and published.
                 </div>
               </section>
-
-            </div>{/* /modalBody */}
-
-            {/* Footer */}
-            <div className="modalFooter">
+              <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>
               <button className="btn btnSecondary" onClick={closeModal} disabled={saving || uploadingImage || uploadingProductImages}>Cancel</button>
               <button className="btn btnPrimary" onClick={save} disabled={saving || uploadingImage || uploadingProductImages}>
                 {saving ? "Submitting…" : mode === "create" ? "Submit" : "Update"}
               </button>
-            </div>
+              </div>
+            </div>{/* /modalBody */}
           </div>
         </div>
       )}

@@ -836,16 +836,13 @@ const confirmToggleEvent = (ev) => {
   </div>
 )}
               </section>
-
-            </div>{/* /modalBody */}
-
-            {/* Footer */}
-            <div className="modalFooter">
-              <button className="btn btnSecondary" onClick={closeModal} disabled={saving}>Cancel</button>
+              <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>
+               <button className="btn btnSecondary" onClick={closeModal} disabled={saving}>Cancel</button>
               <button className="btn btnPrimary" onClick={saveEvent} disabled={saving}>
                 {saving ? "Submitting…" : editId ? "Update" : "Submit"}
               </button>
-            </div>
+              </div>
+            </div>{/* /modalBody */}
           </div>
         </div>
       )}

@@ -612,17 +612,13 @@ const confirmToggleListing = (listing) => {
                   <strong>Note:</strong> Submitting does not guarantee listing. Our team will review and only approved listings will be published.
                 </div>
               </section>
-
-            </div>{/* /modalBody */}
-
-            {/* Footer */}
-            <div className="modalFooter">
+              <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>
               <button className="btn btnSecondary" onClick={closeModal} disabled={saving || uploadingIdx !== null}>Cancel</button>
               <button className="btn btnPrimary" onClick={save} disabled={saving || uploadingIdx !== null}>
                 {saving ? "Submitting…" : mode === "create" ? "Submit" : "Update"}
               </button>
             </div>
-
+            </div>{/* /modalBody */}
           </div>
         </div>
       )}
