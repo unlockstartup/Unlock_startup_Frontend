@@ -800,8 +800,8 @@ const onToggleActiveConfirm = (row) => {
                 Note: Creating or updating a competition sets its status to <strong>Pending</strong> until an admin approves it.
               </div>
           <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>
-                <button className="btn btnSecondary bt_cancel" onClick={closeModal} disabled={saving || attachmentsUploading}>Cancel</button>
-                <button className="btn btnPrimary bt_submit" onClick={save} disabled={saving || attachmentsUploading}>
+                <button className="btn btnSecondary btcancel" onClick={closeModal} disabled={saving || attachmentsUploading}>Cancel</button>
+                <button className="btn btnPrimary btsubmit" onClick={save} disabled={saving || attachmentsUploading}>
                   {saving ? "Submitting…" : mode === "create" ? "Submit Competition" : "Update Competition"}
                 </button>
               </div>
