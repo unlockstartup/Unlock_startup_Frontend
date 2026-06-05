@@ -211,7 +211,7 @@ export default function Page() {
     <th>#</th>
     <th>Type</th>
     <th>Applicant</th>
-    <th>Organisation</th>
+    <th>Company</th>
     <th>Applied For</th>
     <th>Status</th>
     <th>Date</th>
@@ -237,7 +237,7 @@ export default function Page() {
           {sub.email && <div className="tdMuted">{sub.email}</div>}
         </td>
 
-        <td className="tdMuted tdNoWrap" data-label="Organisation">
+        <td className="tdMuted tdNoWrap" data-label="Company">
           {sub.organisation || "—"}
         </td>
 
@@ -324,18 +324,33 @@ export default function Page() {
 
 
         {/* Contact */}
-        <section className="pubModal__section">
-          <h3 className="pubModal__sectionTitle">Contact information</h3>
-          <div className="pubModal__grid">
-            <InfoItem label="Full Name"    value={selected.fullName} />
-            <InfoItem label="Email"        value={selected.email} />
-            <InfoItem label="Phone"        value={selected.phone} />
-            <InfoItem label="Organisation" value={selected.organisation} />
-            <InfoItem label="Org Type"     value={selected.orgType} />
-            <InfoItem label="Role"         value={selected.role} />
-            <InfoItem label="Location"         value={selected.location} />
-          </div>
-        </section>
+<section className="pubModal__section">
+  <h3 className="pubModal__sectionTitle">Contact information</h3>
+  <div className="pubModal__grid">
+    <InfoItem label="Full Name"    value={selected.fullName} />
+    <InfoItem label="Email"        value={selected.email} />
+    <InfoItem label="Phone"        value={selected.phone} />
+    <InfoItem label="Company"      value={selected.organisation} />
+    <InfoItem label="Org Type"     value={selected.orgType} />
+    <InfoItem label="Role"         value={selected.role} />
+    <InfoItem label="Location"     value={selected.location} />
+
+    {/* Service fields merged in */}
+    {getSubmissionType(selected) === "service" && (
+      <>
+        <InfoItem label="Industry Type" value={selected.industryType} />
+        <InfoItem label="Website"       value={selected.website} isLink />
+      </>
+    )}
+  </div>
+
+  {/* Requirements box below the grid */}
+  {getSubmissionType(selected) === "service" && selected.requirements && (
+    <div className="pubModal__requirementBox">
+      {selected.requirements}
+    </div>
+  )}
+</section>
 
         {/* Investor */}
         {getSubmissionType(selected) === "investor" && (
@@ -347,23 +362,6 @@ export default function Page() {
               <InfoItem label="Location"      value={selected.location} />
               <InfoItem label="Website"       value={selected.website} isLink />
             </div>
-          </section>
-        )}
-
-        {/* Service */}
-      {getSubmissionType(selected) === "service" && (
-  <section className="pubModal__section pubModal__section--compact">
-            <h3 className="pubModal__sectionTitle">Service requirements</h3>
-            <div className="pubModal__grid">
-              <InfoItem label="Industry Type" value={selected.industryType} />
-              <InfoItem label="Location"      value={selected.location} />
-              <InfoItem label="Website"       value={selected.website} isLink />
-            </div>
-            {selected.requirements && (
-              <div className="pubModal__requirementBox">
-                {selected.requirements}
-              </div>
-            )}
           </section>
         )}
       </div>

@@ -256,6 +256,7 @@ export default function AllListingandSubmissions() {
           <div className="actionGroup">
             <button
               className="btn btnSm btnPrimary"
+              id="view-sub-btn"
               onClick={() => router.push(`/publisher/submissions/${listing._id}?type=${listing._type}`)}
             >
               View Submissions

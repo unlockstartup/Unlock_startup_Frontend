@@ -449,9 +449,9 @@ export default function InvestorPage({ params }) {
               {/* CTA */}
               <div className="sdpCtaCard">
                 <p className="sdpCtaTitle">Pitch to this Investor</p>
-                <a href={investor.applyLink} className="sdpCtaPrimary">
+                <a href={investor.applyLink}  target="_blank" rel="noopener noreferrer"  className="sdpCtaPrimary" >
                   <ExternalLink size={14} strokeWidth={2} />
-                  Contact to Investor
+                  Apply here
                 </a>
                 <div className="regDivider" style={{ textAlign: "center", margin: "10px 0" }}>
                   <div className="regDividerLine" />
@@ -460,7 +460,7 @@ export default function InvestorPage({ params }) {
                 </div>
                 <button className="sdpCtaPrimary" type="button" onClick={() => setModalOpen(true)}>
                   <Send size={13} strokeWidth={1.75} />
-                  Apply here
+                  Contact to Investor
                 </button>
                 <ApplyModal
                   isOpen={modalOpen}

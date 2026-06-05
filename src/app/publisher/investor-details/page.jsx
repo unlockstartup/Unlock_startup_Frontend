@@ -435,7 +435,7 @@ export default function Page() {
         <div className="row2">
           <div className="field">
             <label className="label">LinkedIn URL <span style={{ color: "var(--orange)" }}>*</span></label>
-            <input className="input" value={linkedIn} onChange={(e) => setLinkedIn(e.target.value)} placeholder="https://linkedin.com/company/example" />
+            <input className="input" value={linkedIn} onChange={(e) => setLinkedIn(e.target.value)} placeholder="https://linkedin.com/" />
           </div>
 
           <div className="field">

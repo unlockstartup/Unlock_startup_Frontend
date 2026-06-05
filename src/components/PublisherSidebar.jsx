@@ -39,10 +39,12 @@ export default function PublisherSidebar({ collapsed, mobileOpen, onClose }) {
   return (
     <div className={classes}>
       <div className="ventic-sidebar__brand">
-        <Image
-          src={logo} alt="Logo" className="ventic-logo-img"
-          style={{ width: collapsed ? "32px" : "120px", height: "auto", transition: "width 0.25s" }}
-        />
+        <a href="/" target="_blank" rel="noopener noreferrer">
+          <Image
+            src={logo} alt="Logo" className="ventic-logo-img"
+            style={{ width: collapsed ? "32px" : "120px", height: "auto", transition: "width 0.25s" }}
+          />
+        </a>
       </div>
 
       <div className="ventic-sidebar__menu">

@@ -601,7 +601,7 @@ const confirmToggleProduct = (prod) => {
                 </Field>
 
                 <Field label="Product Demo / Video URL">
-                  <input type="url" className="input" name="productDemoUrl" value={form.productDemoUrl} onChange={handleChange} placeholder="https://youtube.com/" />
+                  <input type="url" className="input" name="productDemoUrl" value={form.productDemoUrl} onChange={handleChange} placeholder="https://" />
                 </Field>
               </section>
 

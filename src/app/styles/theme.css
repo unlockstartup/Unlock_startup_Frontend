@@ -236,7 +236,7 @@ h1, h2, h3, h4, h5 {
 /*  Global Desktop UI Scale (75%)  */
 @media (min-width: 1024px) {
   .ventic-shell {
-    zoom: 90%;
+    zoom: 67%;
   }
 }
 

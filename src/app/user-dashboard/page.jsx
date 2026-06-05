@@ -319,8 +319,8 @@ function EditProfile({ editData, setEditData, handleSave, saving, saveMsg }) {
             <FormField label="Full Name"    id="name"      value={editData.name}      onChange={set("name")}      placeholder="Full Name" />
             <FormField label="Phone"        id="phone"     value={editData.phone}     onChange={set("phone")}     placeholder="+9999 999 999" type="tel" />
             <FormField label="Location"     id="address"   value={editData.address}   onChange={set("address")}   placeholder="Address" />
-            <FormField label="Website"      id="website"   value={editData.website}   onChange={set("website")}   placeholder="https://yoursite.com" />
-            <FormField label="LinkedIn URL" id="linkedin"  value={editData.linkedin}  onChange={set("linkedin")}  placeholder="https://linkedin.com/in/you" />
+            <FormField label="Website"      id="website"   value={editData.website}   onChange={set("website")}   placeholder="#" />
+            <FormField label="LinkedIn URL" id="linkedin"  value={editData.linkedin}  onChange={set("linkedin")}  placeholder="https://linkedin.com/" />
           </div>
 
           <div className="pd-mt-4">
@@ -533,8 +533,8 @@ function Applications({ token, tabLabel }) {
                             <DetailRow label="Full name"        value={sub.fullName} />
                             <DetailRow label="Email"            value={sub.email} />
                             <DetailRow label="Phone"            value={sub.phone} />
-                            <DetailRow label="Organisation"     value={sub.organisation} />
-                            <DetailRow label="Organisation type" value={sub.orgType} />
+                            <DetailRow label="Company"     value={sub.organisation} />
+                            <DetailRow label="Company type" value={sub.orgType} />
                             <DetailRow label="Role"             value={sub.role} />
                             <DetailRow label="State"            value={sub.location} />
                             <DetailRow label="Funding stage"    value={sub.fundingStage} />

@@ -326,44 +326,85 @@ export default function ServicePage({ params }) {
             {/*  RIGHT SIDEBAR  */}
             <div className="svd-layout__side">
               {/* CTA Card */}
-              <div className="svd-cta">
-                <p className="svd-cta__title">Ready to Connect?</p>
-                <p className="svd-cta__sub">Get in touch with this service provider</p>
-
-                {company.websiteUrl && (
-                  <a href={company.websiteUrl} className="svd-cta__btn-primary">
-                    <ExternalLink size={14} strokeWidth={2} />
-                    Visit Website
-                  </a>
-                )}
-
-                {company.contactEmail && (
-                  <div className="svd-divider" style={{ textAlign: "center" }}>
-                    <div className="svd-divider__line" />
-                    <span className="svd-divider__text">or</span>
-                    <div className="svd-divider__line" />
-                  </div>
-                )}
-
-                <button className="svd-cta__btn-primary" type="button" onClick={() => setModalOpen(true)}>
-                  <Send size={13} strokeWidth={1.75} />
-                  Apply here
-                </button>
-
-                <ApplyModal
-                  isOpen={modalOpen}
-                  onClose={() => setModalOpen(false)}
-                  jobTitle={company.serviceTitle}
-                  companyName={company.companyName}
-                  listingId={id}
-                  listingType="services"
-                />
-
-                <button className="svd-cta__btn-secondary" type="button" onClick={handleShare} style={{ marginTop: "8px" }}>
-                  <Share2 size={14} strokeWidth={1.75} />
-                  Share Listing
-                </button>
-              </div>
+<div className="svd-cta">
+  <p className="svd-cta__title">Ready to Connect?</p>
+  <p className="svd-cta__sub">Get in touch with this service provider</p>
+ 
+  {company.websiteUrl && (
+    user ? (
+      <a href={company.websiteUrl} target="_blank" rel="noopener noreferrer" className="svd-cta__btn-primary">
+        <ExternalLink size={14} strokeWidth={2} />
+        Visit Website
+      </a>
+    ) : (
+      <button
+        className="svd-cta__btn-primary"
+        disabled
+        style={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}
+      >
+        <ExternalLink size={14} strokeWidth={2} />
+        Visit Website
+      </button>
+    )
+  )}
+ 
+  {/* Apply Here — disabled if not logged in */}
+  {user ? (
+    <>
+      {company.websiteUrl && company.contactEmail && (
+        <div className="svd-divider" style={{ textAlign: "center" }}>
+          <div className="svd-divider__line" />
+          <span className="svd-divider__text">or</span>
+          <div className="svd-divider__line" />
+        </div>
+      )}
+      <button className="svd-cta__btn-primary" type="button" onClick={() => setModalOpen(true)}>
+        <Send size={13} strokeWidth={1.75} />
+        Apply here
+      </button>
+    </>
+  ) : (
+    <>
+      {company.websiteUrl && (
+        <div className="svd-divider" style={{ textAlign: "center" }}>
+          <div className="svd-divider__line" />
+          <span className="svd-divider__text">or</span>
+          <div className="svd-divider__line" />
+        </div>
+      )}
+      <button
+        className="svd-cta__btn-primary"
+        disabled
+        style={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}
+      >
+        <Send size={13} strokeWidth={1.75} />
+        Apply here
+      </button>
+      <a
+        href="/login"
+        className="svd-cta__btn-secondary"
+        style={{ marginTop: "8px", textAlign: "center", justifyContent: "center" }}
+      >
+        <User size={14} strokeWidth={2} />
+        Login to Continue
+      </a>
+    </>
+  )}
+ 
+  <ApplyModal
+    isOpen={modalOpen}
+    onClose={() => setModalOpen(false)}
+    jobTitle={company.serviceTitle}
+    companyName={company.companyName}
+    listingId={id}
+    listingType="services"
+  />
+ 
+  <button className="svd-cta__btn-secondary" type="button" onClick={handleShare} style={{ marginTop: "8px" }}>
+    <Share2 size={14} strokeWidth={1.75} />
+    Share Listing
+  </button>
+</div>
 
               {/* Service Area */}
               {company.serviceArea && (

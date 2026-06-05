@@ -807,7 +807,7 @@ function FundingCallsCrud() {
               <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>
                 <button className="btn btnSecondary btcancel" onClick={closeModal} disabled={saving || attachmentsUploading}>Cancel</button>
                 <button className="btn btnPrimary btsubmit" onClick={save} disabled={saving || attachmentsUploading}>
-                  {saving ? "Submitting…" : mode === "create" ? "Submit Competition" : "Update Competition"}
+                  {saving ? "Submitting…" : mode === "create" ? "Submit" : "Update"}
                 </button>
               </div>
             </div>{/* /modalBody */}

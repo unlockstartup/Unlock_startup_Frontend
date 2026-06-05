@@ -359,13 +359,13 @@ const confirmToggleListing = (listing) => {
               </button>
             </div>
           ) : (
-            <table className="table">
+            <table className="table" id="svc-table">
 <thead>
   <tr>
     <th>#</th>
     <th>Service Title</th>
     <th>Image</th>
-    <th>Company / Brand</th>
+    <th>Company</th>
     <th>Plan</th>
     <th>Status</th>
     <th>Active</th>
@@ -391,9 +391,9 @@ const confirmToggleListing = (listing) => {
           )}
         </td>
 
-        <td className="tdMuted" data-label="Company / Brand">
+        <td className="tdMuted tdNoWrap" data-label="Company">
           <div>{l.companyName || "—"}</div>
-          {l.brandName && <div className="tdMuted">{l.brandName}</div>}
+          
         </td>
 
         <td data-label="Plan">
@@ -599,7 +599,7 @@ const confirmToggleListing = (listing) => {
                   </Field>
                 </div>
                 <Field label="Website URL">
-                  <input type="url" className="input" name="websiteUrl" value={form.websiteUrl} onChange={handleChange} placeholder="https://www.example.com" />
+                  <input type="url" className="input" name="websiteUrl" value={form.websiteUrl} onChange={handleChange} placeholder="https://" />
                 </Field>
               </section>
 
