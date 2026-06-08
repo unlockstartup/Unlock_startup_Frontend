@@ -30,7 +30,7 @@
 /*  Layout  */
 .pp-layout {
   display: grid;
-  grid-template-columns: 1fr 260px;
+  grid-template-columns: 1fr 350px;
   gap: 1rem;
   align-items: start;
 }

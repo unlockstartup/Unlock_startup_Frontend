@@ -343,36 +343,87 @@ const Page = () => {
             {/*  LEFT PANEL  */}
             <section className="lsb-left">
               <div className="lsb-bar" />
-              <div className="lsb-hero">
-                <div className="lsb-tag">Join the ecosystem</div>
-                <div className="lsb-orbit">
-                  <strong>Launch, grow, and connect.</strong>
-                  <span>
-                    Create a business-ready account for hiring, events,
-                    competitions, and investors.
-                  </span>
-                </div>
-                <div className="lsb-features">
-                  <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(255,207,10) 0%, rgb(223,88,42) 100%)", color: "#1a1a1a" }}>
-                    <strong>Competitions</strong><span style={{color: "white"}}>Submit and track</span>
-                  </div>
-                  <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(30,176,228) 0%, rgb(255,207,10) 100%)", color: "#1a1a1a" }}>
-                    <strong>Events</strong><span style={{color: "white"}}>Register and manage</span>
-                  </div>
-                  <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(223,88,42) 0%, rgb(30,176,228) 100%)" }}>
-                    <strong>Jobs</strong><span style={{color: "white"}}>Talent and hiring</span>
-                  </div>
-                  <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(255,207,10) 0%, rgb(30,176,228) 100%)", color: "#1a1a1a" }}>
-                    <strong>Investors</strong><span style={{color: "white"}}>Pitch and connect</span>
-                  </div>
-                  <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(30,176,228) 0%, rgb(223,88,42) 100%)" }}>
-                    <strong>Products</strong><span style={{color: "white"}}>Buy and order</span>
-                  </div>
-                  <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(223,88,42) 0%, rgb(255,207,10) 100%)", color: "#1a1a1a" }}>
-                    <strong>Services</strong><span style={{color: "white"}}>Let us help</span>
-                  </div>
-                </div>
-              </div>
+                <Image
+    src="/assets/images/logo/logo_04.png"
+    alt="logo"
+    width={150}
+    height={60}
+    style={{
+      position: "absolute",
+      top: "clamp(12px, 2.4vw, 31px)",
+      left: "50%",
+      transform: "translateX(-50%)",
+      height: "auto",
+      display: "block",
+    }}
+  />
+<div className="lsb-hero">
+  <div className="lsb-tag">Join the ecosystem</div>
+  <div className="lsb-orbit">
+    {accountType === "user" && (
+      <>
+        <strong>Discover, apply, and grow.</strong>
+        <span>Participate in competitions, attend events, find jobs, connect with investors, and access products & services.</span>
+      </>
+    )}
+    {accountType === "publisher" && (
+      <>
+        <strong>Publish, manage, and reach.</strong>
+        <span>Create and manage competitions, post events, list jobs, showcase products and offer services to a growing audience.</span>
+      </>
+    )}
+    {accountType === "investor" && (
+      <>
+        <strong>Discover, fund, and connect.</strong>
+        <span>Explore promising startups, attend pitch events, review funding opportunities, and build your investment portfolio.</span>
+      </>
+    )}
+  </div>
+
+  <div className="lsb-features">
+    <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(255,207,10) 0%, rgb(223,88,42) 100%)", color: "#1a1a1a" }}>
+      <strong>Competitions</strong>
+      <span style={{ color: "white" }}>
+        {accountType === "publisher" ? "Create and manage" : "Participate and win"}
+      </span>
+    </div>
+    <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(30,176,228) 0%, rgb(255,207,10) 100%)", color: "#1a1a1a" }}>
+      <strong>Events</strong>
+      <span style={{ color: "white" }}>
+        {accountType === "publisher" ? "Host and organize" : "Apply and enjoy"}
+      </span>
+    </div>
+    <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(223,88,42) 0%, rgb(30,176,228) 100%)" }}>
+      <strong>Jobs</strong>
+      <span style={{ color: "white" }}>
+        {accountType === "publisher" ? "Post and hire" : "Explore and apply"}
+      </span>
+    </div>
+
+    {/* Investors tile — hidden for publisher, visible for user & investor */}
+    {accountType !== "publisher" && (
+      <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(255,207,10) 0%, rgb(30,176,228) 100%)", color: "#1a1a1a" }}>
+        <strong>Investors</strong>
+        <span style={{ color: "white" }}>
+          {accountType === "investor" ? "Discover and fund" : "Pitch and connect"}
+        </span>
+      </div>
+    )}
+
+    <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(30,176,228) 0%, rgb(223,88,42) 100%)" }}>
+      <strong>Products</strong>
+      <span style={{ color: "white" }}>
+        {accountType === "publisher" ? "List and sell" : "Browse and order"}
+      </span>
+    </div>
+    <div className="lsb-feature" style={{ background: "linear-gradient(135deg, rgb(223,88,42) 0%, rgb(255,207,10) 100%)", color: "#1a1a1a" }}>
+      <strong>Services</strong>
+      <span style={{ color: "white" }}>
+        {accountType === "publisher" ? "Offer and manage" : "Find and hire"}
+      </span>
+    </div>
+  </div>
+</div>
             </section>
 
             {/*  RIGHT PANEL  */}

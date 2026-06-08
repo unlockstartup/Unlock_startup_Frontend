@@ -143,7 +143,7 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
 
         <div className="text-center mb-4">
           <h2 className="fw-bold mb-2" style={{ color: "#1a1a2e", letterSpacing: "-0.5px", fontSize: "2.4rem" }}>
-            Pricing for service plans
+            Pricing for Service plans
           </h2>
           <p className="text-muted mx-auto" style={{ maxWidth: "480px", fontSize: "1.2rem" }}>
             Choose a service plan that works best for you. All service plans include access to our core service features.

@@ -181,7 +181,7 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
 
         <div className="text-center mb-2">
           <h2 className="fw-bold mb-2" style={{ color: "#1a1a2e", letterSpacing: "-0.5px", fontSize: "2.4rem" }}>
-            Pricing for all plans
+            Pricing for Startup plans
           </h2>
           <p className="text-muted mx-auto" style={{ maxWidth: "480px", fontSize: "1.2rem" }}>
             Choose a plan that works best for you. All plans include access to our core features.

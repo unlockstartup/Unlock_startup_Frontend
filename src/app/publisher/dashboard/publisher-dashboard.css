@@ -83,7 +83,7 @@
 
 .pd__overview-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 14px;
   margin-bottom: 2rem;
 }
@@ -674,24 +674,9 @@
   font-weight: 600;
 }
 
-
-/* 
-   PUBLISHER DASHBOARD — RESPONSIVE OVERRIDES
-   Add this file after publisher-dashboard.css (or append to it)
-
-   Breakpoints used:
-     Mobile S  : ≤ 480px  (covers 320 – 450 px)
-     Mobile L  : ≤ 640px
-     Tablet    : ≤ 1024px
-     Tablet M  : ≤ 860px
-    */
-
-/*  1. OVERVIEW STAT CARDS GRID  */
-
-/* Tablet: 3 columns */
 @media (max-width: 1024px) {
   .pd__overview-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
 }

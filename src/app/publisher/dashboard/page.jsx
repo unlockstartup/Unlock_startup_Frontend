@@ -104,6 +104,20 @@ export default function PublisherDashboard() {
     planInfo?.expiry &&
     new Date(planInfo.expiry) > new Date();
 
+const computeServiceDaysLeft = () => {
+  if (!planInfo?.serviceplan?.expiryDate) return 0;
+  const expiry = new Date(planInfo.serviceplan.expiryDate);
+  const diff = expiry - new Date();
+  return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+};
+
+const serviceDaysLeft = computeServiceDaysLeft();
+
+const isServiceActive =
+  planInfo?.servicePlanActive === true &&
+  planInfo?.serviceplan?.expiryDate &&
+  new Date(planInfo.serviceplan.expiryDate) > new Date();
+
   const isAnyLimitReached =
     planInfo?.usage && planInfo?.limits
       ? (planInfo.limits.jobLimit > 0 && planInfo.usage.jobs >= planInfo.limits.jobLimit) ||
@@ -161,13 +175,21 @@ export default function PublisherDashboard() {
       sub: "across all listings",
     },
     {
-      label: "Days Remaining",
+      label: "Startup Plans Days",
       value: isActive ? daysLeft : 0,
       icon: CalendarClock,
       color: isActive ? "#0284c7" : "#dc2626",
       bg: isActive ? "#f0f9ff" : "#fff1f2",
       sub: isActive ? "subscription active" : "subscription expired",
     },
+    {
+  label: "Service Plan Days",
+  value: isServiceActive ? serviceDaysLeft : 0,
+  icon: CalendarClock,
+  color: isServiceActive ? "#0e7490" : "#dc2626",
+  bg: isServiceActive ? "#ecfeff" : "#fff1f2",
+  sub: isServiceActive ? "service plan active" : "service plan expired",
+},
   ];
 
   return (
@@ -253,7 +275,7 @@ export default function PublisherDashboard() {
       <div className="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3 mt-2">
         <div className="pd__section-header" style={{ marginBottom: 0 }}>
           <span className="pd__section-bar" />
-          <span className="pd__section-label">Subscription</span>
+          <span className="pd__section-label">Service Plans</span>
         </div>
         {!isActive && (
           <div className="pd__expired-badge">
