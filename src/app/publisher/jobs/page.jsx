@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import publisherApi from "@/app/publisherapi";
 import RichTextEditor from "@/components/RichTextEditor";
@@ -58,6 +58,55 @@ const statusBadge = (status) => {
   if (status === "rejected") return "badgeDanger";
   return "badgeWarning";
 };
+
+function StatusBadge({ status, reason }) {
+  const [pinned, setPinned] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const ref = useRef(null);
+
+  const cls = statusBadge(status);
+  const showTooltip = (hovered || pinned) && !!reason;
+
+  useEffect(() => {
+    if (!pinned) return;
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setPinned(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [pinned]);
+
+  return (
+    <span className="statusBadgeWrapper">
+      <span className={`badge ${cls}`}>
+        {status}
+        {reason && (
+          <span ref={ref} className="statusBadgeInfo">
+            <span
+              className={`statusInfoBtn statusInfoBtn--${status} ${pinned ? "statusInfoBtn--pinned" : ""}`}
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+              onClick={(e) => { e.stopPropagation(); setPinned((p) => !p); }}
+            >
+              i
+            </span>
+
+            {showTooltip && (
+              <span className={`statusTooltip statusTooltip--${status}`}>
+                <span className={`statusTooltipLabel statusTooltipLabel--${status}`}>
+                  {status === "approved" ? "Approval Note" : "Rejection Reason"}
+                </span>
+                <span className="statusTooltipDivider" />
+                <span className="statusTooltipText">{reason}</span>
+                <span className={`statusTooltipCaret statusTooltipCaret--${status}`} />
+              </span>
+            )}
+          </span>
+        )}
+      </span>
+    </span>
+  );
+}
 
 /*  Component  */
 export default function JobPage() {
@@ -473,9 +522,12 @@ const confirmToggleJob = (job) => {
           {job.jobCategory || "—"}
         </td>
 
-        <td data-label="Status">
-          <span className={`badge ${statusBadge(job.status)}`}>{job.status}</span>
-        </td>
+<td data-label="Status">
+  <StatusBadge
+    status={job.status}
+    reason={job.status === "approved" ? job.approvalReason : job.rejectionReason}
+  />
+</td>
 
         <td data-label="Active">
           <span className={`badge ${job.isActive ? "badgeSuccess" : "badgeNeutral"}`}>

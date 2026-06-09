@@ -1323,3 +1323,126 @@
   }
 }
 
+/* ── StatusBadge with reason tooltip  */
+
+.statusBadgeWrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.statusBadgeInfo {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 5px;
+}
+
+/* ── ⓘ button ── */
+.statusInfoBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  user-select: none;
+  background: transparent;
+  transition: background 0.15s;
+}
+
+.statusInfoBtn--approved {
+  border: 1.5px solid #22c55e;
+  color: #22c55e;
+}
+
+.statusInfoBtn--rejected {
+  border: 1.5px solid #ef4444;
+  color: #ef4444;
+}
+
+.statusInfoBtn--approved.statusInfoBtn--pinned {
+  background: rgba(34, 197, 94, 0.15);
+}
+
+.statusInfoBtn--rejected.statusInfoBtn--pinned {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* ── Tooltip bubble ── */
+.statusTooltip {
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.7rem;
+  width: max-content;
+  max-width: 260px;
+  z-index: 9999;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.statusTooltip--approved {
+  border: 1px solid rgba(34, 197, 94, 0.35);
+}
+
+.statusTooltip--rejected {
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+/* ── Tooltip label ── */
+.statusTooltipLabel {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.statusTooltipLabel--approved { color: #22c55e; }
+.statusTooltipLabel--rejected { color: #ef4444; }
+
+/* ── Tooltip body text ── */
+.statusTooltipText {
+  font-size: 18px;
+  color: black;
+  line-height: 1.5;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+/* ── Caret ── */
+.statusTooltipCaret {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+}
+
+.statusTooltipCaret--approved {
+  border-top: 6px solid rgba(34, 197, 94, 0.35);
+}
+
+.statusTooltipCaret--rejected {
+  border-top: 6px solid rgba(239, 68, 68, 0.35);
+}
+
+.statusTooltipDivider {
+  display: block;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+  margin: 0.4rem 0;
+  border: none;
+}

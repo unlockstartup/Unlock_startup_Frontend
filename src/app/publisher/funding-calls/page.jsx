@@ -4,7 +4,7 @@ export default function FundingCalls() {
   return <FundingCallsCrud />;
 }
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState , useRef } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { INDIA_STATES } from "@/app/constants";
 
@@ -40,12 +40,55 @@ function Field({ label, children, note }) {
   );
 }
 
-/*  Status badge helper  */
-function StatusBadge({ status = "pending" }) {
+function StatusBadge({ status = "pending", reason }) {
+  const [pinned, setPinned] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const ref = useRef(null);
+
   const cls = status === "approved" ? "badgeSuccess"
     : status === "rejected" ? "badgeDanger"
     : "badgeWarning";
-  return <span className={`badge ${cls}`}>{status}</span>;
+
+  const showTooltip = (hovered || pinned) && !!reason;
+
+  useEffect(() => {
+    if (!pinned) return;
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setPinned(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [pinned]);
+
+  return (
+    <span className="statusBadgeWrapper">
+      <span className={`badge ${cls}`}>{status}       {reason && (
+        <span ref={ref} className="statusBadgeInfo">
+          <span
+            className={`statusInfoBtn statusInfoBtn--${status} ${pinned ? "statusInfoBtn--pinned" : ""}`}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            onClick={(e) => { e.stopPropagation(); setPinned((p) => !p); }}
+          >
+            i
+          </span>
+
+          {showTooltip && (
+            <span className={`statusTooltip statusTooltip--${status}`}>
+              <span className={`statusTooltipLabel statusTooltipLabel--${status}`}>
+                {status === "approved" ? "Approval Note" : "Rejection Reason"}
+              </span>
+              <span className="statusTooltipDivider" />
+              <span className="statusTooltipText">{reason}</span>
+              <span className={`statusTooltipCaret statusTooltipCaret--${status}`} />
+            </span>
+          )}
+        </span>
+      )}</span>
+
+
+    </span>
+  );
 }
 
 /*  Date helpers  */
@@ -321,6 +364,8 @@ function FundingCallsCrud() {
     setShowConfirm(true);
   };
 
+
+  
   const onToggleActiveConfirm = (row) => {
     if (!row?._id) { toast.error("Invalid Competition ID"); return; }
     const toggleCount = row.toggleCount ?? 0;
@@ -516,7 +561,10 @@ function FundingCallsCrud() {
                       </td>
 
                       <td data-label="Status">
-                        <StatusBadge status={r.status} />
+                           <StatusBadge
+     status={r.status}
+     reason={r.status === "approved" ? r.approvalReason : r.rejectionReason}
+   />
                       </td>
 
                       <td data-label="Active">
