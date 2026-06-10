@@ -249,7 +249,7 @@ export default function Page() {
         <SectionHeader title="Basic information" subtitle="Firm identity and public-facing details" />
 
         <div className="field">
-          <label className="label">Fund / Investor Name <span style={{ color: "var(--orange)" }}>*</span></label>
+          <label className="label">Investor Name <span style={{ color: "var(--orange)" }}>*</span></label>
           <input className="input" value={fundName} onChange={(e) => setFundName(e.target.value)} placeholder="e.g. Venture Partners India" />
         </div>
 
@@ -266,7 +266,7 @@ export default function Page() {
 
           <div className="field">
             <label className="label">Logo URL <span style={{ color: "var(--orange)" }}>*</span></label>
-            <input className="input" value={logo} onChange={(e) => setLogo(e.target.value)} placeholder="https://cdn.example.com/logo.png" />
+            <input className="input" value={logo} onChange={(e) => setLogo(e.target.value)} placeholder="https://" />
           </div>
         </div>
 
@@ -408,22 +408,22 @@ export default function Page() {
         <div className="row2">
           <div className="field">
             <label className="label">Contact Name <span style={{ color: "var(--orange)" }}>*</span></label>
-            <input className="input" value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Rajesh Patel" />
+            <input className="input" value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Enter Name" />
           </div>
           <div className="field">
-            <label className="label">Contact Title <span style={{ color: "var(--orange)" }}>*</span></label>
-            <input className="input" value={contactTitle} onChange={(e) => setContactTitle(e.target.value)} placeholder="Managing Partner" />
+            <label className="label">Designation <span style={{ color: "var(--orange)" }}>*</span></label>
+            <input className="input" value={contactTitle} onChange={(e) => setContactTitle(e.target.value)} placeholder="Enter Designation" />
           </div>
         </div>
 
         <div className="row2">
           <div className="field">
             <label className="label">Contact Email <span style={{ color: "var(--orange)" }}>*</span></label>
-            <input type="email" className="input" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="rajesh@vpindia.com" />
+            <input type="email" className="input" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="Enter Email ID" />
           </div>
           <div className="field">
             <label className="label">Contact Phone <span style={{ color: "var(--orange)" }}>*</span></label>
-            <input className="input" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="+91-9876543210" />
+            <input className="input" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="+91-9999999999" />
           </div>
         </div>
       </section>
@@ -435,7 +435,7 @@ export default function Page() {
         <div className="row2">
           <div className="field">
             <label className="label">LinkedIn URL <span style={{ color: "var(--orange)" }}>*</span></label>
-            <input className="input" value={linkedIn} onChange={(e) => setLinkedIn(e.target.value)} placeholder="https://linkedin.com/" />
+            <input className="input" value={linkedIn} onChange={(e) => setLinkedIn(e.target.value)} placeholder="https://" />
           </div>
 
           <div className="field">
@@ -467,7 +467,7 @@ export default function Page() {
         <div className="row2">
           <div className="field">
             <label className="label">Apply Link <span style={{ color: "var(--orange)" }}>*</span></label>
-            <input className="input" value={applyLink} onChange={(e) => setApplyLink(e.target.value)} placeholder="https://example.com/apply" />
+            <input className="input" value={applyLink} onChange={(e) => setApplyLink(e.target.value)} placeholder="https://" />
           </div>
 
           <div className="field">

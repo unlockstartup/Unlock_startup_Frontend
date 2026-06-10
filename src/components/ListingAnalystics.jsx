@@ -255,7 +255,7 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Portfolio Companies", item.portfolioCompanies?.map(p => `${p.companyName}${p.description ? ` (${p.description})` : ""}`).join(", ")));
     rows.push(renderField("About", item.about));
     rows.push(renderField("Contact Name", item.contact?.name));
-    rows.push(renderField("Contact Title", item.contact?.title));
+    rows.push(renderField("Designation", item.contact?.title));
     rows.push(renderField("Contact Email", item.contact?.email));
     rows.push(renderField("Contact Phone", item.contact?.phone));
     rows.push(renderField("LinkedIn", item.linkedIn));
@@ -410,6 +410,7 @@ export default function ListingsAnalytics() {
   const grand   = stats?.grandTotal ?? 0;
   const usage   = plan?.usage  ?? {};
   const limits  = plan?.limits ?? {};
+  const isTrial = plan?.plan?.plan === "trial" || plan?.serviceplan?.plan === "trial";
 
   const overviewCards = [
     { label: "Jobs",         value: usage.jobs            ?? 0, Icon: Briefcase   },
@@ -655,20 +656,27 @@ export default function ListingsAnalytics() {
                         <ClickBar value={row._clicks} max={maxClicks} color={m.color || BLUE} />
                       </td>
 
-                      <td className="pd__td" style={{ textAlign: "center" }}>
-                        {limitLeft !== null ? (
-                          <span
-                            className="pd__limit-left"
-                            style={{
-                              color: limitLeft === 0 ? "#7f1d1d" : limitLeft <= 2 ? BLUE : "#059669",
-                            }}
-                          >
-                            {limitLeft === 0 ? "Limit reached" : `${limitLeft} left`}
-                          </span>
-                        ) : (
-                          <span className="pd__limit-none">—</span>
-                        )}
-                      </td>
+<td className="pd__td" style={{ textAlign: "center" }}>
+  {limitLeft !== null ? (
+    limitLeft === 0 ? (
+      <span
+        className="pd__limit-left"
+        style={{ color: isTrial ? "#7c3aed" : "#7f1d1d" }}
+      >
+        {isTrial ? "Trial" : "Limit reached"}
+      </span>
+    ) : (
+      <span
+        className="pd__limit-left"
+        style={{ color: limitLeft <= 2 ? BLUE : "#059669" }}
+      >
+        {limitLeft} left
+      </span>
+    )
+  ) : (
+    <span className="pd__limit-none">—</span>
+  )}
+</td>
 
                       <td className="pd__td" style={{ textAlign: "right" }}>
                         <button

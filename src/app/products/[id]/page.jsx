@@ -34,12 +34,19 @@ import {
   Target,
   Trophy
 } from "lucide-react";
+import { useRouter } from "next/navigation"; 
 
 export default function Page({ params }) {
   const { user } = useAuth();
-
+const router = useRouter(); 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) {
+      router.replace("/login");
+    }
+  }, [user, router]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -58,7 +65,7 @@ export default function Page({ params }) {
     fetchProduct();
   }, [params]);
 
-  if (loading) {
+  if (loading || !user) {
     return (
       <main>
         <div className="productDetailPage">

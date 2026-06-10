@@ -11,7 +11,7 @@ const Page = () => {
         <main id="main-content" className="services-page">
           {/* Hero Section */}
           <section className="hero mt-30" id="top">
-            <div className="container hero-grid">
+            {/* <div className="container hero-grid">
               <div className="hero-left">
                 <span className="eyebrow">What We Offer</span>
                 <div>
@@ -31,11 +31,14 @@ const Page = () => {
                   <li>Built-in compliance, audit trails, and enterprise-grade security</li>
                 </ul>
               </aside>
-            </div>
+            </div> */}
+            <h1 className="hero-heading">
+           Unlock Startup Services
+            </h1>
           </section>
 
           {/* Services Section */}
-          <section id="services">
+          <section id="services" style={{ marginTop: 40 }}>
             <div className="container">
               <div className="section-head">
                 <div className="section-label">What's Inside</div>
@@ -60,13 +63,13 @@ const Page = () => {
                   <div className="features-grid">
                     <div className="feature-item">
                       <svg className="feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                       </svg>
                       <div>Custom judging rubrics, blind scoring panels, real-time leaderboards</div>
                     </div>
                     <div className="feature-item">
                       <svg className="feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        <path d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                       </svg>
                       <div>Multi-stage submissions, team roles, eligibility gating, and NDA workflows</div>
                     </div>
@@ -103,16 +106,16 @@ const Page = () => {
                   <div className="features-grid">
                     <div className="feature-item">
                       <svg className="feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                        <line x1="16" y1="2" x2="16" y2="6"/>
-                        <line x1="8" y1="2" x2="8" y2="6"/>
-                        <line x1="3" y1="10" x2="21" y2="10"/>
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
                       </svg>
                       <div>Tiered ticketing, waitlists, hybrid streaming, and agenda builder</div>
                     </div>
                     <div className="feature-item">
                       <svg className="feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M22 11.08V9a2 2 0 00-2-2H4a2 2 0 00-2 2v2.08a2 2 0 0 1-.83 1.62l-3.1.91a2 2 0 0 1 0 3.28l3.1.91a2 2 0 0 1 .83 1.62V21a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1.09a2 2 0 0 1 .83-1.62l3.1-.91a2 2 0 0 1 0-3.28l-3.1-.91a2 2 0 0 1-.83-1.62z"/>
+                        <path d="M22 11.08V9a2 2 0 00-2-2H4a2 2 0 00-2 2v2.08a2 2 0 0 1-.83 1.62l-3.1.91a2 2 0 0 1 0 3.28l3.1.91a2 2 0 0 1 .83 1.62V21a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1.09a2 2 0 0 1 .83-1.62l3.1-.91a2 2 0 0 1 0-3.28l-3.1-.91a2 2 0 0 1-.83-1.62z" />
                       </svg>
                       <div>Speaker portals, sponsor dashboards, and post-event ROI summaries</div>
                     </div>
@@ -149,16 +152,16 @@ const Page = () => {
                   <div className="features-grid">
                     <div className="feature-item">
                       <svg className="feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
+                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
                       </svg>
                       <div>Skills-based matching, async video interviews, offer letter templates</div>
                     </div>
                     <div className="feature-item">
                       <svg className="feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-                        <polyline points="17 8 17 10 17 12"/>
-                        <polyline points="7 8 7 10 7 12"/>
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                        <polyline points="17 8 17 10 17 12" />
+                        <polyline points="7 8 7 10 7 12" />
                       </svg>
                       <div>Verified startup experience badges, reference checks, culture-fit scoring</div>
                     </div>
@@ -195,17 +198,17 @@ const Page = () => {
                   <div className="features-grid">
                     <div className="feature-item">
                       <svg className="feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <line x1="15" y1="9" x2="9" y2="15"/>
-                        <line x1="9" y1="9" x2="15" y2="15"/>
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="15" y1="9" x2="9" y2="15" />
+                        <line x1="9" y1="9" x2="15" y2="15" />
                       </svg>
                       <div>Thesis-aligned deal flow, one-click intros, and NDA-gated data rooms</div>
                     </div>
                     <div className="feature-item">
                       <svg className="feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-                        <polyline points="7 10 12 15 17 10"/>
-                        <line x1="17" y1="17" x2="17" y2="21"/>
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="17" y1="17" x2="17" y2="21" />
                       </svg>
                       <div>Live cap table sync, pro-rata tracking, and co-investor coordination</div>
                     </div>
@@ -242,17 +245,17 @@ const Page = () => {
                   <div className="features-grid">
                     <div className="feature-item">
                       <svg className="feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect x="9" y="8" width="6" height="8"/>
-                        <rect x="3" y="14" width="6" height="2"/>
-                        <rect x="15" y="14" width="6" height="2"/>
+                        <rect x="9" y="8" width="6" height="8" />
+                        <rect x="3" y="14" width="6" height="2" />
+                        <rect x="15" y="14" width="6" height="2" />
                       </svg>
                       <div>Dynamic pricing tiers, usage-based billing, and trial conversion flows</div>
                     </div>
                     <div className="feature-item">
                       <svg className="feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-                        <polyline points="7 10 12 15 17 10"/>
-                        <line x1="17" y1="17" x2="17" y2="21"/>
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="17" y1="17" x2="17" y2="21" />
                       </svg>
                       <div>Verified reviews, integration badges, and buyer intent signals</div>
                     </div>
@@ -289,13 +292,13 @@ const Page = () => {
                   <div className="features-grid">
                     <div className="feature-item">
                       <svg className="feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                       </svg>
                       <div>Pinned placements, newsletter features, and co-branded social drops</div>
                     </div>
                     <div className="feature-item">
                       <svg className="feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                       </svg>
                       <div>Funnel analytics, multivariate testing, and weekly growth reviews</div>
                     </div>

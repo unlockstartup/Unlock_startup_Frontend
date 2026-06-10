@@ -24,7 +24,7 @@
 .pricingPage__hero h1 {
   font-size: 48px;
   margin-bottom: 16px;
-  color: #111827;
+  color: #38cdfd;
   letter-spacing: -0.02em;
   text-align: center;
 }
@@ -386,3 +386,4 @@
   gap: 20px;
   justify-content: center;
 }
+

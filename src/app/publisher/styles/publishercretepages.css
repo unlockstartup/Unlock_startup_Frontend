@@ -576,6 +576,7 @@
 .statePlaceholder {
   composes: stateOption;
   color: var(--color-text-faint);
+  margin-left: 15px;
 }
 
 .tierTable {

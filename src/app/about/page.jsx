@@ -5,8 +5,8 @@ import './aboutus.css';
 const Page = () => {
   return (
     <main>
-      <section className="au-hero mt-80" id="top">
-        <div className="au-container au-hero-grid">
+      <section className="hero mt-30" id="top">
+        {/* <div className="au-container au-hero-grid">
           <div>
             <span className="au-eyebrow">Event Management for Startups</span>
             <h1 style={{ maxWidth: "100%", wordWrap: "break-word" }}>We create high impact events that accelerate startup growth and unlock new business opportunities.</h1>
@@ -35,7 +35,10 @@ const Page = () => {
               </div>
             </div>
           </aside>
-        </div>
+        </div> */}
+                    <h1 className="hero-heading">
+           About Us
+            </h1>
       </section>
 
       {/* Overview Section */}

@@ -448,7 +448,7 @@
 /* Listing name cell */
 .pd__listing-name {
   font-weight: 600;
-  font-size: 17px;       /* ↑ explicit */
+  font-size: 19px;       /* ↑ explicit */
   color: var(--pd-slate-900);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -594,7 +594,7 @@
   border: 1px solid var(--pd-slate-200);
 }
 .pd__modal-field-label {
-  font-size: 0.7rem;         /* ↑ from 10px */
+  font-size: 1.2rem;         /* ↑ from 10px */
   font-weight: 700;
   color: var(--pd-slate-400);
   text-transform: uppercase;
@@ -602,7 +602,7 @@
   margin-bottom: 2px;
 }
 .pd__modal-field-value {
-  font-size: 0.875rem;       /* ↑ from 13px */
+  font-size: 1.3rem;       /* ↑ from 13px */
   font-weight: 600;
   color: var(--pd-slate-800);/* ↑ from #1e293b */
 }
@@ -883,7 +883,6 @@
   }
 }
 
-/*  9. FILTER BAR  */
 
 @media (max-width: 640px) {
   .pd__filter-bar {

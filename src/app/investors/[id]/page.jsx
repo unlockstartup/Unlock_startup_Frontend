@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import api from "@/app/api";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Building2,
@@ -33,18 +34,14 @@ import "./investorProfile.css";
 import ApplyModal from "@/components/uiElements/ApplyModal";
 import Breadcrumb from "@/components/breadcrumb/Breadcrumb";
  
-//  Amount Formatter 
-// Converts raw INR numbers to human-readable Lakh / Cr / K format
 function formatINR(amount) {
   if (!amount || isNaN(amount)) return "N/A";
   const num = Number(amount);
   if (num >= 1_00_00_000) {
-    // 1 Crore = 1,00,00,000
     const cr = num / 1_00_00_000;
     return `₹${cr % 1 === 0 ? cr : cr.toFixed(2)} Cr`;
   }
   if (num >= 1_00_000) {
-    // 1 Lakh = 1,00,000
     const lakh = num / 1_00_000;
     return `₹${lakh % 1 === 0 ? lakh : lakh.toFixed(2)} Lakh`;
   }
@@ -70,7 +67,14 @@ export default function InvestorPage({ params }) {
   const [id, setId] = useState(null);
   const [portfolioIndex, setPortfolioIndex] = useState(0);
   const { user } = useAuth();
+ const router = useRouter();  
  
+   useEffect(() => {
+    if (!user) {
+      router.replace("/login");
+    }
+  }, [user, router]);
+
   useEffect(() => {
     const fetchInvestor = async () => {
       const { id } = await params;
@@ -151,7 +155,7 @@ export default function InvestorPage({ params }) {
     }
   };
 
-  if (loading) {
+  if (loading || !user) {
     return (
       <main>
         <div className="serviceDetailPage">
@@ -504,13 +508,13 @@ export default function InvestorPage({ params }) {
                       <span className="sdpRegValue">{getValue("investmentExperience")}</span>
                     </div>
                   </div>
-                  <div className="sdpRegRow">
+                  {/* <div className="sdpRegRow">
                     <span className="sdpRegIcon"><Users size={13} strokeWidth={1.75} /></span>
                     <div className="sdpRegMeta">
                       <span className="sdpRegLabel">Portfolio</span>
                       <span className="sdpRegValue">{getValue("notableInvestments")}</span>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 

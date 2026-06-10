@@ -71,7 +71,7 @@ const [stateOpen, setStateOpen] = useState(false);
                 <div className="contact-details">
                   <h3>Email us</h3>
                   <p>
-                    <a href="mailto:hello@example.com">hello@example.com</a>
+                    <a href="mailto:hello@example.com">support@unlockstartup.com</a>
                   </p>
                 </div>
               </div>
@@ -82,12 +82,12 @@ const [stateOpen, setStateOpen] = useState(false);
                     <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94" />
                   </svg>
                 </div>
-                <div className="contact-details">
+                {/* <div className="contact-details">
                   <h3>Email us</h3>
                   <p>
                     <a href="mailto:hello@example.com">hello@example.com</a>
                   </p>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

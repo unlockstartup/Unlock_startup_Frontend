@@ -368,21 +368,38 @@ const DownloadBtn = ({ sub, invNumber, onDownload, isDownloading }) => (
                     </div>
                   </div>
 
-                  {[
-                    ["name", "Name", "text"],
-                    ["email", "Email", "email"],
-                    ["phone", "Phone", "text"],
-                    ["companyName", "Company Name", "text"],
-                    ["organizationType", "Company Type", "text"],
-                    ["website", "Website", "url"],
-                    ["address", "Address", "text"],
-                  ].map(([name, label, type]) => (
-                    <div key={name}>
-                      <label className="pp-field-label" style={{ fontSize: "1.2rem", fontWeight: 600 }}>{label}</label>
-                      <input type={type} className="pp-input" style={{ fontSize: "1.2rem" }}
-                        name={name} value={formData[name]} onChange={handleChange} />
-                    </div>
-                  ))}
+ {[
+  ["name", "Name", "text"],
+  ["email", "Email", "email"],
+  ["phone", "Phone", "text"],
+  ["companyName", "Company Name", "text"],
+  ["organizationType", "Company Type", "text"],
+  ["website", "Website", "url"],
+  ["address", "Address", "text"],
+].map(([name, label, type]) => (
+  <div key={name}>
+    <label className="pp-field-label" style={{ fontSize: "1.2rem", fontWeight: 600 }}>
+      {label}
+    </label>
+    <input
+      type={type}
+      className="pp-input"
+      style={{
+        fontSize: "1.2rem",
+        ...(name === "email" && {
+          backgroundColor: "#f1f5f9",
+          color: "#64748b",
+          cursor: "not-allowed",
+          border: "1px solid #e2e8f0",
+        }),
+      }}
+      name={name}
+      value={formData[name]}
+      onChange={handleChange}
+      readOnly={name === "email"}   // ← key change
+    />
+  </div>
+))}
 
                   <div className="pp-field-full">
                     <label className="pp-field-label" style={{ fontSize: "1.2rem", fontWeight: 600 }}>About Company</label>

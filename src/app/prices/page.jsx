@@ -161,7 +161,7 @@ export default function Page() {
         {/* Hero Section */}
         <section className="pricingPage__hero">
           <div className="pricingPage__container">
-            <h1>Transparent pricing, built for every stage</h1>
+            <h1 clas>Transparent pricing, built for every stage</h1>
             <p>
               From your first idea to full-scale operations — choose a plan that fits where you are today
               and grows with you. No hidden fees, no long-term commitments.

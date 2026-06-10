@@ -712,7 +712,7 @@ function FundingCallsCrud() {
                 </div>
 
                 <Field label="Website Url">
-                  <input type="url" className="input" placeholder="https://…" value={form.organizationWebsite} onChange={sf("organizationWebsite")} />
+                  <input type="url" className="input" placeholder="https://" value={form.organizationWebsite} onChange={sf("organizationWebsite")} />
                 </Field>
               </section>
 
@@ -814,7 +814,7 @@ function FundingCallsCrud() {
                   </Field>
 
                   <Field label="Registration Link *">
-                    <input type="url" className="input" placeholder="https://…" value={form.registrationLink} onChange={sf("registrationLink")} />
+                    <input type="url" className="input" placeholder="https://" value={form.registrationLink} onChange={sf("registrationLink")} />
                   </Field>
                 </div>
               </section>
