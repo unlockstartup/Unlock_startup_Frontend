@@ -363,7 +363,7 @@ export default function CompetitionPage({ params }) {
                 <div className="competitionCard">
                   <div className="competitionSectionHeader">
                     <div className="competitionSectionIcon"><ShieldCheck size={20} strokeWidth={2} /></div>
-                    <h2 className="competitionSectionTitle">Eligibility</h2>
+                    <h2 className="competitionSectionTitle">Who Can Participate</h2>
                   </div>
                   {funding.eligibleParticipants && (
                     <p className="competitionBodyText" style={{ marginBottom: funding.eligibilityVerification?.length > 0 ? "16px" : 0 }}>
