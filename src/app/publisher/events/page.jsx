@@ -59,8 +59,8 @@ const applicationMethods = [
 ];
 const formats = [
   { value: "in-person", label: "In-Person" },
-  { value: "online",    label: "Online"    },
-  { value: "hybrid",    label: "Hybrid"    },
+  { value: "online", label: "Online" },
+  { value: "hybrid", label: "Hybrid" },
 ];
 
 const statusBadge = (status) => {
@@ -120,26 +120,26 @@ function StatusBadge({ status, reason }) {
 
 /*  Component */
 export default function PublisherEventPage() {
-  const [events, setEvents]         = useState([]);
+  const [events, setEvents] = useState([]);
   const [categories, setCategories] = useState([]);
   const [eventTypes, setEventTypes] = useState([]);
-  const [loading, setLoading]       = useState(true);
-  const [showModal, setShowModal]   = useState(false);
-  const [saving, setSaving]         = useState(false);
-  const [form, setForm]             = useState(defaultForm);
-  const [editId, setEditId]         = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState(defaultForm);
+  const [editId, setEditId] = useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
-  const [mainImage, setMainImage]   = useState(null);
-  const [planInfo, setPlanInfo]     = useState(null);
+  const [mainImage, setMainImage] = useState(null);
+  const [planInfo, setPlanInfo] = useState(null);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [stateOpen, setStateOpen]   = useState(false);
-  const [status, setStatus]         = useState("all");
-  const [q, setQ]                   = useState("");
+  const [stateOpen, setStateOpen] = useState(false);
+  const [status, setStatus] = useState("all");
+  const [q, setQ] = useState("");
   const [applicationMethod, setApplicationMethod] = useState("");
   const [confirmConfig, setConfirmConfig] = useState({
     title: "", message: "",
     confirmText: "Confirm", cancelText: "Cancel",
-    confirmVariant: "danger", onConfirm: () => {},
+    confirmVariant: "danger", onConfirm: () => { },
   });
 
   /*  Data fetching  */
@@ -147,9 +147,9 @@ export default function PublisherEventPage() {
     try {
       setLoading(true);
       const params = new URLSearchParams();
-      const s      = overrides.status !== undefined ? overrides.status : status;
-      const search = overrides.q      !== undefined ? overrides.q      : q;
-      if (s !== "all")   params.append("status", s);
+      const s = overrides.status !== undefined ? overrides.status : status;
+      const search = overrides.q !== undefined ? overrides.q : q;
+      if (s !== "all") params.append("status", s);
       if (search.trim()) params.append("q", search.trim());
       const res = await publisherApi.get(`/api/publisher/dashboard/events?${params}`);
       setEvents(res.data?.items || []);
@@ -160,138 +160,148 @@ export default function PublisherEventPage() {
     }
   };
 
-useEffect(() => {
-  fetchEvents();
+  useEffect(() => {
+    fetchEvents();
 
-  (async () => {
-    try {
-      const [types, cats] = await Promise.all([
-        getPublicEventTypes(),
-        getPublicEventCategories(),   // no typeId argument
-      ]);
-      setEventTypes(types.data?.eventTypes || []);
-      setCategories(cats.data?.categories || []);
-    } catch (err) {
-      toast.error("Failed to load dropdown data");
-    }
-  })();
+    (async () => {
+      try {
+        const [types, cats] = await Promise.all([
+          getPublicEventTypes(),
+          getPublicEventCategories(),   // no typeId argument
+        ]);
+        setEventTypes(types.data?.eventTypes || []);
+        setCategories(cats.data?.categories || []);
+      } catch (err) {
+        toast.error("Failed to load dropdown data");
+      }
+    })();
 
-  (async () => {
-    try { const res = await getPublisherPlanInfo(); setPlanInfo(res.data); } catch {}
-  })();
-}, []);
+    (async () => {
+      try { const res = await getPublisherPlanInfo(); setPlanInfo(res.data); } catch { }
+    })();
+  }, []);
 
 
 
-const openModal = () => {
-  setForm(defaultForm);
-  setEditId(null);
-  setMainImage(null);
-  setApplicationMethod(""); 
-  setShowModal(true);
-};
-const openEdit = (ev) => {
-  const alreadyEdited = (ev.editCount ?? 0) >= 1;
+  const openModal = () => {
+    setForm(defaultForm);
+    setEditId(null);
+    setMainImage(null);
+    setApplicationMethod("");
+    setShowModal(true);
+  };
+  const openEdit = (ev) => {
+    const alreadyEdited = (ev.editCount ?? 0) >= 1;
 
-  setConfirmConfig({
-    title: alreadyEdited ? "Edit Not Allowed" : "Edit Event",
-    message: alreadyEdited
-      ? "This listing has already been edited once and can no longer be modified."
-      : "You can only update this listing once. Please review all details carefully before submitting, as no further edits will be allowed after this.",
-    confirmText: alreadyEdited ? "OK" : "I Understand, Proceed",
-    cancelText: alreadyEdited ? "" : "Cancel",
-    confirmVariant: alreadyEdited ? "danger" : "primary",
-    onConfirm: () => {
-      if (alreadyEdited) return;
+    setConfirmConfig({
+      title: alreadyEdited ? "Edit Not Allowed" : "Edit Event",
+      message: alreadyEdited
+        ? "This listing has already been edited once and can no longer be modified."
+        : "You can only update this listing once. Please review all details carefully before submitting, as no further edits will be allowed after this.",
+      confirmText: alreadyEdited ? "OK" : "I Understand, Proceed",
+      cancelText: alreadyEdited ? "" : "Cancel",
+      confirmVariant: alreadyEdited ? "danger" : "primary",
+      onConfirm: () => {
+        if (alreadyEdited) return;
 
-      const pad = (n) => String(n).padStart(2, "0");
-      const fmt = (iso) => {
-        if (!iso) return "";
-        const d = new Date(iso);
-        return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-      };
-      const arr = (v) => (Array.isArray(v) ? v.join(", ") : v || "");
+        const pad = (n) => String(n).padStart(2, "0");
+        const fmt = (iso) => {
+          if (!iso) return "";
+          const d = new Date(iso);
+          return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        };
+        const arr = (v) => (Array.isArray(v) ? v.join(", ") : v || "");
 
-      setForm({
-        ...defaultForm, ...ev,
-        targetAudience:   arr(ev.targetAudience),
-        keyTopics:        arr(ev.keyTopics),
-        attendeeBenefits: arr(ev.attendeeBenefits),
-        eventDescription: ev.eventDescription || "",
-        featuredSpeakers: ev.featuredSpeakers  || "",
-        startDateTime:        fmt(ev.startDateTime),
-        endDateTime:          fmt(ev.endDateTime),
-        registrationDeadline: fmt(ev.registrationDeadline),
-        registrationPrice:    ev.registrationPrice?.toString() || "",
-        eventCategory: Array.isArray(ev.eventCategory) ? ev.eventCategory
-          : ev.eventCategory ? [ev.eventCategory] : [],
-      });
-      setEditId(ev._id);
-      setMainImage(ev.mainImage || null);
-      setApplicationMethod("");
-      setShowModal(true);
-    },
-  });
-  setShowConfirm(true);
-};
+        setForm({
+          ...defaultForm, ...ev,
+          targetAudience: arr(ev.targetAudience),
+          keyTopics: arr(ev.keyTopics),
+          attendeeBenefits: arr(ev.attendeeBenefits),
+          eventDescription: ev.eventDescription || "",
+          featuredSpeakers: ev.featuredSpeakers || "",
+          startDateTime: fmt(ev.startDateTime),
+          endDateTime: fmt(ev.endDateTime),
+          registrationDeadline: fmt(ev.registrationDeadline),
+          registrationPrice: ev.registrationPrice?.toString() || "",
+          eventCategory: Array.isArray(ev.eventCategory) ? ev.eventCategory
+            : ev.eventCategory ? [ev.eventCategory] : [],
+        });
+        setEditId(ev._id);
+        setMainImage(ev.mainImage || null);
+        setApplicationMethod("");
+        setShowModal(true);
+      },
+    });
+    setShowConfirm(true);
+  };
 
 
 
   const closeModal = () => setShowModal(false);
 
-const handleChange = (e) => {
-  const { name, value } = e.target;
-  setForm((prev) => ({ ...prev, [name]: value }));
-};
-const handleNumberOnly = (e) => {
-  const { name, value } = e.target;
-  if (/^\d*$/.test(value)) setForm((prev) => ({ ...prev, [name]: value }));
-};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+  const handleNumberOnly = (e) => {
+    const { name, value } = e.target;
+    if (/^\d*$/.test(value)) setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
-const handleTextOnly = (e) => {
-  const { name, value } = e.target;
-  if (/^[a-zA-Z\s]*$/.test(value)) setForm((prev) => ({ ...prev, [name]: value }));
-};
-  const addTier    = () => setForm((p) => ({ ...p, ticketPricingTiers: [...p.ticketPricingTiers, { label: "", price: "" }] }));
+  const handleTextOnly = (e) => {
+    const { name, value } = e.target;
+    if (/^[a-zA-Z\s]*$/.test(value)) setForm((prev) => ({ ...prev, [name]: value }));
+  };
+  const addTier = () => setForm((p) => ({ ...p, ticketPricingTiers: [...p.ticketPricingTiers, { label: "", price: "" }] }));
   const removeTier = (idx) => setForm((p) => ({ ...p, ticketPricingTiers: p.ticketPricingTiers.filter((_, i) => i !== idx) }));
   const updateTier = (idx, field, value) =>
     setForm((p) => { const t = [...p.ticketPricingTiers]; t[idx] = { ...t[idx], [field]: value }; return { ...p, ticketPricingTiers: t }; });
 
-  const addCategoryTag    = (cat) => { if (cat && !form.eventCategory.includes(cat)) setForm((p) => ({ ...p, eventCategory: [...p.eventCategory, cat] })); };
+  const addCategoryTag = (cat) => { if (cat && !form.eventCategory.includes(cat)) setForm((p) => ({ ...p, eventCategory: [...p.eventCategory, cat] })); };
   const removeCategoryTag = (cat) => setForm((p) => ({ ...p, eventCategory: p.eventCategory.filter((c) => c !== cat) }));
 
 
   const isValidUrl = (url) => {
-  try { new URL(url); return true; } catch { return false; }
-};
-  /*  Save / delete / toggle  */
-  const validate = () => {
-    if (!form.title.trim())          return "Event Name is required";
-    if (!form.eventCategory?.length) return "Event Category is required";
-    if (!form.startDateTime || !form.endDateTime) return "Start/End date-time required";
-    if (!form.workEmail)             return "Work Email is required";
-    if (!mainImage?.url)             return "Main image / banner is required";
-    if (form.organizationWebsite && !isValidUrl(form.organizationWebsite)) return "Enter a valid Company Website URL";
-  return null;
+    try { new URL(url); return true; } catch { return false; }
   };
+  /*  Save / delete / toggle  */
+const validate = () => {
+  if (!form.title.trim())          return "Event Name is required";
+  if (!form.eventCategory?.length) return "Event Category is required";
+  if (!form.startDateTime || !form.endDateTime) return "Start/End date-time required";
+  if (!form.workEmail)             return "Work Email is required";
+  if (!mainImage?.url)             return "Main image / banner is required";
+  if (form.organizationWebsite && !isValidUrl(form.organizationWebsite))
+                                   return "Enter a valid Company Website URL";
+
+  const wordCount = stripHtml(form.eventDescription)
+    .split(/\s+/)
+    .filter(Boolean).length;
+  if (wordCount > 500) return "Event description must be 500 words or less";
+
+  return null;
+};
 
   const saveEvent = async () => {
     const msg = validate();
     if (msg) return toast.warn(msg);
-
+    const stripHtml = (html) => (html || "").replace(/<[^>]*>/g, "").trim();
     const toUTC = (str) => (str ? new Date(str).toISOString() : "");
     try {
       setSaving(true);
       const payload = {
         ...form,
-        targetAudience:   form.targetAudience.split(",").map((s) => s.trim()).filter(Boolean),
-        keyTopics:        form.keyTopics.split(",").map((s) => s.trim()).filter(Boolean),
+        description: stripHtml(form.eventDescription),
+        eventDescription: stripHtml(form.eventDescription),
+        featuredSpeakers: stripHtml(form.featuredSpeakers),
+        targetAudience: form.targetAudience.split(",").map((s) => s.trim()).filter(Boolean),
+        keyTopics: form.keyTopics.split(",").map((s) => s.trim()).filter(Boolean),
         attendeeBenefits: form.attendeeBenefits.split(",").map((s) => s.trim()).filter(Boolean),
         ticketPricingTiers: form.ticketPricingTiers.map((t) => ({ label: t.label, price: parseFloat(t.price) || 0 })),
         mainImage: mainImage,
-        banner:    mainImage,
-        startDateTime:        toUTC(form.startDateTime),
-        endDateTime:          toUTC(form.endDateTime),
+        banner: mainImage,
+        startDateTime: toUTC(form.startDateTime),
+        endDateTime: toUTC(form.endDateTime),
         registrationDeadline: toUTC(form.registrationDeadline),
         registrationUrl: applicationMethod === "platform" ? "" : form.registrationUrl,
       };
@@ -351,58 +361,58 @@ const handleTextOnly = (e) => {
     setShowConfirm(true);
   };
 
-const confirmToggleEvent = (ev) => {
-  if (!ev?._id) return;
+  const confirmToggleEvent = (ev) => {
+    if (!ev?._id) return;
 
-  const toggleCount = ev.toggleCount ?? 0;
+    const toggleCount = ev.toggleCount ?? 0;
 
-  if (toggleCount >= 2) {
+    if (toggleCount >= 2) {
+      setConfirmConfig({
+        title: "Toggle Not Allowed",
+        message: "This event has already been deactivated and reactivated once. No further activation or deactivation is allowed.",
+        confirmText: "OK",
+        cancelText: "",
+        confirmVariant: "danger",
+        onConfirm: () => { },
+      });
+      setShowConfirm(true);
+      return;
+    }
+
+    const isDeactivating = ev.isActive;
+
     setConfirmConfig({
-      title: "Toggle Not Allowed",
-      message: "This event has already been deactivated and reactivated once. No further activation or deactivation is allowed.",
-      confirmText: "OK",
-      cancelText: "",
-      confirmVariant: "danger",
-      onConfirm: () => {},
+      title: isDeactivating ? "Deactivate Event" : "Activate Event",
+      message: isDeactivating
+        ? "You may reactivate this event once after deactivating, but after that no further toggling will be allowed. Are you sure you want to deactivate?"
+        : "You can activate this listing once more. After reactivating, no further deactivation or activation will be permitted. Proceed?",
+      confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
+      cancelText: "Cancel",
+      confirmVariant: isDeactivating ? "warning" : "success",
+      onConfirm: async () => {
+        try {
+          await publisherApi.patch(`/api/publisher/dashboard/${ev._id}/toggle`, {});
+          toast.success(`Event ${ev.isActive ? "deactivated" : "activated"}`);
+          fetchEvents();
+        } catch (err) {
+          toast.error(err?.response?.data?.message || "Toggle failed");
+        }
+      },
     });
     setShowConfirm(true);
-    return;
-  }
-
-  const isDeactivating = ev.isActive;
-
-  setConfirmConfig({
-    title: isDeactivating ? "Deactivate Event" : "Activate Event",
-    message: isDeactivating
-      ? "You may reactivate this event once after deactivating, but after that no further toggling will be allowed. Are you sure you want to deactivate?"
-      : "You can activate this listing once more. After reactivating, no further deactivation or activation will be permitted. Proceed?",
-    confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
-    cancelText: "Cancel",
-    confirmVariant: isDeactivating ? "warning" : "success",
-    onConfirm: async () => {
-      try {
-        await publisherApi.patch(`/api/publisher/dashboard/${ev._id}/toggle`, {});
-        toast.success(`Event ${ev.isActive ? "deactivated" : "activated"}`);
-        fetchEvents();
-      } catch (err) {
-        toast.error(err?.response?.data?.message || "Toggle failed");
-      }
-    },
-  });
-  setShowConfirm(true);
-};
+  };
 
 
   /*  Plan limits  */
   const subscriptionExpired = planInfo && planInfo.subscriptionStatus !== "active";
-  const eventLimitReached   = planInfo && !subscriptionExpired && planInfo.limits?.eventLimit > 0 && planInfo.usage?.events >= planInfo.limits?.eventLimit;
+  const eventLimitReached = planInfo && !subscriptionExpired && planInfo.limits?.eventLimit > 0 && planInfo.usage?.events >= planInfo.limits?.eventLimit;
   const eventButtonDisabled = subscriptionExpired || eventLimitReached;
 
   const addBtnLabel = subscriptionExpired
     ? "Subscription Expired"
     : eventLimitReached
-    ? `Limit Reached (${planInfo.usage.events}/${planInfo.limits.eventLimit})`
-    : "+ Add Event";
+      ? `Limit Reached (${planInfo.usage.events}/${planInfo.limits.eventLimit})`
+      : "+ Add Event";
 
   /*  Render  */
   return (
@@ -421,8 +431,8 @@ const confirmToggleEvent = (ev) => {
             disabled={eventButtonDisabled}
             title={
               subscriptionExpired ? "Your subscription has expired. Please renew to add events."
-              : eventLimitReached  ? `Event limit of ${planInfo.limits.eventLimit} reached for your current plan`
-              : ""
+                : eventLimitReached ? `Event limit of ${planInfo.limits.eventLimit} reached for your current plan`
+                  : ""
             }
           >
             {addBtnLabel}
@@ -502,118 +512,118 @@ const confirmToggleEvent = (ev) => {
                 </tr>
               </thead>
               <tbody>
-{events.map((ev, idx) => {
-  const editLocked = (ev.editCount ?? 0) >= 1;
-  return (
-    <tr key={ev._id}>
+                {events.map((ev, idx) => {
+                  const editLocked = (ev.editCount ?? 0) >= 1;
+                  return (
+                    <tr key={ev._id}>
 
-      {/* 1 */}
-      <td className="tdMuted" data-label="#">
-        {idx + 1}
-      </td>
+                      {/* 1 */}
+                      <td className="tdMuted" data-label="#">
+                        {idx + 1}
+                      </td>
 
-      <td className="tdSemibold" data-label="Title">
-        {ev.title}
-      </td>
+                      <td className="tdSemibold" data-label="Title">
+                        {ev.title}
+                      </td>
 
-      {/* 3 – Banner */}
-      <td data-label="Banner">
-        {ev.mainImage?.url
-          ? <img src={ev.mainImage.url} alt="banner" className="thumb" />
-          : <span className="tdMuted">No image</span>}
-      </td>
+                      {/* 3 – Banner */}
+                      <td data-label="Banner">
+                        {ev.mainImage?.url
+                          ? <img src={ev.mainImage.url} alt="banner" className="thumb" />
+                          : <span className="tdMuted">No image</span>}
+                      </td>
 
-      {/* 4 – Type */}
-      <td className="tdNoWrap" data-label="Type">
-        {ev.eventType || <span className="tdMuted">—</span>}
-      </td>
+                      {/* 4 – Type */}
+                      <td className="tdNoWrap" data-label="Type">
+                        {ev.eventType || <span className="tdMuted">—</span>}
+                      </td>
 
-<td data-label="Status">
-  <StatusBadge
-    status={ev.status}
-    reason={ev.status === "approved" ? ev.approvalReason : ev.rejectionReason}
-  />
-</td>
+                      <td data-label="Status">
+                        <StatusBadge
+                          status={ev.status}
+                          reason={ev.status === "approved" ? ev.approvalReason : ev.rejectionReason}
+                        />
+                      </td>
 
-{/* 6 – Start */}
-<td className="tdMuted tdNoWrap" data-label="Start">
-  {ev.startDateTime ? (
-    <>
-      <span className="dateOnly">
-        {new Date(ev.startDateTime).toLocaleDateString("en-IN", {
-          timeZone: "Asia/Kolkata",
-        })}
-      </span>
-      <span className="timeOnly">
-        {", " +
-          new Date(ev.startDateTime)
-            .toLocaleTimeString("en-IN", {
-              timeZone: "Asia/Kolkata",
-              hour: "2-digit",
-              minute: "2-digit",
-            })
-            .replace(/am|pm/gi, (m) => m.toUpperCase())}
-      </span>
-    </>
-  ) : "—"}
-</td>
+                      {/* 6 – Start */}
+                      <td className="tdMuted tdNoWrap" data-label="Start">
+                        {ev.startDateTime ? (
+                          <>
+                            <span className="dateOnly">
+                              {new Date(ev.startDateTime).toLocaleDateString("en-IN", {
+                                timeZone: "Asia/Kolkata",
+                              })}
+                            </span>
+                            <span className="timeOnly">
+                              {", " +
+                                new Date(ev.startDateTime)
+                                  .toLocaleTimeString("en-IN", {
+                                    timeZone: "Asia/Kolkata",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })
+                                  .replace(/am|pm/gi, (m) => m.toUpperCase())}
+                            </span>
+                          </>
+                        ) : "—"}
+                      </td>
 
-{/* 7 – End */}
-<td className="tdMuted tdNoWrap" data-label="End">
-  {ev.endDateTime ? (
-    <>
-      <span className="dateOnly">
-        {new Date(ev.endDateTime).toLocaleDateString("en-IN", {
-          timeZone: "Asia/Kolkata",
-        })}
-      </span>
-      <span className="timeOnly">
-        {", " +
-          new Date(ev.endDateTime)
-            .toLocaleTimeString("en-IN", {
-              timeZone: "Asia/Kolkata",
-              hour: "2-digit",
-              minute: "2-digit",
-            })
-            .replace(/am|pm/gi, (m) => m.toUpperCase())}
-      </span>
-    </>
-  ) : "—"}
-</td>
+                      {/* 7 – End */}
+                      <td className="tdMuted tdNoWrap" data-label="End">
+                        {ev.endDateTime ? (
+                          <>
+                            <span className="dateOnly">
+                              {new Date(ev.endDateTime).toLocaleDateString("en-IN", {
+                                timeZone: "Asia/Kolkata",
+                              })}
+                            </span>
+                            <span className="timeOnly">
+                              {", " +
+                                new Date(ev.endDateTime)
+                                  .toLocaleTimeString("en-IN", {
+                                    timeZone: "Asia/Kolkata",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })
+                                  .replace(/am|pm/gi, (m) => m.toUpperCase())}
+                            </span>
+                          </>
+                        ) : "—"}
+                      </td>
 
-      {/* 8 – Actions */}
-      <td data-label="Actions">
-        <div className="actionGroup">
-          <button
-            className={`btn btnSm ${(ev.editCount ?? 0) >= 1 ? "btnSecondary" : "btnPrimary"}`}
-            onClick={() => openEdit(ev)}
-            title={(ev.editCount ?? 0) >= 1 ? "Already edited once" : "Edit event"}
-          >
-            Edit
-          </button>
-          <button
-            className={`btn btnSm ${ev.isActive ? "btnWarning" : "btnSuccess"}`}
-            onClick={() => confirmToggleEvent(ev)}
-            title={
-              (ev.toggleCount ?? 0) >= 2
-                ? "Toggle limit reached"
-                : ev.isActive ? "Deactivate" : "Activate"
-            }
-          >
-            {ev.isActive ? "Deactivate" : "Activate"}
-          </button>
-          <button
-            className="btn btnSm btnDanger"
-            onClick={() => deleteEvent(ev._id)}
-          >
-            Delete
-          </button>
-        </div>
-      </td>
+                      {/* 8 – Actions */}
+                      <td data-label="Actions">
+                        <div className="actionGroup">
+                          <button
+                            className={`btn btnSm ${(ev.editCount ?? 0) >= 1 ? "btnSecondary" : "btnPrimary"}`}
+                            onClick={() => openEdit(ev)}
+                            title={(ev.editCount ?? 0) >= 1 ? "Already edited once" : "Edit event"}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className={`btn btnSm ${ev.isActive ? "btnWarning" : "btnSuccess"}`}
+                            onClick={() => confirmToggleEvent(ev)}
+                            title={
+                              (ev.toggleCount ?? 0) >= 2
+                                ? "Toggle limit reached"
+                                : ev.isActive ? "Deactivate" : "Activate"
+                            }
+                          >
+                            {ev.isActive ? "Deactivate" : "Activate"}
+                          </button>
+                          <button
+                            className="btn btnSm btnDanger"
+                            onClick={() => deleteEvent(ev._id)}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
 
-    </tr>
-  );
-})}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           )}
@@ -651,32 +661,32 @@ const confirmToggleEvent = (ev) => {
                     </select>
                   </div>
 
-<div className="field">
-  <label className="label">Event Category *</label>
-  <select
-    className="select"
-    disabled={categories.length === 0}
-    value=""
-    onChange={(e) => { if (e.target.value) addCategoryTag(e.target.value); }}
-  >
-    <option value="">
-      {categories.length === 0 ? "No categories available" : "Add a category…"}
-    </option>
-    {categories.filter((c) => !form.eventCategory.includes(c.name)).map((c) => (
-      <option key={c._id || c.name} value={c.name}>{c.name}</option>
-    ))}
-  </select>
-  {form.eventCategory.length > 0 && (
-    <div className="tagList">
-      {form.eventCategory.map((cat) => (
-        <span key={cat} className="tag">
-          {cat}
-          <button type="button" className="tagRemove" onClick={() => removeCategoryTag(cat)}>✕</button>
-        </span>
-      ))}
-    </div>
-  )}
-</div>
+                  <div className="field">
+                    <label className="label">Event Category *</label>
+                    <select
+                      className="select"
+                      disabled={categories.length === 0}
+                      value=""
+                      onChange={(e) => { if (e.target.value) addCategoryTag(e.target.value); }}
+                    >
+                      <option value="">
+                        {categories.length === 0 ? "No categories available" : "Add a category…"}
+                      </option>
+                      {categories.filter((c) => !form.eventCategory.includes(c.name)).map((c) => (
+                        <option key={c._id || c.name} value={c.name}>{c.name}</option>
+                      ))}
+                    </select>
+                    {form.eventCategory.length > 0 && (
+                      <div className="tagList">
+                        {form.eventCategory.map((cat) => (
+                          <span key={cat} className="tag">
+                            {cat}
+                            <button type="button" className="tagRemove" onClick={() => removeCategoryTag(cat)}>✕</button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="field">
@@ -719,7 +729,7 @@ const confirmToggleEvent = (ev) => {
                       {stateOpen && (
                         <div className="stateDropdownMenu">
                           <div className="statePlaceholder" onClick={() => { setForm({ ...form, jobLocationState: "" }); setStateOpen(false); }}>
-                           
+
                           </div>
                           {INDIA_STATES.map((state) => (
                             <div
@@ -750,22 +760,22 @@ const confirmToggleEvent = (ev) => {
                   <div className="field">
                     <label className="label">Company Name</label>
                     <input
-  className="input"
-  name="organizationName"
-  value={form.organizationName}
-  onChange={handleTextOnly}
-  placeholder="Enter Company name"
-/>
+                      className="input"
+                      name="organizationName"
+                      value={form.organizationName}
+                      onChange={handleTextOnly}
+                      placeholder="Enter Company name"
+                    />
                   </div>
                   <div className="field">
                     <label className="label">Company Contact Person</label>
                     <input
-  className="input"
-  name="organizerContactPerson"
-  value={form.organizerContactPerson}
-  onChange={handleTextOnly}
-  placeholder="Enter contact person name"
-/>
+                      className="input"
+                      name="organizerContactPerson"
+                      value={form.organizerContactPerson}
+                      onChange={handleTextOnly}
+                      placeholder="Enter contact person name"
+                    />
                   </div>
                 </div>
 
@@ -777,13 +787,13 @@ const confirmToggleEvent = (ev) => {
                   <div className="field">
                     <label className="label">Phone Number</label>
                     <input
-  className="input"
-  name="phoneNumber"
-  value={form.phoneNumber}
-  onChange={handleNumberOnly}
-  placeholder="Enter phone number"
-  maxLength={10}
-/>
+                      className="input"
+                      name="phoneNumber"
+                      value={form.phoneNumber}
+                      onChange={handleNumberOnly}
+                      placeholder="Enter phone number"
+                      maxLength={10}
+                    />
                   </div>
                   <div className="field">
                     <label className="label">Company Website</label>
@@ -815,12 +825,12 @@ const confirmToggleEvent = (ev) => {
                 </div>
 
                 <div className="field">
-                  <label className="label">About / Event Description</label>
+                  <label className="label">About / Event Description <span className="labelNote">(500 words)</span></label>
                   <RichTextEditor value={form.eventDescription} onChange={(val) => setForm((p) => ({ ...p, eventDescription: val }))} placeholder="Describe the event" />
                 </div>
 
                 <div className="field">
-                  <label className="label">Featured Speakers</label>
+                  <label className="label">Featured Speakers<span className="labelNote">(comma separated)</span></label>
                   <RichTextEditor value={form.featuredSpeakers} onChange={(val) => setForm((p) => ({ ...p, featuredSpeakers: val }))} placeholder="List the featured speakers" />
                 </div>
 
@@ -844,29 +854,29 @@ const confirmToggleEvent = (ev) => {
               {/*  Registration  */}
               <section className="section">
                 <h3 className="sectionTitle">Registration &amp; links</h3>
-{/* Application Method — UI only, not persisted */}
-<div className="field">
-  <label className="label">Application Method</label>
-  <select
-    className="select"
-    value={applicationMethod}
-    onChange={(e) => setApplicationMethod(e.target.value)}
-  >
-    <option value="">Select Application Method</option>
-    {applicationMethods.map((method) => (
-      <option key={method.value} value={method.value} title={method.tooltip}>
-        {method.label}
-      </option>
-    ))}
-  </select>
+                {/* Application Method — UI only, not persisted */}
+                <div className="field">
+                  <label className="label">Application Method</label>
+                  <select
+                    className="select"
+                    value={applicationMethod}
+                    onChange={(e) => setApplicationMethod(e.target.value)}
+                  >
+                    <option value="">Select Application Method</option>
+                    {applicationMethods.map((method) => (
+                      <option key={method.value} value={method.value} title={method.tooltip}>
+                        {method.label}
+                      </option>
+                    ))}
+                  </select>
 
-  {/* Inline hint for the selected option */}
-  {applicationMethod && (
-    <p style={{ marginTop: "0.4rem", fontSize: "0.8rem", color: "#6b7280" }}>
-      ℹ️ {applicationMethods.find((m) => m.value === applicationMethod)?.tooltip}
-    </p>
-  )}
-</div>
+                  {/* Inline hint for the selected option */}
+                  {applicationMethod && (
+                    <p style={{ marginTop: "0.4rem", fontSize: "0.8rem", color: "#6b7280" }}>
+                      ℹ️ {applicationMethods.find((m) => m.value === applicationMethod)?.tooltip}
+                    </p>
+                  )}
+                </div>
                 <div className="row2">
                   <div className="field">
                     <label className="label">Registration Type</label>
@@ -881,68 +891,68 @@ const confirmToggleEvent = (ev) => {
                   </div>
                 </div>
 
-{form.registrationType === "Paid" && (
-  <div className="field">
-    <label className="label">Ticket Pricing Tiers</label>
+                {form.registrationType === "Paid" && (
+                  <div className="field">
+                    <label className="label">Ticket Pricing Tiers</label>
 
-    <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-      {form.ticketPricingTiers.map((tier, idx) => (
-        <div key={idx} style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
-          <input
-            className="input"
-            placeholder="e.g. Early Bird"
-            value={tier.label}
-            onChange={(e) => updateTier(idx, "label", e.target.value)}
-            style={{ flex: 2 }}
-          />
-          <input
-            type="number"
-            className="input"
-            placeholder="Price (₹)"
-            min="0"
-            value={tier.price}
-            onChange={(e) => updateTier(idx, "price", e.target.value)}
-            style={{ flex: 1 }}
-          />
-          <button
-            type="button"
-            className="btn btnSm btnDanger"
-            onClick={() => removeTier(idx)}
-            style={{ whiteSpace: "nowrap", flexShrink: 0 }}
-          >
-            Remove
-          </button>
-        </div>
-      ))}
-    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                      {form.ticketPricingTiers.map((tier, idx) => (
+                        <div key={idx} style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+                          <input
+                            className="input"
+                            placeholder="e.g. Early Bird"
+                            value={tier.label}
+                            onChange={(e) => updateTier(idx, "label", e.target.value)}
+                            style={{ flex: 2 }}
+                          />
+                          <input
+                            type="number"
+                            className="input"
+                            placeholder="Price (₹)"
+                            min="0"
+                            value={tier.price}
+                            onChange={(e) => updateTier(idx, "price", e.target.value)}
+                            style={{ flex: 1 }}
+                          />
+                          <button
+                            type="button"
+                            className="btn btnSm btnDanger"
+                            onClick={() => removeTier(idx)}
+                            style={{ whiteSpace: "nowrap", flexShrink: 0 }}
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                    </div>
 
-<div style={{ marginTop: "0.5rem" }}>
-  <button
-    type="button"
-    className="btn btnSm btnPrimary"
-    onClick={addTier}
-    style={{ width: "auto" }}
-  >
-    + Add Tier
-  </button>
-</div>
-  </div>
-)}
+                    <div style={{ marginTop: "0.5rem" }}>
+                      <button
+                        type="button"
+                        className="btn btnSm btnPrimary"
+                        onClick={addTier}
+                        style={{ width: "auto" }}
+                      >
+                        + Add Tier
+                      </button>
+                    </div>
+                  </div>
+                )}
 
-{applicationMethod !== "platform" && (
-  <div className="row2">
-    <div className="field">
-      <label className="label">Registration Link / URL</label>
-      <input type="url" className="input" name="registrationUrl" value={form.registrationUrl} onChange={handleChange} placeholder="https://" />
-    </div>
-  </div>
-)}
+                {applicationMethod !== "platform" && (
+                  <div className="row2">
+                    <div className="field">
+                      <label className="label">Registration Link / URL</label>
+                      <input type="url" className="input" name="registrationUrl" value={form.registrationUrl} onChange={handleChange} placeholder="https://" />
+                    </div>
+                  </div>
+                )}
               </section>
               <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>
-               <button className="btn btnSecondary btcancel" onClick={closeModal} disabled={saving}>Cancel</button>
-              <button className="btn btnPrimary btsubmit" onClick={saveEvent} disabled={saving}>
-                {saving ? "Submitting…" : editId ? "Update" : "Submit"}
-              </button>
+                <button className="btn btnSecondary btcancel" onClick={closeModal} disabled={saving}>Cancel</button>
+                <button className="btn btnPrimary btsubmit" onClick={saveEvent} disabled={saving}>
+                  {saving ? "Submitting…" : editId ? "Update" : "Submit"}
+                </button>
               </div>
             </div>{/* /modalBody */}
           </div>
