@@ -181,7 +181,7 @@ registrationDeadline: raw.registrationDeadline
           {/*  Hero Image  */}
           {event.image && (
             <div className="eventHeroImageContainer">
-              <Image src={event.image} fill style={{ objectFit: "cover" }} alt={event.title} priority />
+              <Image src={event.image} fill style={{ objectFit: "fill" }} alt={event.title} priority />
             </div>
           )}
 
