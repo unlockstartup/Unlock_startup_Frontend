@@ -221,7 +221,7 @@ function FundingCallsCrud() {
   const openCreate = () => { setMode("create"); setEditing(null); setForm(initialForm); setOpen(true); };
 
   const openEdit = (row) => {
-    const alreadyEdited = (row.editCount ?? 0) >= 1;
+    const alreadyEdited = (row.editCount ?? 0) >= 2;
     setConfirmConfig({
       title: alreadyEdited ? "Edit Not Allowed" : "Edit Competition",
       message: alreadyEdited
@@ -538,7 +538,7 @@ function FundingCallsCrud() {
               </thead>
               <tbody>
                 {rows.map((r, idx) => {
-                  const editLocked = (r.editCount ?? 0) >= 1;
+                  const editLocked = (r.editCount ?? 0) >= 2;
                   return (
                     <tr key={r._id}>
                       <td className="tdMuted" data-label="#">{(page - 1) * limit + idx + 1}</td>

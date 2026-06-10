@@ -39,12 +39,10 @@ import {
   InfoIcon
 } from "lucide-react";
 import Image from "next/image";
-import ApplyModal from "@/components/uiElements/ApplyModal";
 
 export default function CompetitionPage({ params }) {
   const [funding, setFunding] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -92,7 +90,7 @@ export default function CompetitionPage({ params }) {
             submissionDeadline: fmt(raw.submissionDeadline ?? raw.deadline),
             resultDate: fmt(raw.resultDate),
             applicationFee: raw.applicationFee ?? 0,
-            applicationType: raw.applicationType ?? "",
+            applicationType: raw.applicationType || (raw.applicationFee > 0 ? "paid" : "free"),
             registrationLink: raw.registrationLink ?? "",
             image: raw.attachments?.[0]?.url ?? null,
           });
@@ -553,26 +551,25 @@ export default function CompetitionPage({ params }) {
                     <span className="competitionInfoBlockIcon"><InfoIcon size={18} strokeWidth={2} /></span>
                     Application Details
                   </div>
-                  <div className="competitionRegRow">
-                    <span className="competitionRegIcon"><BadgeIndianRupee size={16} strokeWidth={2} /></span>
-                    <div className="competitionRegMeta">
-                      <span className="competitionRegLabel">Application Type</span>
-                      <span className="competitionRegValue" style={{ textTransform: "capitalize" }}>
-                        {funding.applicationType || "Free"}
-                      </span>
-                    </div>
-                  </div>
-                  {funding.applicationType === "paid" && (
-                    <div className="competitionRegRow">
-                      <span className="competitionRegIcon"><BadgeIndianRupee size={16} strokeWidth={2} /></span>
-                      <div className="competitionRegMeta">
-                        <span className="competitionRegLabel">Application Fee</span>
-                        <span className="competitionRegValue">
-                          {funding.applicationFee > 0 ? `₹${funding.applicationFee}` : "—"}
-                        </span>
-                      </div>
-                    </div>
-                  )}
+<div className="competitionRegRow">
+  <span className="competitionRegIcon"><BadgeIndianRupee size={16} strokeWidth={2} /></span>
+  <div className="competitionRegMeta">
+    <span className="competitionRegLabel">Application Type</span>
+    <span className="competitionRegValue" style={{ textTransform: "capitalize" }}>
+      {funding.applicationFee > 0 ? "Paid" : funding.applicationType || "Free"}
+    </span>
+  </div>
+</div>
+
+{funding.applicationFee > 0 && (
+  <div className="competitionRegRow">
+    <span className="competitionRegIcon"><BadgeIndianRupee size={16} strokeWidth={2} /></span>
+    <div className="competitionRegMeta">
+      <span className="competitionRegLabel">Application Fee</span>
+      <span className="competitionRegValue">₹{funding.applicationFee}</span>
+    </div>
+  </div>
+)}
                   {funding.submissionDeadline && (
                     <div className="competitionRegRow">
                       <span className="competitionRegIcon"><CalendarClock size={16} strokeWidth={2} /></span>
