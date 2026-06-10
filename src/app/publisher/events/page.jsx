@@ -62,7 +62,7 @@ const formats = [
   { value: "online", label: "Online" },
   { value: "hybrid", label: "Hybrid" },
 ];
-
+const stripHtml = (html) => (html || "").replace(/<[^>]*>/g, "").trim();
 const statusBadge = (status) => {
   if (status === "approved") return "badgeSuccess";
   if (status === "rejected") return "badgeDanger";
@@ -285,7 +285,6 @@ const validate = () => {
   const saveEvent = async () => {
     const msg = validate();
     if (msg) return toast.warn(msg);
-    const stripHtml = (html) => (html || "").replace(/<[^>]*>/g, "").trim();
     const toUTC = (str) => (str ? new Date(str).toISOString() : "");
     try {
       setSaving(true);
