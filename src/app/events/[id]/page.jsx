@@ -404,7 +404,7 @@ registrationDeadline: raw.registrationDeadline
                 <div className="eventCard">
                   <div className="eventSectionHeader">
                     <div className="eventSectionIcon"><Users size={15} strokeWidth={1.8} /></div>
-                    <h2 className="eventSectionTitle">Audience &amp; Topics</h2>
+                    <h2 className="eventSectionTitle">Audience</h2>
                   </div>
                   {event.targetAudience?.length > 0 && (
                     <div className="eventAudienceSection">
