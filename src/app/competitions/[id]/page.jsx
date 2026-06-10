@@ -35,7 +35,8 @@ import {
   ListChecks,
   Trophy,
   User,
-  ChevronRight
+  ChevronRight,
+  InfoIcon
 } from "lucide-react";
 import Image from "next/image";
 import ApplyModal from "@/components/uiElements/ApplyModal";
@@ -549,7 +550,7 @@ export default function CompetitionPage({ params }) {
               <div className="competitionInfoCard competitionInfoCard--register">
                 <div className="competitionInfoBlock">
                   <div className="competitionInfoBlockTitle">
-                    <span className="competitionInfoBlockIcon"><BadgeIndianRupee size={18} strokeWidth={2} /></span>
+                    <span className="competitionInfoBlockIcon"><InfoIcon size={18} strokeWidth={2} /></span>
                     Application Details
                   </div>
                   <div className="competitionRegRow">
