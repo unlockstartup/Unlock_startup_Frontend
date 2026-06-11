@@ -782,10 +782,11 @@ const confirmToggleJob = (job) => {
                   <textarea className="textarea" rows={2} value={form.roleOverview} onChange={set("roleOverview")} placeholder="1-paragraph summary of the position" />
                 </div>
 
-                <div className="field">
-                  <label className="label">Key Responsibilities</label>
-                  <textarea className="textarea" rows={3} value={form.keyResponsibilities} onChange={set("keyResponsibilities")} placeholder="List key responsibilities" />
-                </div>
+<div className="field">
+  <label className="label">Key Responsibilities</label>
+  <textarea className="textarea" rows={3} value={form.keyResponsibilities} onChange={set("keyResponsibilities")} placeholder="List key responsibilities" />
+  <span className="labelNote">Enter each responsibility separated by a comma, e.g. Manage team, Review code, Write documentation</span>
+</div>
 
                 <div className="row2">
                   <div className="field">
@@ -795,6 +796,7 @@ const confirmToggleJob = (job) => {
                   <div className="field">
                     <label className="label">Must-Have Skills</label>
                     <textarea className="textarea" rows={2} value={form.mustHaveSkills} onChange={set("mustHaveSkills")} placeholder="e.g. React, Node.js, SQL" />
+                  <span className="labelNote">Enter skills separated by commas, e.g. React, Node.js, SQL</span>
                   </div>
                 </div>
               </section>
