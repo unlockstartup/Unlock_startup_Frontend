@@ -405,11 +405,17 @@ function Applications({ token, tabLabel }) {
     return start || null;
   };
 
-  const resolvePublisherContact = (sub) => {
-    const p = sub.publisherId;
-    if (!p) return {};
-    return { website: p.website || null, address: p.address || null, phone: p.phone || null, contactName: p.contactName || null };
+const resolvePublisherContact = (sub) => {
+  const p = sub.publisherId;
+  if (!p) return {};
+  return {
+    website:     p.website              || null,
+    address:     p.address              || null,
+    phone:       p.phone                || p.userId?.phone || null,
+    email:       p.userId?.email        || null,
+    contactName: p.contactName          || p.userId?.name  || null,  // fallback to user name
   };
+};
 
   const resolveDate = (sub) =>
     new Date(sub.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
@@ -516,15 +522,16 @@ function Applications({ token, tabLabel }) {
                             description={description}
                             eventDates={eventDates}
                           />
-                          <DetailSection title="Organiser / Publisher">
-                            {!sub.serviceId && (
-                              <DetailRow label="Company Name" value={resolveCompany(sub)} />
-                            )}
-                            <DetailRow label="Website"      value={pubContact.website}     link />
-                            <DetailRow label="Address"      value={pubContact.address} />
-                            <DetailRow label="Phone"        value={pubContact.phone} />
-                            <DetailRow label="Contact Name" value={pubContact.contactName} />
-                          </DetailSection>
+<DetailSection title="Organiser / Publisher">
+  {!sub.serviceId && (
+    <DetailRow label="Company Name" value={resolveCompany(sub)} />
+  )}
+  <DetailRow label="Contact Name" value={pubContact.contactName} />
+  <DetailRow label="Email"        value={pubContact.email} />
+  <DetailRow label="Phone"        value={pubContact.phone} />
+  <DetailRow label="Website"      value={pubContact.website} link />
+  <DetailRow label="Address"      value={pubContact.address} />
+</DetailSection>
                         </div>
 
                         {/* Your Submission — 2-col grid */}
