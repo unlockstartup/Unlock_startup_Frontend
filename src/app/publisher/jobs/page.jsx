@@ -281,17 +281,27 @@ const validate = () => {
   return null;
 };
 
-  const saveJob = async () => {
-    const msg = validate();
-    if (msg) return toast.warn(msg);
-    const payload = {
-      ...form,
-      openings:               Number(form.openings) || 0,
-      salaryMin:              form.salaryMin ? Number(form.salaryMin) : undefined,
-      salaryMax:              form.salaryMax ? Number(form.salaryMax) : undefined,
-      yearsExperienceRequired: form.yearsExperienceRequired ? Number(form.yearsExperienceRequired) : undefined,
-      workMode:               form.workMode || "",
-    };
+const stripHtml = (html) => {
+  if (!html) return "";
+  return html
+    .replace(/\s*style="[^"]*"/gi, "")
+    .replace(/\s*style='[^']*'/gi, "");
+};
+
+const saveJob = async () => {
+  const msg = validate();
+  if (msg) return toast.warn(msg);
+  const payload = {
+    ...form,
+    companyDescription: stripHtml(form.companyDescription),
+    roleOverview: stripHtml(form.roleOverview),
+    keyResponsibilities: stripHtml(form.keyResponsibilities),
+    openings: Number(form.openings) || 0,
+    salaryMin: form.salaryMin ? Number(form.salaryMin) : undefined,
+    salaryMax: form.salaryMax ? Number(form.salaryMax) : undefined,
+    yearsExperienceRequired: form.yearsExperienceRequired ? Number(form.yearsExperienceRequired) : undefined,
+    workMode: form.workMode || "",
+  };
     try {
       setSaving(true);
       if (editId) {
