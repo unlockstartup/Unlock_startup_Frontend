@@ -413,7 +413,7 @@ const resolvePublisherContact = (sub) => {
     address:     p.address              || null,
     phone:       p.phone                || p.userId?.phone || null,
     email:       p.userId?.email        || null,
-    contactName: p.contactName          || p.userId?.name  || null,  // fallback to user name
+    contactName: p.userId?.name  || null, 
   };
 };
 
