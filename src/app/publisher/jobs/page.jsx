@@ -273,7 +273,7 @@ const validate = () => {
   if (!form.jobLocationCountry?.trim())  return "Job Location - Country is required";
   if (!form.applyLastDate)               return "Application Deadline is required";
   if (!form.applyDate)                   return "Expected Start Date is required";
-  if (!form.applicationMethod)           return "Application Method is required";
+  // if (!form.applicationMethod)           return "Application Method is required";
   if (form.companyWebsite && !isValidUrl(form.companyWebsite))
     return "Enter a valid Company Website URL";
   if (form.externalApplicationUrl && !isValidUrl(form.externalApplicationUrl))
