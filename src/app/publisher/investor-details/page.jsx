@@ -416,7 +416,7 @@ const [sectors, setSectors] = useState([]);
 
         <div className="row2">
           <div className="field">
-            <label className="label">Company Name <span style={{ color: "var(--orange)" }}>*</span></label>
+            <label className="label">Contact Name <span style={{ color: "var(--orange)" }}>*</span></label>
             <input className="input" value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Enter Name" />
           </div>
           <div className="field">
