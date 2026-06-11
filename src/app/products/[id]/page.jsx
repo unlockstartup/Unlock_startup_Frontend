@@ -449,30 +449,25 @@ const router = useRouter();
                 </div>
               )}
               {/* Company Card */}
-{product.awardsRecognition && (
-  <div className="sdpInfoCard sdpInfoCard--company">
-    <div className="sdpInfoBlock">
-      <div className="sdpInfoBlockTitle">
-        <span className="sdpInfoBlockIcon"><Trophy size={14} strokeWidth={2} /></span>
-        Awards & Recognition
-      </div>
-      <div className="sdpRegRow">
-        <span className="sdpRegIcon"><Trophy size={13} strokeWidth={1.75} /></span>
-        <div className="sdpRegMeta">
-          {product.awardsRecognition
-            .split("\n")
-            .map(s => s.trim())
-            .filter(Boolean)
-            .map((award, i) => (
-              <div key={i} className="sdpRegValue" style={{ marginBottom: "4px" }}>
-                • {award}
-              </div>
-            ))}
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+              {(product.awardsRecognition) && (
+                <div className="sdpInfoCard sdpInfoCard--company">
+                  <div className="sdpInfoBlock">
+                    <div className="sdpInfoBlockTitle">
+                      <span className="sdpInfoBlockIcon"><Trophy size={14} strokeWidth={2} /></span>
+                      Awards & Recognition
+                    </div>
+                    {product.awardsRecognition && (
+                      <div className="sdpRegRow">
+                        <span className="sdpRegIcon"><Trophy size={13} strokeWidth={1.75} /></span>
+                        <div className="sdpRegMeta">
+                          <span className="sdpRegLabel">Awards & Recognition</span>
+                          <span className="sdpRegValue">{product.awardsRecognition}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
               {/* Contact Card – with login blur */}
               {(product.founderName || product.contactEmail || product.contactNumber) && (
                 <div className="sdpInfoCard sdpInfoCard--contact">
