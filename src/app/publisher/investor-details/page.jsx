@@ -12,7 +12,6 @@ import {
 
 import "../styles/publishercretepages.css";
 
-const SECTORS = ["Technology", "AI/ML", "FinTech", "HealthTech", "SaaS", "Deeptech"];
 
 
 function SectionHeader({ title, subtitle }) {
@@ -73,6 +72,7 @@ export default function Page() {
   const [profileVisibility, setProfileVisibility] = useState("Public");
   const [stateOpen, setStateOpen]           = useState(false);
   const [applyLink, setApplyLink]           = useState("");
+const [sectors, setSectors] = useState([]);
 
   const [showConfirm, setShowConfirm]   = useState(false);
   const [confirmConfig, setConfirmConfig] = useState({
@@ -97,7 +97,12 @@ export default function Page() {
         setInvestorTypes(res.data?.investorTypes ?? res.data?.data ?? (Array.isArray(res.data) ? res.data : []));
       } catch (err) { toast.error(err?.response?.data?.message || "Failed to load investor types"); }
     })();
-
+(async () => {
+  try {
+    const res = await publisherApi.get("/api/public/industry-sectors");
+    setSectors(res.data?.sectors || []);
+  } catch (err) { toast.error(err?.response?.data?.message || "Failed to load industry sectors"); }
+})();
     (async () => {
       try {
         const res = await getPublicPreferredStages();
@@ -381,24 +386,28 @@ export default function Page() {
           )}
         </div>
 
-        <div className="field">
-          <label className="label">
-            Industry / Sector Focus <span style={{ color: "var(--orange)" }}>*</span>
-            {industrySectorFocus.length > 0 && (
-              <span className="badge badgePrimary" style={{ marginLeft: "0.5rem" }}>{industrySectorFocus.length} selected</span>
-            )}
-          </label>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "0.25rem" }}>
-            {SECTORS.map((s) => (
-              <TagButton
-                key={s}
-                label={s}
-                selected={industrySectorFocus.includes(s)}
-                onClick={() => toggleMultiSelect(s, industrySectorFocus, setIndustrySectorFocus)}
-              />
-            ))}
-          </div>
-        </div>
+<div className="field">
+  <label className="label">
+    Industry / Sector Focus <span style={{ color: "var(--orange)" }}>*</span>
+    {industrySectorFocus.length > 0 && (
+      <span className="badge badgePrimary" style={{ marginLeft: "0.5rem" }}>{industrySectorFocus.length} selected</span>
+    )}
+  </label>
+  {sectors.length === 0 ? (
+    <span className="labelNote">Loading…</span>
+  ) : (
+    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "0.25rem" }}>
+      {sectors.map((s) => (
+        <TagButton
+          key={s._id}
+          label={s.name}
+          selected={industrySectorFocus.includes(s.name)}
+          onClick={() => toggleMultiSelect(s.name, industrySectorFocus, setIndustrySectorFocus)}
+        />
+      ))}
+    </div>
+  )}
+</div>
       </section>
 
       {/*  Contact details  */}
