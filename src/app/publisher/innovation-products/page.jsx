@@ -708,6 +708,8 @@ const confirmToggleProduct = (prod) => {
                 <Field label="Awards / Recognition">
                   <textarea className="textarea" rows={2} name="awardsRecognition" value={form.awardsRecognition} onChange={handleChange} placeholder="Any awards, recognitions, or notable achievements (optional)" />
                 </Field>
+
+                
               </section>
 
               {/*  Consent  */}
