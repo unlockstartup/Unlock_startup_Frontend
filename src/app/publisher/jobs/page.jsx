@@ -215,14 +215,15 @@ const openEdit = (job) => {
         return String(mode).split(",")[0].trim();
       };
       setEditId(job._id);
-      setForm({
-        ...defaultForm, ...job,
-        applyLastDate: fmtDate(job.applyLastDate || job.deadline),
-        applyDate:     fmtDate(job.applyDate),
-        jobType:       String(job.jobType || "").trim(),
-        workMode:      normalizeWorkMode(job.workMode),
-        companyLogo:   job.companyLogo || null,
-      });
+setForm({
+    ...defaultForm, ...job,
+    applyLastDate: fmtDate(job.applyLastDate || job.deadline),
+    applyDate:     fmtDate(job.applyDate),
+    jobType:       String(job.jobType || "").trim(),
+    workMode:      normalizeWorkMode(job.workMode),  
+    experienceLevel: String(job.experienceLevel || "").trim(), 
+    companyLogo:   job.companyLogo || null,
+  });
       setShowModal(true);
     },
   });
