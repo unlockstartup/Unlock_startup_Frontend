@@ -649,18 +649,18 @@ function FundingCallsCrud() {
                     </select>
                   </Field>
 
-<Field label="Challenge Category *">
-  <select
-    className="select"
-    value={form.challengeCategory}
-    onChange={sf("challengeCategory")}
-  >
-    <option value="">Select Category</option>
-    {[...challengeCategories].reverse().map((c) => (
-      <option key={c._id} value={c.name}>{c.name}</option>
-    ))}
-  </select>
-</Field>
+                  <Field label="Challenge Category *">
+                    <select
+                      className="select"
+                      value={form.challengeCategory}
+                      onChange={sf("challengeCategory")}
+                    >
+                      <option value="">Select Category</option>
+                      {challengeCategories.map((c) => (
+                        <option key={c._id} value={c.name}>{c.name}</option>
+                      ))}
+                    </select>
+                  </Field>
 
                   <Field label="Startup Stage Requirements *">
                     <select className="select" value={form.startupStage} onChange={sf("startupStage")}>
