@@ -323,18 +323,20 @@ export default function SidebarFilter({ pageType, onFilterChange, searchPlacehol
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pendingFilters, rawTypeObjects]);
 
-  //  Configs with resolved options 
-  const configsWithOptions = useMemo(() => {
-    return configs.map((config) => {
-      if (apiOptions[config.key]?.length) {
-        const opts = apiOptions[config.key];
-        return { ...config, options: config.type === "select" ? ["All", ...opts] : opts };
-      }
-      return { ...config, options: getDynamicOptions(config, items) };
-    });
-  }, [configs, items, apiOptions]);
+const configsWithOptions = useMemo(() => {
+  return configs.map((config) => {
+    let opts = apiOptions[config.key]?.length
+      ? (config.type === "select" ? ["All", ...apiOptions[config.key]] : apiOptions[config.key])
+      : getDynamicOptions(config, items);
 
-  //  Pending change detection 
+    if (config.key === "challengeCategory") {
+      opts = [...opts].reverse();
+    }
+
+    return { ...config, options: opts };
+  });
+}, [configs, items, apiOptions]);
+
   const hasPendingChanges = useMemo(() => {
     if (pendingSearch !== appliedSearch) return true;
     const allKeys = new Set([...Object.keys(pendingFilters), ...Object.keys(appliedFilters)]);
