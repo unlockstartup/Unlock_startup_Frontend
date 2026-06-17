@@ -22,10 +22,8 @@ function useBreakpoint() {
 export default function PublisherLayout({ children }) {
   const bp = useBreakpoint();
 
-  // Desktop: controls collapsed (icon-only) vs full
   const [collapsed, setCollapsed] = useState(false);
 
-  // Mobile: controls drawer open/closed
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleToggle = () => {

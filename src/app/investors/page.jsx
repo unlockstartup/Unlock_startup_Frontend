@@ -6,7 +6,7 @@ import InvestorCard from "@/components/uiElements/InvestorCard";
 import SidebarFilter from "@/components/uiElements/SidebarFilter";
 import api from "@/app/api";
 
-const PER_PAGE = 9; // 3×3 grid fits nicely
+const PER_PAGE = 9; 
 
 export default function InvestorPage() {
   const [investors, setInvestors] = useState([]);
@@ -28,7 +28,6 @@ export default function InvestorPage() {
     })();
   }, []);
 
-  // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [activeFilters]);

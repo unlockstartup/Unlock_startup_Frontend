@@ -119,7 +119,6 @@ export default function Page() {
   const [serviceError, setServiceError]     = useState(null);
 
   useEffect(() => {
-    // Fetch subscription plans
     (async () => {
       try {
         const res = await api.get('/api/subscription/plans');
@@ -136,7 +135,6 @@ export default function Page() {
       }
     })();
 
-    // Fetch service plans
     (async () => {
       try {
         const res = await api.get('/api/service-plans');

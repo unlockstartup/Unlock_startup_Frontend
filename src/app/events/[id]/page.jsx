@@ -64,7 +64,7 @@ export default function EventPage({ params }) {
 startDate: raw.startDateTime
   ? new Date(raw.startDateTime).toLocaleDateString("en-IN", {
       day: "numeric", month: "short", year: "numeric",
-      timeZone: "Asia/Kolkata",  // ← was "UTC"
+      timeZone: "Asia/Kolkata", 
     })
   : "TBA",
 
@@ -72,13 +72,13 @@ startTime: raw.startDateTime
   ? new Date(raw.startDateTime).toLocaleTimeString("en-IN", {
       hour: "2-digit", minute: "2-digit",
       timeZone: "Asia/Kolkata",
-    }).replace(/am|pm/i, (m) => m.toUpperCase())  // ← add this
+    }).replace(/am|pm/i, (m) => m.toUpperCase())  
   : null,
 
 endDate: raw.endDateTime
   ? new Date(raw.endDateTime).toLocaleDateString("en-IN", {
       day: "numeric", month: "short", year: "numeric",
-      timeZone: "Asia/Kolkata",  // ← was "UTC"
+      timeZone: "Asia/Kolkata",  
     })
   : "TBA",
 
@@ -86,7 +86,7 @@ endTime: raw.endDateTime
   ? new Date(raw.endDateTime).toLocaleTimeString("en-IN", {
       hour: "2-digit", minute: "2-digit",
       timeZone: "Asia/Kolkata",
-    }).replace(/am|pm/i, (m) => m.toUpperCase())  // ← add this
+    }).replace(/am|pm/i, (m) => m.toUpperCase()) 
   : null,
 
             venueName: raw.venueName ?? "",
@@ -103,7 +103,7 @@ endTime: raw.endDateTime
 registrationDeadline: raw.registrationDeadline
   ? new Date(raw.registrationDeadline).toLocaleDateString("en-IN", {
       day: "numeric", month: "short", year: "numeric",
-      timeZone: "Asia/Kolkata",  // ← was "UTC"
+      timeZone: "Asia/Kolkata", 
     })
   : null,
             registrationPrice: raw.registrationPrice ?? null,

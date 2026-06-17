@@ -140,7 +140,6 @@ const isServiceActive =
     return Math.min(100, Math.round((totalUsed / totalLimit) * 100));
   })();
 
-  //  Stat card definitions (dynamic colour values stay inline) 
   const statCards = [
     {
       label: "Total Listings",

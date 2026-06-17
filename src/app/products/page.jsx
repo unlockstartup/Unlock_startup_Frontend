@@ -28,7 +28,6 @@ const Page = () => {
     })();
   }, []);
 
-  // Reset to page 1 whenever filters or sort change
   useEffect(() => {
     setCurrentPage(1);
   }, [activeFilters, sortBy]);

@@ -75,12 +75,10 @@ export default function Page() {
 /*  derived values  */
 const capitalize = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : "";
 
-// Normalize workMode to a deduped array regardless of what the API sends
 const workModes = (() => {
   const raw = job.workMode;
   if (!raw) return [];
   const arr = Array.isArray(raw) ? raw : raw.split(",").map(s => s.trim());
-  // dedupe case-insensitively, then capitalize
   const seen = new Set();
   return arr.filter(s => {
     const key = s.toLowerCase();
@@ -125,7 +123,7 @@ const workModes = (() => {
 
 const handleApply = () => {
   if (!user) return;
-  TrackPublicAppyClick(job._id).catch(() => {}); // silent fail
+  TrackPublicAppyClick(job._id).catch(() => {});
   if (job.externalApplicationUrl && job.externalApplicationUrl !== "link") {
     window.open(job.externalApplicationUrl, "_blank", "noopener,noreferrer");
   } else {

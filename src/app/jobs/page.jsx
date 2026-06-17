@@ -30,7 +30,6 @@ const JobListPage = () => {
     })();
   }, []);
 
-  // Reset to page 1 when filters or sort change
   useEffect(() => {
     setCurrentPage(1);
   }, [activeFilters, sortBy]);

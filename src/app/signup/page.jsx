@@ -268,7 +268,6 @@ const Page = () => {
     setError("");
     setLoading(true);
     try {
-      // Always role "publisher" — accountCategory carries "publisher" vs "investor"
       await api.post("/api/auth/send-otp", { email, role: "publisher", type: "register" });
       setShowOtpModal(true);
     } catch (err) {
@@ -287,8 +286,8 @@ const Page = () => {
       const selectedOrgType = organizerTypes.find((t) => t._id === pubForm.organizerType);
       const res = await api.post("/api/auth/verify-otp", {
         email, otp: otpValue,
-        role: "publisher",           // always publisher role
-        accountCategory: accountType, // ← "publisher" or "investor"
+        role: "publisher",           
+        accountCategory: accountType, 
         password, phone,
         publisherType: pubForm.publisherType,
         organizerType: pubForm.organizerType,
@@ -301,7 +300,7 @@ const Page = () => {
       const { token, user: userData } = res.data;
       if (token) {
         localStorage.setItem("publisher_token", token);
-        localStorage.setItem("publisher_category", accountType); // ← "publisher" or "investor"
+        localStorage.setItem("publisher_category", accountType); 
       }
       setShowOtpModal(false);
       redirectAfterSuccess(accountType, "/publisher/dashboard");
@@ -461,7 +460,6 @@ const Page = () => {
                         { value: "publisher", label: "Publisher" },
                         { value: "investor",  label: "Investor"  },
                       ]}
-                      //  Fixed: correct label for all 3 types 
                       value={{
                         value: accountType,
                         label: accountType === "user" ? "User"

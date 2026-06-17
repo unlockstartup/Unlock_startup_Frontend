@@ -198,9 +198,7 @@ function ActivePills({ filters, configs, onRemove }) {
 export default function SidebarFilter({ pageType, onFilterChange, searchPlaceholder, items = [] }) {
   const configs = FILTER_CONFIGS[pageType] || [];
 
-  // apiOptions: name strings shown in checkboxes  { [filterKey]: string[] }
   const [apiOptions,     setApiOptions]     = useState({});
-  // rawTypeObjects: full objects { _id, name } for type keys only — needed for cascade ID lookup
   const [rawTypeObjects, setRawTypeObjects] = useState({});
 
   const [pendingSearch,  setPendingSearch]  = useState("");
@@ -250,10 +248,8 @@ export default function SidebarFilter({ pageType, onFilterChange, searchPlacehol
 
     fetchAll();
     prevTypeFilters.current = {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageType]);
 
-  //  Cascade: re-fetch category options whenever a type filter changes 
   useEffect(() => {
     const cascadeEntries = Object.entries(CASCADE_MAP).filter(([typeKey]) =>
       configs.some((c) => c.key === typeKey)
@@ -272,7 +268,6 @@ export default function SidebarFilter({ pageType, onFilterChange, searchPlacehol
       if (!mapping) return;
 
       if (!selectedNames.length) {
-        // No type selected → restore full unfiltered category list
         try {
           const res = await api.get(mapping.url);
           const raw = res.data?.[mapping.dataKey] ?? [];
@@ -309,7 +304,6 @@ export default function SidebarFilter({ pageType, onFilterChange, searchPlacehol
 
         setApiOptions((prev) => ({ ...prev, [categoryKey]: names }));
 
-        // Clear any previously selected categories that no longer exist in the new list
         setPendingFilters((prev) => {
           const existing = prev[categoryKey] ?? [];
           const valid    = existing.filter((v) => names.includes(v));

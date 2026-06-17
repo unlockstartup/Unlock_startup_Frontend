@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
         setUser(JSON.parse(storedUser));
       } catch {
         localStorage.removeItem("user");
-        localStorage.removeItem("userToken"); // ← renamed key
+        localStorage.removeItem("userToken"); 
         setUser(null);
       }
     } else {
@@ -37,13 +37,13 @@ export function AuthProvider({ children }) {
   }, []);
 
 const login = (userData, token) => {
-  localStorage.setItem("user_token", token);   // ← was "token"
+  localStorage.setItem("user_token", token);  
   localStorage.setItem("user", JSON.stringify(userData));
   setUser(userData);
 };
 
 const logout = () => {
-  localStorage.removeItem("user_token");        // ← was "token"
+  localStorage.removeItem("user_token");     
   localStorage.removeItem("user");
   setUser(null);
 };

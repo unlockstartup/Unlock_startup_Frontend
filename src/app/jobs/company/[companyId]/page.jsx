@@ -22,11 +22,9 @@ const AllJobPage = () => {
     (async () => {
       try {
         setLoading(true);
-        // Adjust the endpoint to whatever your API exposes
         const res = await api.get(`/api/publisher/jobs/sorted`);
         const allJobs = res.data?.items || res.data?.jobs || [];
 
-        // Filter client-side by companyId or companyName slug
         const matched = allJobs.filter(
           (j) =>
             j.companyId === companyId ||
@@ -35,7 +33,6 @@ const AllJobPage = () => {
 
         setJobs(matched);
 
-        // Grab meta from the first match
         if (matched.length > 0) {
           setCompanyName(matched[0].companyName || "");
           setCompanyLogo(matched[0].companyLogo?.url || null);

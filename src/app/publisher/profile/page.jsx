@@ -109,7 +109,7 @@ const handleDownloadServiceInvoice = async (serviceSubscriptionId, invoiceNumber
   setDownloadingServiceId(serviceSubscriptionId);
   try {
     const response = await publisherApi.get(
-      `/api/publisher/subscription/invoice/${serviceSubscriptionId}?type=service`,  // ← same route, flag added
+      `/api/publisher/subscription/invoice/${serviceSubscriptionId}?type=service`, 
       { responseType: "blob" }
     );
     const url = URL.createObjectURL(response.data);
@@ -218,7 +218,6 @@ const DownloadBtn = ({ sub, invNumber, onDownload, isDownloading }) => (
     );
   };
 
-  // ── Table renderers ─────────────────────────────────────────────────────────
   const renderPlatformTable = () => {
     if (subscriptions.length === 0) return <EmptyState label="No platform subscription history found." />;
     return (

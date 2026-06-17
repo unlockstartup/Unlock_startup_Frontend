@@ -85,11 +85,8 @@ function OtpModal({ email, onVerify, onResend, onClose, loading }) {
   );
 }
 
-/* 
-   FORGOT PASSWORD MODAL  (new)
- */
 function ForgotPasswordModal({ onClose }) {
-  const [step, setStep]         = useState("email");   // "email" | "otp" | "reset"
+  const [step, setStep]         = useState("email");  
   const [email, setEmail]       = useState("");
   const [otp, setOtp]           = useState(["", "", "", "", "", ""]);
   const [newPassword, setNew]   = useState("");
@@ -396,7 +393,7 @@ const Page = () => {
   const [password, setPassword]         = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showOtpModal, setShowOtpModal] = useState(false);
-  const [showFpModal, setShowFpModal]   = useState(false);   // ← forgot-password modal
+  const [showFpModal, setShowFpModal]   = useState(false);  
   const [loading, setLoading]           = useState(false);
   const [error, setError]               = useState("");
 
@@ -417,7 +414,7 @@ const handlePasswordSubmit = async (e) => {
       router.push("/"); router.refresh();
     } else if (userData?.role === "publisher") {
       localStorage.setItem("publisher_token", token);
-      localStorage.setItem("publisher_category", data.publisherCategory || "publisher"); // ← add
+      localStorage.setItem("publisher_category", data.publisherCategory || "publisher");
       router.push("/publisher/dashboard"); router.refresh();
     } else {
       setError("Access denied. Only users and publishers can log in here.");
@@ -461,7 +458,7 @@ const handleVerifyOtp = async (otpValue) => {
         router.push("/"); router.refresh();
       } else if (userData?.role === "publisher") {
         localStorage.setItem("publisher_token", token);
-        localStorage.setItem("publisher_category", res.data.publisherCategory || "publisher"); // ← add
+        localStorage.setItem("publisher_category", res.data.publisherCategory || "publisher"); 
         setShowOtpModal(false);
         router.push("/publisher/dashboard"); router.refresh();
       } else {

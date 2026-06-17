@@ -417,7 +417,6 @@ export default function CompetitionPage({ params }) {
 
   {funding.registrationLink && (
     user ? (
-      // Logged in — normal apply button
       <a
         href={funding.registrationLink}
         target="_blank"
@@ -431,7 +430,6 @@ export default function CompetitionPage({ params }) {
         Apply via External Link
       </a>
     ) : (
-      // Not logged in — disabled button + login link
       <>
         <button
           className="competitionCtaPrimary"

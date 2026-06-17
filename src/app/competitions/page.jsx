@@ -80,7 +80,6 @@ const Page = () => {
 if (location && location !== "All") {
   list = list.filter((f) => f.location === location);
 }
-    // Sort: latest submissionDeadline first
     list.sort((a, b) => {
       const dateA = a.submissionDeadline ? new Date(a.submissionDeadline).getTime() : 0;
       const dateB = b.submissionDeadline ? new Date(b.submissionDeadline).getTime() : 0;
