@@ -178,7 +178,7 @@ function FundingCallsCrud() {
       setCompetitionTypes(types.data?.competitionTypes || types.data?.types || []);
       setOrganizerTypes(orgs.data?.organizerTypes     || orgs.data?.types   || []);
       setStartupStages(stages.data?.startupStages     || stages.data?.stages || []);
-      setChallengeCategories(cats.data?.categories    || []);
+      setChallengeCategories([...(cats.data?.categories || [])].reverse());
     } catch {
       toast.error("Failed to load dropdown data");
     }
@@ -649,18 +649,18 @@ function FundingCallsCrud() {
                     </select>
                   </Field>
 
-                  <Field label="Challenge Category *">
-                    <select
-                      className="select"
-                      value={form.challengeCategory}
-                      onChange={sf("challengeCategory")}
-                    >
-                      <option value="">Select Category</option>
-                      {challengeCategories.map((c) => (
-                        <option key={c._id} value={c.name}>{c.name}</option>
-                      ))}
-                    </select>
-                  </Field>
+<Field label="Challenge Category *">
+  <select
+    className="select"
+    value={form.challengeCategory}
+    onChange={sf("challengeCategory")}
+  >
+    <option value="">Select Category</option>
+    {[...challengeCategories].reverse().map((c) => (
+      <option key={c._id} value={c.name}>{c.name}</option>
+    ))}
+  </select>
+</Field>
 
                   <Field label="Startup Stage Requirements *">
                     <select className="select" value={form.startupStage} onChange={sf("startupStage")}>
