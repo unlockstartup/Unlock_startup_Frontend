@@ -47,9 +47,10 @@ const Page = () => {
           <div className="au-section-head">
             <div className="au-section-label">Company overview</div>
             <div>
-              <h2>Event management with proven startup growth impact.</h2>
+              <h2>Complete Startup Ecosystem for Growth and Success.</h2>
               <p className="au-section-copy">
-                We operate at the intersection of strategic event planning and business acceleration. Our role is not simply to host events — it is to create powerful experiences that position startups for rapid growth, attract investors, and convert attendees into loyal customers and partners.
+                Every startup has its vision and mission but finding the right platform to grow, connect and succeed can be a challenge.
+<br/> To bridge this gap, we developed an all-in-one ecosystem for startups, innovators, investors, job seekers, service providers and innovative product listings. Our platform combines everything a growing startup needs, all in one place – from startup challenges and events, to jobs, networking, funding and products.
               </p>
             </div>
           </div>
@@ -58,19 +59,19 @@ const Page = () => {
             <article className="au-card">
               <h3>Who we are</h3>
               <p>
-                We are a specialized team of event strategists, producers, and growth experts dedicated to helping startups scale faster through high-ROI events that deliver real business outcomes.
+                We provide a dynamic platform designed to support startups, innovators, entrepreneurs, and investors by creating opportunities for growth, collaboration, and success. 
               </p>
             </article>
             <article className="au-card">
               <h3>What we do</h3>
               <p>
-                From intimate founder dinners to large-scale industry summits, we deliver end-to-end startup event planning that aligns perfectly with your growth objectives and brand story.
+                We are an innovation startup platform designed to enable entrepreneurs, innovators, investors and the scaling business ecosystem through an integrated and robust digital platform.
               </p>
             </article>
             <article className="au-card">
-              <h3>How we work</h3>
+              <h3>What we offer</h3>
               <p>
-                Our process is data-driven, founder-centric, and results-oriented — moving from goal-setting to flawless execution with speed, precision, and measurable business impact.
+                 Unlock Startup provides a subscription-based dashboard for publishers, and investors, bringing the entire startup ecosystem together on a single digital platform. Our services include job posting solutions, startup competitions, business events, investor networking, and product listing services to help businesses gain visibility and reach the right audience.
               </p>
             </article>
           </div>
@@ -83,9 +84,9 @@ const Page = () => {
           <div className="au-section-head">
             <div className="au-section-label">Mission &amp; vision</div>
             <div>
-              <h2>Built for startups shaping the future of business.</h2>
+              <h2>One Platform. Endless Opportunities for Startups.</h2>
               <p className="au-section-copy">
-                Our long-term ambition is to become the leading event management partner for high-growth startups worldwide. We create experiences that don't just impress — they deliver funding, customers, and momentum that propel businesses forward.
+                Unlock Startup: The only place you need for innovation and growth, connecting entrepreneurs, innovators, startups, companies and investors within one seamlessly connected platform. Unlock Startup aggregates grant challenges, startup events, job postings, investor relationships, product showcases and business services all into one online portal. 
               </p>
             </div>
           </div>
@@ -94,13 +95,13 @@ const Page = () => {
             <article className="au-statement">
               <span>Our mission</span>
               <p>
-                To deliver exceptional startup event management that transforms business vision into high-impact experiences, generating measurable growth, investor interest, and market leadership.
+                Unlock Startup mission to support the startups in all phases of their growth by offering access to the opportunities, connections and resources necessary for growth. Often, early-stage startups struggle with finding investment opportunities, getting suitable mentors, establishing a business network, targeting potential clients and achieving market reachability.
               </p>
             </article>
             <article className="au-statement">
               <span>Our vision</span>
               <p>
-                To set the global standard for strategic event planning that empowers every startup to scale faster, connect deeper, and achieve sustainable business success.
+                Our vision is to contribute to India's emergence as a global leader in innovation, entrepreneurship, and technology. We believe the rise of a new generation of entrepreneurs, innovators, and creators will transform lives in a significant and powerful way through creation of solutions and services with impact and purpose that adds real value for everyone involved.
               </p>
             </article>
           </div>
@@ -113,52 +114,60 @@ const Page = () => {
           <div className="au-section-head">
             <div className="au-section-label">Core services</div>
             <div>
-              <h2>Comprehensive event management for startup growth.</h2>
+              <h2>Empowering Startups to Innovate, Connect, and Scale.</h2>
               <p className="au-section-copy">
-                Our services are designed to support startups at every stage — from early validation to hyper-growth. We deliver integrated event experiences that ensure maximum visibility, networking, and ROI.
+                Unlock Startup provides a comprehensive range of services designed to support innovation, entrepreneurship, and business growth. Our platform enables organizations to publish innovation challenges, competitions, hackathons, events, and job opportunities while allowing startups and innovators to discover and participate in them. We are able to deliver as well: product showcase lists, lists of start-up services, access to investors, and networking among business people. All these with the help of one integrated, central platform where startups, companies, investors and professionals are linked, interact and grow in the vibrant ecosystem for innovation.
               </p>
             </div>
           </div>
 
           <div className="au-service-grid">
             <article className="au-card">
-              <h3>Startup Launch Events</h3>
+              <h3>Competitions</h3>
               <p>
-                We orchestrate unforgettable product launches and go-to-market events that create buzz, attract media, and drive immediate customer acquisition.
+                Unlock Startup enables startups, companies, organizations, investors, and ecosystem partners to publish competitions, innovation challenges, grant programs, seed funding opportunities, hackathons, and other growth initiatives through a dedicated Publisher Dashboard. Every submitted program undergoes a review and validation by the Unlock Startup team before it is published on the platform. when approved, they become available to our growing community of innovators, entrepreneurs, startups and professionals, where they will register for an account, view programs, make submissions and enter challenges and competition that match with their capabilities, ideas, business models and so on.
+              </p>
+            </article>
+            <article className="au-card">
+              <h3>Events</h3>
+              <p>
+                Unlock Startup provides a Publisher Dashboard that enables startups, companies, organizations, investors, and ecosystem partners to publish and promote a wide range of events, including conferences, seminars, webinars, workshops, trade shows, networking sessions, investor meetups, and industry programs.
               </p>
               <ul>
-                <li>Product launch strategy, venue selection, and full production.</li>
-                <li>Media outreach, influencer partnerships, and post-event growth campaigns.</li>
+                <li>Event organizers can submit their event details through the platform for review and verification by the Unlock Startup team. Publishers have the flexibility to direct participants to their own registration page or accept applications directly through the Unlock Startup platform.</li>
+                <li>Once approved, events become visible to our growing community of innovators, entrepreneurs, startups, professionals, and industry leaders. This creates valuable opportunities for learning, networking, collaboration, knowledge sharing, and business growth within the innovation ecosystem.</li>
               </ul>
             </article>
             <article className="au-card">
-              <h3>Investor &amp; Networking Events</h3>
+              <h3>Jobs</h3>
               <p>
-                Premium pitch nights, demo days, and exclusive investor summits engineered to help startups secure funding and build strategic relationships.
+                 Unlock Startup provides a separate publisher dashboard that allows startup companies, organization, firm and investors to post their job opportunities for different kinds of industries & profession like technology, IT, networking, E-commerce, Digital Marketing, Business Development, operation etc.
               </p>
               <ul>
-                <li>Investor matchmaking, pitch deck alignment, and venue transformation.</li>
-                <li>Seamless AV, live streaming, and follow-up lead nurturing systems.</li>
+                <li>Publisher will submit their job posts on our platform which will check & verified by unlock startup team for the best opportunity for the individuals. Publishers can add their individual application link so that candidates can apply through their process.</li>
+                <li>After checking & approval, opportunity will display to the student, innovator, professional & job seekers in their user dashboard. User can search the details of the job description, criteria & details and apply for the same.</li>
               </ul>
             </article>
             <article className="au-card">
-              <h3>Industry Conference &amp; Summit Production</h3>
+              <h3>Investors </h3>
               <p>
-                We produce large-scale startup conferences and thought-leadership summits that position your brand as an industry leader and generate high-quality leads.
+                Unlock Startup provides a Investor Dashboard exclusively designed for angel investors, venture capital firms, investment professionals, and funding organizations. Investors can create a comprehensive profile showcasing their investment interests, industry focus, funding stage preferences, portfolio companies, and past investment experience. All investor profiles must pass a review by the Unlock Startup team prior to being published in the platform for verification purposes so that they are genuine and true. When approved, these investors become visible and accessible for all the startups, entrepreneurs, and companies that are looking for funding and partnership opportunity.
               </p>
-              <ul>
-                <li>End-to-end planning, speaker curation, and sponsor activation.</li>
-                <li>Hybrid &amp; virtual event technology for maximum reach and engagement.</li>
-              </ul>
             </article>
             <article className="au-card">
-              <h3>Ongoing Growth Event Partnership</h3>
+              <h3>Product Listings </h3>
               <p>
-                We become your embedded event management partner — delivering a steady pipeline of strategic events that fuel continuous business expansion.
+                Unlock Startup offers to start-ups, innovators and organizations, a unique platform to feature their innovation products to a large audience. Numerous start-ups at the beginning of their trajectory develops an innovation product or technology but encounter difficulties to ensure its visibility in the market, reach their potential customers and connect to investors. Our "Product Listings" space enables start-ups to display their product innovation, list their features and exhibit the relevance and benefits of the innovation. Product visibility at the platform increases the brand awareness of the start-up, captures the customers’ interest and opens new business avenues.
               </p>
-              <ul>
-                <li>Retainer-based event strategy and quarterly growth activations.</li>
-                <li>Scalable event systems, brand consistency, and performance tracking.</li>
+            </article>
+            <article className="au-card">
+              <h3>Services  </h3>
+              <p>
+                The Unlock Startup's Services Marketplace provides a platform to promote services, business services, solutions, and professional offers by businesses, companies, agencies, consultants and professional firms to an ever-expanding entrepreneurial, business and innovation focused community. 
+              </p>
+                <ul>
+                <li>A service listing is submitted by a business, and Unlock Startup verifies the service to assure it is legitimate and professional before it is published. All submitted and verified services are then discoverable to registered users in the network. Startups and companies sign up, log in to their account, view listed services, and inquire or partner directly with service providers.</li>
+                <li>Services are typically sold through monthly or yearly subscriptions or by direct contract payment to a third-party provider. A business can list services and gain new clients, expand their reach within the market, achieve greater brand exposure and visibility, generate qualified leads, and discover new revenue opportunities.</li>
               </ul>
             </article>
           </div>
@@ -171,36 +180,36 @@ const Page = () => {
           <div className="au-section-head">
             <div className="au-section-label">Our values</div>
             <div>
-              <h2>The principles behind every startup success story.</h2>
+              <h2>Connecting Visionaries with Opportunities.</h2>
               <p className="au-section-copy">
-                Our values define how we plan, execute, and measure events. They are the foundation of long-term client partnerships and the reason our events consistently deliver exceptional business growth.
+                At Unlock Startup, we are convinced that all important inventions start with a revolutionary idea. It is our goal to link Entrepreneurs, Innovators, Startups, Businesses, Investors, Professionals to resources so that they can convert ideas into business realities.
               </p>
             </div>
           </div>
 
           <div className="au-values-grid">
             <article className="au-card">
-              <h3>Results-Driven</h3>
+              <h3>Innovation </h3>
               <p>
-                Every event is designed with clear KPIs — leads generated, funding secured, partnerships formed — ensuring measurable ROI for your startup.
+                We encourage creativity, new ideas, and forward-thinking solutions that drive business growth and industry transformation.
               </p>
             </article>
             <article className="au-card">
-              <h3>Founder-First</h3>
+              <h3>Collaboration</h3>
               <p>
-                We listen deeply, move fast, and tailor every experience to your unique vision, timeline, and growth objectives.
+                We develop a cohesive network that enables startups, investors, professionals, and corporations to communicate, assist, and thrive collectively.
               </p>
             </article>
             <article className="au-card">
-              <h3>Innovation</h3>
+              <h3>Empowerment</h3>
               <p>
-                We embrace cutting-edge event technology, immersive formats, and creative storytelling to make your brand unforgettable.
+                We make efforts to empower ventures and entrepreneurs by giving them the tools, information and associations essential for achievements.
               </p>
             </article>
             <article className="au-card">
-              <h3>Scalable Excellence</h3>
+              <h3>Growth & Sustainability</h3>
               <p>
-                From intimate dinners to global summits, we deliver flawless execution that scales with your business ambitions across any market.
+               We aim to deliver enduring worth and sustainable progress for startups, companies and the entrepreneurship landscape.
               </p>
             </article>
           </div>

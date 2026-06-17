@@ -148,7 +148,7 @@
 .au-section-copy {
   font-size: 15px;
   color: #666666;
-  max-width: 62ch;
+  max-width: fit-content;
   line-height: 1.75;
 }
 
