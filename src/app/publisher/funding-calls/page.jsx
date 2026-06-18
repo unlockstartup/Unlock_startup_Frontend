@@ -585,11 +585,12 @@ function FundingCallsCrud() {
 
                       <td data-label="Actions">
                         <div className="actionGroup">
-                          <button
-                            className={`btn btnSm ${editLocked ? "btnSecondary" : "btnPrimary"}`}
-                            onClick={() => openEdit(r)}
-                            title={editLocked ? "Already edited once" : "Edit competition"}
-                          >
+<button
+  className={`btn btnSm ${editLocked ? "btnSecondary" : "btnPrimary"}`}
+  onClick={() => openEdit(r)}
+  disabled={editLocked}
+  title={editLocked ? "Edit not allowed — already edited once" : "Edit competition"}
+>
                             Edit
                           </button>
                           <button
