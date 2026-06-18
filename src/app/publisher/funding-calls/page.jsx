@@ -588,11 +588,10 @@ function FundingCallsCrud() {
 <button
   className={`btn btnSm ${editLocked ? "btnSecondary" : "btnPrimary"}`}
   onClick={() => openEdit(r)}
-  disabled={editLocked}
   title={editLocked ? "Edit not allowed — already edited once" : "Edit competition"}
 >
-                            Edit
-                          </button>
+  Edit
+</button>
                           <button
                             className={`btn btnSm ${r.isActive ? "btnWarning" : "btnSuccess"}`}
                             onClick={() => onToggleActiveConfirm(r)}
