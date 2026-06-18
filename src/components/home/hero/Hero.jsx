@@ -30,15 +30,9 @@ export default function Hero() {
           <div className="row">
             <div className="col-lg-6 col-md-8">
               <h1 className="main-title wow fadeInUp" data-wow-delay="0.1s">
-                Unlock Opportunities. Accelerate Your Startup Journey.
+                Unleashing Ideas, Empowering Entrepreneurs, Shaping Tomorrow's Success.
               </h1>
-              <p
-                className="text-md mt-35 mb-50 lg-mb-30 pe-xxl-5 wow fadeInUp"
-                data-wow-delay="0.2s"
-              >
-                With the largest professional creative community online, simply
-                search through from our website
-              </p>
+
             </div>
           </div>
 

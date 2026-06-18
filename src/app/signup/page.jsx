@@ -575,7 +575,7 @@ const Page = () => {
                       <label htmlFor="org-name">Company Name</label>
                       <div className="lsb-ctrl">
                         <Building2 size={15} color="var(--lsb-red)" strokeWidth={2} style={{ flexShrink: 0 }} />
-                        <input id="org-name" type="text" placeholder="ABC Pvt Ltd"
+                        <input id="org-name" type="text" placeholder="Company Name"
                           value={pubForm.organizationName}
                           onChange={(e) => setPub("organizationName", e.target.value)} required />
                       </div>

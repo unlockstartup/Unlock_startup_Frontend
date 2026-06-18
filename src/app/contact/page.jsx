@@ -63,10 +63,10 @@ const [stateOpen, setStateOpen] = useState(false);
               </div>
               <div className="contact-item">
                 <div className="contact-icon" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="4" />
-                    <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94" />
-                  </svg>
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <rect x="2" y="4" width="20" height="16" rx="2" />
+  <path d="M2 7l10 7 10-7" />
+</svg>
                 </div>
                 <div className="contact-details">
                   <h3>Email us</h3>
@@ -75,13 +75,13 @@ const [stateOpen, setStateOpen] = useState(false);
                   </p>
                 </div>
               </div>
-              <div className="contact-item">
+              {/* <div className="contact-item">
                 <div className="contact-icon" aria-hidden="true">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <circle cx="12" cy="12" r="4" />
                     <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94" />
                   </svg>
-                </div>
+                </div> */}
                 {/* <div className="contact-details">
                   <h3>Email us</h3>
                   <p>
@@ -91,7 +91,7 @@ const [stateOpen, setStateOpen] = useState(false);
               </div>
             </div>
           </div>
-        </div>
+        {/* </div> */}
       </section>
 
       {/* Contact Form Section */}

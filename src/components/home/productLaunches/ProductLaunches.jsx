@@ -138,7 +138,7 @@ const ProductLaunches = () => {
                 ))}
 
                 {/* Static promo card — always last */}
-                <div className="product-card-wrap">
+                {/* <div className="product-card-wrap">
                   <div
                     className="card-style-four bg-color tran3s w-100 wow fadeInUp"
                     style={{ height: "100%" }}
@@ -169,7 +169,7 @@ const ProductLaunches = () => {
                       </div>
                     </Link>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* Dot indicators */}

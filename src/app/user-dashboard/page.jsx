@@ -214,7 +214,7 @@ function OpportunityDetails({ sub, listingLoc, description, eventDates }) {
     const inv = sub.investorId;
     return (
       <DetailSection title="Investor Details" variant="blue">
-        <DetailRow label="Fund name"     value={inv.fundName} />
+        <DetailRow label="Investor name"     value={inv.fundName} />
         <DetailRow label="Investor type" value={inv.investorType} />
         <DetailRow label="Website"       value={inv.website} link />
         <DetailRow label="About"         value={description?.length > 200 ? description.slice(0, 200) + "…" : description} />

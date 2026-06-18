@@ -255,7 +255,7 @@ const [sectors, setSectors] = useState([]);
 
         <div className="field">
           <label className="label">Investor Name <span style={{ color: "var(--orange)" }}>*</span></label>
-          <input className="input" value={fundName} onChange={(e) => setFundName(e.target.value)} placeholder="e.g. Venture Partners India" />
+          <input className="input" value={fundName} onChange={(e) => setFundName(e.target.value)} placeholder="Enter Investor Name" />
         </div>
 
         <div className="row2">
@@ -416,7 +416,7 @@ const [sectors, setSectors] = useState([]);
 
         <div className="row2">
           <div className="field">
-            <label className="label">Contact Name <span style={{ color: "var(--orange)" }}>*</span></label>
+            <label className="label">Contact Person Name <span style={{ color: "var(--orange)" }}>*</span></label>
             <input className="input" value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Enter Name" />
           </div>
           <div className="field">

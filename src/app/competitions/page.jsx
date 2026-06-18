@@ -6,11 +6,14 @@ import FundingCard from "@/components/uiElements/FundingCard";
 import SidebarFilter from "@/components/uiElements/SidebarFilter";
 import api from "@/app/api";
 
+const PER_PAGE = 3; 
+
 const Page = () => {
   const [fundings, setFundings] = useState([]);
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState(null);
   const [activeFilters, setActiveFilters] = useState({});
+  const [currentPage, setCurrentPage] = useState(1); 
 
   useEffect(() => {
     const fetchFundings = async () => {
@@ -53,6 +56,10 @@ const Page = () => {
     fetchFundings();
   }, []);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeFilters]);
+
   const filtered = useMemo(() => {
     let list = [...fundings];
     const { search, challengeType, challengeCategory, startupStage, geographicRestrictions, location } = activeFilters;
@@ -77,9 +84,9 @@ const Page = () => {
         (f) =>
           f.geographicRestrictions?.toLowerCase() === geographicRestrictions.toLowerCase()
       );
-if (location && location !== "All") {
-  list = list.filter((f) => f.location === location);
-}
+    if (location && location !== "All") {
+      list = list.filter((f) => f.location === location);
+    }
     list.sort((a, b) => {
       const dateA = a.submissionDeadline ? new Date(a.submissionDeadline).getTime() : 0;
       const dateB = b.submissionDeadline ? new Date(b.submissionDeadline).getTime() : 0;
@@ -88,16 +95,26 @@ if (location && location !== "All") {
     return list;
   }, [fundings, activeFilters]);
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+
+  const paginated = useMemo(() => {
+    const start = (currentPage - 1) * PER_PAGE;
+    return filtered.slice(start, start + PER_PAGE);
+  }, [filtered, currentPage]);
+
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
+  };
+
   return (
     <main>
-
       <section className="event-section pt-100 lg-pt-80 pb-100 lg-pb-80 mt-30">
         <div className="container">
           <Breadcrumb title="Competitions" />
           <div className="row g-4 mt-10">
             {/* Sidebar */}
             <div className="col-12 col-lg-3">
-                      <SidebarFilter
+              <SidebarFilter
                 pageType="competitions"
                 onFilterChange={setActiveFilters}
                 items={fundings}
@@ -126,13 +143,57 @@ if (location && location !== "All") {
                 </div>
               )}
               {!loading && !error && filtered.length > 0 && (
-                <div className="row g-4">
-                  {filtered.map((funding, index) => (
-                    <div key={funding.slug} className="col-12 col-md-6 col-xl-4">
-                      <FundingCard funding={funding} index={index} />
-                    </div>
-                  ))}
-                </div>
+                <>
+                  <div className="row g-4">
+                    {paginated.map((funding, index) => (
+                      <div key={funding.slug} className="col-12 col-md-6 col-xl-4">
+                        <FundingCard funding={funding} index={index} />
+                      </div>
+                    ))}
+                  </div>
+
+                  {filtered.length > PER_PAGE && (
+                    <nav className="mt-4 d-flex justify-content-center">
+                      <ul className="pagination">
+                        <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                          <button
+                            className="page-link"
+                            onClick={() => goToPage(currentPage - 1)}
+                            disabled={currentPage === 1}
+                          >
+                            Previous
+                          </button>
+                        </li>
+
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                          <li
+                            key={page}
+                            className={`page-item ${currentPage === page ? "active" : ""}`}
+                          >
+                            <button className="page-link" onClick={() => goToPage(page)}>
+                              {page}
+                            </button>
+                          </li>
+                        ))}
+
+                        <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+                          <button
+                            className="page-link"
+                            onClick={() => goToPage(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                          >
+                            Next
+                          </button>
+                        </li>
+                      </ul>
+                    </nav>
+                  )}
+
+                  <div className="text-center text-muted small mt-2">
+                    Showing {(currentPage - 1) * PER_PAGE + 1}–
+                    {Math.min(currentPage * PER_PAGE, filtered.length)} of {filtered.length}
+                  </div>
+                </>
               )}
             </div>
           </div>
