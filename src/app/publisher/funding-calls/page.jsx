@@ -221,7 +221,7 @@ function FundingCallsCrud() {
   const openCreate = () => { setMode("create"); setEditing(null); setForm(initialForm); setOpen(true); };
 
   const openEdit = (row) => {
-    const alreadyEdited = (row.editCount ?? 0) >= 2;
+    const alreadyEdited = (row.editCount ?? 0) >= 1;
     setConfirmConfig({
       title: alreadyEdited ? "Edit Not Allowed" : "Edit Competition",
       message: alreadyEdited
