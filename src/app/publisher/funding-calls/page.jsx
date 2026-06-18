@@ -538,7 +538,7 @@ function FundingCallsCrud() {
               </thead>
               <tbody>
                 {rows.map((r, idx) => {
-                  const editLocked = (r.editCount ?? 0) >= 2;
+                  const editLocked = (r.editCount ?? 0) >= 1;
                   return (
                     <tr key={r._id}>
                       <td className="tdMuted" data-label="#">{(page - 1) * limit + idx + 1}</td>
