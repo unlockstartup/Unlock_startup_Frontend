@@ -170,7 +170,7 @@ export default function Page() {
         {/* Subscription Plans Grid */}
         <section className="pricingPage__pricing" id="pricing">
           <h2 style={{ textAlign: 'center', fontSize: '28px', fontWeight: '700', color: '#111827', marginBottom: '8px' }}>
-            Subscription Plans
+            Startup Plans
           </h2>
           <p style={{ textAlign: 'center', color: '#6b7280', fontSize: '15px', marginBottom: '40px' }}>
             Publish and manage your job listings, event listings and fundings. Pick a duration that suits your needs.

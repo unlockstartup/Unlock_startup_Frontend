@@ -258,7 +258,7 @@ const isServiceActive =
       <div className="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3 mt-2">
         <div className="pd__section-header" style={{ marginBottom: 0 }}>
           <span className="pd__section-bar" />
-          <span className="pd__section-label">Subscription Plans</span>
+          <span className="pd__section-label">Startup Plans</span>
         </div>
         {!isActive && (
           <div className="pd__expired-badge">

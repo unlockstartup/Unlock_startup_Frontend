@@ -10,6 +10,8 @@ const UpcomingFundingCalls = () => {
   const [error, setError]       = useState(null);
   const [current, setCurrent]   = useState(0);
   const trackRef                = useRef(null);
+const [needsScroll, setNeedsScroll] = useState(false);
+const [cardsPerView, setCardsPerView] = useState(4);
 
   useEffect(() => {
     const fetchFundings = async () => {
@@ -57,22 +59,45 @@ const UpcomingFundingCalls = () => {
     fetchFundings();
   }, []);
 
-  // Sync dot indicator with native scroll position
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track || fundings.length === 0) return;
+// 1. Calculate overflow AND cards per view
+useEffect(() => {
+  const track = trackRef.current;
+  if (!track || fundings.length === 0) return;
 
-    const onScroll = () => {
-      const firstCard = track.children[0];
-      if (!firstCard) return;
-      const cardWidth = firstCard.getBoundingClientRect().width + 16; // +gap
-      const idx = Math.round(track.scrollLeft / cardWidth);
-      setCurrent(Math.max(0, Math.min(idx, fundings.length - 1)));
-    };
+  const checkOverflow = () => {
+    const firstCard = track.children[0];
+    if (!firstCard) return;
+    const cardWidth = firstCard.getBoundingClientRect().width + 16;
+    const visible = Math.max(1, Math.round(track.clientWidth / cardWidth));
+    setCardsPerView(visible);
+    setNeedsScroll(track.scrollWidth > track.clientWidth + 1);
+  };
 
-    track.addEventListener("scroll", onScroll, { passive: true });
-    return () => track.removeEventListener("scroll", onScroll);
-  }, [fundings]);
+  checkOverflow();
+  const ro = new ResizeObserver(checkOverflow);
+  ro.observe(track);
+  return () => ro.disconnect();
+}, [fundings]);
+
+// 2. Sync dot indicator with native scroll position
+useEffect(() => {
+  const track = trackRef.current;
+  if (!track || fundings.length === 0) return;
+
+  const onScroll = () => {
+    const firstCard = track.children[0];
+    if (!firstCard) return;
+    const cardWidth = firstCard.getBoundingClientRect().width + 16;
+    const idx = Math.round(track.scrollLeft / cardWidth);
+    setCurrent(Math.max(0, Math.min(idx, fundings.length - 1)));
+  };
+
+  track.addEventListener("scroll", onScroll, { passive: true });
+  return () => track.removeEventListener("scroll", onScroll);
+}, [fundings]);
+
+const totalPages = Math.ceil(fundings.length / cardsPerView);
+const currentPage = Math.floor(current / cardsPerView);
 
   const scrollToIndex = useCallback((i) => {
     const track = trackRef.current;
@@ -181,27 +206,27 @@ const UpcomingFundingCalls = () => {
                   </div>
 
                   {/* Dot indicators */}
-                  {fundings.length > 1 && (
-                    <div className="d-flex justify-content-center gap-2 mt-4">
-                      {fundings.map((_, i) => (
-                        <button
-                          key={i}
-                          onClick={() => scrollToIndex(i)}
-                          aria-label={`Go to competition ${i + 1}`}
-                          style={{
-                            width:        i === current ? "20px" : "7px",
-                            height:       "7px",
-                            borderRadius: i === current ? "4px" : "50%",
-                            background:   i === current ? "#6c5ce7" : "#ccc",
-                            border:       "none",
-                            padding:      0,
-                            cursor:       "pointer",
-                            transition:   "all 0.2s",
-                          }}
-                        />
-                      ))}
-                    </div>
-                  )}
+{needsScroll && (
+  <div className="d-flex justify-content-center gap-2 mt-4">
+    {Array.from({ length: totalPages }).map((_, i) => (
+      <button
+        key={i}
+        onClick={() => scrollToIndex(i * cardsPerView)} // scroll to first card of that page
+        aria-label={`Go to page ${i + 1}`}
+        style={{
+          width:        i === currentPage ? "20px" : "7px",
+          height:       "7px",
+          borderRadius: i === currentPage ? "4px" : "50%",
+          background:   i === currentPage ? "#6c5ce7" : "#ccc",
+          border:       "none",
+          padding:      0,
+          cursor:       "pointer",
+          transition:   "all 0.2s",
+        }}
+      />
+    ))}
+  </div>
+)}
                 </>
               )}
             </>

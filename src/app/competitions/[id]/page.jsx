@@ -365,7 +365,7 @@ export default function CompetitionPage({ params }) {
                   </div>
                   {funding.eligibleParticipants && (
                     <p className="competitionBodyText" style={{ marginBottom: funding.eligibilityVerification?.length > 0 ? "16px" : 0 }}>
-                     <strong> Eligible Participants: </strong> {funding.eligibleParticipants}
+                    {funding.eligibleParticipants}
                     </p>
                   )}
           
