@@ -59,7 +59,8 @@ const [cardsPerView, setCardsPerView] = useState(4);
     fetchFundings();
   }, []);
 
-// 1. Calculate overflow AND cards per view
+
+// Calculate overflow AND cards per view
 useEffect(() => {
   const track = trackRef.current;
   if (!track || fundings.length === 0) return;
@@ -67,7 +68,7 @@ useEffect(() => {
   const checkOverflow = () => {
     const firstCard = track.children[0];
     if (!firstCard) return;
-    const cardWidth = firstCard.getBoundingClientRect().width + 16;
+    const cardWidth = firstCard.getBoundingClientRect().width + 16; // +gap
     const visible = Math.max(1, Math.round(track.clientWidth / cardWidth));
     setCardsPerView(visible);
     setNeedsScroll(track.scrollWidth > track.clientWidth + 1);
@@ -77,23 +78,6 @@ useEffect(() => {
   const ro = new ResizeObserver(checkOverflow);
   ro.observe(track);
   return () => ro.disconnect();
-}, [fundings]);
-
-// 2. Sync dot indicator with native scroll position
-useEffect(() => {
-  const track = trackRef.current;
-  if (!track || fundings.length === 0) return;
-
-  const onScroll = () => {
-    const firstCard = track.children[0];
-    if (!firstCard) return;
-    const cardWidth = firstCard.getBoundingClientRect().width + 16;
-    const idx = Math.round(track.scrollLeft / cardWidth);
-    setCurrent(Math.max(0, Math.min(idx, fundings.length - 1)));
-  };
-
-  track.addEventListener("scroll", onScroll, { passive: true });
-  return () => track.removeEventListener("scroll", onScroll);
 }, [fundings]);
 
 const totalPages = Math.ceil(fundings.length / cardsPerView);
