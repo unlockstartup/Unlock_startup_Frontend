@@ -13915,3 +13915,8 @@ background: linear-gradient(
   margin-left: 50px;
 }
 
+@media (min-width : 300px) and (max-width: 768px){
+.order-lg-0{
+  margin-left: 50px;
+}
+}
