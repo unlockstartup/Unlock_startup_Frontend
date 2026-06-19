@@ -145,7 +145,6 @@ const [sectors, setSectors] = useState([]);
     }
   };
 
-  /*  Helpers  */
   const toggleMultiSelect = (value, selected, setSelected) =>
     selected.includes(value)
       ? setSelected(selected.filter((v) => v !== value))

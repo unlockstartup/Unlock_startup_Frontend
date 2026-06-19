@@ -136,11 +136,7 @@ export default function RefundPolicy() {
             Refund &amp; <span>Cancellation Policy</span>
           </h1>
           <div className="ex-hero-meta">
-            <span className="ex-hero-meta-item">Effective: January 1, 2025</span>
-            <span className="ex-hero-meta-dot" />
             <span className="ex-hero-meta-item">Last Updated: May 23, 2026</span>
-            <span className="ex-hero-meta-dot" />
-            <span className="ex-hero-meta-item">Version 4.0</span>
           </div>
         </div>
       </div>

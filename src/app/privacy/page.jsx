@@ -23,51 +23,39 @@ import {
   Ban,
   Scale,
   HelpCircle,
-  CreditCard
+  CreditCard,
+  Building2,
+  BarChart2,
 } from 'lucide-react';
 import '@/app/styles/termandcondition.css';
 
 const sections = [
-  { id: 'pv-intro', label: 'Introduction & Scope', color: 'orange' },
-  { id: 'pv-collection', label: 'Information We Collect', color: 'blue' },
-  { id: 'pv-usage', label: 'How We Use Your Data', color: 'yellow' },
-  { id: 'pv-sharing', label: 'Data Sharing & Third Parties', color: 'orange' },
-  { id: 'pv-cookies', label: 'Cookies & Tracking', color: 'blue' },
-  { id: 'pv-security', label: 'Data Security', color: 'yellow' },
-  { id: 'pv-rights', label: 'Your Privacy Rights', color: 'orange' },
-  { id: 'pv-retention', label: 'Data Retention', color: 'blue' },
-  { id: 'pv-transfer', label: 'International Transfers', color: 'yellow' },
-  { id: 'pv-contact', label: 'Contact Us', color: 'blue' },
+  { id: 'pv-intro',        label: 'Introduction',            color: 'orange' },
+  { id: 'pv-collection',   label: 'Information We Collect',  color: 'blue'   },
+  { id: 'pv-usage',        label: 'How We Use Your Data',    color: 'yellow' },
+  { id: 'pv-sharing',      label: 'Sharing Your Information',color: 'orange' },
+  { id: 'pv-data-privacy', label: 'Data Privacy',            color: 'blue'   },
+  { id: 'pv-rights',       label: 'Your Choices & Rights',   color: 'yellow' },
+  { id: 'pv-third-party',  label: 'Third-Party Links',       color: 'orange' },
+  { id: 'pv-children',     label: "Children's Privacy",      color: 'blue'   },
+  { id: 'pv-changes',      label: 'Changes to This Policy',  color: 'yellow' },
+  { id: 'pv-contact',      label: 'Contact Us',              color: 'orange' },
 ];
 
-const policyCards = [
-  { icon: UserCheck, title: 'Identity Data', text: 'Name, email, phone, profile photo, and government ID when required.' },
-  { icon: CreditCard, title: 'Financial Data', text: 'Payment methods, billing addresses, and transaction history.' },
-  { icon: Server, title: 'Technical Data', text: 'IP address, browser type, device info, and usage logs.' },
-  { icon: Globe, title: 'Location Data', text: 'Geolocation from your device or IP for event recommendations.' },
-  { icon: Eye, title: 'Interaction Data', text: 'Events viewed, tickets purchased, messages sent, and preferences.' },
-  { icon: Cookie, title: 'Cookie Data', text: 'Session tokens, preference storage, and analytics identifiers.' },
+const collectionCards = [
+  { icon: UserCheck,  title: 'Personal Information', text: 'Name, email address, phone number, company name, and other contact details.' },
+  { icon: Building2,  title: 'Business Information', text: 'Information about your business such as industry, company size, and business goals.' },
+  { icon: BarChart2,  title: 'Usage Data',           text: 'IP address, browser type, pages visited, and other usage details from your interaction with our site.' },
+  { icon: Cookie,     title: 'Cookies & Tracking',   text: 'Cookies and similar technologies used to enhance your experience and track usage patterns.' },
 ];
 
 const contactCards = [
-  { icon: Mail, title: 'Privacy Inquiries', text: 'privacy@unlockproject.io' },
-  { icon: Shield, title: 'Data Protection Officer', text: 'dpo@unlockproject.io' },
-  { icon: Phone, title: 'Support Hotline', text: '+1 (800) 888-3947' },
-  { icon: HelpCircle, title: 'Data Requests', text: 'requests@unlockproject.io' },
-];
-
-const dataUsageTable = [
-  ['Account Management', 'Registration, authentication, profile maintenance', 'Identity, Contact', 'Legitimate Interest / Contract'],
-  ['Ticket Processing', 'Purchasing, delivery, refunds, fraud prevention', 'Financial, Identity', 'Contract / Legal Obligation'],
-  ['Personalization', 'Event recommendations, saved preferences', 'Interaction, Technical', 'Consent / Legitimate Interest'],
-  ['Marketing', 'Promotional emails, retargeting ads', 'Contact, Interaction', 'Consent (opt-in)'],
-  ['Analytics', 'Platform improvement, A/B testing, performance', 'Technical, Cookie', 'Legitimate Interest'],
-  ['Legal Compliance', 'Tax reporting, regulatory audits, law enforcement', 'Identity, Financial', 'Legal Obligation'],
+  { icon: Mail,  title: 'Email Us',   text: 'contact@unlockstartup.com' },
+  { icon: Phone, title: 'Call Us',    text: '+91 9266733959'            },
 ];
 
 export default function PrivacyPolicy() {
   const [activeSection, setActiveSection] = useState('pv-intro');
-  const [menuOpen, setMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [accepted, setAccepted] = useState(false);
   const observerRef = useRef(null);
@@ -79,7 +67,6 @@ export default function PrivacyPolicy() {
       const scrollHeight = el.scrollHeight - el.clientHeight;
       setScrollProgress(scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0);
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -88,34 +75,30 @@ export default function PrivacyPolicy() {
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
         });
       },
       { rootMargin: '-30% 0px -60% 0px' }
     );
-
     sections.forEach(({ id }) => {
       const el = document.getElementById(id);
       if (el) observerRef.current.observe(el);
     });
-
     return () => observerRef.current?.disconnect();
   }, []);
 
   const handleAccept = () => {
     setAccepted(true);
     setTimeout(() => {
-      alert('You have acknowledged the Privacy & Data Policy.');
+      alert('You have acknowledged the Privacy Policy.');
     }, 150);
   };
 
   return (
     <>
       <Head>
-        <title>Privacy & Data Policy | unlockproject</title>
-        <meta name="description" content="unlockproject Privacy & Data Policy — learn how we collect, use, protect, and share your personal information." />
+        <title>Privacy Policy | Unlock Startup</title>
+        <meta name="description" content="Unlock Startup Privacy Policy — learn how we collect, use, and protect your personal information." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -132,53 +115,38 @@ export default function PrivacyPolicy() {
             Legal Document
           </span>
           <h1 className="ex-hero-title">
-            Privacy &amp; <span>Data Policy</span>
+            Privacy <span>Policy</span>
           </h1>
+          <p className="ex-hero-subtitle">Unlock Startup</p>
           <div className="ex-hero-meta">
-            <span className="ex-hero-meta-item">Effective: January 1, 2025</span>
-            <span className="ex-hero-meta-dot" />
-            <span className="ex-hero-meta-item">Last Updated: May 23, 2026</span>
-            <span className="ex-hero-meta-dot" />
-            <span className="ex-hero-meta-item">Version 4.1</span>
+            <span className="ex-hero-meta-item">Last Updated: April 28, 2026</span>           
           </div>
         </div>
       </div>
 
       {/* Main Layout */}
       <div className="ex-page-layout">
-        {/* Mobile TOC */}
-        <div className="ex-mobile-toc-card">
-          <TocCard activeSection={activeSection} onAccept={handleAccept} accepted={accepted} />
-        </div>
+
+
 
         {/* Content */}
         <main className="ex-content">
+
           {/* 1. Introduction */}
           <section id="pv-intro" className="ex-section">
             <div className="ex-section-header">
               <span className="ex-section-num ex-orange">01</span>
               <div>
-                <h2 className="ex-section-title">Introduction &amp; Scope</h2>
-                <p className="ex-section-subtitle">Our commitment to protecting your personal information</p>
+                <h2 className="ex-section-title">Introduction</h2>
+                <p className="ex-section-subtitle">Our commitment to protecting your privacy</p>
               </div>
             </div>
             <div className="ex-prose">
               <p>
-                This <strong>Privacy &amp; Data Policy</strong> describes how <strong>unlockproject Technologies Inc.</strong> ("unlockproject," "we," "us," or "our") collects, uses, stores, shares, and protects your personal information when you use our website, mobile applications, APIs, and related services (collectively, "Services").
+                <strong>Unlock Startup</strong> ("we," "us," or "our") is committed to protecting the privacy and personal information of our users ("you," "your"). This Privacy Policy outlines how we collect, use, and safeguard your personal data when you use our website, services, or products.
               </p>
               <p>
-                We are committed to respecting your privacy and ensuring transparency in our data practices. This policy applies to all visitors, registered users, event organizers, and any other individuals who interact with our platform, regardless of location.
-              </p>
-            </div>
-            <div className="ex-callout ex-orange">
-              <AlertCircle className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Important:</strong> By accessing or using our Services, you acknowledge that you have read and understood this policy. If you do not agree with our practices, you must discontinue use of the platform immediately.
-              </p>
-            </div>
-            <div className="ex-prose">
-              <p>
-                This policy is designed to comply with major data protection frameworks, including the General Data Protection Regulation (GDPR), the California Consumer Privacy Act (CCPA), and other applicable local privacy laws. We review and update this policy regularly to reflect changes in our practices or legal requirements.
+                By accessing or using our services, you agree to the terms outlined in this policy. If you do not agree with the terms, please discontinue the use of our services.
               </p>
             </div>
           </section>
@@ -196,11 +164,11 @@ export default function PrivacyPolicy() {
             </div>
             <div className="ex-prose">
               <p>
-                We collect information that you provide directly, data generated automatically through your use of the Services, and information from third-party sources. We minimize data collection to what is necessary for the specific purposes outlined in this policy.
+                We may collect various types of information from you, including:
               </p>
             </div>
             <div className="ex-policy-grid">
-              {policyCards.map((card) => {
+              {collectionCards.map((card) => {
                 const Icon = card.icon;
                 return (
                   <div key={card.title} className="ex-policy-card">
@@ -211,102 +179,61 @@ export default function PrivacyPolicy() {
                 );
               })}
             </div>
-            <div className="ex-prose">
-              <p>
-                We may also collect sensitive personal data — such as government-issued identification or health information — only when strictly necessary (e.g., age-restricted events or accessibility requirements) and with your explicit consent.
-              </p>
-            </div>
-            <div className="ex-callout ex-blue">
-              <Shield className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Minors:</strong> Our Services are not directed to individuals under 16 years of age. We do not knowingly collect personal data from children. If you believe we have inadvertently collected such data, contact us immediately for deletion.
-              </p>
-            </div>
           </section>
 
           <div className="ex-divider" />
 
-          {/* 3. How We Use Your Data */}
+          {/* 3. How We Use Your Information */}
           <section id="pv-usage" className="ex-section">
             <div className="ex-section-header">
               <span className="ex-section-num ex-yellow">03</span>
               <div>
-                <h2 className="ex-section-title">How We Use Your Data</h2>
-                <p className="ex-section-subtitle">Purposes and legal bases for processing</p>
+                <h2 className="ex-section-title">How We Use Your Information</h2>
+                <p className="ex-section-subtitle">Purposes for which we process your data</p>
               </div>
             </div>
             <div className="ex-prose">
               <p>
-                We process your personal data only for specific, explicit, and legitimate purposes. The table below summarizes the primary uses, the data categories involved, and the legal basis for processing under applicable privacy laws.
+                We use the information we collect for various purposes, including:
               </p>
             </div>
-            <div className="ex-table-wrapper">
-              <table className="ex-table">
-                <thead>
-                  <tr>
-                    <th>Purpose</th>
-                    <th>Description</th>
-                    <th>Data Categories</th>
-                    <th>Legal Basis</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataUsageTable.map(([purpose, desc, categories, basis], i) => (
-                    <tr key={i}>
-                      <td>
-                        <strong style={{ color: 'var(--ex-text-primary)', fontWeight: 500 }}>
-                          {purpose}
-                        </strong>
-                      </td>
-                      <td style={{ color: 'var(--ex-text-muted)' }}>{desc}</td>
-                      <td>{categories}</td>
-                      <td>
-                        <span className={`ex-badge ex-${i % 3 === 0 ? 'orange' : i % 3 === 1 ? 'blue' : 'yellow'}`}>
-                          {basis}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="ex-prose">
-              <p>
-                We do not use your personal data for automated decision-making that produces legal or similarly significant effects without human intervention, except where necessary for fraud prevention with appropriate safeguards.
-              </p>
-            </div>
-            <div className="ex-callout ex-yellow">
-              <Scale className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Marketing:</strong> We only send promotional communications if you have opted in. You may withdraw consent and unsubscribe at any time via the link in every marketing email or through your account settings.
-              </p>
-            </div>
+            <ul className="ex-rule-list">
+              {[
+                'Providing Services: To deliver the solutions and services you request, including consulting, branding, marketing, and business development.',
+                'Improving Our Services: To analyze and improve our services, website performance, and user experience.',
+                'Communication: To send you updates, newsletters, promotional materials, and other information related to our services.',
+                'Legal Compliance: To comply with applicable laws, regulations, and legal processes.',
+              ].map((rule, i) => (
+                <li key={i} className="ex-rule-item">
+                  <span className="ex-rule-dot ex-yellow" />
+                  {rule}
+                </li>
+              ))}
+            </ul>
+
           </section>
 
           <div className="ex-divider" />
 
-          {/* 4. Data Sharing */}
+          {/* 4. Sharing Your Information */}
           <section id="pv-sharing" className="ex-section">
             <div className="ex-section-header">
               <span className="ex-section-num ex-orange">04</span>
               <div>
-                <h2 className="ex-section-title">Data Sharing &amp; Third Parties</h2>
-                <p className="ex-section-subtitle">Who we share your information with and why</p>
+                <h2 className="ex-section-title">Sharing Your Information</h2>
+                <p className="ex-section-subtitle">Who we share your data with and why</p>
               </div>
             </div>
             <div className="ex-prose">
               <p>
-                We do not sell your personal data. We share information only with trusted third parties who assist us in operating the platform, processing payments, analyzing usage, or complying with legal obligations. All third parties are contractually bound to use your data solely for the specified purpose and to protect it in accordance with this policy.
+                We do not sell, trade, or otherwise transfer your personal information to third parties except in the following circumstances:
               </p>
             </div>
             <ul className="ex-rule-list">
               {[
-                'Event Organizers — name, email, and ticket details to manage attendance and communicate updates.',
-                'Payment Processors — Stripe, PayPal, and other PCI-DSS compliant providers for transaction handling.',
-                'Cloud Infrastructure — AWS, Google Cloud for secure hosting, storage, and backup.',
-                'Analytics Providers — Google Analytics, Mixpanel for aggregated, non-identifiable usage insights.',
-                'Marketing Platforms — Mailchimp, Meta for targeted campaigns (only with your consent).',
-                'Legal Authorities — when required by subpoena, court order, or applicable law.',
+                'Service Providers: Trusted third-party providers who assist in delivering our services — such as payment processors, hosting providers, and marketing agencies — and are required to protect your information.',
+                'Legal Obligations: We may disclose your information if required by law, regulation, or legal process, or if necessary to protect our rights, property, or safety.',
+                'Business Transfers: In the event of a merger, acquisition, or sale of all or part of our business, your information may be transferred to the new owner.',
               ].map((rule, i) => (
                 <li key={i} className="ex-rule-item">
                   <span className="ex-rule-dot ex-orange" />
@@ -314,79 +241,55 @@ export default function PrivacyPolicy() {
                 </li>
               ))}
             </ul>
-            <div className="ex-callout ex-orange">
-              <AlertTriangle className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Business Transfers:</strong> If unlockproject undergoes a merger, acquisition, or asset sale, your personal data may be transferred as part of that transaction. We will notify you before your data becomes subject to a different privacy policy.
-              </p>
-            </div>
+
           </section>
 
           <div className="ex-divider" />
 
-          {/* 5. Cookies & Tracking */}
-          <section id="pv-cookies" className="ex-section">
+          {/* 5. Data Privacy */}
+          <section id="pv-data-privacy" className="ex-section">
             <div className="ex-section-header">
               <span className="ex-section-num ex-blue">05</span>
               <div>
-                <h2 className="ex-section-title">Cookies &amp; Tracking Technologies</h2>
-                <p className="ex-section-subtitle">How we use cookies and similar technologies</p>
+                <h2 className="ex-section-title">Data Privacy</h2>
+                <p className="ex-section-subtitle">How we secure and handle your personal data</p>
               </div>
             </div>
             <div className="ex-prose">
               <p>
-                We use cookies, local storage, session storage, and pixel tags to operate, secure, and improve our Services. These technologies help us maintain your login session, remember preferences, analyze traffic, and deliver relevant content.
+                We implement a variety of security measures to protect your personal information from unauthorized access, use, or disclosure. However, no method of transmission over the Internet or electronic storage is completely secure, so we cannot guarantee absolute security.
               </p>
               <p>
-                For detailed information on the specific cookies we use, their lifespans, and your management options, please refer to our <a href="#">Cookie Policy</a>, which is incorporated into this Privacy Policy by reference.
+                By participating in a third-party event, you may be required to provide personal information to the third-party company. Unlock Startup is not responsible for the privacy practices of third parties, and we recommend reviewing the third party's privacy policy before submitting any personal data.
+              </p>
+              <p>
+                Unlock Startup may collect certain data for event promotion or platform analytics, but such data collection will be governed by this Privacy Policy, and no personal data will be shared with third parties without your consent.
               </p>
             </div>
-            <ul className="ex-rule-list">
-              {[
-                'Essential cookies are required for core functionality and cannot be disabled.',
-                'Functional cookies enable personalization features such as language and timezone preferences.',
-                'Analytics cookies help us understand platform usage and improve user experience.',
-                'Advertising cookies deliver relevant promotions and measure campaign effectiveness.',
-                'You can manage your cookie preferences anytime through your account settings or browser controls.',
-              ].map((rule, i) => (
-                <li key={i} className="ex-rule-item">
-                  <span className="ex-rule-dot ex-blue" />
-                  {rule}
-                </li>
-              ))}
-            </ul>
-            <div className="ex-callout ex-blue">
-              <Cookie className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Do Not Track:</strong> We honor browser "Do Not Track" signals for non-essential cookies. Essential cookies required for security and platform operation will remain active regardless of tracking preferences.
-              </p>
-            </div>
+
           </section>
 
           <div className="ex-divider" />
 
-          {/* 6. Data Security */}
-          <section id="pv-security" className="ex-section">
+          {/* 6. Your Choices and Rights */}
+          <section id="pv-rights" className="ex-section">
             <div className="ex-section-header">
               <span className="ex-section-num ex-yellow">06</span>
               <div>
-                <h2 className="ex-section-title">Data Security</h2>
-                <p className="ex-section-subtitle">Measures we take to protect your information</p>
+                <h2 className="ex-section-title">Your Choices &amp; Rights</h2>
+                <p className="ex-section-subtitle">How to manage and control your personal information</p>
               </div>
             </div>
             <div className="ex-prose">
               <p>
-                We implement a comprehensive security program designed to protect your personal data against unauthorized access, alteration, disclosure, or destruction. Our measures include technical, administrative, and physical safeguards appropriate to the sensitivity of the data we process.
+                You have the following rights regarding your personal information:
               </p>
             </div>
             <ul className="ex-rule-list">
               {[
-                'AES-256 encryption for data at rest and TLS 1.3 for data in transit.',
-                'Regular penetration testing and vulnerability assessments by independent security firms.',
-                'Role-based access controls limiting data access to authorized personnel only.',
-                'Multi-factor authentication (MFA) required for all internal administrative accounts.',
-                'Automated anomaly detection and real-time threat monitoring.',
-                'Annual SOC 2 Type II audits and PCI-DSS compliance for payment data.',
+                'Access and Correction: You may request access to or correction of your personal information by contacting us at (Email ID).',
+                'Opt-Out: You can opt out of receiving marketing communications by following the unsubscribe link in our emails or contacting us directly.',
+                'Cookies: Most web browsers are set to accept cookies by default. You can choose to remove or reject cookies, though this may affect certain features of our website.',
               ].map((rule, i) => (
                 <li key={i} className="ex-rule-item">
                   <span className="ex-rule-dot ex-yellow" />
@@ -394,148 +297,80 @@ export default function PrivacyPolicy() {
                 </li>
               ))}
             </ul>
-            <div className="ex-callout ex-yellow">
-              <Lock className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Breach Notification:</strong> In the unlikely event of a data breach affecting your personal data, we will notify you within 72 hours in accordance with GDPR requirements and applicable state breach notification laws.
-              </p>
-            </div>
+
           </section>
 
           <div className="ex-divider" />
 
-          {/* 7. Your Privacy Rights */}
-          <section id="pv-rights" className="ex-section">
+          {/* 7. Third-Party Links */}
+          <section id="pv-third-party" className="ex-section">
             <div className="ex-section-header">
               <span className="ex-section-num ex-orange">07</span>
               <div>
-                <h2 className="ex-section-title">Your Privacy Rights</h2>
-                <p className="ex-section-subtitle">How to exercise control over your personal data</p>
+                <h2 className="ex-section-title">Third-Party Links</h2>
+                <p className="ex-section-subtitle">External websites and your responsibility</p>
               </div>
             </div>
             <div className="ex-prose">
               <p>
-                Depending on your jurisdiction, you may have specific rights regarding your personal data. We honor these rights regardless of your location and have established simple mechanisms to submit requests.
+                Our website may contain links to third-party websites or services. We are not responsible for the privacy practices or content of those sites. We encourage you to review the privacy policies of any third-party sites you visit.
               </p>
             </div>
-            <ul className="ex-rule-list">
-              {[
-                'Right to Access — request a copy of the personal data we hold about you.',
-                'Right to Rectification — correct inaccurate or incomplete information.',
-                'Right to Erasure ("Right to be Forgotten") — request deletion of your data, subject to legal retention requirements.',
-                'Right to Restrict Processing — limit how we use your data in certain circumstances.',
-                'Right to Data Portability — receive your data in a structured, machine-readable format.',
-                'Right to Object — opt out of processing based on legitimate interests or direct marketing.',
-                'Right to Withdraw Consent — revoke previously given consent at any time.',
-                'Right to Non-Discrimination — we will not penalize you for exercising your privacy rights.',
-              ].map((rule, i) => (
-                <li key={i} className="ex-rule-item">
-                  <span className="ex-rule-dot ex-orange" />
-                  {rule}
-                </li>
-              ))}
-            </ul>
-            <div className="ex-callout ex-orange">
-              <UserCheck className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>How to Submit:</strong> Email requests@unlockproject.io with "Privacy Rights Request" in the subject line. We verify identity before processing and respond within 30 days. Complex requests may require an additional 60-day extension.
-              </p>
-            </div>
+
           </section>
 
           <div className="ex-divider" />
 
-          {/* 8. Data Retention */}
-          <section id="pv-retention" className="ex-section">
+          {/* 8. Children's Privacy */}
+          <section id="pv-children" className="ex-section">
             <div className="ex-section-header">
               <span className="ex-section-num ex-blue">08</span>
               <div>
-                <h2 className="ex-section-title">Data Retention</h2>
-                <p className="ex-section-subtitle">How long we keep your personal information</p>
+                <h2 className="ex-section-title">Children's Privacy</h2>
+                <p className="ex-section-subtitle">Our policy on data collected from minors</p>
               </div>
             </div>
             <div className="ex-prose">
               <p>
-                We retain your personal data only for as long as necessary to fulfill the purposes for which it was collected, comply with legal obligations, resolve disputes, and enforce our agreements. Retention periods vary by data category and legal requirements.
+                Our services are not directed to individuals under the age of 18. We do not knowingly collect personal information from children. If you are a parent or guardian and believe your child has provided us with personal data, please contact us, and we will take steps to delete such information.
               </p>
             </div>
-            <ul className="ex-rule-list">
-              {[
-                'Account data: retained for the duration of your account plus 90 days after deletion.',
-                'Transaction records: retained for 7 years to comply with tax and financial regulations.',
-                'Marketing data: retained until you withdraw consent or unsubscribe.',
-                'Server logs and analytics: retained for 12 months, then anonymized or deleted.',
-                'Support correspondence: retained for 3 years for quality assurance and dispute resolution.',
-                'Backup data: may persist in encrypted archives for up to 6 months beyond active deletion.',
-              ].map((rule, i) => (
-                <li key={i} className="ex-rule-item">
-                  <span className="ex-rule-dot ex-blue" />
-                  {rule}
-                </li>
-              ))}
-            </ul>
-            <div className="ex-callout ex-blue">
-              <Trash2 className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Secure Deletion:</strong> When retention periods expire, we securely delete or irreversibly anonymize your data using industry-standard methods. Physical backups are destroyed through certified shredding services.
-              </p>
-            </div>
+
           </section>
 
           <div className="ex-divider" />
 
-          {/* 9. International Transfers */}
-          <section id="pv-transfer" className="ex-section">
+          {/* 9. Changes to This Privacy Policy */}
+          <section id="pv-changes" className="ex-section">
             <div className="ex-section-header">
               <span className="ex-section-num ex-yellow">09</span>
               <div>
-                <h2 className="ex-section-title">International Data Transfers</h2>
-                <p className="ex-section-subtitle">Cross-border processing and safeguards</p>
+                <h2 className="ex-section-title">Changes to This Privacy Policy</h2>
+                <p className="ex-section-subtitle">How we notify you of updates</p>
               </div>
             </div>
             <div className="ex-prose">
               <p>
-                unlockproject operates globally, and your personal data may be transferred to, stored, or processed in countries outside your jurisdiction, including the United States, the European Union, and other regions where our service providers maintain facilities.
-              </p>
-              <p>
-                When we transfer personal data across borders, we implement appropriate safeguards to ensure your data receives an equivalent level of protection as required in your home jurisdiction.
+                We may update this Privacy Policy from time to time. We will notify you of any significant changes by posting the updated policy on our website. Your continued use of our services after any changes indicates your acceptance of the revised policy.
               </p>
             </div>
-            <ul className="ex-rule-list">
-              {[
-                'Standard Contractual Clauses (SCCs) approved by the European Commission for EU data transfers.',
-                'Adequacy decisions where the destination country is recognized by the EU Commission.',
-                'Data Processing Agreements (DPAs) with all subprocessors and service providers.',
-                'Encryption of data in transit and at rest regardless of storage location.',
-              ].map((rule, i) => (
-                <li key={i} className="ex-rule-item">
-                  <span className="ex-rule-dot ex-yellow" />
-                  {rule}
-                </li>
-              ))}
-            </ul>
-            <div className="ex-callout ex-yellow">
-              <Globe className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>UK &amp; Swiss Transfers:</strong> For data originating from the UK or Switzerland, we apply the UK International Data Transfer Agreement (IDTA) and Swiss Federal Act on Data Protection (FADP) equivalent safeguards respectively.
-              </p>
-            </div>
+
           </section>
 
           <div className="ex-divider" />
 
-          {/* 10. Contact */}
+          {/* 10. Contact Us */}
           <section id="pv-contact" className="ex-section">
             <div className="ex-section-header">
-              <span className="ex-section-num ex-blue">10</span>
+              <span className="ex-section-num ex-orange">10</span>
               <div>
                 <h2 className="ex-section-title">Contact Us</h2>
-                <p className="ex-section-subtitle">Questions, requests, and data protection inquiries</p>
+                <p className="ex-section-subtitle">Reach out with questions or data concerns</p>
               </div>
             </div>
             <div className="ex-prose">
               <p>
-                If you have questions about this Privacy &amp; Data Policy, wish to exercise your privacy rights, or need to report a data protection concern, please contact us using the information below. We aim to respond to all inquiries within 2 business days.
+                If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at:
               </p>
             </div>
             <div className="ex-policy-grid">
@@ -550,53 +385,15 @@ export default function PrivacyPolicy() {
                 );
               })}
             </div>
-            <div className="ex-callout ex-blue">
-              <Mail className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Postal Address:</strong> unlockproject Technologies Inc., Attn: Data Protection Officer, 100 Event Plaza, Suite 400, San Francisco, CA 94105, USA.
-              </p>
-            </div>
+
           </section>
 
           <div className="ex-divider" />
+
         </main>
+
       </div>
     </>
   );
 }
 
-function TocCard({ activeSection, onAccept, accepted }) {
-  return (
-    <div className="ex-toc-card">
-      <div className="ex-toc-header">
-        <List className="ex-toc-header-icon" size={20} />
-        <span className="ex-toc-title">On this page</span>
-      </div>
-      <ul className="ex-toc-list">
-        {sections.map((section) => (
-          <li key={section.id} className="ex-toc-item">
-            <a
-              href={`#${section.id}`}
-              className={`ex-toc-link ${activeSection === section.id ? 'ex-active' : ''}`}
-            >
-              <span className="ex-toc-num">{sections.indexOf(section) + 1 < 10 ? `0${sections.indexOf(section) + 1}` : sections.indexOf(section) + 1}</span>
-              {section.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-      <div className="ex-toc-accept">
-        <button className="ex-toc-accept-btn" onClick={onAccept} disabled={accepted}>
-          {accepted ? (
-            <span className="ex-accepted-inline">
-              <Check size={16} />
-              Accepted
-            </span>
-          ) : (
-            'Accept Terms'
-          )}
-        </button>
-      </div>
-    </div>
-  );
-}

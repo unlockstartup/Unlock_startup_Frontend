@@ -9,58 +9,33 @@ import {
   ShieldCheck,
   List,
   Check,
-  ArrowRight,
   FileText,
   ShieldAlert,
   Lock,
-  Mail,
-  Phone,
-  MapPin,
-  UserCheck,
-  Ticket,
-  CreditCard,
-  RefreshCw,
+  MessageCircle,
   Ban,
-  Copyright,
   Eye,
   Scale,
   LogOut,
-  MessageCircle,
+  UserCheck,
 } from 'lucide-react';
 import '@/app/styles/termandcondition.css';
 
 const sections = [
-  { id: 'ex-acceptance', label: 'Acceptance of Terms', color: 'orange' },
-  { id: 'ex-accounts', label: 'User Accounts', color: 'blue' },
-  { id: 'ex-events', label: 'Event Management', color: 'yellow' },
-  { id: 'ex-tickets', label: 'Tickets & Payments', color: 'orange' },
-  { id: 'ex-refunds', label: 'Refunds & Cancellations', color: 'blue' },
-  { id: 'ex-ip', label: 'Intellectual Property', color: 'orange' },
-  { id: 'ex-privacy', label: 'Privacy & Data', color: 'blue' },
-  { id: 'ex-liability', label: 'Limitation of Liability', color: 'yellow' },
-  { id: 'ex-termination', label: 'Termination', color: 'orange' },
-  { id: 'ex-contact', label: 'Contact Us', color: 'blue' },
-];
-
-const policyCards = [
-  { icon: FileText, title: 'Accurate Info', text: 'All event details must be truthful and kept up to date.' },
-  { icon: ShieldAlert, title: 'Compliance', text: 'Events must comply with all applicable local laws and regulations.' },
-  { icon: Lock, title: 'Safety', text: 'Organizers must maintain appropriate safety standards for all attendees.' },
-  { icon: MessageCircle, title: 'Communication', text: 'Notify attendees promptly of any changes to event details.' },
-  { icon: CreditCard, title: 'Financial', text: 'Organizers are responsible for accurate pricing and any applicable taxes.' },
-  { icon: Ban, title: 'Prohibited', text: 'Events promoting illegal activities or hate speech are strictly banned.' },
-];
-
-const contactCards = [
-  { icon: Mail, title: 'Legal Inquiries', text: 'legal@unlockproject.io' },
-  { icon: Eye, title: 'Privacy Team', text: 'privacy@unlockproject.io' },
-  { icon: Shield, title: 'Security', text: 'security@unlockproject.io' },
-  { icon: Phone, title: 'Support', text: '+1 (800) 888-3947' },
+  { id: 'ex-introduction',       label: 'Introduction',                color: 'orange' },
+  { id: 'ex-prohibited',         label: 'Prohibited Activities',       color: 'blue'   },
+  { id: 'ex-third-party',        label: 'Third-Party Links',           color: 'yellow' },
+  { id: 'ex-liability',          label: 'Limitation of Liability',     color: 'orange' },
+  { id: 'ex-user-resp',          label: 'User Responsibilities',       color: 'blue'   },
+  { id: 'ex-disclaimer',         label: 'Disclaimer of Warranties',    color: 'yellow' },
+  { id: 'ex-indemnity',          label: 'Indemnity',                   color: 'orange' },
+  { id: 'ex-governing',          label: 'Governing Law',               color: 'blue'   },
+  { id: 'ex-modifications',      label: 'Modifications',               color: 'yellow' },
+  { id: 'ex-entire-agreement',   label: 'Entire Agreement',            color: 'orange' },
 ];
 
 export default function TermsConditions() {
-  const [activeSection, setActiveSection] = useState('ex-acceptance');
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('ex-introduction');
   const [scrollProgress, setScrollProgress] = useState(0);
   const [accepted, setAccepted] = useState(false);
   const observerRef = useRef(null);
@@ -72,7 +47,6 @@ export default function TermsConditions() {
       const scrollHeight = el.scrollHeight - el.clientHeight;
       setScrollProgress(scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0);
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -81,19 +55,15 @@ export default function TermsConditions() {
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
         });
       },
       { rootMargin: '-30% 0px -60% 0px' }
     );
-
     sections.forEach(({ id }) => {
       const el = document.getElementById(id);
       if (el) observerRef.current.observe(el);
     });
-
     return () => observerRef.current?.disconnect();
   }, []);
 
@@ -107,18 +77,13 @@ export default function TermsConditions() {
   return (
     <>
       <Head>
-        <title>Terms & Conditions | unlockproject</title>
-        <meta name="description" content="unlockproject Terms and Conditions — please read before using our event management platform." />
+        <title>Terms & Conditions | Unlock Startup</title>
+        <meta name="description" content="Unlock Startup Blog Terms and Conditions — please read before using our website." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       {/* Progress Bar */}
-      <div
-        className="ex-progress-bar"
-        style={{ width: `${scrollProgress}%` }}
-      />
-
-
+      <div className="ex-progress-bar" style={{ width: `${scrollProgress}%` }} />
 
       {/* Hero Strip */}
       <div className="ex-hero-strip">
@@ -132,12 +97,9 @@ export default function TermsConditions() {
           <h1 className="ex-hero-title">
             Terms &amp; <span>Conditions</span>
           </h1>
+          <p className="ex-hero-subtitle">for Unlock Startup Blog</p>
           <div className="ex-hero-meta">
-            <span className="ex-hero-meta-item">Effective: January 1, 2025</span>
-            <span className="ex-hero-meta-dot" />
             <span className="ex-hero-meta-item">Last Updated: April 28, 2026</span>
-            <span className="ex-hero-meta-dot" />
-            <span className="ex-hero-meta-item">Version 3.2</span>
           </div>
         </div>
       </div>
@@ -145,68 +107,56 @@ export default function TermsConditions() {
       {/* Main Layout */}
       <div className="ex-page-layout">
 
-        {/* Mobile TOC */}
-        <div className="ex-mobile-toc-card">
-          <TocCard activeSection={activeSection} onAccept={handleAccept} accepted={accepted} />
-        </div>
+
 
         {/* Content */}
         <main className="ex-content">
 
-          {/* 1. Acceptance */}
-          <section id="ex-acceptance" className="ex-section">
+          {/* 1. Introduction */}
+          <section id="ex-introduction" className="ex-section">
             <div className="ex-section-header">
               <span className="ex-section-num ex-orange">01</span>
               <div>
-                <h2 className="ex-section-title">Acceptance of Terms</h2>
-                <p className="ex-section-subtitle">By using unlockproject, you agree to these terms</p>
+                <h2 className="ex-section-title">Introduction</h2>
+                <p className="ex-section-subtitle">Governing your use of Unlock Startup</p>
               </div>
             </div>
             <div className="ex-prose">
               <p>
-                Welcome to <strong>unlockproject</strong>, the premier platform for creating, managing, and attending events worldwide. These Terms and Conditions ("Terms") constitute a legally binding agreement between you ("User," "you," or "your") and unlockproject Technologies Inc. ("unlockproject," "we," "us," or "our").
-              </p>
-              <p>
-                By accessing or using our website, mobile applications, APIs, or any other services (collectively, "Services"), you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy, incorporated herein by reference.
+                These terms and conditions govern your use of the website <strong>Unlock Startup</strong>. By accessing and using this website, you agree to abide by these terms and conditions in full. If you disagree with any part of these terms and conditions, you must refrain from using this website.
               </p>
             </div>
-            <div className="ex-callout ex-orange">
+            {/* <div className="ex-callout ex-orange">
               <AlertCircle className="ex-callout-icon" size={20} />
               <p className="ex-callout-text">
-                <strong>Important:</strong> If you do not agree to these Terms, you must not access or use our Services. Continued use of unlockproject after any modifications constitutes your acceptance of the updated Terms.
+                <strong>Important:</strong> Continued use of Unlock Startup constitutes your full acceptance of these terms and conditions. Please read them carefully before proceeding.
               </p>
-            </div>
-            <div className="ex-prose">
-              <p>
-                These Terms apply to all visitors, registered users, event organizers, sponsors, and any other parties who interact with the unlockproject platform in any capacity. You must be at least 18 years of age, or the legal age of majority in your jurisdiction, to use our Services.
-              </p>
-            </div>
+            </div> */}
           </section>
 
           <div className="ex-divider" />
 
-          {/* 2. Accounts */}
-          <section id="ex-accounts" className="ex-section">
+          {/* 2. Prohibited Activities */}
+          <section id="ex-prohibited" className="ex-section">
             <div className="ex-section-header">
               <span className="ex-section-num ex-blue">02</span>
               <div>
-                <h2 className="ex-section-title">User Accounts</h2>
-                <p className="ex-section-subtitle">Registration, security, and responsibilities</p>
+                <h2 className="ex-section-title">Prohibited Activities</h2>
+                <p className="ex-section-subtitle">What you must not do while using this website</p>
               </div>
             </div>
             <div className="ex-prose">
               <p>
-                To access certain features of the Services, you must register for an account. When creating your account, you agree to provide accurate, current, and complete information and to update such information to keep it accurate, current, and complete.
+                While using this website, you must not engage in any unlawful, fraudulent, or harmful activities. This includes but is not limited to:
               </p>
             </div>
             <ul className="ex-rule-list">
               {[
-                'You are responsible for safeguarding your password and any activities under your account.',
-                'You must notify us immediately at security@unlockproject.io if you suspect unauthorized access.',
-                'You may not share your account credentials with any third party.',
-                'Each person may only maintain one active account at a time.',
-                'Accounts created by automated means or bots are strictly prohibited.',
-                'You agree not to impersonate any person or entity when registering.',
+                'Attempting to gain unauthorized access to the website or its server.',
+                'Uploading or transmitting any malicious software, viruses, or harmful code.',
+                'Interfering with the website\'s functionality or disrupting its services.',
+                'Collecting or storing personal information of other users without their consent.',
+                'Posting or transmitting any offensive, indecent, or objectionable content.',
               ].map((rule, i) => (
                 <li key={i} className="ex-rule-item">
                   <span className="ex-rule-dot ex-blue" />
@@ -214,295 +164,214 @@ export default function TermsConditions() {
                 </li>
               ))}
             </ul>
-            <div className="ex-callout ex-blue">
+            {/* <div className="ex-callout ex-blue">
               <Shield className="ex-callout-icon" size={20} />
               <p className="ex-callout-text">
-                <strong>Account Security:</strong> We employ industry-standard encryption and security measures. Enable two-factor authentication in your settings to add an extra layer of protection to your account.
+                <strong>Enforcement:</strong> Violations of these prohibitions may result in immediate suspension of your access and may be reported to the relevant authorities.
               </p>
-            </div>
+            </div> */}
           </section>
 
           <div className="ex-divider" />
 
-          {/* 3. Events */}
-          <section id="ex-events" className="ex-section">
+          {/* 3. Third-Party Links */}
+          <section id="ex-third-party" className="ex-section">
             <div className="ex-section-header">
               <span className="ex-section-num ex-yellow">03</span>
               <div>
-                <h2 className="ex-section-title">Event Management</h2>
-                <p className="ex-section-subtitle">Rules for creating and hosting events</p>
+                <h2 className="ex-section-title">Third-Party Links</h2>
+                <p className="ex-section-subtitle">External links and your responsibility</p>
               </div>
             </div>
             <div className="ex-prose">
               <p>
-                unlockproject provides tools for organizers to create, promote, and manage events. By creating an event on our platform, you represent that you have all necessary rights, permissions, and authorizations to host the event, including any required venue licenses, performer agreements, and regulatory permits.
+This website may contain links to third-party websites. These links are provided solely for your convenience. Unlock Startup does not endorse, control, or guarantee the accuracy, relevance, or completeness of any third-party websites. Visiting such websites is at your own risk, and you should review their respective terms and conditions.
               </p>
+            
             </div>
-            <div className="ex-policy-grid">
-              {policyCards.map((card) => {
-                const Icon = card.icon;
-                return (
-                  <div key={card.title} className="ex-policy-card">
-                    <Icon className="ex-policy-card-icon" size={22} />
-                    <div className="ex-policy-card-title">{card.title}</div>
-                    <div className="ex-policy-card-text">{card.text}</div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="ex-prose">
-              <p>
-                unlockproject reserves the right to remove any event listing that violates these Terms, community guidelines, or applicable law, without prior notice. Repeated violations may result in permanent suspension of organizer privileges.
-              </p>
-            </div>
-          </section>
-
-          <div className="ex-divider" />
-
-          {/* 4. Tickets & Payments */}
-          <section id="ex-tickets" className="ex-section">
-            <div className="ex-section-header">
-              <span className="ex-section-num ex-orange">04</span>
-              <div>
-                <h2 className="ex-section-title">Tickets &amp; Payments</h2>
-                <p className="ex-section-subtitle">Purchasing, transferring, and payment terms</p>
-              </div>
-            </div>
-            <div className="ex-prose">
-              <p>
-                All ticket purchases made through unlockproject are subject to our processing fees and the terms set by the event organizer. Prices are displayed inclusive of applicable taxes unless otherwise stated.
-              </p>
-            </div>
-            <div className="ex-table-wrapper">
-              <table className="ex-table">
-                <thead>
-                  <tr>
-                    <th>Fee Type</th>
-                    <th>Amount</th>
-                    <th>Applies To</th>
-                    <th>Charged By</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    ['Platform Service Fee', '2.5% + Rs.99', 'All ticket sales', <span key="a" className="ex-badge ex-orange">unlockproject</span>],
-                    ['Payment Processing', '2.9% + Rs.30', 'Credit/Debit cards', <span key="b" className="ex-badge ex-blue">Processor</span>],
-                    ['Organizer Fee', 'Varies', 'Set per event', <span key="c" className="ex-badge ex-yellow">Organizer</span>],
-                    ['Currency Conversion', 'Up to 2%', 'International purchases', <span key="d" className="ex-badge ex-blue">Processor</span>],
-                    ['Express Ticket', 'Rs.150 flat', 'Same-day delivery', <span key="e" className="ex-badge ex-orange">unlockproject</span>],
-                  ].map(([type, amount, applies, charged], i) => (
-                    <tr key={i}>
-                      <td><strong style={{ color: 'var(--ex-text-primary)', fontWeight: 500 }}>{type}</strong></td>
-                      <td>{amount}</td>
-                      <td style={{ color: 'var(--ex-text-muted)' }}>{applies}</td>
-                      <td>{charged}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="ex-prose">
-              <p>
-                All payments are processed through PCI-DSS compliant payment gateways. unlockproject does not store your full credit card details on our servers. By completing a purchase, you authorize unlockproject to charge the specified amount to your selected payment method.
-              </p>
-            </div>
-          </section>
-
-
-
-          {/* 5. Refunds */}
-          {/* <section id="ex-refunds" className="ex-section">
-            <div className="ex-section-header">
-              <span className="ex-section-num ex-blue">05</span>
-              <div>
-                <h2 className="ex-section-title">Refunds &amp; Cancellations</h2>
-                <p className="ex-section-subtitle">Our refund policy and cancellation procedures</p>
-              </div>
-            </div>
-            <div className="ex-prose">
-              <p>
-                Refund eligibility depends on the event organizer's policy, which is displayed on each event page before purchase. unlockproject's service fee is non-refundable in all cases.
-              </p>
-            </div>
-            <ul className="ex-rule-list">
-              {[
-                'Full refunds are issued if an event is cancelled by the organizer.',
-                'Postponed events entitle attendees to refunds if the new date is unacceptable.',
-                'Refund requests for personal reasons are subject to the organizer\'s policy.',
-                'Approved refunds are processed within 5–10 business days to the original payment method.',
-                'Partial refunds may be issued for multi-day event cancellations on a pro-rata basis.',
-                'Ticket transfers are subject to a $2.00 administrative fee per transfer.',
-              ].map((rule, i) => (
-                <li key={i} className="ex-rule-item">
-                  <span className="ex-rule-dot ex-blue" />
-                  {rule}
-                </li>
-              ))}
-            </ul>
-            <div className="ex-callout ex-yellow">
+            {/* <div className="ex-callout ex-yellow">
               <AlertTriangle className="ex-callout-icon" size={20} />
               <p className="ex-callout-text">
-                <strong>Note:</strong> unlockproject acts as an intermediary between buyers and organizers. For organizer-specific refund disputes, contact the organizer directly through the event page messaging system within 30 days of the event.
+                <strong>Disclaimer:</strong> Unlock Startup bears no responsibility for the content, privacy practices, or any damages arising from your visit to any linked third-party website.
               </p>
-            </div>
-          </section> */}
-
-   
-
-
-          <div className="ex-divider" />
-
-          {/* 7. IP */}
-          <section id="ex-ip" className="ex-section">
-            <div className="ex-section-header">
-              <span className="ex-section-num ex-orange">07</span>
-              <div>
-                <h2 className="ex-section-title">Intellectual Property</h2>
-                <p className="ex-section-subtitle">Content ownership and license terms</p>
-              </div>
-            </div>
-            <div className="ex-prose">
-              <p>
-                The unlockproject platform, including its software, design, logos, trademarks, and content created by unlockproject, is owned by unlockproject Technologies Inc. and is protected by applicable intellectual property laws worldwide.
-              </p>
-              <p>
-                By uploading content (event descriptions, images, videos, etc.) to unlockproject, you grant us a non-exclusive, royalty-free, worldwide license to use, reproduce, distribute, and display that content solely for the purpose of operating and promoting the Services. You retain all ownership rights to your content.
-              </p>
-            </div>
-            <div className="ex-callout ex-orange">
-              <ShieldCheck className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>DMCA:</strong> If you believe your copyright has been infringed on our platform, contact our designated copyright agent at dmca@unlockproject.io with full details of the alleged infringement.
-              </p>
-            </div>
+            </div> */}
           </section>
 
-
-
-          {/* 8. Privacy */}
-          {/* <section id="ex-privacy" className="ex-section">
-            <div className="ex-section-header">
-              <span className="ex-section-num ex-blue">08</span>
-              <div>
-                <h2 className="ex-section-title">Privacy &amp; Data</h2>
-                <p className="ex-section-subtitle">How we collect, use, and protect your data</p>
-              </div>
-            </div>
-            <div className="ex-prose">
-              <p>
-                Your privacy is important to us. Our collection and use of personal information is governed by our <a href="#">Privacy Policy</a>, which is incorporated into these Terms by reference. By using unlockproject, you consent to the data practices described therein.
-              </p>
-              <p>
-                We collect information you provide directly (registration data, payment info), data generated by your use of the Services (browsing history, purchase records), and information from third-party sources (social logins, fraud prevention services). We use this data to operate, improve, and personalize the Services, process transactions, and communicate with you.
-              </p>
-              <p>
-                We implement technical, administrative, and physical safeguards to protect your personal information. In the event of a data breach that affects your rights, we will notify you in accordance with applicable data protection laws, including GDPR and CCPA requirements.
-              </p>
-            </div>
-          </section> */}
-
           <div className="ex-divider" />
 
-          {/* 9. Liability */}
+          {/* 4. Limitation of Liability */}
           <section id="ex-liability" className="ex-section">
             <div className="ex-section-header">
-              <span className="ex-section-num ex-yellow">09</span>
+              <span className="ex-section-num ex-orange">04</span>
               <div>
                 <h2 className="ex-section-title">Limitation of Liability</h2>
                 <p className="ex-section-subtitle">Disclaimers and maximum liability caps</p>
               </div>
             </div>
-            <div className="ex-callout ex-yellow">
+            {/* <div className="ex-callout ex-yellow">
               <AlertTriangle className="ex-callout-icon" size={20} />
               <p className="ex-callout-text">
-                <strong>Disclaimer:</strong> The Services are provided on an "as is" and "as available" basis without warranties of any kind. unlockproject expressly disclaims all implied warranties, including merchantability, fitness for a particular purpose, and non-infringement.
+                <strong>Disclaimer:</strong> Under no circumstances shall Unlock Startup, its directors, employees, partners, or affiliates be liable for any direct, indirect, incidental, consequential, or special damages arising out of or in any way connected with the use of this website.
               </p>
-            </div>
+            </div> */}
             <div className="ex-prose">
               <p>
-                To the maximum extent permitted by law, unlockproject shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, goodwill, or other intangible losses, resulting from your use of or inability to use the Services.
-              </p>
-              <p>
-                Our total cumulative liability for any claims arising from or relating to these Terms or the Services shall not exceed the greater of (a) the total amount you paid to unlockproject in the twelve months preceding the claim, or (b) one hundred US dollars ($100.00).
+Under no circumstances shall Unlock Startup, its directors, employees, partners, or affiliates be liable for any direct, indirect, incidental, consequential, or special damages arising out of or in any way connected with the use of this website or reliance on any information provided on the website. This includes but is not limited to loss of data, revenue, or profits.
               </p>
             </div>
           </section>
 
           <div className="ex-divider" />
 
-          {/* 10. Termination */}
-          <section id="ex-termination" className="ex-section">
+          {/* 5. User Responsibilities */}
+          <section id="ex-user-resp" className="ex-section">
             <div className="ex-section-header">
-              <span className="ex-section-num ex-orange">10</span>
+              <span className="ex-section-num ex-blue">05</span>
               <div>
-                <h2 className="ex-section-title">Termination</h2>
-                <p className="ex-section-subtitle">Account closure and suspension policies</p>
+                <h2 className="ex-section-title">User Responsibilities</h2>
+                <p className="ex-section-subtitle">Your obligations when using this website</p>
               </div>
             </div>
             <div className="ex-prose">
               <p>
-                You may terminate your account at any time by visiting your account settings and following the deactivation process. Upon termination, your right to use the Services will immediately cease.
-              </p>
-              <p>
-                unlockproject reserves the right to suspend or permanently terminate your account at our sole discretion, without prior notice, if we determine you have violated these Terms, engaged in fraudulent activity, or posed a risk to the platform or other users.
+By using this website, you agree to be solely responsible for any content you post, upload, or transmit. You must ensure that such content complies with applicable laws and does not infringe upon any intellectual property rights or violate any third-party rights.
               </p>
             </div>
-            <ul className="ex-rule-list">
-              {[
-                'Upon account closure, your data will be retained for up to 90 days per our data retention policy.',
-                'Outstanding balances owed to you (legitimate earnings) will be paid within 30 days of termination.',
-                'Termination does not relieve you of obligations incurred prior to termination.',
-                'Provisions that by their nature should survive termination will continue to apply.',
-              ].map((rule, i) => (
-                <li key={i} className="ex-rule-item">
-                  <span className="ex-rule-dot ex-orange" />
-                  {rule}
-                </li>
-              ))}
-            </ul>
+            {/* <div className="ex-callout ex-blue">
+              <UserCheck className="ex-callout-icon" size={20} />
+              <p className="ex-callout-text">
+                <strong>Your Commitment:</strong> You are solely accountable for all content you contribute to the platform. Unlock Startup reserves the right to remove any content that violates these responsibilities.
+              </p>
+            </div> */}
+          </section>
+
+          <div className="ex-divider" />
+
+          {/* 6. Disclaimer of Warranties */}
+          <section id="ex-disclaimer" className="ex-section">
+            <div className="ex-section-header">
+              <span className="ex-section-num ex-yellow">06</span>
+              <div>
+                <h2 className="ex-section-title">Disclaimer of Warranties</h2>
+                <p className="ex-section-subtitle">No guarantees on information accuracy or reliability</p>
+              </div>
+            </div>
+            <div className="ex-prose">
+              <p>
+This website is provided “as is” without any warranties or representations, whether express or implied. Unlock Startup makes no guarantees regarding the accuracy, reliability, or suitability of the information and materials found on the website. Any reliance you place on such information is strictly at your own risk.
+              </p>
+            </div>
+            {/* <div className="ex-callout ex-yellow">
+              <ShieldCheck className="ex-callout-icon" size={20} />
+              <p className="ex-callout-text">
+                <strong>As-Is Basis:</strong> All content and services are provided without warranty of any kind. Unlock Startup expressly disclaims all implied warranties, including merchantability and fitness for a particular purpose.
+              </p>
+            </div> */}
+          </section>
+
+          <div className="ex-divider" />
+
+          {/* 7. Indemnity */}
+          <section id="ex-indemnity" className="ex-section">
+            <div className="ex-section-header">
+              <span className="ex-section-num ex-orange">07</span>
+              <div>
+                <h2 className="ex-section-title">Indemnity</h2>
+                <p className="ex-section-subtitle">Your agreement to hold Unlock Startup harmless</p>
+              </div>
+            </div>
+            <div className="ex-prose">
+              <p>
+You agree to indemnify and hold Unlock Startup and its affiliates, directors, employees, and partners harmless from any claims, liabilities, damages, expenses, and costs, including reasonable attorneys’ fees, arising from your use of this website or any violation of these terms and conditions.
+              </p>
+            </div>
+            {/* <div className="ex-callout ex-orange">
+              <Scale className="ex-callout-icon" size={20} />
+              <p className="ex-callout-text">
+                <strong>Note:</strong> This indemnification obligation survives termination of your use of this website and remains in full force regardless of any changes to these terms.
+              </p>
+            </div> */}
+          </section>
+
+          <div className="ex-divider" />
+
+          {/* 8. Governing Law */}
+          <section id="ex-governing" className="ex-section">
+            <div className="ex-section-header">
+              <span className="ex-section-num ex-blue">08</span>
+              <div>
+                <h2 className="ex-section-title">Governing Law &amp; Jurisdiction</h2>
+                <p className="ex-section-subtitle">Legal framework and dispute resolution</p>
+              </div>
+            </div>
+            <div className="ex-prose">
+              <p>
+These terms and conditions shall be governed by and construed in accordance with the laws of [Jurisdiction]. Any disputes arising out of or related to the use of this website shall be subject to the exclusive jurisdiction of the courts in [Jurisdiction].
+              </p>
+            </div>
+            {/* <div className="ex-callout ex-blue">
+              <Shield className="ex-callout-icon" size={20} />
+              <p className="ex-callout-text">
+                <strong>Jurisdiction:</strong> By using this website, you consent to the personal jurisdiction of the courts specified herein for the purpose of litigating any such disputes.
+              </p>
+            </div> */}
+          </section>
+
+          <div className="ex-divider" />
+
+          {/* 9. Modifications */}
+          <section id="ex-modifications" className="ex-section">
+            <div className="ex-section-header">
+              <span className="ex-section-num ex-yellow">09</span>
+              <div>
+                <h2 className="ex-section-title">Modifications</h2>
+                <p className="ex-section-subtitle">Our right to update these terms</p>
+              </div>
+            </div>
+            <div className="ex-prose">
+              <p>
+Unlock Startup reserves the right to modify or replace these terms and conditions at any time without prior notice. By continuing to use this website after such modifications are made, you signify your acceptance of the updated terms and conditions.
+              </p>
+            </div>
+            {/* <div className="ex-callout ex-yellow">
+              <AlertTriangle className="ex-callout-icon" size={20} />
+              <p className="ex-callout-text">
+                <strong>Stay Informed:</strong> We recommend reviewing these terms periodically to stay aware of any updates. Your continued use of the website constitutes acceptance of any revised terms.
+              </p>
+            </div> */}
+          </section>
+
+          <div className="ex-divider" />
+
+          {/* 10. Entire Agreement */}
+          <section id="ex-entire-agreement" className="ex-section">
+            <div className="ex-section-header">
+              <span className="ex-section-num ex-orange">10</span>
+              <div>
+                <h2 className="ex-section-title">Entire Agreement</h2>
+                <p className="ex-section-subtitle">The complete agreement between you and Unlock Startup</p>
+              </div>
+            </div>
+            <div className="ex-prose">
+              <p>
+These terms and conditions constitute the entire agreement between you and Unlock Startup and supersede all prior agreements and understandings, whether written or verbal, relating to the subject matter herein.
+              </p>
+            </div>
+            {/* <div className="ex-callout ex-orange">
+              <FileText className="ex-callout-icon" size={20} />
+              <p className="ex-callout-text">
+                <strong>Final Agreement:</strong> No other representations, warranties, or agreements, whether oral or written, shall be binding unless expressly included in these terms and conditions.
+              </p>
+            </div> */}
           </section>
 
           <div className="ex-divider" />
 
         </main>
-      </div>
 
+
+      </div>
     </>
   );
 }
 
-function TocCard({ activeSection, onAccept, accepted }) {
-  return (
-    <div className="ex-toc-card">
-      <div className="ex-toc-header">
-        <List className="ex-toc-header-icon" size={20} />
-        <span className="ex-toc-title">On this page</span>
-      </div>
-      <ul className="ex-toc-list">
-        {sections.map((section) => (
-          <li key={section.id} className="ex-toc-item">
-            <a
-              href={`#${section.id}`}
-              className={`ex-toc-link ${activeSection === section.id ? 'ex-active' : ''}`}
-            >
-              <span className="ex-toc-num">{sections.indexOf(section) + 1 < 10 ? `0${sections.indexOf(section) + 1}` : sections.indexOf(section) + 1}</span>
-              {section.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-      <div className="ex-toc-accept">
-        <button className="ex-toc-accept-btn" onClick={onAccept} disabled={accepted}>
-          {accepted ? (
-            <span className="ex-accepted-inline">
-              <Check size={16} />
-              Accepted
-            </span>
-          ) : (
-            'Accept Terms'
-          )}
-        </button>
-      </div>
-    </div>
-  );
-}
