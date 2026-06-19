@@ -57,7 +57,7 @@ const [stateOpen, setStateOpen] = useState(false);
                 <div className="contact-details">
                   <h3>Call us</h3>
                   <p>
-                    <a href="tel:+91-9876543210">+91 98765 43210</a>
+                    <a href="tel:+91-9266733959">+91 92667 33959</a>
                   </p>
                 </div>
               </div>
@@ -71,7 +71,7 @@ const [stateOpen, setStateOpen] = useState(false);
                 <div className="contact-details">
                   <h3>Email us</h3>
                   <p>
-                    <a href="mailto:hello@example.com">support@unlockstartup.com</a>
+                    <a href="mailto:support@unlockstartup.com">support@unlockstartup.com</a>
                   </p>
                 </div>
               </div>
@@ -119,7 +119,7 @@ const [stateOpen, setStateOpen] = useState(false);
                       id="name"
                       name="name"
                       required
-                      placeholder="Your full name"
+                      placeholder="Enter full name"
                       value={formData.name}
                       onChange={handleChange}
                     />
@@ -130,7 +130,7 @@ const [stateOpen, setStateOpen] = useState(false);
                       type="text"
                       id="company"
                       name="company"
-                      placeholder="Your startup or company"
+                      placeholder="Enter Company Name"
                       value={formData.company}
                       onChange={handleChange}
                     />
@@ -144,7 +144,7 @@ const [stateOpen, setStateOpen] = useState(false);
                       type="tel"
                       id="phone"
                       name="phone"
-                      placeholder="+91 98765 43210"
+                      placeholder="+91 999 999 9999"
                       value={formData.phone}
                       onChange={handleChange}
                     />
@@ -156,7 +156,7 @@ const [stateOpen, setStateOpen] = useState(false);
                       id="email"
                       name="email"
                       required
-                      placeholder="your@email.com"
+                      placeholder="Enter your email id"
                       value={formData.email}
                       onChange={handleChange}
                     />
