@@ -216,7 +216,11 @@ function OpportunityDetails({ sub, listingLoc, description, eventDates }) {
       <DetailSection title="Investor Details" variant="blue">
         <DetailRow label="Investor name"     value={inv.fundName} />
         <DetailRow label="Investor type" value={inv.investorType} />
-        <DetailRow label="Website"       value={inv.website} link />
+        <DetailRow label="Investor linkedIn" value={inv.linkedIn} />
+        {/* <DetailRow label="Website"       value={inv.website} link /> */}
+        <DetailRow label="Contact Person Name" value={inv.contact.name} />
+        <DetailRow label="Contact Person Email" value={inv.contact.email} />
+        <DetailRow label="Contact Person Number" value={inv.contact.phone} />
         <DetailRow label="About"         value={description?.length > 200 ? description.slice(0, 200) + "…" : description} />
       </DetailSection>
     );

@@ -60,7 +60,6 @@ const [cardsPerView, setCardsPerView] = useState(4);
   }, []);
 
 
-// Calculate overflow AND cards per view
 useEffect(() => {
   const track = trackRef.current;
   if (!track || fundings.length === 0) return;
