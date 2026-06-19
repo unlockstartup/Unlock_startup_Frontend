@@ -5,7 +5,6 @@ import Image from "next/image";
 import { logout } from "@/app/apiServices/auth";
 import publisherApi from "@/app/publisherapi";
 
-// Derives up to 2 initials from a display name
 function NameAvatar({ name, size = 42 }) {
   const initials = name
     .split(" ")
@@ -79,16 +78,14 @@ export default function PublisherTopbar({ onToggle }) {
         <i className="bi bi-list" style={{ fontSize: "1.6rem" }} />
       </button>
 
-      {/* Right section: explicit gap + vertical centering */}
       <div
         className="ventic-topbar__right"
         style={{
           display: "flex",
           alignItems: "center",
-          gap: "0.75rem",   // controls space between bell and profile
+          gap: "0.75rem", 
         }}
       >
-        {/* Notifications */}
         <button
           className="btn btn-light ventic-icon-btn"
           onClick={() => router.push("/publisher/notifications")}
@@ -120,9 +117,9 @@ export default function PublisherTopbar({ onToggle }) {
                 borderRadius: "999px",
                 padding: "0 5px",
                 fontWeight: 700,
-                background: "#dc3545",   // Bootstrap danger red
+                background: "#dc3545", 
                 color: "#fff",
-                border: "2px solid #fff", // keeps it separated from dark backgrounds
+                border: "2px solid #fff",
                 boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
                 zIndex: 2,
               }}
@@ -143,7 +140,7 @@ export default function PublisherTopbar({ onToggle }) {
               padding: "6px 12px",
               borderRadius: "12px",
               border: "1px solid #e2e8f0",
-              height: 44,          // match bell button height
+              height: 44,       
             }}
           >
             {profileurl ? (

@@ -11,7 +11,6 @@ function getInitial(name = "") {
 export default function ServiceCard({ service, index }) {
   const iconProps = { size: 13, strokeWidth: 2, color: TEAL, style: { flexShrink: 0 } };
 
-  // Use first image from serviceImages array
   const bannerUrl = service?.serviceImages?.[0]?.url || null;
 
   return (

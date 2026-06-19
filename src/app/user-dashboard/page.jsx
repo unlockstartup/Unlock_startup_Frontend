@@ -96,7 +96,6 @@ export default function ProfileDashboard() {
     return null;
   };
 
-  // Close sidebar when switching tabs on mobile
   const handleTabChange = (id) => {
     setActiveTab(id);
     setSidebarOpen(false);

@@ -22,10 +22,6 @@ const API_OPTION_MAP = {
   productStatus:     { url: "/api/public/product-status/active",    dataKey: "statuses"         },
 };
 
-//  Cascade map: selecting a type re-fetches its child categories 
-// typeKey         → which filter key triggers the cascade
-// categoryKey     → which filter key receives the filtered results
-// categoryParam   → query param name expected by the categories endpoint
 const CASCADE_MAP = {
   eventType:     { categoryKey: "category",          categoryParam: "eventType"       },
   challengeType: { categoryKey: "challengeCategory", categoryParam: "competitionType" },
@@ -93,7 +89,6 @@ function getDynamicOptions(config, items = []) {
   return options;
 }
 
-//  Sub-components 
 function CheckboxGroup({ config, values, onChange }) {
   return (
     <div className="sf-group">
@@ -194,7 +189,6 @@ function ActivePills({ filters, configs, onRemove }) {
   );
 }
 
-//  Main component 
 export default function SidebarFilter({ pageType, onFilterChange, searchPlaceholder, items = [] }) {
   const configs = FILTER_CONFIGS[pageType] || [];
 
@@ -208,10 +202,8 @@ export default function SidebarFilter({ pageType, onFilterChange, searchPlacehol
   const [collapsed,      setCollapsed]      = useState({});
   const [mobileOpen,     setMobileOpen]     = useState(false);
 
-  // Track previous type selections so we only re-fetch on actual change
   const prevTypeFilters = useRef({});
 
-  //  Initial fetch: all types + all categories (unfiltered) 
   useEffect(() => {
     if (!configs.length) return;
 
@@ -234,7 +226,6 @@ export default function SidebarFilter({ pageType, onFilterChange, searchPlacehol
             keyMaps.forEach(({ key, dataKey }) => {
               const raw = res.data?.[dataKey] ?? res.data ?? [];
               const arr = Array.isArray(raw) ? raw : [];
-              // Store full objects for type keys (needed for cascade ID lookup)
               if (CASCADE_MAP[key]) rawResults[key] = arr;
               nameResults[key] = arr.map((i) => (typeof i === "string" ? i : i.name)).filter(Boolean);
             });
@@ -260,7 +251,6 @@ export default function SidebarFilter({ pageType, onFilterChange, searchPlacehol
       const selectedNames = pendingFilters[typeKey] ?? [];
       const prevNames     = prevTypeFilters.current[typeKey] ?? [];
 
-      // Skip if nothing changed for this type key
       if (JSON.stringify(selectedNames) === JSON.stringify(prevNames)) return;
       prevTypeFilters.current[typeKey] = selectedNames;
 
@@ -279,7 +269,6 @@ export default function SidebarFilter({ pageType, onFilterChange, searchPlacehol
         return;
       }
 
-      // Resolve selected type names → _id values using stored raw objects
       const typeObjects  = rawTypeObjects[typeKey] ?? [];
       const selectedIds  = selectedNames
         .map((name) => typeObjects.find((t) => t.name === name)?._id)
@@ -314,7 +303,6 @@ export default function SidebarFilter({ pageType, onFilterChange, searchPlacehol
         });
       } catch { /* ignore */ }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pendingFilters, rawTypeObjects]);
 
 const configsWithOptions = useMemo(() => {
@@ -344,7 +332,6 @@ const configsWithOptions = useMemo(() => {
     pendingSearch ||
     Object.values(pendingFilters).some((v) => (Array.isArray(v) ? v.length > 0 : Boolean(v)));
 
-  //  Filter update helpers 
   const updatePendingFilter = (key, value) => {
     const next = { ...pendingFilters, [key]: value };
     const config = configs.find((c) => c.key === key);
@@ -383,11 +370,9 @@ const configsWithOptions = useMemo(() => {
 
   const toggleCollapse = (key) => setCollapsed((prev) => ({ ...prev, [key]: !prev[key] }));
 
-  //  Inner render 
   const renderInnerContent = () => (
     <>
       <div className="sf-scroll-body">
-        {/* Search */}
         <div className="sf-search">
           <svg className="sf-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
@@ -403,12 +388,10 @@ const configsWithOptions = useMemo(() => {
         <ActivePills filters={pendingFilters} configs={configs} onRemove={removePendingFilter} />
         {hasPendingActive && <div className="sf-divider" />}
 
-        {/* Filter groups */}
         {configsWithOptions.map((config) => {
           const isOpen = !collapsed[config.key];
           const value  = pendingFilters[config.key];
 
-          // Show a hint on category filters when their parent type is active
           const parentTypeKey = Object.keys(CASCADE_MAP).find(
             (tk) => CASCADE_MAP[tk].categoryKey === config.key
           );

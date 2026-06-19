@@ -1,24 +1,21 @@
 "use client";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import FundingCard from "@/components/uiElements/FundingCard";
 import api from "@/app/api";
+import "@/app/carousel.css"
 
 const UpcomingFundingCalls = () => {
-  const [fundings, setFundings] = useState([]);
-  const [loading, setLoading]   = useState(true);
-  const [error, setError]       = useState(null);
-  const [current, setCurrent]   = useState(0);
-  const trackRef                = useRef(null);
-const [needsScroll, setNeedsScroll] = useState(false);
-const [cardsPerView, setCardsPerView] = useState(4);
+  const [fundings, setFundings]           = useState([]);
+  const [loading, setLoading]             = useState(true);
+  const [error, setError]                 = useState(null);
+  const [cardsPerSlide, setCardsPerSlide] = useState(4);
 
   useEffect(() => {
     const fetchFundings = async () => {
       try {
         const response = await api.get("/api/publisher/funding-calls/all");
         const items = response.data?.fundings ?? [];
-
         const mapped = items.filter(Boolean).map((item) => ({
           slug:                    item._id,
           title:                   item.title ?? "",
@@ -46,7 +43,6 @@ const [cardsPerView, setCardsPerView] = useState(4);
           attachments:             item.attachments ?? [],
           location:                item.location ?? "",
         }));
-
         setFundings(mapped);
       } catch (err) {
         console.error("Failed to fetch funding calls:", err);
@@ -55,90 +51,32 @@ const [cardsPerView, setCardsPerView] = useState(4);
         setLoading(false);
       }
     };
-
     fetchFundings();
   }, []);
 
-
-useEffect(() => {
-  const track = trackRef.current;
-  if (!track || fundings.length === 0) return;
-
-  const checkOverflow = () => {
-    const firstCard = track.children[0];
-    if (!firstCard) return;
-    const cardWidth = firstCard.getBoundingClientRect().width + 16; // +gap
-    const visible = Math.max(1, Math.round(track.clientWidth / cardWidth));
-    setCardsPerView(visible);
-    setNeedsScroll(track.scrollWidth > track.clientWidth + 1);
-  };
-
-  checkOverflow();
-  const ro = new ResizeObserver(checkOverflow);
-  ro.observe(track);
-  return () => ro.disconnect();
-}, [fundings]);
-
-const totalPages = Math.ceil(fundings.length / cardsPerView);
-const currentPage = Math.floor(current / cardsPerView);
-
-  const scrollToIndex = useCallback((i) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const card = track.children[i];
-    if (!card) return;
-    track.scrollTo({ left: card.offsetLeft, behavior: "smooth" });
-    setCurrent(i);
+  useEffect(() => {
+    const update = () => {
+      if (window.matchMedia("(max-width: 480px)").matches)       setCardsPerSlide(1);
+      else if (window.matchMedia("(max-width: 768px)").matches)  setCardsPerSlide(2);
+      else if (window.matchMedia("(max-width: 1024px)").matches) setCardsPerSlide(3);
+      else                                                        setCardsPerSlide(4);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
   }, []);
+
+  const slides = [];
+  for (let i = 0; i < fundings.length; i += cardsPerSlide) {
+    slides.push(fundings.slice(i, i + cardsPerSlide));
+  }
+
+  const showControls = slides.length > 1;
 
   return (
     <>
-      {/*  Responsive carousel styles  */}
-      <style>{`
-        .fundings-track {
-          display: flex;
-          gap: 16px;
-          overflow-x: auto;
-          scroll-snap-type: x mandatory;
-          scroll-behavior: smooth;
-          scrollbar-width: none;
-          -ms-overflow-style: none;
-        }
-        .fundings-track::-webkit-scrollbar {
-          display: none;
-        }
-
-        .funding-card-wrap {
-          /* 4 cards on large screens */
-          flex: 0 0 calc(25% - 12px);
-          scroll-snap-align: start;
-          min-width: 0;
-        }
-
-        /* 3 cards */
-        @media (max-width: 1024px) {
-          .funding-card-wrap {
-            flex: 0 0 calc(33.333% - 11px);
-          }
-        }
-
-        /* 2 cards */
-        @media (max-width: 768px) {
-          .funding-card-wrap {
-            flex: 0 0 calc(50% - 8px);
-          }
-        }
-
-        /* 1 card */
-        @media (max-width: 480px) {
-          .funding-card-wrap {
-            flex: 0 0 100%;
-          }
-        }
-      `}</style>
-
       <section className="competition-section-one">
-        <div className="container position-relative">
+        <div className="container">
 
           {/* Header */}
           <div className="row align-items-center mt-50 mb-20">
@@ -158,61 +96,89 @@ const currentPage = Math.floor(current / cardsPerView);
             </div>
           </div>
 
-          {/* States */}
-          {loading && (
-            <div className="text-center py-5">
-              <p>Loading competitions...</p>
-            </div>
-          )}
-          {error && (
-            <div className="text-center py-5">
-              <p className="text-danger">{error}</p>
-            </div>
-          )}
+          {/* Loading / Error */}
+          {loading && <div className="text-center py-5"><p>Loading competitions...</p></div>}
+          {error   && <div className="text-center py-5"><p className="text-danger">{error}</p></div>}
 
           {/* Carousel */}
           {!loading && !error && (
-            <>
-              {fundings.length === 0 ? (
-                <div className="col-12 text-center py-5">
-                  <p>No active competitions found.</p>
-                </div>
-              ) : (
-                <>
-                  {/* Carousel track — CSS handles all sizing & snap */}
-                  <div ref={trackRef} className="fundings-track">
-                    {fundings.map((funding, index) => (
-                      <div key={funding.slug} className="funding-card-wrap">
-                        <FundingCard funding={funding} index={index} />
+            fundings.length === 0 ? (
+              <div className="col-12 text-center py-5">
+                <p>No active competitions found.</p>
+              </div>
+            ) : (
+              <div className="funding-carousel-wrapper">
+                <div
+                  id="fundingCarousel"
+                  className="carousel slide"
+                  data-bs-ride="false"
+                  data-bs-wrap="true"
+                  data-bs-touch="true"
+                >
+                  {/* Slides */}
+                  <div className="carousel-inner">
+                    {slides.map((slideCards, slideIndex) => (
+                      <div
+                        key={slideIndex}
+                        className={`carousel-item ${slideIndex === 0 ? "active" : ""}`}
+                      >
+                        <div className="row g-3">
+                          {slideCards.map((funding, index) => (
+                            <div
+                              key={funding.slug}
+                              className={`col-${12 / cardsPerSlide}`}
+                            >
+                              <FundingCard funding={funding} index={index} />
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     ))}
                   </div>
 
-                  {/* Dot indicators */}
-{needsScroll && (
-  <div className="d-flex justify-content-center gap-2 mt-4">
-    {Array.from({ length: totalPages }).map((_, i) => (
-      <button
-        key={i}
-        onClick={() => scrollToIndex(i * cardsPerView)} // scroll to first card of that page
-        aria-label={`Go to page ${i + 1}`}
-        style={{
-          width:        i === currentPage ? "20px" : "7px",
-          height:       "7px",
-          borderRadius: i === currentPage ? "4px" : "50%",
-          background:   i === currentPage ? "#6c5ce7" : "#ccc",
-          border:       "none",
-          padding:      0,
-          cursor:       "pointer",
-          transition:   "all 0.2s",
-        }}
-      />
-    ))}
-  </div>
-)}
-                </>
-              )}
-            </>
+                  {/* Indicators — below slides */}
+                  {showControls && (
+                    <div className="carousel-indicators">
+                      {slides.map((_, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          data-bs-target="#fundingCarousel"
+                          data-bs-slide-to={i}
+                          className={i === 0 ? "active" : ""}
+                          aria-label={`Slide ${i + 1}`}
+                          aria-current={i === 0 ? "true" : undefined}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Arrows */}
+                  {showControls && (
+                    <>
+                      <button
+                        className="carousel-control-prev"
+                        type="button"
+                        data-bs-target="#fundingCarousel"
+                        data-bs-slide="prev"
+                      >
+                        <span className="carousel-control-prev-icon" aria-hidden="true" />
+                        <span className="visually-hidden">Previous</span>
+                      </button>
+                      <button
+                        className="carousel-control-next"
+                        type="button"
+                        data-bs-target="#fundingCarousel"
+                        data-bs-slide="next"
+                      >
+                        <span className="carousel-control-next-icon" aria-hidden="true" />
+                        <span className="visually-hidden">Next</span>
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            )
           )}
 
           {/* Mobile explore link */}

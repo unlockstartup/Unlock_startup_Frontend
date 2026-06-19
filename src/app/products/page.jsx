@@ -51,7 +51,6 @@ const Page = () => {
     if (patentStatus?.length)
       list = list.filter((p) => patentStatus.includes(p.patentStatus));
 
-    // Sort
     if (sortBy === "latest")
       list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 

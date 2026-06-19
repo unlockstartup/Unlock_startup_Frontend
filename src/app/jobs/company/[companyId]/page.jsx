@@ -1,4 +1,3 @@
-// all jobs of a company
 "use client";
 
 import { useEffect, useState } from "react";

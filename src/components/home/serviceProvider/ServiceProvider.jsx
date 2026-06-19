@@ -1,15 +1,14 @@
 "use client";
-
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState } from "react";
 import ServiceCard from "@/components/uiElements/ServiceCard";
 import Link from "next/link";
 import api from "@/app/api";
+import "@/app/carousel.css"
 
 const ServiceProvider = () => {
-  const [services, setServices] = useState([]);
-  const [loading, setLoading]   = useState(true);
-  const [current, setCurrent]   = useState(0);
-  const trackRef                = useRef(null);
+  const [services, setServices]       = useState([]);
+  const [loading, setLoading]         = useState(true);
+  const [cardsPerSlide, setCardsPerSlide] = useState(4);
 
   useEffect(() => {
     (async () => {
@@ -25,95 +24,38 @@ const ServiceProvider = () => {
     })();
   }, []);
 
-  // Sync dot indicator with native scroll position
   useEffect(() => {
-    const track = trackRef.current;
-    if (!track || services.length === 0) return;
-
-    const onScroll = () => {
-      const firstCard = track.children[0];
-      if (!firstCard) return;
-      const cardWidth = firstCard.getBoundingClientRect().width + 16; // +gap
-      const idx = Math.round(track.scrollLeft / cardWidth);
-      setCurrent(Math.max(0, Math.min(idx, services.length - 1)));
+    const update = () => {
+      if (window.matchMedia("(max-width: 480px)").matches)       setCardsPerSlide(1);
+      else if (window.matchMedia("(max-width: 768px)").matches)  setCardsPerSlide(2);
+      else if (window.matchMedia("(max-width: 1024px)").matches) setCardsPerSlide(3);
+      else                                                        setCardsPerSlide(4);
     };
-
-    track.addEventListener("scroll", onScroll, { passive: true });
-    return () => track.removeEventListener("scroll", onScroll);
-  }, [services]);
-
-  const scrollToIndex = useCallback((i) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const card = track.children[i];
-    if (!card) return;
-    track.scrollTo({ left: card.offsetLeft, behavior: "smooth" });
-    setCurrent(i);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
   }, []);
+
+  const slides = [];
+  for (let i = 0; i < services.length; i += cardsPerSlide) {
+    slides.push(services.slice(i, i + cardsPerSlide));
+  }
+
+  const showControls = slides.length > 1;
 
   return (
     <>
-      {/*  Responsive carousel styles  */}
-      <style>{`
-        .services-track {
-          display: flex;
-          gap: 16px;
-          overflow-x: auto;
-          scroll-snap-type: x mandatory;
-          scroll-behavior: smooth;
-          scrollbar-width: none;
-          -ms-overflow-style: none;
-        }
-        .services-track::-webkit-scrollbar {
-          display: none;
-        }
-
-        .service-card-wrap {
-          /* 4 cards on large screens */
-          flex: 0 0 calc(25% - 12px);
-          scroll-snap-align: start;
-          min-width: 0;
-        }
-
-        /* 3 cards */
-        @media (max-width: 1024px) {
-          .service-card-wrap {
-            flex: 0 0 calc(33.333% - 11px);
-          }
-        }
-
-        /* 2 cards */
-        @media (max-width: 768px) {
-          .service-card-wrap {
-            flex: 0 0 calc(50% - 8px);
-          }
-        }
-
-        /* 1 card */
-        @media (max-width: 480px) {
-          .service-card-wrap {
-            flex: 0 0 100%;
-          }
-        }
-      `}</style>
-
       <section className="service-section pt-80 lg-pt-100">
-        <div className="container position-relative">
-
-          {/* Header */}
+        <div className="container">
           <div className="row justify-content-between align-items-center mt-0 mb-20">
             <div className="col-md-6">
               <div className="title-one mb-60 lg-mb-40">
-                <h2 className="fw-semibold fs-1 fs-lg-3 fs-md-4 fs-sm-5">
-                  Unlock Startup Services
-                </h2>
+                <h2 className="fw-semibold fs-1 fs-lg-3 fs-md-4 fs-sm-5">Unlock Startup Services</h2>
               </div>
             </div>
             <div className="col-md-5">
               <div className="d-flex justify-content-md-end">
-                <Link href="/services" className="btn-six d-none d-md-inline-block">
-                  Explore all
-                </Link>
+                <Link href="/services" className="btn-six d-none d-md-inline-block">Explore all</Link>
               </div>
             </div>
           </div>
@@ -123,48 +65,62 @@ const ServiceProvider = () => {
           ) : services.length === 0 ? (
             <div className="text-center py-4 text-muted">No services available.</div>
           ) : (
-            <>
-              {/* Carousel track — CSS handles all sizing & snap */}
-              <div ref={trackRef} className="services-track">
-                {services.map((service) => (
-                  <div key={service._id} className="service-card-wrap">
-                    <ServiceCard service={service} />
-                  </div>
-                ))}
-              </div>
-
-              {/* Dot indicators */}
-              {services.length > 1 && (
-                <div className="d-flex justify-content-center gap-2 mt-4">
-                  {services.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => scrollToIndex(i)}
-                      aria-label={`Go to service ${i + 1}`}
-                      style={{
-                        width:        i === current ? "20px" : "7px",
-                        height:       "7px",
-                        borderRadius: i === current ? "4px" : "50%",
-                        background:   i === current ? "#000" : "#ccc",
-                        border:       "none",
-                        padding:      0,
-                        cursor:       "pointer",
-                        transition:   "all 0.2s",
-                      }}
-                    />
+            <div className="services-carousel-wrapper">
+              <div
+                id="servicesCarousel"
+                className="carousel slide"
+                data-bs-ride="false"
+                data-bs-wrap="true"
+                data-bs-touch="true"
+              >
+                <div className="carousel-inner">
+                  {slides.map((slideCards, slideIndex) => (
+                    <div key={slideIndex} className={`carousel-item ${slideIndex === 0 ? "active" : ""}`}>
+                      <div className="row g-3">
+                        {slideCards.map((service) => (
+                          <div key={service._id} className={`col-${12 / cardsPerSlide}`}>
+                            <ServiceCard service={service} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
-              )}
 
-              {/* Mobile explore link */}
-              <div className="text-center mt-40 d-md-none">
-                <Link href="/services" className="btn-six">
-                  Explore all
-                </Link>
+                {showControls && (
+                  <div className="carousel-indicators">
+                    {slides.map((_, i) => (
+                      <button
+                        key={i} type="button"
+                        data-bs-target="#servicesCarousel"
+                        data-bs-slide-to={i}
+                        className={i === 0 ? "active" : ""}
+                        aria-label={`Slide ${i + 1}`}
+                        aria-current={i === 0 ? "true" : undefined}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {showControls && (
+                  <>
+                    <button className="carousel-control-prev" type="button" data-bs-target="#servicesCarousel" data-bs-slide="prev">
+                      <span className="carousel-control-prev-icon" aria-hidden="true" />
+                      <span className="visually-hidden">Previous</span>
+                    </button>
+                    <button className="carousel-control-next" type="button" data-bs-target="#servicesCarousel" data-bs-slide="next">
+                      <span className="carousel-control-next-icon" aria-hidden="true" />
+                      <span className="visually-hidden">Next</span>
+                    </button>
+                  </>
+                )}
               </div>
-            </>
+            </div>
           )}
 
+          <div className="text-center mt-40 d-md-none">
+            <Link href="/services" className="btn-six">Explore all</Link>
+          </div>
         </div>
       </section>
     </>

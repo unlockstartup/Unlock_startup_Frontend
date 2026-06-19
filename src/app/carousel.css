@@ -1,0 +1,129 @@
+.funding-carousel-wrapper,
+.events-carousel-wrapper,
+.products-carousel-wrapper,
+.services-carousel-wrapper,
+.investors-carousel-wrapper {
+  position: relative;
+  margin: 0 -44px;      
+  padding: 0 44px;      
+}
+
+#fundingCarousel .carousel-indicators,
+#eventsCarousel .carousel-indicators,
+#productsCarousel .carousel-indicators,
+#servicesCarousel .carousel-indicators,
+#investorsCarousel .carousel-indicators {
+  position: relative;
+  bottom: auto;
+  left: auto;
+  right: auto;
+  margin: 20px 0 0 0;
+  padding: 0;
+  gap: 6px;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+}
+
+#fundingCarousel .carousel-indicators button,
+#eventsCarousel .carousel-indicators button,
+#productsCarousel .carousel-indicators button,
+#servicesCarousel .carousel-indicators button,
+#investorsCarousel .carousel-indicators button {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #ccc;
+  border: none;
+  padding: 0;
+  opacity: 1;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+#fundingCarousel .carousel-indicators button.active,
+#eventsCarousel .carousel-indicators button.active,
+#productsCarousel .carousel-indicators button.active,
+#servicesCarousel .carousel-indicators button.active,
+#investorsCarousel .carousel-indicators button.active {
+  width: 20px;
+  border-radius: 4px;
+  background-color: #6c5ce7;
+}
+
+#fundingCarousel .carousel-control-prev,
+#fundingCarousel .carousel-control-next,
+#eventsCarousel .carousel-control-prev,
+#eventsCarousel .carousel-control-next,
+#productsCarousel .carousel-control-prev,
+#productsCarousel .carousel-control-next,
+#servicesCarousel .carousel-control-prev,
+#servicesCarousel .carousel-control-next,
+#investorsCarousel .carousel-control-prev,
+#investorsCarousel .carousel-control-next {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  background-color: #6c5ce7;
+  border-radius: 50%;
+  opacity: 1;
+  z-index: 10;
+}
+
+#fundingCarousel .carousel-control-prev,
+#eventsCarousel .carousel-control-prev,
+#productsCarousel .carousel-control-prev,
+#servicesCarousel .carousel-control-prev,
+#investorsCarousel .carousel-control-prev {
+  left: -44px;            
+}
+
+#fundingCarousel .carousel-control-next,
+#eventsCarousel .carousel-control-next,
+#productsCarousel .carousel-control-next,
+#servicesCarousel .carousel-control-next,
+#investorsCarousel .carousel-control-next {
+   right: -44px;
+}
+
+#fundingCarousel .carousel-control-prev-icon,
+#fundingCarousel .carousel-control-next-icon,
+#eventsCarousel .carousel-control-prev-icon,
+#eventsCarousel .carousel-control-next-icon,
+#productsCarousel .carousel-control-prev-icon,
+#productsCarousel .carousel-control-next-icon,
+#servicesCarousel .carousel-control-prev-icon,
+#servicesCarousel .carousel-control-next-icon,
+#investorsCarousel .carousel-control-prev-icon,
+#investorsCarousel .carousel-control-next-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ── Mobile: hide arrows── */
+@media (max-width: 576px) {
+  .funding-carousel-wrapper,
+  .events-carousel-wrapper,
+  .products-carousel-wrapper,
+  .services-carousel-wrapper,
+  .investors-carousel-wrapper {
+    margin: 0;
+    padding: 0;
+  }
+
+  #fundingCarousel .carousel-control-prev,
+  #fundingCarousel .carousel-control-next,
+  #eventsCarousel .carousel-control-prev,
+  #eventsCarousel .carousel-control-next,
+  #productsCarousel .carousel-control-prev,
+  #productsCarousel .carousel-control-next,
+  #servicesCarousel .carousel-control-prev,
+  #servicesCarousel .carousel-control-next,
+  #investorsCarousel .carousel-control-prev,
+  #investorsCarousel .carousel-control-next {
+    display: none;
+  }
+}

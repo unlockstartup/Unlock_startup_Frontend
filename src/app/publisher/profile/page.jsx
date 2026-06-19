@@ -32,7 +32,6 @@ export default function Page() {
   const [editMode, setEditMode] = useState(false);
   const [profileurl, setProfileurl] = useState(null);
 const [downloadingServiceId, setDownloadingServiceId] = useState(null);
-  // Subscription history state
   const [subscriptions, setSubscriptions] = useState([]);
   const [serviceSubscriptions, setServiceSubscriptions] = useState([]);
   const [subsLoading, setSubsLoading] = useState(true);
@@ -395,7 +394,7 @@ const DownloadBtn = ({ sub, invNumber, onDownload, isDownloading }) => (
       name={name}
       value={formData[name]}
       onChange={handleChange}
-      readOnly={name === "email"}   // ← key change
+      readOnly={name === "email"}  
     />
   </div>
 ))}

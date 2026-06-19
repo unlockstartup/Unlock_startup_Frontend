@@ -23,7 +23,6 @@ export default function Breadcrumb({ title, dynamicTitle }) {
                   const href = "/" + pathSegments.slice(0, index + 1).join("/");
                   const isLast = index === pathSegments.length - 1;
 
-                  // Use dynamicTitle for last segment if provided, else format the segment
                   const formattedName = isLast && dynamicTitle
                     ? dynamicTitle
                     : segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " ");

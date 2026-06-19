@@ -1,4 +1,3 @@
-// publisher dashboard
 "use client"
 
 import { useEffect, useState } from "react";

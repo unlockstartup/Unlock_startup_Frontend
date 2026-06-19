@@ -6,7 +6,6 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
   const fileInputRef = useRef(null);
   const internalChange = useRef(false);
 
-  // Sync external value into the editor without breaking cursor position
   useEffect(() => {
     if (!ref.current) return;
     if (internalChange.current) {
@@ -20,7 +19,6 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
 
   const exec = (cmd, val = null) => {
     ref.current?.focus();
-    // Use setTimeout to let selection stabilize before command
     setTimeout(() => {
       document.execCommand(cmd, false, val);
       handleInput();
@@ -58,10 +56,8 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
         handleInput();
       }
     } catch (err) {
-      // surface minimal feedback
       alert(err?.response?.data?.message || "Image upload failed");
     } finally {
-      // reset input so same file can be chosen again
       e.target.value = "";
     }
   };

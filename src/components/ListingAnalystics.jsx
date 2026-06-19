@@ -96,7 +96,6 @@ function DetailModal({ item, onClose }) {
   const m = TYPE_META[item._type] || {};
   const clicks = item._clicks ?? 0;
 
-  // Helper to safely render any field
   const renderField = (label, val) => {
     if (val == null || val === "" || (Array.isArray(val) && val.length === 0)) return null;
     const display = Array.isArray(val) ? val.join(", ") : String(val);
@@ -105,14 +104,12 @@ function DetailModal({ item, onClose }) {
 
   const rows = [];
 
-  //  UNIVERSAL FIELDS 
   rows.push(renderField("Title", item._title || item.title || item.productName || item.serviceTitle || item.fundName));
   rows.push(renderField("Description", item.description || item.detailedDescription || item.companyDescription || item.eventDescription || item.about));
   rows.push(renderField("Status", item.status || item.approvalStatus));
   rows.push(renderField("Location", item.location));
   rows.push(renderField("Apply Clicks", clicks > 0 ? clicks : null));
 
-  //  JOB FIELDS 
   if (item._type === "jobs") {
     rows.push(renderField("Company", item.companyName));
     rows.push(renderField("Company Website", item.companyWebsite));
@@ -143,7 +140,6 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
   }
 
-  //  COMPETITION FIELDS 
   else if (item._type === "competitions") {
     rows.push(renderField("Organizer", item.organizingCompany));
     rows.push(renderField("Organizer Type", item.organizerType));
@@ -194,7 +190,6 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
   }
 
-  //  PRODUCT FIELDS 
   else if (item._type === "products") {
     rows.push(renderField("Company", item.companyName));
     rows.push(renderField("Brand", item.brandName));
@@ -218,7 +213,6 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
   }
 
-  //  SERVICE FIELDS 
   else if (item._type === "services") {
     rows.push(renderField("Company", item.companyName));
     rows.push(renderField("Brand", item.brandName));
@@ -240,7 +234,6 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
   }
 
-  //  INVESTOR FIELDS 
   else if (item._type === "investors") {
     rows.push(renderField("Fund Name", item.fundName || item.title));
     rows.push(renderField("Investor Type", item.investorType));
@@ -264,7 +257,6 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Apply Link", item.applyLink));
   }
 
-  // Filter out nulls
   const validRows = rows.filter(Boolean);
 
   return (

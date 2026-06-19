@@ -8,7 +8,6 @@ import Link from "next/link";
 const VideoPost = ({ thumb, src }) => {
   useEffect(() => {
     Fancybox.bind("[data-fancybox]", {
-      // Your custom options
     });
   }, []);
 

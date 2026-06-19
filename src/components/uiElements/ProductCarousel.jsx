@@ -9,7 +9,6 @@ const ProductCarousel = ({ images, productName }) => {
   const containerRef = useRef(null);
   const autoPlayRef = useRef(null);
 
-  // Handle navigation
   const handlePrev = () => {
     setActiveIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     setIsAutoPlaying(false);
@@ -25,13 +24,11 @@ const ProductCarousel = ({ images, productName }) => {
     setIsAutoPlaying(false);
   };
 
-  // Keyboard navigation
   const handleKeyDown = (e) => {
     if (e.key === 'ArrowLeft') handlePrev();
     if (e.key === 'ArrowRight') handleNext();
   };
 
-  // Auto-play functionality
   useEffect(() => {
     if (isAutoPlaying && images.length > 1) {
       autoPlayRef.current = setInterval(() => {

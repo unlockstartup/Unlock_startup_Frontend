@@ -47,7 +47,6 @@ const Page = () => {
     fetchEvents();
   }, []);
 
-  // Reset to page 1 whenever filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [activeFilters]);

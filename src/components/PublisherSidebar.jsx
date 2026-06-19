@@ -25,7 +25,6 @@ export default function PublisherSidebar({ collapsed, mobileOpen, onClose }) {
     setCategory(localStorage.getItem("publisher_category")); // "publisher" | "investor"
   }, []);
 
-  // ← filter out items hidden for this account category
   const visibleMenu = menu.filter(
     (item) => !item.hideFor || !item.hideFor.includes(category)
   );
@@ -48,7 +47,7 @@ export default function PublisherSidebar({ collapsed, mobileOpen, onClose }) {
       </div>
 
       <div className="ventic-sidebar__menu">
-        {visibleMenu.map((item) => ( // ← visibleMenu instead of menu
+        {visibleMenu.map((item) => (
           <Link
             key={item.to} href={item.to} onClick={onClose}
             className={`ventic-nav ${pathname === item.to ? "active" : ""}`}

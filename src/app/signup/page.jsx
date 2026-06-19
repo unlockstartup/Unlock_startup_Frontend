@@ -153,9 +153,7 @@ function SuccessModal({ role }) {
   );
 }
 
-/* 
-   SIGNUP PAGE
- */
+
 const Page = () => {
   const router = useRouter();
 
@@ -192,7 +190,6 @@ const Page = () => {
     setPortalTarget(document.body);
   }, []);
 
-  //  Load organizer types for both publisher AND investor 
   useEffect(() => {
     if (accountType !== "publisher" && accountType !== "investor") return;
     if (publisherTypes.length > 0) return;
@@ -319,7 +316,6 @@ const Page = () => {
     }
   };
 
-  //  Helper: is it a publisher-type account? 
   const isPublisherType = accountType === "publisher" || accountType === "investor";
 
   return (

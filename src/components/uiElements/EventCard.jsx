@@ -15,14 +15,14 @@ export default function EventCard({ event, index }) {
 const startDateOnly = event.startDateTime
   ? new Date(event.startDateTime).toLocaleDateString("en-IN", {
       day: "numeric", month: "short", year: "numeric",
-      timeZone: "Asia/Kolkata",  // ← was "UTC"
+      timeZone: "Asia/Kolkata",  
     })
   : null;
 
 const endDateOnly = event.endDateTime
   ? new Date(event.endDateTime).toLocaleDateString("en-IN", {
       day: "numeric", month: "short", year: "numeric",
-      timeZone: "Asia/Kolkata",  // ← was "UTC"
+      timeZone: "Asia/Kolkata",  
     })
   : null;
 
