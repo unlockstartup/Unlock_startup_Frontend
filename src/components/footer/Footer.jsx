@@ -79,9 +79,23 @@ export default function Footer() {
               <div className="footer-nav-col footer-social-col">
                 <h5 className="footer-title">Follow Us</h5>
 <ul className="style-none d-flex social-icon gap-3 footer-social-list">
-  <li><Link href="#"><i className="bi bi-whatsapp"></i></Link></li>
-  <li><Link href="#"><i className="bi bi-facebook"></i></Link></li>
-  <li><Link href="#"><i className="bi bi-linkedin"></i></Link></li>
+  <li>
+    <a href="https://wa.me/919266733959" target="_blank" rel="noopener noreferrer">
+      <i className="bi bi-whatsapp"></i>
+    </a>
+  </li>
+
+  <li>
+    <a href="https://www.facebook.com/unlockstartup" target="_blank" rel="noopener noreferrer">
+      <i className="bi bi-facebook"></i>
+    </a>
+  </li>
+
+  <li>
+    <a href="https://www.linkedin.com/company/unlock-startup" target="_blank" rel="noopener noreferrer">
+      <i className="bi bi-linkedin"></i>
+    </a>
+  </li>
 </ul>
               </div>
 
