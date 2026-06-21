@@ -105,7 +105,7 @@ function DetailModal({ item, onClose }) {
   const rows = [];
 
   rows.push(renderField("Title", item._title || item.title || item.productName || item.serviceTitle || item.fundName));
-  rows.push(renderField("Description", item.description || item.detailedDescription || item.companyDescription || item.eventDescription || item.about));
+  rows.push(renderField("Event Description", item.description || item.detailedDescription || item.companyDescription || item.eventDescription || item.about));
   rows.push(renderField("Status", item.status || item.approvalStatus));
   rows.push(renderField("Location", item.location));
   rows.push(renderField("Apply Clicks", clicks > 0 ? clicks : null));
@@ -186,7 +186,6 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Organizer Contact", item.organizerContactPerson));
     rows.push(renderField("Work Email", item.workEmail));
     rows.push(renderField("Phone Number", item.phoneNumber));
-    rows.push(renderField("Event Description", item.eventDescription));
     rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
   }
 
