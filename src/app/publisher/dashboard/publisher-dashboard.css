@@ -994,9 +994,6 @@
   }
 }
 
-/*  17. ZOOM RESET  */
-/* theme.css applies zoom:65% for large desktops — reset on small screens
-   so mobile content isn't zoomed-out */
 
 @media (max-width: 1023px) {
   .ventic-shell {
@@ -1005,13 +1002,14 @@
 }
 
 .pd__modal--full {
-  max-width: 1200px;
-  width: 96vw;
-  max-height: 95vh;
+  max-width: 1400px;
+  width: 100vw;
+  max-height: 100%;
+  
 }
 
 .pd__modal-body--scrollable {
-  max-height: 90vh;
+  max-height: 100vh;
   overflow-y: auto;
   padding-right: 8px;
 }
