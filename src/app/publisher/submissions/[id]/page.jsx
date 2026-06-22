@@ -8,13 +8,7 @@ import ConfirmationModal from "@/components/ConfirmationModal";
 
 import "../../styles/publishercretepages.css";
 
-/* ─── Constants  */
-const STATUS_BADGE = {
-  new:         "badgePrimary",
-  reviewing:   "badgeWarning",
-  shortlisted: "badgeSuccess",
-  rejected:    "badgeDanger",
-};
+
 
 const STATUS_OPTIONS = ["new", "reviewing", "shortlisted", "rejected"];
 
@@ -213,7 +207,6 @@ export default function Page() {
     <th>Applicant</th>
     <th>Company</th>
     <th>Applied For</th>
-    <th>Status</th>
     <th>Date</th>
     <th className="tdRight" style={{ textAlign: "center" }}>Actions</th>
   </tr>
@@ -245,11 +238,7 @@ export default function Page() {
           <div className="tdSemibold spec-font">{getSourceTitle(sub)}</div>
         </td>
 
-        <td data-label="Status">
-          <span className={`badge ${STATUS_BADGE[sub.status] || "badgeNeutral"}`}>
-            {sub.status || "new"}
-          </span>
-        </td>
+
 
         <td className="tdMuted tdNoWrap" data-label="Date">
           {sub.createdAt ? (
