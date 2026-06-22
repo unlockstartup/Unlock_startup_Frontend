@@ -105,9 +105,12 @@ function DetailModal({ item, onClose }) {
   const rows = [];
 
   rows.push(renderField("Title", item._title || item.title || item.productName || item.serviceTitle || item.fundName));
- rows.push(item._type === "jobs"
-  ? renderField("Company Details", item.description || item.detailedDescription || item.companyDescription || item.about)
-  : renderField("Description", item.description || item.detailedDescription || item.eventDescription || item.about)
+rows.push(
+  item._type === "jobs"
+    ? renderField("Company Details", item.description || item.detailedDescription || item.companyDescription || item.about)
+    : item._type === "services"
+    ? renderField("Detailed Description", item.description || item.detailedDescription || item.about)
+    : renderField("Description", item.description || item.detailedDescription || item.eventDescription || item.about)
 );
   rows.push(renderField("Status", item.status || item.approvalStatus));
   rows.push(renderField("Location", item.location));
@@ -227,7 +230,6 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Team Size", item.teamSize));
     rows.push(renderField("Certifications", item.certifications));
     rows.push(renderField("Benefits", item.benefits));
-    rows.push(renderField("Detailed Description", item.detailedDescription));
     rows.push(renderField("Contact Email", item.contactEmail));
     rows.push(renderField("Contact Number", item.contactNumber));
     rows.push(renderField("Contact Address", item.contactAddress));
