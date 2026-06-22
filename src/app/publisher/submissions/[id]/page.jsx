@@ -208,7 +208,7 @@ export default function Page() {
     <th>Company</th>
     <th>Applied For</th>
     <th>Date</th>
-    <th className="tdRight" style={{ textAlign: "center" }}>Actions</th>
+    <th className="tdRight" >Actions</th>
   </tr>
 </thead>
 <tbody>
@@ -318,11 +318,12 @@ export default function Page() {
   <div className="pubModal__grid">
     <InfoItem label="Full Name"    value={selected.fullName} />
     <InfoItem label="Company"      value={selected.organisation} />
+     <InfoItem label="Org Type"     value={selected.orgType} />
     <InfoItem label="Role"         value={selected.role} />
     <InfoItem label="Email"        value={selected.email} />
     <InfoItem label="Phone"        value={selected.phone} />
     <InfoItem label="Location"     value={selected.location} />
-    <InfoItem label="Org Type"     value={selected.orgType} />
+   
 
     {/* Service fields merged in */}
     {getSubmissionType(selected) === "service" && (
