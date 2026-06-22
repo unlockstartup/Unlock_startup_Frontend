@@ -113,7 +113,7 @@ rows.push(
     : renderField("Description", item.description || item.detailedDescription || item.eventDescription || item.about)
 );
   rows.push(renderField("Status", item.status || item.approvalStatus));
-  rows.push(renderField("Location", item.location));
+  if (item._type !== "jobs") rows.push(renderField("Location", item.location));
   rows.push(renderField("Apply Clicks", clicks > 0 ? clicks : null));
 
   if (item._type === "jobs") {
