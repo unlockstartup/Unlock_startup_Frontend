@@ -460,28 +460,31 @@ registrationDeadline: raw.registrationDeadline
     );
   }
 
-  if (!user) {
-    return (
-      <>
+if (!user) {
+  return (
+    <>
+      {event.registrationUrl ? (
         <button className="eventCtaPrimary" disabled style={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}>
           <ExternalLink size={14} strokeWidth={2} />
           Register via External Link
         </button>
-        <button className="eventCtaPrimary" disabled style={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none", marginTop: "8px" }}>
+      ) : (
+        <button className="eventCtaPrimary" disabled style={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}>
           <Send size={13} strokeWidth={1.75} />
           Apply here
         </button>
-        <a href="/login" className="eventCtaSecondary" style={{ marginTop: "8px", textAlign: "center", justifyContent: "center" }}>
-          <User size={14} strokeWidth={2} />
-          Login to Apply
-        </a>
-        <button className="eventCtaSecondary" type="button" onClick={handleShare} style={{ marginTop: "8px" }}>
-          <Share2 size={14} strokeWidth={1.75} />
-          Share Event
-        </button>
-      </>
-    );
-  }
+      )}
+      <a href="/login" className="eventCtaSecondary" style={{ marginTop: "8px", textAlign: "center", justifyContent: "center" }}>
+        <User size={14} strokeWidth={2} />
+        Login to Apply
+      </a>
+      <button className="eventCtaSecondary" type="button" onClick={handleShare} style={{ marginTop: "8px" }}>
+        <Share2 size={14} strokeWidth={1.75} />
+        Share Event
+      </button>
+    </>
+  );
+}
 
   return (
     <>

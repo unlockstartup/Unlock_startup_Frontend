@@ -573,7 +573,7 @@
 }
 .pd__modal-body {
   padding: 18px 22px;
-  max-height: 360px;
+  max-height: 74vh;
   overflow-y: auto;
 }
 .pd__modal-desc {
@@ -808,6 +808,11 @@
   .pd__engagement-row {
     gap: 10px;
   }
+  .pd__modal--full {
+  max-width: 1200px;
+  width: 96vw;
+  max-height: 95vh;
+}
 }
 
 /*  7. PANEL HEADER / TITLE / META  */
@@ -904,7 +909,7 @@
   }
   .pd__modal {
     border-radius: 16px 16px 0 0;
-    max-height: 85vh;
+    max-height: 95vh;
     overflow-y: auto;
   }
   .pd__modal-header {
@@ -918,10 +923,11 @@
     padding: 14px 16px;
     max-height: none;
   }
-  .pd__modal-grid {
-    grid-template-columns: 1fr; /* single-column on mobile */
-    gap: 8px;
-  }
+.pd__modal-grid,
+.pd__modal-grid--full {
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
   .pd__modal-footer {
     padding: 10px 16px;
   }
@@ -998,23 +1004,23 @@
   }
 }
 
-/* Add to your CSS file */
 .pd__modal--full {
-  max-width: 900px;
-  width: 90vw;
-  max-height: 85vh;
+  max-width: 1200px;
+  width: 96vw;
+  max-height: 95vh;
 }
 
 .pd__modal-body--scrollable {
-  max-height: 60vh;
+  max-height: 90vh;
   overflow-y: auto;
   padding-right: 8px;
 }
 
 .pd__modal-grid--full {
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
 }
+
 
 .pd__modal-field {
   break-inside: avoid;

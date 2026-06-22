@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -38,11 +39,7 @@ function TypeBadge({ type }) {
   return (
     <span
       className="pd__badge"
-      style={{
-        background: m.bg,
-        color: m.color,
-        border: `1px solid ${m.color}33`,
-      }}
+      style={{ background: m.bg, color: m.color, border: `1px solid ${m.color}33` }}
     >
       {m.label}
     </span>
@@ -55,9 +52,7 @@ function StatusBadge({ status }) {
   const color = s === "approved" ? "#065f46" : s === "rejected" ? "#7f1d1d" : "#78350f";
   const bg    = s === "approved" ? "rgba(29,191,115,.10)" : s === "rejected" ? "rgba(220,38,38,.08)" : "rgba(252,207,2,.12)";
   return (
-    <span className="pd__badge" style={{ background: bg, color }}>
-      {s}
-    </span>
+    <span className="pd__badge" style={{ background: bg, color }}>{s}</span>
   );
 }
 
@@ -67,10 +62,7 @@ function ClickBar({ value, max, color }) {
   return (
     <div className="pd__click-bar-wrap">
       <div className="pd__click-bar-track">
-        <div
-          className="pd__click-bar-fill"
-          style={{ width: `${pct}%`, background: color }}
-        />
+        <div className="pd__click-bar-fill" style={{ width: `${pct}%`, background: color }} />
       </div>
       <span className="pd__click-bar-val" style={{ color }}>{value}</span>
     </div>
@@ -96,23 +88,31 @@ function DetailModal({ item, onClose }) {
   const m = TYPE_META[item._type] || {};
   const clicks = item._clicks ?? 0;
 
+  /* Returns a plain text row */
   const renderField = (label, val) => {
     if (val == null || val === "" || (Array.isArray(val) && val.length === 0)) return null;
     const display = Array.isArray(val) ? val.join(", ") : String(val);
-    return { label, val: display };
+    return { label, val: display, isLink: false, isFallback: false };
+  };
+
+  /* Returns a clickable link row; if url is empty, shows fallbackLabel as a styled pill */
+  const renderLink = (label, url, fallbackLabel = null) => {
+    if (url) return { label, val: url, isLink: true, href: url, isFallback: false };
+    if (fallbackLabel) return { label, val: fallbackLabel, isLink: false, isFallback: true };
+    return null;
   };
 
   const rows = [];
 
   rows.push(renderField("Title", item._title || item.title || item.productName || item.serviceTitle || item.fundName));
-  rows.push(renderField("Event Description", item.description || item.detailedDescription || item.companyDescription || item.eventDescription || item.about));
+  rows.push(renderField("Description", item.description || item.detailedDescription || item.companyDescription || item.eventDescription || item.about));
   rows.push(renderField("Status", item.status || item.approvalStatus));
   rows.push(renderField("Location", item.location));
   rows.push(renderField("Apply Clicks", clicks > 0 ? clicks : null));
 
   if (item._type === "jobs") {
     rows.push(renderField("Company", item.companyName));
-    rows.push(renderField("Company Website", item.companyWebsite));
+    rows.push(renderLink("Company Website", item.companyWebsite));
     rows.push(renderField("Company Size", item.companySize));
     rows.push(renderField("Industry Sector", item.industrySector));
     rows.push(renderField("Job Category", item.jobCategory));
@@ -128,7 +128,7 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Country", item.jobLocationCountry));
     rows.push(renderField("Apply By", fmt(item.applyLastDate)));
     rows.push(renderField("Application Method", item.applicationMethod));
-    rows.push(renderField("External URL", item.externalApplicationUrl));
+    rows.push(renderLink("External URL", item.externalApplicationUrl));
     rows.push(renderField("Hiring Manager", item.hiringManagerName));
     rows.push(renderField("Hiring Manager Email", item.hiringManagerEmail));
     rows.push(renderField("Hiring Manager Phone", item.hiringManagerPhone));
@@ -154,9 +154,9 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Start Date", fmt(item.launchDate)));
     rows.push(renderField("Submission Deadline", fmt(item.submissionDeadline || item.deadline)));
     rows.push(renderField("Result Date", fmt(item.resultDate)));
-    rows.push(renderField("Result Date", fmt(item.applicationType)));
+    rows.push(renderField("Application Type", fmt(item.applicationType)));
     rows.push(renderField("Application Fee", item.applicationFee > 0 ? `₹${item.applicationFee}` : "Free"));
-    rows.push(renderField("Registration Link", item.registrationLink));
+    rows.push(renderLink("Registration Link", item.registrationLink));
     rows.push(renderField("Contact Person", item.contactPersonName));
     rows.push(renderField("Official Email", item.officialEmail));
     rows.push(renderField("Contact Phone", item.contactPhone));
@@ -166,7 +166,7 @@ function DetailModal({ item, onClose }) {
 
   else if (item._type === "events") {
     rows.push(renderField("Company Name", item.organizationName));
-    rows.push(renderField("Company Website", item.organizationWebsite));
+    rows.push(renderLink("Company Website", item.organizationWebsite));
     rows.push(renderField("Event Type", item.eventType));
     rows.push(renderField("Categories", item.eventCategory));
     rows.push(renderField("Format", item.eventFormat));
@@ -178,7 +178,8 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Registration Type", item.registrationType));
     rows.push(renderField("Registration Price", item.registrationPrice ? `₹${item.registrationPrice}` : null));
     rows.push(renderField("Ticket Tiers", item.ticketPricingTiers?.map(t => `${t.label}: ₹${t.price}`).join(", ")));
-    rows.push(renderField("Registration URL", item.registrationUrl));
+    /* ↓ Shows link if registrationUrl exists, otherwise shows "Apply via Platform" pill */
+    rows.push(renderLink("Registration URL", item.registrationUrl, "Apply via Platform"));
     rows.push(renderField("Target Audience", item.targetAudience));
     rows.push(renderField("Key Topics", item.keyTopics));
     rows.push(renderField("Featured Speakers", item.featuredSpeakers));
@@ -203,12 +204,12 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Company/Institution", item.companyInstitution));
     rows.push(renderField("Founder Name", item.founderName));
     rows.push(renderField("Key Features", item.keyFeatures));
-    rows.push(renderField("Product Demo URL", item.productDemoUrl));
+    rows.push(renderLink("Product Demo URL", item.productDemoUrl));
     rows.push(renderField("Awards & Recognition", item.awardsRecognition));
     rows.push(renderField("Short Description", item.shortProductDescription));
     rows.push(renderField("Contact Email", item.contactEmail));
     rows.push(renderField("Contact Number", item.contactNumber));
-    rows.push(renderField("Website", item.websiteUrl));
+    rows.push(renderLink("Website", item.websiteUrl));
     rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
   }
 
@@ -228,7 +229,7 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Contact Email", item.contactEmail));
     rows.push(renderField("Contact Number", item.contactNumber));
     rows.push(renderField("Contact Address", item.contactAddress));
-    rows.push(renderField("Website", item.websiteUrl));
+    rows.push(renderLink("Website", item.websiteUrl));
     rows.push(renderField("Rejection Reason", item.rejectionReason || null));
     rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
   }
@@ -250,10 +251,10 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Designation", item.contact?.title));
     rows.push(renderField("Contact Email", item.contact?.email));
     rows.push(renderField("Contact Phone", item.contact?.phone));
-    rows.push(renderField("LinkedIn", item.linkedIn));
+    rows.push(renderLink("LinkedIn", item.linkedIn));
     rows.push(renderField("Office Location", item.officeLocation));
     rows.push(renderField("Profile Visibility", item.profileVisibility));
-    rows.push(renderField("Apply Link", item.applyLink));
+    rows.push(renderLink("Apply Link", item.applyLink));
   }
 
   const validRows = rows.filter(Boolean);
@@ -311,13 +312,30 @@ function DetailModal({ item, onClose }) {
           <button className="pd__modal-close" onClick={onClose}>✕</button>
         </div>
 
-        {/* Body - Full Details */}
+        {/* Body */}
         <div className="pd__modal-body pd__modal-body--scrollable">
           <div className="pd__modal-grid pd__modal-grid--full">
-            {validRows.map(({ label, val }) => (
+            {validRows.map(({ label, val, isLink, href, isFallback }) => (
               <div key={label} className="pd__modal-field">
                 <div className="pd__modal-field-label">{label}</div>
-                <div className="pd__modal-field-value">{val}</div>
+                <div className="pd__modal-field-value">
+                  {isLink ? (
+                    <a
+                      href={href.startsWith("http") ? href : `https://${href}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ color: BLUE, textDecoration: "underline", wordBreak: "break-all" }}
+                    >
+                      {val}
+                    </a>
+                  ) : isFallback ? (
+                    <span  >
+                       {val}
+                    </span>
+                  ) : (
+                    val
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -428,9 +446,10 @@ export default function ListingsAnalytics() {
     { label: "Investor",    value: summary.investors     ?? 0 },
   ].filter(d => d.value > 0);
 
-  const totalListings  = Object.values(usage).reduce((a, b) => a + (b || 0), 0);
-  const activeListings = allRows.filter(r => (r._clicks || 0) > 0).length;
-  const engagementPct  = totalListings > 0 ? Math.round((activeListings / totalListings) * 100) : 0;
+const totalListings  = allRows.length;
+const activeListings = allRows.filter(r => (r._clicks || 0) > 0).length;
+const engagementPct  = totalListings > 0 ? Math.round((activeListings / totalListings) * 100) : 0;
+
 
   const getLimitLeft = (row) => {
     if (row._type === "jobs")         return limits.jobLimit           != null ? Math.max(0, (limits.jobLimit           || 0) - (usage.jobs            || 0)) : null;
