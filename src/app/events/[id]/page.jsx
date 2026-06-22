@@ -513,7 +513,6 @@ if (!user) {
       className="eventCtaPrimary"
       type="button"
       onClick={() => {
-        TrackPublicAppyClick(event.id).catch(() => {});
         setShowForm(true);
       }}
     >
