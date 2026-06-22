@@ -377,12 +377,20 @@ export default function ListingsAnalytics() {
       const rows = [];
       const bd = statsRes.status === "fulfilled" ? (statsRes.value.data?.breakdown ?? {}) : {};
 
-      const pushFromStats = (type, arr, map, titleKey) => {
-        arr.forEach(item => {
-          const detail = map[String(item.id)] ?? {};
-          rows.push({ ...detail, ...item, _id: item.id, _type: type, _title: item.title || detail[titleKey] || detail.title || "—", _clicks: item.applyClicks ?? item.submissionCount ?? 0 });
-        });
-      };
+// Fix 2: pushFromStats — use `total` field when available for events
+const pushFromStats = (type, arr, map, titleKey) => {
+  arr.forEach(item => {
+    const detail = map[String(item.id)] ?? {};
+    rows.push({
+      ...detail,
+      ...item,
+      _id: item.id,
+      _type: type,
+      _title: item.title || detail[titleKey] || detail.title || "—",
+      _clicks: item.total ?? item.applyClicks ?? item.submissionCount ?? 0,
+    });
+  });
+};
       pushFromStats("jobs",         bd.jobs         ?? [], jobMap,      "title");
       pushFromStats("competitions", bd.competitions  ?? [], compMap,     "title");
       pushFromStats("events",       bd.events        ?? [], eventsMap,   "title");
@@ -437,14 +445,16 @@ export default function ListingsAnalytics() {
     { name: "Services",     value: usage.serviceListings  ?? 0 },
   ];
 
-  const clicksData = [
-    { label: "Job",         value: summary.jobs         ?? 0 },
-    { label: "Competition", value: summary.competitions  ?? 0 },
-    { label: "Event",       value: summary.events        ?? 0 },
-    { label: "Product",     value: summary.products      ?? 0 },
-    { label: "Service",     value: summary.services      ?? 0 },
-    { label: "Investor",    value: summary.investors     ?? 0 },
-  ].filter(d => d.value > 0);
+const clicksData = [
+  { label: "Job",         value: summary.jobs         ?? 0 },
+  { label: "Competition", value: summary.competitions  ?? 0 },
+  { label: "Event",       value: typeof summary.events === "object"
+                                   ? (summary.events?.total ?? 0)
+                                   : (summary.events ?? 0) },
+  { label: "Product",     value: summary.products      ?? 0 },
+  { label: "Service",     value: summary.services      ?? 0 },
+  { label: "Investor",    value: summary.investors     ?? 0 },
+].filter(d => d.value > 0);
 
 const totalListings  = allRows.length;
 const activeListings = allRows.filter(r => (r._clicks || 0) > 0).length;
