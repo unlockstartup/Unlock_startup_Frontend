@@ -53,7 +53,7 @@ const Page = () => {
 
   const filtered = useMemo(() => {
     let list = [...events];
-    const { search, eventType, category, registrationType, state } = activeFilters;
+    const { search, eventType, category, eventFormat, registrationType, state } = activeFilters;
 
     if (search) {
       const q = search.toLowerCase();
@@ -64,6 +64,13 @@ const Page = () => {
           e.publisherName?.toLowerCase().includes(q)
       );
     }
+    if (eventFormat?.length) {
+  list = list.filter((e) =>
+    eventFormat.some(
+      (f) => e.eventFormat?.toLowerCase() === f.toLowerCase()
+    )
+  );
+}
     if (eventType?.length) {
       list = list.filter((e) =>
         eventType.some(
