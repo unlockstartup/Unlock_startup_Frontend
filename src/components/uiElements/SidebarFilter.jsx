@@ -78,6 +78,7 @@ services: [
 
 function getDynamicOptions(config, items = []) {
   if (config.key === "location" || config.key === "state") return INDIA_STATES;
+  if (config.key === "eventFormat") return ["Online", "Offline", "Hybrid"];
   const unique = new Set();
   items.forEach((item) => {
     let value = item[config.key];
