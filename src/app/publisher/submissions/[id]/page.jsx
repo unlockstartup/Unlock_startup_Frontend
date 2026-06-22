@@ -19,7 +19,7 @@ const STATUS_BADGE = {
 const STATUS_OPTIONS = ["new", "reviewing", "shortlisted", "rejected"];
 
 const TYPE_META = {
-  listing:  { label: "Event / Job", color: "var(--blue)" },
+  listing:  { label: "Event", color: "var(--blue)" },
   investor: { label: "Investor",    color: "var(--orange)" },
   service:  { label: "Service",     color: "var(--yellow-hover)" },
 };
@@ -328,12 +328,12 @@ export default function Page() {
   <h3 className="pubModal__sectionTitle">Contact information</h3>
   <div className="pubModal__grid">
     <InfoItem label="Full Name"    value={selected.fullName} />
+    <InfoItem label="Company"      value={selected.organisation} />
+    <InfoItem label="Role"         value={selected.role} />
     <InfoItem label="Email"        value={selected.email} />
     <InfoItem label="Phone"        value={selected.phone} />
-    <InfoItem label="Company"      value={selected.organisation} />
-    <InfoItem label="Org Type"     value={selected.orgType} />
-    <InfoItem label="Role"         value={selected.role} />
     <InfoItem label="Location"     value={selected.location} />
+    <InfoItem label="Org Type"     value={selected.orgType} />
 
     {/* Service fields merged in */}
     {getSubmissionType(selected) === "service" && (
