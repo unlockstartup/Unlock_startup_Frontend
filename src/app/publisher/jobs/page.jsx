@@ -725,7 +725,7 @@ const confirmToggleJob = (job) => {
                 </div>
 
                 <div className="field">
-                  <label className="label">Company Description</label>
+                  <label className="label">Company Details</label>
                   <RichTextEditor
                     value={form.companyDescription}
                     onChange={(val) => setForm((p) => ({ ...p, companyDescription: val }))}

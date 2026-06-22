@@ -105,7 +105,10 @@ function DetailModal({ item, onClose }) {
   const rows = [];
 
   rows.push(renderField("Title", item._title || item.title || item.productName || item.serviceTitle || item.fundName));
-  rows.push(renderField("Description", item.description || item.detailedDescription || item.companyDescription || item.eventDescription || item.about));
+ rows.push(item._type === "jobs"
+  ? renderField("Company Details", item.description || item.detailedDescription || item.companyDescription || item.about)
+  : renderField("Description", item.description || item.detailedDescription || item.eventDescription || item.about)
+);
   rows.push(renderField("Status", item.status || item.approvalStatus));
   rows.push(renderField("Location", item.location));
   rows.push(renderField("Apply Clicks", clicks > 0 ? clicks : null));
@@ -136,7 +139,6 @@ function DetailModal({ item, onClose }) {
     rows.push(renderField("Key Responsibilities", item.keyResponsibilities));
     rows.push(renderField("Required Education", item.requiredEducation));
     rows.push(renderField("Must-Have Skills", item.mustHaveSkills));
-    rows.push(renderField("Company Description", item.companyDescription));
     rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
   }
 
@@ -377,7 +379,6 @@ export default function ListingsAnalytics() {
       const rows = [];
       const bd = statsRes.status === "fulfilled" ? (statsRes.value.data?.breakdown ?? {}) : {};
 
-// Fix 2: pushFromStats — use `total` field when available for events
 const pushFromStats = (type, arr, map, titleKey) => {
   arr.forEach(item => {
     const detail = map[String(item.id)] ?? {};
