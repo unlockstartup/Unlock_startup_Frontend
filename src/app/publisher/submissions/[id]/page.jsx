@@ -321,28 +321,35 @@ export default function Page() {
   <div className="pubModal__grid">
     <InfoItem label="Full Name"    value={selected.fullName} />
     <InfoItem
-  label={isIndividual(selected) ? "Gender" : "Company Name"}
-  value={selected.organisation}
-/>
-{getSubmissionType(selected) === "service" ? (
-  <InfoItem label="Industry Type" value={selected.industryType} />
-) : !isIndividual(selected) ? (
-  <InfoItem label="Org Type" value={selected.orgType} />
-) : null}
+      label={isIndividual(selected) ? "Gender" : "Company Name"}
+      value={selected.organisation}
+    />
+    {getSubmissionType(selected) === "service" ? (
+      <InfoItem label="Industry Type" value={selected.industryType} />
+    ) : !isIndividual(selected) ? (
+      <InfoItem label="Org Type" value={selected.orgType} />
+    ) : null}
     <InfoItem label="Role"         value={selected.role} />
     <InfoItem label="Email"        value={selected.email} />
     <InfoItem label="Phone"        value={selected.phone} />
     <InfoItem label="Location"     value={selected.location} />
-   
 
-    {getSubmissionType(selected) === "service" && (
+    {/* Investor-specific fields merged in */}
+    {getSubmissionType(selected) === "investor" && (
       <>
+        <InfoItem label="Funding Stage" value={selected.fundingStage} />
+        <InfoItem label="Industry Type" value={selected.industryType} />
         <InfoItem label="Website"       value={selected.website} isLink />
       </>
     )}
+
+    {/* Service-specific fields */}
+    {getSubmissionType(selected) === "service" && (
+      <InfoItem label="Website" value={selected.website} isLink />
+    )}
   </div>
 
-  {/* Requirements box below the grid */}
+  {/* Requirements box for service */}
   {getSubmissionType(selected) === "service" && selected.requirements && (
     <div className="pubModal__requirementBox">
       {selected.requirements}
