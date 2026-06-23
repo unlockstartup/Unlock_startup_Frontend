@@ -123,7 +123,11 @@ export default function Page() {
       try {
         const res = await api.get('/api/subscription/plans');
         if (res.data?.success) {
-          setPlans((res.data.plans || []).map(adaptPlan));
+          setPlans(
+  (res.data.plans || [])
+    .filter((p) => p.price > 0 && p.durationInMonths > 0)
+    .map(adaptPlan)
+);
         } else {
           setError('Failed to load plans.');
         }
