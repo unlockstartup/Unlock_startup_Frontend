@@ -339,7 +339,6 @@ const companyColumnLabel =
     {/* Service fields merged in */}
     {getSubmissionType(selected) === "service" && (
       <>
-        <InfoItem label="Industry Type" value={selected.industryType} />
         <InfoItem label="Website"       value={selected.website} isLink />
       </>
     )}
