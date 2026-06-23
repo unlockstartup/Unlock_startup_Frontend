@@ -462,10 +462,10 @@ const DownloadBtn = ({ sub, invNumber, onDownload, isDownloading }) => (
             <p className="pp-card-title" style={{ fontSize: "1.35rem", fontWeight: 700 }}>Subscription</p>
             <div className="pp-sub-row">
               <span className="pp-sub-label" style={{ fontSize: "1.2rem" }}>Status</span>
-              <span className={`pp-badge ${isSubActive ? "pp-badge--active" : "pp-badge--expired"}`}
-                style={{ fontSize: "1.2rem", padding: "5px 14px" }}>
-                {profile.subscriptionStatus || "—"}
-              </span>
+<span className={`pp-badge ${isSubActive ? "pp-badge--active" : "pp-badge--expired"}`}
+  style={{ fontSize: "1.2rem", padding: "5px 14px" }}>
+  {isSubActive ? "Active" : "Expired"} 
+</span>
             </div>
             <div className="pp-sub-row">
               <span className="pp-sub-label" style={{ fontSize: "1.2rem" }}>Expiry</span>

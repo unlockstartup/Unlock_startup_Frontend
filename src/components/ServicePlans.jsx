@@ -5,6 +5,7 @@ import {
   verifyServicePayment,
 } from "@/app/apiServices/serviceplan";
 import { toast, ToastContainer } from "react-toastify";
+import publisherApi from "@/app/publisherapi";
 
 function loadRazorpayScript() {
   return new Promise((resolve, reject) => {
@@ -22,6 +23,79 @@ const CheckIcon = () => (
     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
   </svg>
 );
+
+function ConfirmSwitchModal({ durationType, currentPlanLabel, onConfirm, onCancel }) {
+  const newPlanLabel = durationType === "6m" ? "6-Month Plan" : "Yearly Plan";
+
+  return (
+    <div
+      style={{
+        position: "fixed", inset: 0, zIndex: 9999,
+        backgroundColor: "rgba(0,0,0,0.45)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "16px",
+      }}
+      onClick={onCancel}
+    >
+      <div
+        style={{
+          backgroundColor: "#fff", borderRadius: "16px",
+          padding: "48px 40px", maxWidth: "560px", width: "100%",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.18)",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div style={{ textAlign: "center", marginBottom: "24px" }}>
+          <div style={{
+            display: "inline-flex", alignItems: "center", justifyContent: "center",
+            width: "72px", height: "72px", borderRadius: "50%",
+            backgroundColor: "rgba(234,179,8,0.12)",
+          }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"
+              fill="none" stroke="#ca8a04" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+        </div>
+
+        <h5 style={{ fontWeight: 700, color: "#1a1a2e", textAlign: "center", marginBottom: "14px", fontSize: "1.5rem" }}>
+          Switch to {newPlanLabel}?
+        </h5>
+        <p style={{ color: "#64748b", fontSize: "1.15rem", textAlign: "center", lineHeight: 1.7, marginBottom: "32px" }}>
+          You currently have an active <strong style={{ color: "#1a1a2e" }}>{currentPlanLabel}</strong> plan.
+          Purchasing <strong style={{ color: "#1a1a2e" }}>{newPlanLabel}</strong> will{" "}
+          <span style={{ color: "#dc2626", fontWeight: 600 }}>immediately deactivate</span> your current plan.
+          This action cannot be undone.
+        </p>
+
+        <div style={{ display: "flex", gap: "16px" }}>
+          <button
+            onClick={onCancel}
+            style={{
+              flex: 1, padding: "14px 0", borderRadius: "10px",
+              border: "1.5px solid #e2e8f0", backgroundColor: "#f8fafc",
+              color: "#475569", fontWeight: 600, fontSize: "1.1rem", cursor: "pointer",
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            style={{
+              flex: 1, padding: "14px 0", borderRadius: "10px",
+              border: "none", backgroundColor: "#4338ca",
+              color: "#fff", fontWeight: 600, fontSize: "1.1rem", cursor: "pointer",
+            }}
+          >
+            Yes, Switch Plan
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function buildServiceDetails(plan, durationType) {
   const limit =
@@ -42,12 +116,29 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
   const [servicePlans, setServicePlans]           = useState([]);
   const [loading, setLoading]                     = useState(true);
   const [loadingServiceKey, setLoadingServiceKey] = useState(null);
+  const [pendingOrder, setPendingOrder]           = useState(null);
+  const [hasPremiumHistory, setHasPremiumHistory] = useState(false);
+  const [isTrialActive, setIsTrialActive]         = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
-        const res = await getServicePlans();
-        if (res.data?.success) setServicePlans(res.data.plans || []);
+        const [plansRes, historyRes] = await Promise.all([
+          getServicePlans(),
+          publisherApi.get("/api/publisher/subscriptions/history"),
+        ]);
+
+        if (plansRes.data?.success) setServicePlans(plansRes.data.plans || []);
+
+        if (historyRes?.data?.success && Array.isArray(historyRes.data.serviceSubscriptions)) {
+          const hasPremium = historyRes.data.serviceSubscriptions.some((s) => s.durationType !== "trial");
+          setHasPremiumHistory(hasPremium);
+
+          const activeTrial = historyRes.data.serviceSubscriptions.find(
+            (s) => s.durationType === "trial" && s.isActive && new Date(s.expiryDate) > new Date()
+          );
+          setIsTrialActive(!!activeTrial);
+        }
       } catch (err) {
         console.error("Failed to load service plans", err);
       } finally {
@@ -63,12 +154,23 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
 
   const activeServiceKey = isServiceActive ? planInfo?.serviceplan?.plan : null;
 
-  const isServiceLimitReached =
-    planInfo?.limits?.serviceListingLimit > 0 &&
-    (planInfo?.usage?.serviceListings ?? 0) >= planInfo.limits.serviceListingLimit;
+  const currentPlanLabel = activeServiceKey === "6m" ? "6-Month Plan" : activeServiceKey === "12m" ? "Yearly Plan" : "current";
 
   const handleServiceSubscribe = async (plan, durationType) => {
     const key = `${plan._id}_${durationType}`;
+    const isActivePlan = isServiceActive && activeServiceKey === durationType;
+
+    if (isActivePlan) return;
+
+    if (isServiceActive) {
+      setPendingOrder({ plan, durationType, key });
+      return;
+    }
+
+    await executeServicePayment(plan, durationType, key);
+  };
+
+  const executeServicePayment = async (plan, durationType, key) => {
     setLoadingServiceKey(key);
     try {
       const res = await createServiceOrder(plan._id, durationType);
@@ -117,18 +219,19 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
     }
   };
 
+  const handleModalConfirm = () => {
+    const { plan, durationType, key } = pendingOrder;
+    setPendingOrder(null);
+    executeServicePayment(plan, durationType, key);
+  };
+
+  const handleModalCancel = () => setPendingOrder(null);
+
   if (loading)
     return (
       <div className="py-5 text-center text-muted" style={{ fontSize: "1.2rem" }}>
         <div className="spinner-border spinner-border-sm me-2" role="status" />
         Loading service plans…
-      </div>
-    );
-
-  if (!servicePlans.length)
-    return (
-      <div className="py-5 text-center text-muted" style={{ fontSize: "1.2rem" }}>
-        No service plans available.
       </div>
     );
 
@@ -151,28 +254,111 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
         </div>
 
         <div className="row g-4 align-items-stretch justify-content-center">
+          {!hasPremiumHistory && (
+            <div className="col-12 col-sm-12 col-xl-3" key="service_trial_static">
+              <div
+                className="h-100 d-flex flex-column rounded-3"
+                style={{
+                  border: isTrialActive ? "2px solid #4338ca" : "1px solid #e2e8f0",
+                  backgroundColor: "#fff",
+                  boxShadow: isTrialActive
+                    ? "0 0 0 4px rgba(67,56,202,0.08)"
+                    : "0 1px 4px rgba(0,0,0,0.04)",
+                  transition: "opacity 0.2s ease",
+                  position: "relative",
+                }}
+              >
+                {isTrialActive && (
+                  <div
+                    style={{
+                      position: "absolute", top: "-13px", left: "50%",
+                      transform: "translateX(-50%)", backgroundColor: "#4338ca",
+                      color: "#fff", fontSize: "1.2rem", fontWeight: 700,
+                      padding: "3px 14px", borderRadius: "999px",
+                      letterSpacing: "0.06em", textTransform: "uppercase",
+                      whiteSpace: "nowrap", zIndex: 1,
+                    }}
+                  >
+                    ● Ongoing
+                  </div>
+                )}
+
+                <div className="p-4" style={{ borderBottom: "1px solid #f1f5f9" }}>
+                  <p
+                    className="fw-semibold mb-1"
+                    style={{ color: "#4338ca", fontSize: "1.2rem", textTransform: "uppercase", letterSpacing: "0.06em" }}
+                  >
+                    Free Trial
+                  </p>
+                  <div className="d-flex align-items-baseline gap-1 mb-2">
+                    <span className="fw-bold" style={{ fontSize: "2.4rem", color: "#1a1a2e", lineHeight: 1.1 }}>
+                      Free
+                    </span>
+                  </div>
+                  <p className="text-muted mb-3" style={{ fontSize: "1.2rem", minHeight: "3.2rem" }}>
+                    Get started at no cost for 30 days.
+                  </p>
+
+                  {isTrialActive ? (
+                    <div
+                      style={{
+                        width: "100%", padding: "10px 0", borderRadius: "8px",
+                        fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
+                        backgroundColor: "rgba(67,56,202,0.08)",
+                        color: "#4338ca", border: "2px solid #4338ca",
+                      }}
+                    >
+                      ✓ Current Plan
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        width: "100%", padding: "10px 0", borderRadius: "8px",
+                        fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
+                        backgroundColor: "#f1f5f9",
+                        color: "#94a3b8", border: "1.5px solid #e2e8f0",
+                        cursor: "default",
+                      }}
+                    >
+                      Trial Ended
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-4 flex-grow-1">
+                  <p className="fw-semibold mb-3" style={{ fontSize: "1.2rem", color: "#1a1a2e" }}>What's included</p>
+                  <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
+                    {["Access to service listing features", "No credit card required"].map((item, idx) => (
+                      <li key={idx} className="d-flex align-items-start gap-2">
+                        <CheckIcon />
+                        <span style={{ fontSize: "1.2rem", color: "#475569" }}>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+
           {servicePlans.map((plan) =>
             tiers.map(({ durationType, label, suffix, desc }) => {
               const key            = `${plan._id}_${durationType}`;
               const price          = durationType === "6m" ? plan.sixMonthPrice : plan.yearlyPrice;
               const isThisLoading  = loadingServiceKey === key;
               const isOtherLoading = loadingServiceKey !== null && loadingServiceKey !== key;
-              const details = buildServiceDetails(plan, durationType);
+              const details        = buildServiceDetails(plan, durationType);
               const isActivePlan   = isServiceActive && activeServiceKey === durationType;
-              const isDisabled =
-                isThisLoading ||
-                isOtherLoading ||
-                (isServiceActive && !isActivePlan && !isServiceLimitReached);
+              const isDisabled     = isThisLoading || isOtherLoading;
 
               return (
-                <div className="col-12 col-sm- col-xl-3" key={key}>
+                <div className="col-12 col-sm-12 col-xl-3" key={key}>
                   <div
                     className="h-100 d-flex flex-column rounded-3"
                     style={{
                       border: isActivePlan ? "2px solid #4338ca" : "1px solid #e2e8f0",
                       backgroundColor: "#fff",
                       boxShadow: isActivePlan ? "0 0 0 4px rgba(67,56,202,0.08)" : "0 1px 4px rgba(0,0,0,0.04)",
-                      opacity: isOtherLoading || (isServiceActive && !isActivePlan && !isServiceLimitReached) ? 0.5 : 1,
+                      opacity: isOtherLoading ? 0.5 : 1,
                       transition: "opacity 0.2s ease",
                       position: "relative",
                     }}
@@ -238,10 +424,24 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
               );
             })
           )}
+          {!servicePlans.length && hasPremiumHistory && (
+            <div className="col-12 py-4 text-center text-muted" style={{ fontSize: "1.2rem" }}>
+              No service plans available.
+            </div>
+          )}
         </div>
 
         <ToastContainer position="top-center" />
       </div>
+
+      {pendingOrder && (
+        <ConfirmSwitchModal
+          durationType={pendingOrder.durationType}
+          currentPlanLabel={currentPlanLabel}
+          onConfirm={handleModalConfirm}
+          onCancel={handleModalCancel}
+        />
+      )}
     </section>
   );
 }
