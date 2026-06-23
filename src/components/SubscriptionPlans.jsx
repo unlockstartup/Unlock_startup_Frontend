@@ -14,13 +14,15 @@ function loadRazorpayScript() {
 }
 
 const planLabels = (months) => {
-  if (months === 3)  return { name: "Startup Basic", desc: "Perfect for individuals just getting started." };
-  if (months === 6)  return { name: "Startup Plus",  desc: "Great for small teams and growing startups." };
-  if (months === 9)  return { name: "Startup Pro",   desc: "Ideal for professionals who need more power." };
-  return                    { name: "Startup Elite", desc: "Best value for long-term power users." };
+  if (months === 0)  return { name: "Free",          desc: "Get started at no cost for 30 days." };
+  if (months === 3)  return { name: "Startup Basic",  desc: "Perfect for individuals just getting started." };
+  if (months === 6)  return { name: "Startup Plus",   desc: "Great for small teams and growing startups." };
+  if (months === 9)  return { name: "Startup Pro",    desc: "Ideal for professionals who need more power." };
+  return                    { name: "Startup Elite",  desc: "Best value for long-term power users." };
 };
 
 const monthsToPlanKey = (months) => {
+  if (months === 0)  return "free";
   if (months === 3)  return "3m";
   if (months === 6)  return "6m";
   if (months === 9)  return "9m";
@@ -270,14 +272,16 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
                     >
                       {name}
                     </p>
-                    <div className="d-flex align-items-baseline gap-1 mb-2">
-                      <span className="fw-bold" style={{ fontSize: "2.4rem", color: "#1a1a2e", lineHeight: 1.1 }}>
-                        ₹{plan.price.toLocaleString("en-IN")}
-                      </span>
-                      <span className="text-muted" style={{ fontSize: "1.2rem" }}>
-                        / {plan.durationInMonths} mo
-                      </span>
-                    </div>
+<div className="d-flex align-items-baseline gap-1 mb-2">
+  <span className="fw-bold" style={{ fontSize: "2.4rem", color: "#1a1a2e", lineHeight: 1.1 }}>
+    {plan.price === 0 ? "Free" : `₹${plan.price.toLocaleString("en-IN")}`}
+  </span>
+  {plan.durationInMonths > 0 && (
+    <span className="text-muted" style={{ fontSize: "1.2rem" }}>
+      / {plan.durationInMonths} mo
+    </span>
+  )}
+</div>
                     <p className="text-muted mb-3" style={{ fontSize: "1.2rem", minHeight: "3.2rem" }}>
                       {desc}
                     </p>

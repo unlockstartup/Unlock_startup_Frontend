@@ -7,10 +7,11 @@ import api from '@/app/api';
 
 
 function planLabels(months) {
-  if (months === 3)  return { name: 'Startup Basic',  desc: 'For solo founders validating an idea. Get a project live without any overhead.' };
-  if (months === 6)  return { name: 'Startup Plus',   desc: 'The complete toolkit for early-stage teams. Build faster, present confidently, iterate without limits.' };
-  if (months === 9)  return { name: 'Startup Pro',    desc: 'Advanced tooling and dedicated support for teams moving fast and managing multiple products.' };
-  return                    { name: 'Startup Elite',  desc: 'Best value for long-term power users who need everything, always.' };
+  if (months === 0)  return { name: 'Startup Free',  desc: 'Kick the tyres at zero cost. Get a feel for the platform before committing to a paid plan.' };
+  if (months === 3)  return { name: 'Startup Basic', desc: 'For solo founders validating an idea. Get a project live without any overhead.' };
+  if (months === 6)  return { name: 'Startup Plus',  desc: 'The complete toolkit for early-stage teams. Build faster, present confidently, iterate without limits.' };
+  if (months === 9)  return { name: 'Startup Pro',   desc: 'Advanced tooling and dedicated support for teams moving fast and managing multiple products.' };
+  return                    { name: 'Startup Elite', desc: 'Best value for long-term power users who need everything, always.' };
 }
 
 function buildFeatures(plan) {
@@ -52,7 +53,7 @@ function buildFeatures(plan) {
     );
   }
   if (Array.isArray(plan.features)) {
-    plan.features.forEach((f) => items.push(f));
+    plan.features.forEach((f) => { if (f?.trim()) items.push(f); });
   }
 
   return items;
@@ -70,21 +71,6 @@ function adaptPlan(plan) {
   };
 }
 
-const FREE_PLAN = {
-  _id: 'free-plan-static',
-  name: 'Startup Free',
-  desc: 'Kick the tyres at zero cost. Get a feel for the platform before committing to a paid plan.',
-  price: 0,
-  durationInMonths: 1,
-  features: [
-    'Up to 1 job posting',
-    'Up to 1 event',
-    'Up to 1 product',
-    'Up to 1 funding call',
-    'Community support',
-  ],
-};
-
 const SERVICE_TIERS = [
   { durationType: '6m',  label: '6-Month Plan', priceKey: 'sixMonthPrice', period: '/ 6 months', desc: 'Flexible half-year access to service listings.' },
   { durationType: '12m', label: 'Yearly Plan',  priceKey: 'yearlyPrice',   period: '/ year',     desc: 'Best value — full year of service listings.' },
@@ -99,14 +85,11 @@ function buildServiceFeatures(plan) {
   ];
 }
 
-
-
 const CheckIcon = () => (
   <svg className="pricingPage__featureIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M5 13l4 4L19 7" />
   </svg>
 );
-
 
 
 export default function Page() {
@@ -124,10 +107,11 @@ export default function Page() {
         const res = await api.get('/api/subscription/plans');
         if (res.data?.success) {
           setPlans(
-  (res.data.plans || [])
-    .filter((p) => p.price > 0 && p.durationInMonths > 0)
-    .map(adaptPlan)
-);
+            (res.data.plans || [])
+              // include free plan (durationInMonths === 0, price === 0) and all paid plans
+              .filter((p) => p.isActive !== false)
+              .map(adaptPlan)
+          );
         } else {
           setError('Failed to load plans.');
         }
@@ -163,7 +147,7 @@ export default function Page() {
         {/* Hero Section */}
         <section className="pricingPage__hero">
           <div className="pricingPage__container">
-            <h1 clas>Transparent pricing, built for every stage</h1>
+            <h1>Transparent pricing, built for every stage</h1>
             <p>
               From your first idea to full-scale operations — choose a plan that fits where you are today
               and grows with you. No hidden fees, no long-term commitments.
@@ -192,33 +176,37 @@ export default function Page() {
               </p>
             )}
 
-{!loading && !error && (
-  <div className="pricingPage__pricingGrid">
-    {[FREE_PLAN, ...plans].map((plan) => (
-      <div key={plan._id} className="pricingPage__planCard">
-        <h2 className="pricingPage__planName">{plan.name}</h2>
-        <div className="pricingPage__planPrice">
-          <span className="pricingPage__priceAmount">
-            {plan.price === 0 ? 'Free' : `₹${plan.price.toLocaleString('en-IN')}`}
-          </span>
-          <span className="pricingPage__pricePeriod">/ {plan.durationInMonths} month{plan.durationInMonths !== 1 ? 's' : ''}</span>
-        </div>
-        <p className="pricingPage__planDesc">{plan.desc}</p>
-        <ul className="pricingPage__featuresList">
-          {plan.features.map((f) => (
-            <li key={f} className="pricingPage__featureItem">
-              <CheckIcon />
-              {f}
-            </li>
-          ))}
-        </ul>
-        <a href="#signup" className="pricingPage__btn pricingPage__btnSecondary pricingPage__planCta">
-          {plan.price === 0 ? 'Start Free' : 'Get Started'}
-        </a>
-      </div>
-    ))}
-  </div>
-)}
+            {!loading && !error && (
+              <div className="pricingPage__pricingGrid">
+                {plans.map((plan) => (
+                  <div key={plan._id} className="pricingPage__planCard">
+                    <h2 className="pricingPage__planName">{plan.name}</h2>
+                    <div className="pricingPage__planPrice">
+                      <span className="pricingPage__priceAmount">
+                        {plan.price === 0 ? 'Free' : `₹${plan.price.toLocaleString('en-IN')}`}
+                      </span>
+                      {plan.durationInMonths > 0 && (
+                        <span className="pricingPage__pricePeriod">
+                          / {plan.durationInMonths} month{plan.durationInMonths !== 1 ? 's' : ''}
+                        </span>
+                      )}
+                    </div>
+                    <p className="pricingPage__planDesc">{plan.desc}</p>
+                    <ul className="pricingPage__featuresList">
+                      {plan.features.map((f, idx) => (
+                        <li key={idx} className="pricingPage__featureItem">
+                          <CheckIcon />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                    <a href="#signup" className="pricingPage__btn pricingPage__btnSecondary pricingPage__planCta">
+                      {plan.price === 0 ? 'Start Free' : 'Get Started'}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            )}
 
           </div>
         </section>
@@ -264,8 +252,8 @@ export default function Page() {
                         </div>
                         <p className="pricingPage__planDesc">{desc}</p>
                         <ul className="pricingPage__featuresList">
-                          {features.map((f) => (
-                            <li key={f} className="pricingPage__featureItem">
+                          {features.map((f, idx) => (
+                            <li key={idx} className="pricingPage__featureItem">
                               <CheckIcon />
                               {f}
                             </li>
