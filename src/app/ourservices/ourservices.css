@@ -1,4 +1,3 @@
-/*  Color Tokens  */
 :root {
   --sp-blue:         rgb(30, 176, 228);
   --sp-blue-light:   rgba(30, 176, 228, 0.10);
@@ -65,15 +64,6 @@
   margin-bottom: 10px;
 }
 
-.services-page h4 {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #9ca3af;
-  margin-bottom: 10px;
-}
-
 .services-page p {
   font-size: 15px;
   color: #66625c;
@@ -85,13 +75,6 @@
   padding: 80px 0 64px;
   background: #ffffff;
   margin-top: 60px;
-}
-
-.services-page .hero-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 48px;
-  align-items: start;
 }
 
 /* Eyebrow badge — yellow accent */
@@ -109,63 +92,6 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.13em;
-}
-
-.services-page .hero-left > p {
-  max-width: 60ch;
-  margin-bottom: 32px;
-}
-
-/* Hero panel — blue accent */
-.services-page .hero-panel {
-  padding: 32px;
-  border-radius: 16px;
-  background: #fafafa;
-  border: 1px solid var(--sp-blue-border);
-}
-
-.services-page .hero-panel h2 {
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  margin-bottom: 16px;
-}
-
-.services-page .hero-panel ul {
-  list-style: none;
-  display: grid;
-  gap: 0;
-}
-
-.services-page .hero-panel li {
-  border-top: 1px solid var(--sp-blue-border);
-  padding: 14px 0 14px 20px;
-  color: #66625c;
-  font-size: 14px;
-  line-height: 1.65;
-  position: relative;
-}
-
-.services-page .hero-panel li:first-child {
-  border-top: none;
-  padding-top: 0;
-}
-
-.services-page .hero-panel li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--sp-blue);
-}
-
-.services-page .hero-panel li:first-child::before {
-  top: 10px;
-  transform: none;
 }
 
 /*  Services Section  */
@@ -244,52 +170,17 @@ section#services {
   margin-bottom: 20px;
 }
 
-/*  Feature Items  */
-.services-page .features-grid {
-  display: grid;
-  gap: 0;
-  margin-bottom: 20px;
-}
-
-.services-page .feature-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 12px 0;
-  border-top: 1px solid #e5e5e5;
-  font-size: 14px;
-  color: #66625c;
-  line-height: 1.65;
-}
-
-.services-page .feature-item:first-child {
-  border-top: none;
-  padding-top: 0;
-}
-
-/* Feature icon — blue accent */
-.services-page .feature-icon {
-  color: var(--sp-blue);
-  flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-  margin-top: 2px;
-}
-
-/*  Sub Section (Use Cases / Benefits)  */
-.services-page .sub-section {
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #e5e5e5;
-}
-
-.services-page .sub-section ul {
+/*  Card List  */
+.services-page .service-card ul {
   list-style: none;
   display: grid;
   gap: 0;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e5e5;
 }
 
-.services-page .sub-section li {
+.services-page .service-card li {
   font-size: 14px;
   color: #66625c;
   line-height: 1.65;
@@ -298,13 +189,13 @@ section#services {
   position: relative;
 }
 
-.services-page .sub-section li:first-child {
+.services-page .service-card li:first-child {
   border-top: none;
   padding-top: 0;
 }
 
 /* Blue bullet */
-.services-page .sub-section li::before {
+.services-page .service-card li::before {
   content: '';
   position: absolute;
   left: 0;
@@ -316,7 +207,7 @@ section#services {
   background: var(--sp-blue);
 }
 
-.services-page .sub-section li:first-child::before {
+.services-page .service-card li:first-child::before {
   top: 8px;
   transform: none;
 }
@@ -329,11 +220,6 @@ section#services {
 }
 
 @media (max-width: 980px) {
-  .services-page .hero-grid {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-
   .services-page .section-head {
     grid-template-columns: 1fr;
     gap: 14px;
@@ -348,8 +234,7 @@ section#services {
   .services-page .hero { padding: 48px 0 40px; }
   section#services { padding: 56px 0; }
 
-  .services-page .service-card,
-  .services-page .hero-panel { padding: 24px; }
+  .services-page .service-card { padding: 24px; }
 
   .services-page h1 { font-size: 28px; }
   .services-page h2 { font-size: 22px; }
@@ -367,7 +252,7 @@ section#services {
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-text-secondary); /* or a muted gray */
+  color: var(--color-text-secondary);
   margin-bottom: 16px;
 }
 
@@ -381,4 +266,11 @@ section#services {
   color: #38cdfd;
 }
 
+.hero-description {
+  width: 500px;
+  justify-self: center;
+}
 
+.hero-subheading {
+  font-weight: 800;
+}
