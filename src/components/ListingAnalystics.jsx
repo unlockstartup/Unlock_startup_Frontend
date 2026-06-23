@@ -146,8 +146,8 @@ rows.push(
   }
 
   else if (item._type === "competitions") {
-    rows.push(renderField("Organizer", item.organizingCompany));
-    rows.push(renderField("Organizer Type", item.organizerType));
+    rows.push(renderField("Company", item.organizingCompany));
+    rows.push(renderField("Company Type", item.organizerType));
     rows.push(renderField("Challenge Type", item.challengeType));
     rows.push(renderField("Category", item.challengeCategory));
     rows.push(renderField("Objective", item.challengeObjective));
