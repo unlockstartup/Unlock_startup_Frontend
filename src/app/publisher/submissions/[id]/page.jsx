@@ -19,10 +19,6 @@ const TYPE_META = {
 };
 const isIndividual = (sub) => sub.orgType === "individual";
 
-const companyColumnLabel =
-  submissions.some((sub) => sub.orgType === "individual")
-    ? "Gender"
-    : "Company";
 
 function InfoItem({ label, value, isLink = false, icon }) {
   if (!value) return null;
@@ -67,7 +63,12 @@ export default function Page() {
 
   const limit = 20;
 
-  /* ── Data loading ──────────────────────────────────────────────────────────── */
+
+const companyColumnLabel =
+  submissions.some((sub) => sub.orgType === "individual")
+    ? "Gender"
+    : "Company";
+
   const load = async () => {
     if (!listingId) return;
     try {
