@@ -323,7 +323,7 @@ export default function Page() {
     <>
       <InfoItem label="Full Name"     value={selected.fullName} />
       <InfoItem label="Company Name"  value={selected.organisation} />
-      <InfoItem label="Funding Stage" value={selected.fundingStage} />
+      <InfoItem label="Funding Request" value={selected.fundingStage} />
       <InfoItem label="Email"         value={selected.email} />
       <InfoItem label="Phone"         value={selected.phone} />
       <InfoItem label="Website"       value={selected.website} isLink />
