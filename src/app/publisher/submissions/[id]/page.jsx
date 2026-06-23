@@ -64,10 +64,7 @@ export default function Page() {
   const limit = 20;
 
 
-const companyColumnLabel =
-  submissions.some((sub) => sub.orgType === "individual")
-    ? "Gender"
-    : "Company Name";
+
 
   const load = async () => {
     if (!listingId) return;
@@ -211,7 +208,7 @@ const companyColumnLabel =
     <th>#</th>
     <th>Type</th>
     <th>Applicant</th>
-    <th>Gender/Company Name</th>
+    <th>Gender / Company Name</th>
     <th>Applied For</th>
     <th>Date</th>
     <th className="tdRight" style={{ textAlign: "center" }}>Actions</th>
