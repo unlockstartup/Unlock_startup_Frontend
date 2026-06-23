@@ -171,7 +171,10 @@ const handleDownloadServiceInvoice = async (serviceSubscriptionId, invoiceNumber
     : "Not set";
   const daysLeft = profile.subscriptionExpiry
     ? Math.max(0, Math.ceil((new Date(profile.subscriptionExpiry) - new Date()) / (1000 * 60 * 60 * 24))) : 0;
-  const isSubActive = profile.subscriptionStatus === "active";
+  const isExpired = profile.subscriptionExpiry
+  ? new Date(profile.subscriptionExpiry) < new Date()
+  : false;
+const isSubActive = profile.subscriptionStatus === "active" && !isExpired;
 
   const orgFields = [
     ["Name",         formData.name],

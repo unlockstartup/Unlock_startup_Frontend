@@ -430,18 +430,22 @@ function FundingCallsCrud() {
     setForm((p) => ({ ...p, attachments: p.attachments.filter((a) => a.publicId !== publicId) }));
 
   /*  Plan limits  */
+const isDateExpired = planInfo?.expiry && new Date(planInfo.expiry) < new Date();
 const isExpired = planInfo && (
-  planInfo.subscriptionStatus !== "active" ||
-  (planInfo.expiry && new Date(planInfo.expiry) < new Date())
+  planInfo.subscriptionStatus !== "active" || isDateExpired
 );
 const hasAccess           = planInfo ? !isExpired : false;
 const subscriptionExpired = isExpired;
-  const fundingLimitReached  = planInfo && !subscriptionExpired && planInfo.limits?.fundingCallsLimit > 0 && planInfo.usage?.fundingCalls >= planInfo.limits?.fundingCallsLimit;
-  const fundingButtonDisabled = !hasAccess || fundingLimitReached;
+const fundingLimitReached  = planInfo && !subscriptionExpired && planInfo.limits?.fundingCallsLimit > 0 && planInfo.usage?.fundingCalls >= planInfo.limits?.fundingCallsLimit;
+const fundingButtonDisabled = !hasAccess || fundingLimitReached;
 
-  const addBtnLabel = !hasAccess ? "Create (Subscribe)"
-    : fundingLimitReached ? `Limit Reached (${planInfo.usage.fundingCalls}/${planInfo.limits.fundingCallsLimit})`
-    : "+ Add Competition";
+const addBtnLabel = subscriptionExpired
+  ? "Subscription Expired"
+  : !hasAccess
+  ? "Create (Subscribe)"
+  : fundingLimitReached
+  ? `Limit Reached (${planInfo.usage.fundingCalls}/${planInfo.limits.fundingCallsLimit})`
+  : "+ Add Competition";
 
   /*  Render  */
   return (
@@ -456,17 +460,19 @@ const subscriptionExpired = isExpired;
         <div className="topbarActions">
           <button
             className={`btn ${fundingButtonDisabled ? "btnSecondary" : "btnPrimary"}`}
-            onClick={
-              !hasAccess ? () => toast.info("Please purchase a subscription to create Competition")
-              : fundingLimitReached ? undefined
-              : openCreate
-            }
-            disabled={fundingLimitReached}
-            title={
-              !hasAccess ? "Subscribe to create Competition"
-              : fundingLimitReached ? `Competitions limit of ${planInfo.limits.fundingCallsLimit} reached`
-              : ""
-            }
+onClick={
+  subscriptionExpired ? undefined
+  : !hasAccess ? () => toast.info("Please purchase a subscription to create Competition")
+  : fundingLimitReached ? undefined
+  : openCreate
+}
+disabled={subscriptionExpired || fundingLimitReached}
+title={
+  subscriptionExpired ? "Your subscription has expired. Please renew to add competitions."
+  : !hasAccess ? "Subscribe to create Competition"
+  : fundingLimitReached ? `Competitions limit of ${planInfo.limits.fundingCallsLimit} reached`
+  : ""
+}
           >
             {addBtnLabel}
           </button>
