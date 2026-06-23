@@ -356,19 +356,6 @@ export default function Page() {
     </div>
   )}
 </section>
-
-        {/* Investor */}
-        {getSubmissionType(selected) === "investor" && (
-          <section className="pubModal__section">
-            <h3 className="pubModal__sectionTitle">Investment details</h3>
-            <div className="pubModal__grid">
-              <InfoItem label="Funding Stage" value={selected.fundingStage} />
-              <InfoItem label="Industry Type" value={selected.industryType} />
-              <InfoItem label="Location"      value={selected.location} />
-              <InfoItem label="Website"       value={selected.website} isLink />
-            </div>
-          </section>
-        )}
       </div>
 
       {/* Footer */}
