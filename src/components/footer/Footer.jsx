@@ -107,17 +107,13 @@ export default function Footer() {
 {/* Bottom Footer */}
 <div className="bottom-footer">
   <div className="container">
-    <div className="row align-items-center" style={{ position: "relative" }}>
-      <div className="col-12">
-        <p className="text-center mb-15">
-          Copyright © {new Date().getFullYear()} Unlock Startup. All rights reserved.
-        </p>
-      </div>
+    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <p style={{ margin: 0 }} className="mb-15">
+        Copyright © {new Date().getFullYear()} Unlock Startup. All rights reserved.
+      </p>
       <p style={{
         position: "absolute",
         right: "0",
-        top: "50%",
-        transform: "translateY(-50%)",
         fontSize: "12px",
         color: "#9ca3af",
         margin: 0,
