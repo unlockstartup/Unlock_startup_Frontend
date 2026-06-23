@@ -17,6 +17,12 @@ const TYPE_META = {
   investor: { label: "Investor",    color: "var(--orange)" },
   service:  { label: "Service",     color: "var(--yellow-hover)" },
 };
+const isIndividual = (sub) => sub.orgType === "individual";
+
+const companyColumnLabel =
+  submissions.some((sub) => sub.orgType === "individual")
+    ? "Gender"
+    : "Company";
 
 function InfoItem({ label, value, isLink = false, icon }) {
   if (!value) return null;
@@ -205,7 +211,7 @@ export default function Page() {
     <th>#</th>
     <th>Type</th>
     <th>Applicant</th>
-    <th>Company</th>
+    <th>{companyColumnLabel}</th>
     <th>Applied For</th>
     <th>Date</th>
     <th className="tdRight" style={{ textAlign: "center" }}>Actions</th>
@@ -230,9 +236,9 @@ export default function Page() {
           {sub.email && <div className="tdMuted">{sub.email}</div>}
         </td>
 
-        <td className="tdMuted tdNoWrap" data-label="Company">
-          {sub.organisation || "—"}
-        </td>
+<td className="tdMuted tdNoWrap" data-label={isIndividual(sub) ? "Gender" : "Company"}>
+  {sub.organisation || "—"}
+</td>
 
         <td data-label="Applied For">
           <div className="tdSemibold spec-font">{getSourceTitle(sub)}</div>
