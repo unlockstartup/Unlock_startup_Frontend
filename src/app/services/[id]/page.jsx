@@ -132,32 +132,32 @@ export default function ServicePage({ params }) {
                     {(company.brandName || company.companyName || "S").charAt(0)}
                   </div>
                   <span className="svd-org__name">
-                    by <strong>{company.brandName || company.companyName}</strong>
+                    by <strong>{company.companyName}</strong>
                     {company.establishedYear && (
-                      <span style={{ fontWeight: 400, color: "#888", marginLeft: 6 }}>
-                        · Est. {company.establishedYear}
+                      <span style={{ fontWeight: 800, color: "#888", marginLeft: 6 }}>
+                        · Established. {company.establishedYear}
                       </span>
                     )}
                   </span>
                 </div>
               </div>
               <div className="svd-hero-info__right">
-                {company.serviceCategory && (
-                  <span className="svd-badge">{company.serviceCategory}</span>
+                {company.serviceType && (
+                  <span className="svd-badge">{company.serviceType}</span>
                 )}
               </div>
             </div>
 
             {/* Stats strip */}
             <div className="svd-stats">
-              {company.serviceType && (
+              {company.brandName && (
                 <div className="svd-stat">
                   <span className="svd-stat__icon svd-stat__icon--date">
                     <Tag size={15} strokeWidth={1.8} />
                   </span>
                   <div className="svd-stat__meta">
-                    <span className="svd-stat__label">Service Type</span>
-                    <span className="svd-stat__value">{company.serviceType}</span>
+                    <span className="svd-stat__label">Brand Name</span>
+                    <span className="svd-stat__value">{company.brandName}</span>
                   </div>
                 </div>
               )}

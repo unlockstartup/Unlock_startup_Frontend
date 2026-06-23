@@ -177,7 +177,7 @@ const ApplyModal = ({ isOpen, onClose, jobTitle, companyName, listingId, listing
                     <input className={`am-input${errors.fullName ? " am-input--err" : ""}`} placeholder="Full Name" value={form.fullName} onChange={set("fullName")} />
                   </Field>
 
-                  <Field label="Company Name *" icon={Building2} error={errors.organisation}>
+                  <Field label="Participant Type *" icon={Building2} error={errors.organisation}>
                     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                       <div className="am-toggle-row">
                         <button type="button" className={`am-toggle-btn${form.orgType === "individual" ? " am-toggle-btn--active" : ""}`} onClick={() => setForm(f => ({ ...f, orgType: "individual" }))}>Individual</button>

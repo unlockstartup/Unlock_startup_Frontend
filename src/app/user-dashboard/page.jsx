@@ -204,9 +204,6 @@ export default function ProfileDashboard() {
   );
 }
 
-/* 
-   Sub-components
- */
 
 function OpportunityDetails({ sub, listingLoc, description, eventDates }) {
   if (sub.investorId) {
@@ -229,7 +226,7 @@ function OpportunityDetails({ sub, listingLoc, description, eventDates }) {
     return (
       <DetailSection title="Service Details" variant="blue">
         <DetailRow label="Service"  value={svc.serviceTitle} />
-        <DetailRow label="Category" value={svc.serviceCategory} />
+        <DetailRow label="Service type" value={svc.serviceType} />
         <DetailRow label="Company"  value={svc.companyName} />
         <DetailRow label="About"    value={description?.length > 200 ? description.slice(0, 200) + "…" : description} />
       </DetailSection>
@@ -537,20 +534,37 @@ const resolvePublisherContact = (sub) => {
 </DetailSection>
                         </div>
 
-                        {/* Your Submission — 2-col grid */}
-                        <DetailSection title="My Submitted Details" variant="orange">
-                          <div className="detail-section__rows-grid">
-                            <DetailRow label="Full name"        value={sub.fullName} />
-                            <DetailRow label="Email"            value={sub.email} />
-                            <DetailRow label="Phone"            value={sub.phone} />
-                            <DetailRow label="Company"     value={sub.organisation} />
-                            <DetailRow label="Company type" value={sub.orgType} />
-                            <DetailRow label="Role"             value={sub.role} />
-                            <DetailRow label="State"            value={sub.location} />
-                            <DetailRow label="Funding stage"    value={sub.fundingStage} />
-                            <DetailRow label="Website"          value={sub.website} />
-                          </div>
-                        </DetailSection>
+<DetailSection title="My Submitted Details" variant="orange">
+  <div className="detail-section__rows-grid">
+    <DetailRow label="Full name"     value={sub.fullName} />
+    <DetailRow label="Email"         value={sub.email} />
+    <DetailRow label="Phone"         value={sub.phone} />
+
+    {/* Only for event listing submissions */}
+    {sub.listingId ? (
+      <>
+        <DetailRow
+          label={sub.orgType === "individual" ? "Gender" : "Company Name"}
+          value={sub.organisation}
+        />
+        <DetailRow
+          label="Participant Type"
+          value={sub.orgType ? sub.orgType.charAt(0).toUpperCase() + sub.orgType.slice(1) : null}
+        />
+      </>
+    ) : (
+      <>
+        <DetailRow label="Company"      value={sub.organisation} />
+        <DetailRow label="Company type" value={sub.orgType} />
+      </>
+    )}
+
+    <DetailRow label="Role"          value={sub.role} />
+    <DetailRow label="State"         value={sub.location} />
+    <DetailRow label="Funding stage" value={sub.fundingStage} />
+    <DetailRow label="Website"       value={sub.website} />
+  </div>
+</DetailSection>
                       </div>
                     )}
                   </div>
