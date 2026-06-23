@@ -211,7 +211,7 @@ const companyColumnLabel =
     <th>#</th>
     <th>Type</th>
     <th>Applicant</th>
-    <th>{companyColumnLabel}</th>
+    <th>Gender/Company Name</th>
     <th>Applied For</th>
     <th>Date</th>
     <th className="tdRight" style={{ textAlign: "center" }}>Actions</th>
@@ -323,7 +323,10 @@ const companyColumnLabel =
   <h3 className="pubModal__sectionTitle">Contact information</h3>
   <div className="pubModal__grid">
     <InfoItem label="Full Name"    value={selected.fullName} />
-    <InfoItem label="Company Name"      value={selected.organisation} />
+    <InfoItem
+  label={isIndividual(selected) ? "Gender" : "Company Name"}
+  value={selected.organisation}
+/>
      {getSubmissionType(selected) !== "service" ? (
   <InfoItem label="Org Type" value={selected.orgType} />
 ) : (
