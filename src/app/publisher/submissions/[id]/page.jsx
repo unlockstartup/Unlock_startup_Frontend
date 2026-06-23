@@ -324,11 +324,11 @@ export default function Page() {
   label={isIndividual(selected) ? "Gender" : "Company Name"}
   value={selected.organisation}
 />
-     {getSubmissionType(selected) !== "service" ? (
-  <InfoItem label="Org Type" value={selected.orgType} />
-) : (
+{getSubmissionType(selected) === "service" ? (
   <InfoItem label="Industry Type" value={selected.industryType} />
-)}
+) : !isIndividual(selected) ? (
+  <InfoItem label="Org Type" value={selected.orgType} />
+) : null}
     <InfoItem label="Role"         value={selected.role} />
     <InfoItem label="Email"        value={selected.email} />
     <InfoItem label="Phone"        value={selected.phone} />
