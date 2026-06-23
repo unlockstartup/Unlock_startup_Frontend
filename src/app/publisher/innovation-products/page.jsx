@@ -185,7 +185,10 @@ export default function InnovationProducts() {
   }, []);
 
   /*  Plan limits  */
-  const subscriptionExpired  = planInfo && planInfo.subscriptionStatus !== "active";
+  const subscriptionExpired = planInfo && (
+  planInfo.subscriptionStatus !== "active" ||
+  (planInfo.expiry && new Date(planInfo.expiry) < new Date())
+);
   const productLimitReached  = planInfo && !subscriptionExpired && planInfo.limits?.productsLimit > 0 && planInfo.usage?.products >= planInfo.limits?.productsLimit;
   const productButtonDisabled = subscriptionExpired || productLimitReached;
 

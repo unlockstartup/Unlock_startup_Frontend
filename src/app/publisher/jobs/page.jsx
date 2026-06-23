@@ -420,7 +420,10 @@ const confirmToggleJob = (job) => {
   };
 
   /*  Plan limits  */
-  const subscriptionExpired = planInfo && planInfo.subscriptionStatus !== "active";
+  const subscriptionExpired = planInfo && (
+  planInfo.subscriptionStatus !== "active" ||
+  (planInfo.expiry && new Date(planInfo.expiry) < new Date())
+);
   const jobLimitReached     = planInfo && !subscriptionExpired && planInfo.limits?.jobLimit > 0 && planInfo.usage?.jobs >= planInfo.limits?.jobLimit;
   const jobButtonDisabled   = subscriptionExpired || jobLimitReached;
 

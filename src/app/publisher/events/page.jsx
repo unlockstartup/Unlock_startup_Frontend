@@ -403,7 +403,10 @@ const validate = () => {
 
 
   /*  Plan limits  */
-  const subscriptionExpired = planInfo && planInfo.subscriptionStatus !== "active";
+  const subscriptionExpired = planInfo && (
+  planInfo.subscriptionStatus !== "active" ||
+  (planInfo.expiry && new Date(planInfo.expiry) < new Date())
+);
   const eventLimitReached = planInfo && !subscriptionExpired && planInfo.limits?.eventLimit > 0 && planInfo.usage?.events >= planInfo.limits?.eventLimit;
   const eventButtonDisabled = subscriptionExpired || eventLimitReached;
 

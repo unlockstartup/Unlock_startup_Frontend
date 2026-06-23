@@ -430,8 +430,12 @@ function FundingCallsCrud() {
     setForm((p) => ({ ...p, attachments: p.attachments.filter((a) => a.publicId !== publicId) }));
 
   /*  Plan limits  */
-  const hasAccess            = planInfo ? planInfo.subscriptionStatus === "active" : false;
-  const subscriptionExpired  = planInfo && planInfo.subscriptionStatus !== "active";
+const isExpired = planInfo && (
+  planInfo.subscriptionStatus !== "active" ||
+  (planInfo.expiry && new Date(planInfo.expiry) < new Date())
+);
+const hasAccess           = planInfo ? !isExpired : false;
+const subscriptionExpired = isExpired;
   const fundingLimitReached  = planInfo && !subscriptionExpired && planInfo.limits?.fundingCallsLimit > 0 && planInfo.usage?.fundingCalls >= planInfo.limits?.fundingCallsLimit;
   const fundingButtonDisabled = !hasAccess || fundingLimitReached;
 
