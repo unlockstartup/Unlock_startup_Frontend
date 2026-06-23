@@ -8,7 +8,6 @@ export default function Footer() {
         <div className="inner-wrapper">
           <div className="row justify-content-between text-center text-lg-start footer-row">
 
-            {/* Footer Intro — full width on tablet, centered */}
             <div className="col-xl-4 col-lg-3 col-sm-6 footer-intro mb-15 footer-intro-col" style={{display: "flex" , flexDirection: "column", alignItems: "center"}}>
               <div className="logo mb-25">
                 <Link href="/" className="footer-logo">
@@ -105,17 +104,29 @@ export default function Footer() {
       </div>
 
       {/* Bottom Footer */}
-      <div className="bottom-footer">
-        <div className="container">
-          <div className="row align-items-center">
-            <div className="col-12">
-              <p className="text-center mb-15">
-                Copyright © {new Date().getFullYear()} Unlock Startup. All rights reserved.
-              </p>
-            </div>
-          </div>
-        </div>
+{/* Bottom Footer */}
+<div className="bottom-footer">
+  <div className="container">
+    <div className="row align-items-center" style={{ position: "relative" }}>
+      <div className="col-12">
+        <p className="text-center mb-15">
+          Copyright © {new Date().getFullYear()} Unlock Startup. All rights reserved.
+        </p>
       </div>
+      <p style={{
+        position: "absolute",
+        right: "16px",
+        bottom: "0",
+        fontSize: "12px",
+        color: "#9ca3af",
+        margin: 0,
+        whiteSpace: "nowrap"
+      }}>
+        🇮🇳 Services available for India only
+      </p>
+    </div>
+  </div>
+</div>
     </div>
   );
 }
