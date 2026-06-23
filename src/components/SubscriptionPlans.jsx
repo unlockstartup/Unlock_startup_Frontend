@@ -36,6 +36,82 @@ const CheckIcon = () => (
   </svg>
 );
 
+// ── Warning modal ────────────────────────────────────────────────────────────
+function ConfirmSwitchModal({ plan, currentPlanName, onConfirm, onCancel }) {
+  const { name } = planLabels(plan.durationInMonths);
+
+  return (
+    <div
+      style={{
+        position: "fixed", inset: 0, zIndex: 9999,
+        backgroundColor: "rgba(0,0,0,0.45)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "16px",
+      }}
+      onClick={onCancel}
+    >
+      <div
+        style={{
+          backgroundColor: "#fff", borderRadius: "14px",
+          padding: "32px 28px", maxWidth: "440px", width: "100%",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.18)",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Icon */}
+        <div style={{ textAlign: "center", marginBottom: "18px" }}>
+          <div style={{
+            display: "inline-flex", alignItems: "center", justifyContent: "center",
+            width: "56px", height: "56px", borderRadius: "50%",
+            backgroundColor: "rgba(234,179,8,0.12)",
+          }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+              fill="none" stroke="#ca8a04" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+        </div>
+
+        <h5 style={{ fontWeight: 700, color: "#1a1a2e", textAlign: "center", marginBottom: "10px", fontSize: "1.2rem" }}>
+          Switch to {name}?
+        </h5>
+        <p style={{ color: "#64748b", fontSize: "1rem", textAlign: "center", lineHeight: 1.6, marginBottom: "24px" }}>
+          You currently have an active <strong style={{ color: "#1a1a2e" }}>{currentPlanName}</strong> plan.
+          Purchasing <strong style={{ color: "#1a1a2e" }}>{name}</strong> will{" "}
+          <span style={{ color: "#dc2626", fontWeight: 600 }}>immediately deactivate</span> your current plan.
+          This action cannot be undone.
+        </p>
+
+        <div style={{ display: "flex", gap: "12px" }}>
+          <button
+            onClick={onCancel}
+            style={{
+              flex: 1, padding: "10px 0", borderRadius: "8px",
+              border: "1.5px solid #e2e8f0", backgroundColor: "#f8fafc",
+              color: "#475569", fontWeight: 600, fontSize: "1rem", cursor: "pointer",
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            style={{
+              flex: 1, padding: "10px 0", borderRadius: "8px",
+              border: "none", backgroundColor: "#4338ca",
+              color: "#fff", fontWeight: 600, fontSize: "1rem", cursor: "pointer",
+            }}
+          >
+            Yes, Switch Plan
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 function buildPlanDetails(plan) {
   const items = [];
 
@@ -74,9 +150,10 @@ function buildPlanDetails(plan) {
 }
 
 export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
-  const [plans, setPlans]                 = useState([]);
-  const [loading, setLoading]             = useState(true);
-  const [loadingPlanId, setLoadingPlanId] = useState(null);
+  const [plans, setPlans]                   = useState([]);
+  const [loading, setLoading]               = useState(true);
+  const [loadingPlanId, setLoadingPlanId]   = useState(null);
+  const [pendingPlan, setPendingPlan]       = useState(null); // plan awaiting confirmation
 
   useEffect(() => {
     (async () => {
@@ -102,17 +179,16 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
     if (!planInfo?.usage || !planInfo?.limits) return false;
     const { usage, limits } = planInfo;
     return (
-      (limits.jobLimit           > 0 && usage.jobs           >= limits.jobLimit)           ||
-      (limits.eventLimit         > 0 && usage.events         >= limits.eventLimit)         ||
-      (limits.fundingCallsLimit  > 0 && usage.fundingCalls   >= limits.fundingCallsLimit)  ||
-      (limits.productsLimit      > 0 && usage.products       >= limits.productsLimit)      ||
+      (limits.jobLimit            > 0 && usage.jobs            >= limits.jobLimit)           ||
+      (limits.eventLimit          > 0 && usage.events          >= limits.eventLimit)         ||
+      (limits.fundingCallsLimit   > 0 && usage.fundingCalls    >= limits.fundingCallsLimit)  ||
+      (limits.productsLimit       > 0 && usage.products        >= limits.productsLimit)      ||
       (limits.serviceListingLimit > 0 && usage.serviceListings >= limits.serviceListingLimit)
     );
   })();
 
-  const planLocked = isSubscriptionActive && activePlanKey !== null && !isAnyLimitReached;
-
-  const handleSubscribe = async (plan) => {
+  // ── Initiate payment (called after confirmation if needed) ─────────────────
+  const startPayment = async (plan) => {
     setLoadingPlanId(plan._id);
     try {
       const res = await createOrder(plan.durationInMonths);
@@ -162,6 +238,40 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
     }
   };
 
+  // ── Button click handler ───────────────────────────────────────────────────
+  const handleSubscribe = (plan) => {
+    const thisPlanKey = monthsToPlanKey(plan.durationInMonths);
+    const isActivePlan = isSubscriptionActive && activePlanKey === thisPlanKey;
+
+    // Already on this plan — do nothing (button shows "Current Plan" anyway)
+    if (isActivePlan) return;
+
+    // Active plan exists → show warning modal first
+    if (isSubscriptionActive) {
+      setPendingPlan(plan);
+      return;
+    }
+
+    // No active plan → proceed directly
+    startPayment(plan);
+  };
+
+  const handleModalConfirm = () => {
+    const plan = pendingPlan;
+    setPendingPlan(null);
+    startPayment(plan);
+  };
+
+  const handleModalCancel = () => setPendingPlan(null);
+
+  // ── Derive current plan name for modal copy ────────────────────────────────
+  const currentPlanName = (() => {
+    if (!activePlanKey) return "current";
+    const monthsMap = { free: 0, "3m": 3, "6m": 6, "9m": 9, "12m": 12 };
+    const months = monthsMap[activePlanKey] ?? 0;
+    return planLabels(months).name;
+  })();
+
   if (loading)
     return (
       <div className="py-5 text-center text-muted" style={{ fontSize: "1.2rem" }}>
@@ -193,18 +303,11 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
         {isAnyLimitReached && isSubscriptionActive && (
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "10px",
-              background: "rgba(255,91,91,0.07)",
-              border: "1px solid rgba(255,91,91,0.25)",
-              borderRadius: "10px",
-              padding: "12px 18px",
-              marginBottom: "20px",
-              fontSize: "1.2rem",
-              color: "#991b1b",
-              fontWeight: 500,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              gap: "10px", background: "rgba(255,91,91,0.07)",
+              border: "1px solid rgba(255,91,91,0.25)", borderRadius: "10px",
+              padding: "12px 18px", marginBottom: "20px",
+              fontSize: "1.2rem", color: "#991b1b", fontWeight: 500,
             }}
           >
             <span style={{ fontSize: "1.2rem" }}>⚠</span>
@@ -217,15 +320,16 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
 
         <div className="row g-4 align-items-stretch justify-content-center grid-mob">
           {plans.map((plan) => {
-            const { name, desc } = planLabels(plan.durationInMonths);
-            const planDetails    = buildPlanDetails(plan);
-            const isThisLoading  = loadingPlanId === plan._id;
-            const isOtherLoading = loadingPlanId !== null && loadingPlanId !== plan._id;
+            const { name, desc }  = planLabels(plan.durationInMonths);
+            const planDetails     = buildPlanDetails(plan);
+            const isThisLoading   = loadingPlanId === plan._id;
+            const isOtherLoading  = loadingPlanId !== null && loadingPlanId !== plan._id;
 
             const thisPlanKey  = monthsToPlanKey(plan.durationInMonths);
-            const isActivePlan = planLocked && activePlanKey === thisPlanKey;
+            const isActivePlan = isSubscriptionActive && activePlanKey === thisPlanKey;
 
-            const isDisabled = isThisLoading || isOtherLoading || (planLocked && !isActivePlan);
+            // Only disable during a concurrent loading state — never lock other plans
+            const isDisabled = isThisLoading || isOtherLoading;
 
             return (
               <div className="col-12 col-sm-12 col-xl-3" key={plan._id}>
@@ -237,7 +341,7 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
                     boxShadow: isActivePlan
                       ? "0 0 0 4px rgba(67,56,202,0.08)"
                       : "0 1px 4px rgba(0,0,0,0.04)",
-                    opacity: isOtherLoading || (planLocked && !isActivePlan) ? 0.5 : 1,
+                    opacity: isOtherLoading ? 0.5 : 1,
                     transition: "opacity 0.2s ease",
                     position: "relative",
                   }}
@@ -245,20 +349,12 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
                   {isActivePlan && (
                     <div
                       style={{
-                        position: "absolute",
-                        top: "-13px",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        backgroundColor: "#4338ca",
-                        color: "#fff",
-                        fontSize: "1.2rem",
-                        fontWeight: 700,
-                        padding: "3px 14px",
-                        borderRadius: "999px",
-                        letterSpacing: "0.06em",
-                        textTransform: "uppercase",
-                        whiteSpace: "nowrap",
-                        zIndex: 1,
+                        position: "absolute", top: "-13px", left: "50%",
+                        transform: "translateX(-50%)", backgroundColor: "#4338ca",
+                        color: "#fff", fontSize: "1.2rem", fontWeight: 700,
+                        padding: "3px 14px", borderRadius: "999px",
+                        letterSpacing: "0.06em", textTransform: "uppercase",
+                        whiteSpace: "nowrap", zIndex: 1,
                       }}
                     >
                       ● Ongoing
@@ -272,16 +368,16 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
                     >
                       {name}
                     </p>
-<div className="d-flex align-items-baseline gap-1 mb-2">
-  <span className="fw-bold" style={{ fontSize: "2.4rem", color: "#1a1a2e", lineHeight: 1.1 }}>
-    {plan.price === 0 ? "Free" : `₹${plan.price.toLocaleString("en-IN")}`}
-  </span>
-  {plan.durationInMonths > 0 && (
-    <span className="text-muted" style={{ fontSize: "1.2rem" }}>
-      / {plan.durationInMonths} mo
-    </span>
-  )}
-</div>
+                    <div className="d-flex align-items-baseline gap-1 mb-2">
+                      <span className="fw-bold" style={{ fontSize: "2.4rem", color: "#1a1a2e", lineHeight: 1.1 }}>
+                        {plan.price === 0 ? "Free" : `₹${plan.price.toLocaleString("en-IN")}`}
+                      </span>
+                      {plan.durationInMonths > 0 && (
+                        <span className="text-muted" style={{ fontSize: "1.2rem" }}>
+                          / {plan.durationInMonths} mo
+                        </span>
+                      )}
+                    </div>
                     <p className="text-muted mb-3" style={{ fontSize: "1.2rem", minHeight: "3.2rem" }}>
                       {desc}
                     </p>
@@ -289,15 +385,10 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
                     {isActivePlan ? (
                       <div
                         style={{
-                          width: "100%",
-                          padding: "10px 0",
-                          borderRadius: "8px",
-                          fontSize: "1.2rem",
-                          fontWeight: 600,
-                          textAlign: "center",
+                          width: "100%", padding: "10px 0", borderRadius: "8px",
+                          fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
                           backgroundColor: "rgba(67,56,202,0.08)",
-                          color: "#4338ca",
-                          border: "2px solid #4338ca",
+                          color: "#4338ca", border: "2px solid #4338ca",
                         }}
                       >
                         ✓ Current Plan
@@ -308,10 +399,8 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
                         style={{
                           backgroundColor: isThisLoading ? "#4338ca" : "#fff",
                           color: isThisLoading ? "#fff" : "#4338ca",
-                          border: "2px solid #4338ca",
-                          borderRadius: "8px",
-                          padding: "10px 0",
-                          fontSize: "1.2rem",
+                          border: "2px solid #4338ca", borderRadius: "8px",
+                          padding: "10px 0", fontSize: "1.2rem",
                           transition: "all 0.15s ease",
                           cursor: isDisabled ? "not-allowed" : "pointer",
                         }}
@@ -373,6 +462,15 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
 
         <ToastContainer position="top-center" />
       </div>
+
+      {pendingPlan && (
+        <ConfirmSwitchModal
+          plan={pendingPlan}
+          currentPlanName={currentPlanName}
+          onConfirm={handleModalConfirm}
+          onCancel={handleModalCancel}
+        />
+      )}
     </section>
   );
 }
