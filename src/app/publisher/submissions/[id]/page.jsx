@@ -338,7 +338,7 @@ export default function Page() {
       {getSubmissionType(selected) === "service" ? (
         <InfoItem label="Industry Type" value={selected.industryType} />
       ) : !isIndividual(selected) ? (
-        <InfoItem label="Org Type" value={selected.orgType} />
+        <InfoItem label="Company Type" value={selected.orgType} />
       ) : null}
       <InfoItem label="Role"  value={selected.role} />
       <InfoItem label="Email" value={selected.email} />
