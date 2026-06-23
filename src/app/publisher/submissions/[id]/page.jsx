@@ -318,36 +318,38 @@ export default function Page() {
         {/* Contact */}
 <section className="pubModal__section">
   <h3 className="pubModal__sectionTitle">Contact information</h3>
-  <div className="pubModal__grid">
-    <InfoItem label="Full Name"    value={selected.fullName} />
-    <InfoItem
-      label={isIndividual(selected) ? "Gender" : "Company Name"}
-      value={selected.organisation}
-    />
-    {getSubmissionType(selected) === "service" ? (
-      <InfoItem label="Industry Type" value={selected.industryType} />
-    ) : !isIndividual(selected) ? (
-      <InfoItem label="Org Type" value={selected.orgType} />
-    ) : null}
-    <InfoItem label="Role"         value={selected.role} />
-    <InfoItem label="Email"        value={selected.email} />
-    <InfoItem label="Phone"        value={selected.phone} />
-    <InfoItem label="Location"     value={selected.location} />
-
-    {/* Investor-specific fields merged in */}
-    {getSubmissionType(selected) === "investor" && (
-      <>
-        <InfoItem label="Funding Stage" value={selected.fundingStage} />
+<div className="pubModal__grid">
+  {getSubmissionType(selected) === "investor" ? (
+    <>
+      <InfoItem label="Full Name"     value={selected.fullName} />
+      <InfoItem label="Company Name"  value={selected.organisation} />
+      <InfoItem label="Funding Stage" value={selected.fundingStage} />
+      <InfoItem label="Email"         value={selected.email} />
+      <InfoItem label="Phone"         value={selected.phone} />
+      <InfoItem label="Website"       value={selected.website} isLink />
+    </>
+  ) : (
+    <>
+      <InfoItem label="Full Name"    value={selected.fullName} />
+      <InfoItem
+        label={isIndividual(selected) ? "Gender" : "Company Name"}
+        value={selected.organisation}
+      />
+      {getSubmissionType(selected) === "service" ? (
         <InfoItem label="Industry Type" value={selected.industryType} />
-        <InfoItem label="Website"       value={selected.website} isLink />
-      </>
-    )}
-
-    {/* Service-specific fields */}
-    {getSubmissionType(selected) === "service" && (
-      <InfoItem label="Website" value={selected.website} isLink />
-    )}
-  </div>
+      ) : !isIndividual(selected) ? (
+        <InfoItem label="Org Type" value={selected.orgType} />
+      ) : null}
+      <InfoItem label="Role"  value={selected.role} />
+      <InfoItem label="Email" value={selected.email} />
+      <InfoItem label="Phone" value={selected.phone} />
+      <InfoItem label="Location" value={selected.location} />
+      {getSubmissionType(selected) === "service" && (
+        <InfoItem label="Website" value={selected.website} isLink />
+      )}
+    </>
+  )}
+</div>
 
   {/* Requirements box for service */}
   {getSubmissionType(selected) === "service" && selected.requirements && (
