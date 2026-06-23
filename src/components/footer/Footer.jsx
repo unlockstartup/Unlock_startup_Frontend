@@ -107,17 +107,24 @@ export default function Footer() {
 {/* Bottom Footer */}
 <div className="bottom-footer">
   <div className="container">
-    <div className="row align-items-center">
-      <div className="col-6">
-        <p className="mb-15">
+    <div className="row align-items-center" style={{ position: "relative" }}>
+      <div className="col-12">
+        <p className="text-center mb-15">
           Copyright © {new Date().getFullYear()} Unlock Startup. All rights reserved.
         </p>
       </div>
-      <div className="col-6 text-end">
-        <p className="mb-15" style={{ fontSize: "12px", color: "#9ca3af" }}>
-          🇮🇳 Services available for India only
-        </p>
-      </div>
+      <p style={{
+        position: "absolute",
+        right: "0",
+        top: "50%",
+        transform: "translateY(-50%)",
+        fontSize: "12px",
+        color: "#9ca3af",
+        margin: 0,
+        whiteSpace: "nowrap"
+      }}>
+        🇮🇳 Services available for India only
+      </p>
     </div>
   </div>
 </div>
