@@ -77,6 +77,7 @@ function StatusBadge({ status, reason }) {
     </span>
   );
 }
+
 /*  Constants  */
 const initialForm = {
   companyName: "", brandName: "", establishedYear: "",
@@ -151,42 +152,52 @@ export default function ServiceListings() {
   }, []);
 
   /*  Plan guards  */
-  const subscriptionExpired  = planInfo && planInfo.subscriptionStatus !== "active";
-  const serviceInactive      = planInfo && planInfo.servicePlanActive === false;
-  const serviceLimitReached  = planInfo && !subscriptionExpired && !serviceInactive
+  const subscriptionExpired = planInfo && planInfo.subscriptionStatus !== "active";
+  const serviceInactive     = planInfo && planInfo.servicePlanActive === false;
+
+  // Check serviceplan expiry date from planInfo.serviceplan.expiryDate
+  const servicePlanExpired  = planInfo && planInfo.serviceplan?.expiryDate
+    && new Date(planInfo.serviceplan.expiryDate) < new Date();
+
+  const serviceLimitReached = planInfo && !subscriptionExpired && !serviceInactive && !servicePlanExpired
     && planInfo.limits?.serviceListingLimit > 0
     && planInfo.usage?.serviceListings >= planInfo.limits?.serviceListingLimit;
-  const addButtonDisabled    = subscriptionExpired || serviceInactive || serviceLimitReached;
 
-  const addLabel = subscriptionExpired ? "Subscription Expired"
-    : serviceInactive   ? "Service Plan Required"
-    : serviceLimitReached ? `Limit Reached (${planInfo.usage.serviceListings}/${planInfo.limits.serviceListingLimit})`
+  const addButtonDisabled = subscriptionExpired || serviceInactive || servicePlanExpired || serviceLimitReached;
+
+  const addLabel = subscriptionExpired
+    ? "Subscription Expired"
+    : serviceInactive
+    ? "Service Plan Required"
+    : servicePlanExpired
+    ? "Service Plan Expired"
+    : serviceLimitReached
+    ? `Limit Reached (${planInfo.usage.serviceListings}/${planInfo.limits.serviceListingLimit})`
     : "+ Add Service";
 
   /*  Modal helpers  */
   const openCreate = () => { setMode("create"); setEditing(null); setForm(initialForm); setServiceImages([]); setOpen(true); };
 
-const openEdit = (listing) => {
-  const alreadyEdited = (listing.editCount ?? 0) >= 1;
-  setConfirmConfig({
-    title: alreadyEdited ? "Edit Not Allowed" : "Edit Service Listing",
-    message: alreadyEdited
-      ? "This listing has already been edited once and can no longer be modified."
-      : "You can only update this listing once. Please review all details carefully before submitting, as no further edits will be allowed after this.",
-    confirmText: alreadyEdited ? "OK" : "I Understand, Proceed",
-    cancelText: alreadyEdited ? "" : "Cancel",
-    confirmVariant: alreadyEdited ? "danger" : "primary",
-    onConfirm: () => {
-      if (alreadyEdited) return;
-      setMode("edit"); setEditing(listing);
-      setForm({ ...initialForm, ...listing, disclosureConsent: false });
-      setServiceImages(listing.serviceImages || []);
-      setOpen(true);
-    },
-  });
-  setShowConfirm(true);
-};
-
+  const openEdit = (listing) => {
+    const alreadyEdited = (listing.editCount ?? 0) >= 1;
+    setConfirmConfig({
+      title: alreadyEdited ? "Edit Not Allowed" : "Edit Service Listing",
+      message: alreadyEdited
+        ? "This listing has already been edited once and can no longer be modified."
+        : "You can only update this listing once. Please review all details carefully before submitting, as no further edits will be allowed after this.",
+      confirmText: alreadyEdited ? "OK" : "I Understand, Proceed",
+      cancelText: alreadyEdited ? "" : "Cancel",
+      confirmVariant: alreadyEdited ? "danger" : "primary",
+      onConfirm: () => {
+        if (alreadyEdited) return;
+        setMode("edit"); setEditing(listing);
+        setForm({ ...initialForm, ...listing, disclosureConsent: false });
+        setServiceImages(listing.serviceImages || []);
+        setOpen(true);
+      },
+    });
+    setShowConfirm(true);
+  };
 
   const closeModal = () => { if (saving || uploadingIdx !== null) return; setOpen(false); };
 
@@ -276,44 +287,42 @@ const openEdit = (listing) => {
     setShowConfirm(true);
   };
 
-const confirmToggleListing = (listing) => {
-  if (!listing?._id) return;
-  const toggleCount = listing.toggleCount ?? 0;
-  if (toggleCount >= 2) {
+  const confirmToggleListing = (listing) => {
+    if (!listing?._id) return;
+    const toggleCount = listing.toggleCount ?? 0;
+    if (toggleCount >= 2) {
+      setConfirmConfig({
+        title: "Toggle Not Allowed",
+        message: "This service has already been deactivated and reactivated once. No further activation or deactivation is allowed.",
+        confirmText: "OK",
+        cancelText: "",
+        confirmVariant: "danger",
+        onConfirm: () => {},
+      });
+      setShowConfirm(true);
+      return;
+    }
+    const isDeactivating = listing.isActive;
     setConfirmConfig({
-      title: "Toggle Not Allowed",
-      message: "This service has already been deactivated and reactivated once. No further activation or deactivation is allowed.",
-      confirmText: "OK",
-      cancelText: "",
-      confirmVariant: "danger",
-      onConfirm: () => {},
+      title: isDeactivating ? "Deactivate Service" : "Activate Service",
+      message: isDeactivating
+        ? "You may reactivate this service once after deactivating, but after that no further toggling will be allowed. Are you sure you want to deactivate?"
+        : "You can activate this listing once more. After reactivating, no further deactivation or activation will be permitted. Proceed?",
+      confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
+      cancelText: "Cancel",
+      confirmVariant: isDeactivating ? "warning" : "success",
+      onConfirm: async () => {
+        try {
+          await publisherApi.patch(`/api/publisher/service-listings/${listing._id}/toggle`);
+          toast.success(`Service ${isDeactivating ? "deactivated" : "activated"}`);
+          fetchListings();
+        } catch (err) {
+          toast.error(err?.response?.data?.message || "Toggle failed");
+        }
+      },
     });
     setShowConfirm(true);
-    return;
-  }
-  const isDeactivating = listing.isActive;
-  setConfirmConfig({
-    title: isDeactivating ? "Deactivate Service" : "Activate Service",
-    message: isDeactivating
-      ? "You may reactivate this service once after deactivating, but after that no further toggling will be allowed. Are you sure you want to deactivate?"
-      : "You can activate this listing once more. After reactivating, no further deactivation or activation will be permitted. Proceed?",
-    confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
-    cancelText: "Cancel",
-    confirmVariant: isDeactivating ? "warning" : "success",
-    onConfirm: async () => {
-      try {
-        await publisherApi.patch(`/api/publisher/service-listings/${listing._id}/toggle`);
-        toast.success(`Service ${isDeactivating ? "deactivated" : "activated"}`);
-        fetchListings();
-      } catch (err) {
-        toast.error(err?.response?.data?.message || "Toggle failed");
-      }
-    },
-  });
-  setShowConfirm(true);
-};
-
-
+  };
 
   /*  Render  */
   return (
@@ -331,9 +340,11 @@ const confirmToggleListing = (listing) => {
             onClick={addButtonDisabled ? undefined : openCreate}
             disabled={addButtonDisabled}
             title={
-              subscriptionExpired ? "Your subscription has expired."
-              : serviceInactive   ? "You need an active service plan."
-              : serviceLimitReached ? `Limit of ${planInfo.limits.serviceListingLimit} reached` : ""
+              subscriptionExpired  ? "Your subscription has expired."
+              : serviceInactive    ? "You need an active service plan."
+              : servicePlanExpired ? "Your service plan has expired."
+              : serviceLimitReached ? `Limit of ${planInfo.limits.serviceListingLimit} reached`
+              : ""
             }
           >
             {addLabel}
@@ -395,90 +406,90 @@ const confirmToggleListing = (listing) => {
                 disabled={addButtonDisabled}
                 style={{ marginTop: "0.75rem" }}
               >
-                {subscriptionExpired ? "Subscription Expired"
+                {subscriptionExpired  ? "Subscription Expired"
                   : serviceInactive   ? "Service Plan Required"
+                  : servicePlanExpired ? "Service Plan Expired"
                   : serviceLimitReached ? "Limit Reached"
                   : "+ Add Your First Service"}
               </button>
             </div>
           ) : (
             <table className="table" id="svc-table">
-<thead>
-  <tr>
-    <th>#</th>
-    <th>Service Title</th>
-    <th>Image</th>
-    <th>Company</th>
-    <th>Plan</th>
-    <th>Status</th>
-    <th>Active</th>
-    <th className="tdRight" style={{ textAlign: "center" }}>Actions</th>
-  </tr>
-</thead>
-<tbody>
-  {listings.map((l, idx) => {
-    const editLocked = (l.editCount ?? 0) >= 1;
-    return (
-      <tr key={l._id}>
-        <td className="tdMuted" data-label="#">{idx + 1}</td>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Service Title</th>
+                  <th>Image</th>
+                  <th>Company</th>
+                  <th>Plan</th>
+                  <th>Status</th>
+                  <th>Active</th>
+                  <th className="tdRight" style={{ textAlign: "center" }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {listings.map((l, idx) => {
+                  const editLocked = (l.editCount ?? 0) >= 1;
+                  return (
+                    <tr key={l._id}>
+                      <td className="tdMuted" data-label="#">{idx + 1}</td>
 
-        <td className="tdSemibold" data-label="Service Title">
-          {l.serviceTitle}
-        </td>
+                      <td className="tdSemibold" data-label="Service Title">
+                        {l.serviceTitle}
+                      </td>
 
-        <td data-label="Image">
-          {l.serviceImages?.[0]?.url ? (
-            <img src={l.serviceImages[0].url} alt="service" className="thumb" />
-          ) : (
-            <span className="tdMuted">No image</span>
-          )}
-        </td>
+                      <td data-label="Image">
+                        {l.serviceImages?.[0]?.url ? (
+                          <img src={l.serviceImages[0].url} alt="service" className="thumb" />
+                        ) : (
+                          <span className="tdMuted">No image</span>
+                        )}
+                      </td>
 
-        <td className="tdMuted tdNoWrap" data-label="Company">
-          <div>{l.companyName || "—"}</div>
-          
-        </td>
+                      <td className="tdMuted tdNoWrap" data-label="Company">
+                        <div>{l.companyName || "—"}</div>
+                      </td>
 
-        <td data-label="Plan">
-          <span className="badge badgePrimary">{l.serviceCategory || "—"}</span>
-        </td>
+                      <td data-label="Plan">
+                        <span className="badge badgePrimary">{l.serviceCategory || "—"}</span>
+                      </td>
 
-<td data-label="Status">
-  <StatusBadge
-    status={l.approvalStatus}
-    reason={l.approvalStatus === "approved" ? l.approvalReason : l.rejectionReason}
-  />
-</td>
+                      <td data-label="Status">
+                        <StatusBadge
+                          status={l.approvalStatus}
+                          reason={l.approvalStatus === "approved" ? l.approvalReason : l.rejectionReason}
+                        />
+                      </td>
 
-        <td data-label="Active">
-          <span className={`badge ${l.isActive ? "badgeSuccess" : "badgeNeutral"}`}>
-            {l.isActive ? "Active" : "Inactive"}
-          </span>
-        </td>
+                      <td data-label="Active">
+                        <span className={`badge ${l.isActive ? "badgeSuccess" : "badgeNeutral"}`}>
+                          {l.isActive ? "Active" : "Inactive"}
+                        </span>
+                      </td>
 
-        <td data-label="Actions">
-          <div className="actionGroup">
-            <button
-              className={`btn btnSm ${editLocked ? "btnSecondary" : "btnPrimary"}`}
-              onClick={() => openEdit(l)}
-              title={editLocked ? "Already edited once" : "Edit listing"}
-            >
-              Edit
-            </button>
-            <button
-              className={`btn btnSm ${l.isActive ? "btnWarning" : "btnSuccess"}`}
-              onClick={() => confirmToggleListing(l)}
-              title={(l.toggleCount ?? 0) >= 2 ? "Toggle limit reached" : l.isActive ? "Deactivate" : "Activate"}
-            >
-              {l.isActive ? "Deactivate" : "Activate"}
-            </button>
-            <button className="btn btnSm btnDanger" onClick={() => deleteListing(l._id)}>Delete</button>
-          </div>
-        </td>
-      </tr>
-    );
-  })}
-</tbody>
+                      <td data-label="Actions">
+                        <div className="actionGroup">
+                          <button
+                            className={`btn btnSm ${editLocked ? "btnSecondary" : "btnPrimary"}`}
+                            onClick={() => openEdit(l)}
+                            title={editLocked ? "Already edited once" : "Edit listing"}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className={`btn btnSm ${l.isActive ? "btnWarning" : "btnSuccess"}`}
+                            onClick={() => confirmToggleListing(l)}
+                            title={(l.toggleCount ?? 0) >= 2 ? "Toggle limit reached" : l.isActive ? "Deactivate" : "Activate"}
+                          >
+                            {l.isActive ? "Deactivate" : "Activate"}
+                          </button>
+                          <button className="btn btnSm btnDanger" onClick={() => deleteListing(l._id)}>Delete</button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
             </table>
           )}
         </div>
@@ -591,7 +602,6 @@ const confirmToggleListing = (listing) => {
                       {stateOpen && (
                         <div className="stateDropdownMenu">
                           <div className="statePlaceholder" onClick={() => { setForm((p) => ({ ...p, serviceArea: "" })); setStateOpen(false); }}>
-                          
                           </div>
                           {["Pan India", ...INDIA_STATES].map((state) => (
                             <div
@@ -673,12 +683,14 @@ const confirmToggleListing = (listing) => {
                   <strong>Note:</strong> Submitting does not guarantee listing. Our team will review and only approved listings will be published.
                 </div>
               </section>
+
               <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>
-              <button className="btn btnSecondary btcancel" onClick={closeModal} disabled={saving || uploadingIdx !== null}>Cancel</button>
-              <button className="btn btnPrimary btsubmit" onClick={save} disabled={saving || uploadingIdx !== null}>
-                {saving ? "Submitting…" : mode === "create" ? "Submit" : "Update"}
-              </button>
-            </div>
+                <button className="btn btnSecondary btcancel" onClick={closeModal} disabled={saving || uploadingIdx !== null}>Cancel</button>
+                <button className="btn btnPrimary btsubmit" onClick={save} disabled={saving || uploadingIdx !== null}>
+                  {saving ? "Submitting…" : mode === "create" ? "Submit" : "Update"}
+                </button>
+              </div>
+
             </div>{/* /modalBody */}
           </div>
         </div>
