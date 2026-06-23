@@ -67,7 +67,7 @@ export default function Page() {
 const companyColumnLabel =
   submissions.some((sub) => sub.orgType === "individual")
     ? "Gender"
-    : "Company";
+    : "Company Name";
 
   const load = async () => {
     if (!listingId) return;
@@ -94,7 +94,6 @@ const companyColumnLabel =
 
   useEffect(() => { load(); }, [listingId, listingType, page, statusFilter]);
 
-  /* ── Helpers ───────────────────────────────────────────────────────────────── */
   const updateStatus = async (id, status) => {
     try {
       setUpdatingId(id);
@@ -324,7 +323,7 @@ const companyColumnLabel =
   <h3 className="pubModal__sectionTitle">Contact information</h3>
   <div className="pubModal__grid">
     <InfoItem label="Full Name"    value={selected.fullName} />
-    <InfoItem label="Company"      value={selected.organisation} />
+    <InfoItem label="Company Name"      value={selected.organisation} />
      {getSubmissionType(selected) !== "service" ? (
   <InfoItem label="Org Type" value={selected.orgType} />
 ) : (
@@ -336,7 +335,6 @@ const companyColumnLabel =
     <InfoItem label="Location"     value={selected.location} />
    
 
-    {/* Service fields merged in */}
     {getSubmissionType(selected) === "service" && (
       <>
         <InfoItem label="Website"       value={selected.website} isLink />
