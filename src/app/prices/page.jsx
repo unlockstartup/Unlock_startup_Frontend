@@ -150,7 +150,7 @@ export default function Page() {
             <h1>Pricing</h1>
             <h4>Affordable Plans for Every Stage of Growth</h4>
             <p>
-              Unlock Startup: Our affordable monthly/annually subscription plans are structured to give you more opportunities, exposure, and the right network to boost your success in the startup ecosystem, along with more growth and access. Subscribe to a plan that will unlock everything you need to ensure your startup is able to compete and thrive in the ecosystem.
+               Our affordable monthly/annually subscription plans are structured to give you more opportunities, exposure, and the right network to boost your success in the startup ecosystem, along with more growth and access. Subscribe to a plan that will unlock everything you need to ensure your startup is able to compete and thrive in the ecosystem.
             </p>
           </div>
         </section>
