@@ -13697,15 +13697,18 @@ background: linear-gradient(
           color: #a07f00;
         }
 
-        .apexfaq__heading {
-          font-family: 'Gordita', sans-serif;
-          font-size: clamp(2.6rem, 6vw, 4rem);
-          font-weight: 900;
-          line-height: 1.06;
-          letter-spacing: -0.025em;
-          color: #1a1a1a;
-          margin-bottom: 1.25rem;
-        }
+.apexfaq__heading {
+  font-family: 'Gordita', sans-serif;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  color: #1a1a1a;
+  margin-bottom: 1.25rem;
+  white-space: nowrap;
+}
+
+
 
         .apexfaq__heading-accent {
           color: #1eb0e4;

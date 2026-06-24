@@ -8,70 +8,60 @@ const faqs = [
     color: "#ec512b",
     items: [
       {
-        q: "What types of events does your company manage?",
-        a: "We handle the full spectrum — corporate conferences, product launches, galas, trade expos, brand activations, award ceremonies, team off-sites, and large-scale concerts. If it needs a crowd and a stage, we've done it.",
+        q: "What is Unlock Startup?",
+        a: "Unlock Startup is a comprehensive digital platform designed to connect startups, companies, organizations, investors, innovators, professionals, and job seekers within a unified ecosystem. The platform enables publishers to create and manage listings for innovation challenges, competitions, events, job opportunities, products, and professional services through a dedicated dashboard.\n\nAt the same time, individuals, innovators, entrepreneurs, startups, and professionals can discover and participate in competitions, register for events, apply for jobs, explore innovative products, and connect with service providers that support business growth.",
       },
       {
-        q: "How early should I reach out before my event date?",
-        a: "For large-scale events (500+ attendees), we recommend a minimum of 3–4 months lead time. For mid-size events, 6–8 weeks. For intimate gatherings, 2–3 weeks can work. That said — the earlier, the better. Venue availability and vendor bookings fill up fast.",
+        q: "Who can join Unlock Startup?",
+        a: "If you are individual, innovators, can join, including startups, entrepreneurs, companies, organizations, investors, students, professionals, and job seekers.",
       },
       {
-        q: "Do you offer services for virtual or hybrid events?",
-        a: "Absolutely. We have a dedicated digital production team specializing in virtual stages, live-streaming, hybrid audience management, and interactive online experiences. Your remote attendees get the same energy as those in the room.",
-      },
-    ],
-  },
-  {
-    category: "Pricing & Packages",
-    color: "#ec512b",
-    items: [
-      {
-        q: "How is pricing structured?",
-        a: "We offer three service tiers: Essentials (coordination + day-of execution), Signature (end-to-end planning with creative direction), and Bespoke (white-glove, fully custom delivery). Pricing scales with event complexity, headcount, and duration. Contact us for a tailored quote.",
+        q: "How do I create an account?",
+        a: "You can register through our platform by selecting the account type that best matches your role, such as User, Publisher, or Investor.",
       },
       {
-        q: "Are there any hidden fees I should know about?",
-        a: "Zero hidden fees. Every quote we send is itemised and transparent — vendor costs, our management fee, contingency budget, and optional add-ons are all broken out clearly before you sign anything.",
-      },
-      {
-        q: "Do you require a deposit? What is your cancellation policy?",
-        a: "We require a 30% deposit upon signing. Cancellations made 60+ days before the event receive a full refund of the deposit. Within 30–60 days, 50% is retained. Under 30 days, the full deposit is non-refundable. We always work with clients on force-majeure situations.",
+        q: "Is Unlock Startup free to use?",
+        a: "Unlock Startup may offer both one month free and subscription-based plans. Features and benefits vary depending on the selected subscription plan.",
       },
     ],
   },
   {
-    category: "Planning & Execution",
+    category: "Account Types",
     color: "#ec512b",
     items: [
       {
-        q: "Will I have a dedicated event manager throughout the process?",
-        a: "Yes, always. From the kickoff call to post-event debrief, you get a single dedicated event manager as your main point of contact. No being bounced around — one person who knows your event inside and out.",
+        q: "What is a User Account?",
+        a: "A User Account is designed for individuals, innovators, entrepreneurs, startup founders, students, professionals, and job seekers who want to explore and participate in opportunities available on Unlock Startup. Through a User Account, members can discover innovation challenges, competitions, grant programs, events, job opportunities, investor profiles, products, and business services from a single dashboard.",
       },
       {
-        q: "Do you have preferred vendors, or can I bring my own?",
-        a: "We have a vetted network of caterers, AV crews, decorators, photographers, and entertainers we trust and have worked with extensively. That said, you're welcome to bring your own vendors — we'll coordinate and integrate them seamlessly into the plan.",
+        q: "What is a Publisher Account?",
+        a: "A Publisher Account allows startups, companies, organizations, and ecosystem partners to publish competitions, events, jobs, products list, and service listings on the platform.",
       },
       {
-        q: "How do you handle unexpected issues on the event day?",
-        a: "Every event ships with a detailed contingency plan. Our on-site team runs a closed operations channel and has pre-approved backup options for vendors, logistics, and tech — so we resolve issues before guests even notice they existed.",
-      },
-      {
-        q: "Can you manage events outside our city or country?",
-        a: "Yes. We manage domestic and international events. Our team handles venue scouting, local vendor sourcing, permit acquisition, and on-ground logistics no matter the location. We've executed events across 4 continents.",
+        q: "What is an Investor Account?",
+        a: "An Investor Account is designed for angel investors, venture capital firms, and funding organizations to create investment profiles and connect with startups seeking funding opportunities.",
       },
     ],
   },
   {
-    category: "After the Event",
+    category: "Listings & Applications",
     color: "#ec512b",
     items: [
       {
-        q: "Do you provide post-event reporting or analytics?",
-        a: "Every event closes with a comprehensive debrief report covering attendance data, budget reconciliation, vendor performance ratings, attendee feedback summary, and recommendations for future events. Data you can actually use.",
+        q: "Can investors receive pitch decks from startups?",
+        a: "Yes. Investors can include pitch deck submission link details in their profiles, allowing startups to share business proposals and funding requests directly.",
       },
       {
-        q: "Can we repurpose event content — photos, videos, livestreams?",
-        a: "Yes. We coordinate with our media partners to deliver edited highlight reels, photography packages, and raw livestream archives within 5–10 business days post-event. Licensing rights are fully transferred to you.",
+        q: "What types of products can be listed?",
+        a: "Startups and companies can showcase innovative products, technologies, hardware products, research projects, and market-ready innovations.",
+      },
+      {
+        q: "Can Publishers Track Applications?",
+        a: "Yes. Publishers can track and manage applications submitted through their listings using the Publisher Dashboard. Depending on the listing type, publishers can view applicant details, monitor application activity, review submissions, and track participation status. This feature helps organizations efficiently manage opportunities, evaluate candidates or participants, and streamline their selection process.",
+      },
+      {
+        q: "Why do some listings use external or third-party application links?",
+        a: "Unlock Startup allows publishers, investors to include external or third-party application links to provide flexibility in managing their recruitment, event registration, challenge participation, job apply, investor applications, or business processes. Only events apply for platform or add external link option.",
       },
     ],
   },
@@ -137,13 +127,13 @@ export default function FAQPage() {
             <span className="apexfaq__eyebrow-text">Help Centre</span>
           </div>
 
-          <h1 className="apexfaq__heading">
-            <span className="apexfaq__heading-accent">Everything</span> you need to know.
-          </h1>
+<h1 className="apexfaq__heading">
+  <span className="apexfaq__heading-accent">Frequently Asked Questions</span> 
+</h1>
 
-          <p className="apexfaq__subheading">
-            From your first inquiry to post-event debrief — answers to the questions our clients ask most. Still stuck? We're a message away.
-          </p>
+<p className="apexfaq__subheading">
+  From account setup to publisher tools — answers to the most common questions about Unlock Startup. Need help? We are a message away.
+</p>
 
           <div className="apexfaq__grid">
             {faqs.map((cat, catIdx) => (
@@ -180,7 +170,7 @@ export default function FAQPage() {
           <div className="apexfaq__cta-bar">
             <div>
               <p className="apexfaq__cta-text-primary">Still have questions?</p>
-              <p className="apexfaq__cta-text-secondary">Our team responds within 2 business hours.</p>
+              <p className="apexfaq__cta-text-secondary">Our team responds within 24 hours.</p>
             </div>
             <a className="apexfaq__cta-btn" href="#">
               Talk to us
