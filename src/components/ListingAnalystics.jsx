@@ -425,28 +425,27 @@ const pushFromStats = (type, arr, map, titleKey) => {
 
   useEffect(() => { load(); }, [load]);
 
-  /*  Derived values  */
   const summary = stats?.summary ?? {};
   const grand   = stats?.grandTotal ?? 0;
   const usage   = plan?.usage  ?? {};
   const limits  = plan?.limits ?? {};
   const isTrial = plan?.plan?.plan === "trial" || plan?.serviceplan?.plan === "trial";
 
-  const overviewCards = [
-    { label: "Jobs",         value: usage.jobs            ?? 0, Icon: Briefcase   },
-    { label: "Events",       value: usage.events           ?? 0, Icon: CalendarDays },
-    { label: "Competitions", value: usage.fundingCalls     ?? 0, Icon: Trophy       },
-    { label: "Products",     value: usage.products         ?? 0, Icon: Package      },
-    { label: "Services",     value: usage.serviceListings  ?? 0, Icon: Settings     },
-  ];
+const overviewCards = [
+  { label: "Jobs",         value: allRows.filter(r => r._type === "jobs").length,         Icon: Briefcase    },
+  { label: "Events",       value: allRows.filter(r => r._type === "events").length,        Icon: CalendarDays },
+  { label: "Competitions", value: allRows.filter(r => r._type === "competitions").length,  Icon: Trophy       },
+  { label: "Products",     value: allRows.filter(r => r._type === "products").length,      Icon: Package      },
+  { label: "Services",     value: allRows.filter(r => r._type === "services").length,      Icon: Settings     },
+];
 
-  const barData = [
-    { name: "Jobs",         value: usage.jobs            ?? 0 },
-    { name: "Events",       value: usage.events           ?? 0 },
-    { name: "Competitions", value: usage.fundingCalls     ?? 0 },
-    { name: "Products",     value: usage.products         ?? 0 },
-    { name: "Services",     value: usage.serviceListings  ?? 0 },
-  ];
+const barData = [
+  { name: "Jobs",         value: allRows.filter(r => r._type === "jobs").length         },
+  { name: "Events",       value: allRows.filter(r => r._type === "events").length        },
+  { name: "Competitions", value: allRows.filter(r => r._type === "competitions").length  },
+  { name: "Products",     value: allRows.filter(r => r._type === "products").length      },
+  { name: "Services",     value: allRows.filter(r => r._type === "services").length      },
+];
 
 const clicksData = [
   { label: "Job",         value: summary.jobs         ?? 0 },
