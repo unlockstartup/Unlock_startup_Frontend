@@ -37,21 +37,22 @@ export default function PublisherNotifications() {
 
   useEffect(() => { fetchNotifications(page); }, [page]);
 
-  const markAsRead = async (id) => {
-    try {
-      await publisherApi.patch(`/api/notifications/${id}/read`);
-      setNotifications((prev) =>
-        prev.map((n) => (n._id === id ? { ...n, isRead: true } : n))
-      );
-    } catch (err) {
-      toast.error(err?.response?.data?.message || "Failed to mark as read");
-    }
-  };
+const markAsRead = async (id) => {
+  try {
+    await publisherApi.patch(`/api/notifications/${id}/read`);
+    setNotifications((prev) =>
+      prev.map((n) => (n._id === id ? { ...n, isRead: true } : n))
+    );
+    window.dispatchEvent(new Event("notifications:updated"));
+  } catch (err) {
+    toast.error(err?.response?.data?.message || "Failed to mark as read");
+  }
+};
 
-  const markAllAsRead = async () => {
-    const unread = notifications.filter((n) => !n.isRead);
-    await Promise.all(unread.map((n) => markAsRead(n._id)));
-  };
+const markAllAsRead = async () => {
+  const unread = notifications.filter((n) => !n.isRead);
+  await Promise.all(unread.map((n) => markAsRead(n._id)));
+};
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
   const displayed   = showUnreadOnly ? notifications.filter((n) => !n.isRead) : notifications;

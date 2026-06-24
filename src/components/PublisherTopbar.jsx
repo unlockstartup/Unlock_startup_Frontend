@@ -41,32 +41,39 @@ export default function PublisherTopbar({ onToggle }) {
   const [name, setName] = useState("Profile");
   const [unreadCount, setUnreadCount] = useState(0);
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await publisherApi.get("/api/publisher/me");
-        const p = res.data?.publisher;
-        setProfileurl(p?.userId?.profileurl?.url || null);
-        setName(p?.userId?.name || "Profile");
-      } catch (err) {
-        console.error("Failed to load profile for topbar", err);
-      }
-    };
+useEffect(() => {
+  const fetchProfile = async () => {
+    try {
+      const res = await publisherApi.get("/api/publisher/me");
+      const p = res.data?.publisher;
+      setProfileurl(p?.userId?.profileurl?.url || null);
+      setName(p?.userId?.name || "Profile");
+    } catch (err) {
+      console.error("Failed to load profile for topbar", err);
+    }
+  };
 
-    const fetchUnreadCount = async () => {
-      try {
-        const res = await publisherApi.get("/api/notifications/my?page=1&limit=100");
-        const items = res.data?.items || [];
-        const unread = items.filter((n) => !n.isRead).length;
-        setUnreadCount(unread);
-      } catch {
-        // silently ignore
-      }
-    };
+  const fetchUnreadCount = async () => {
+    try {
+      const res = await publisherApi.get("/api/notifications/my?page=1&limit=100");
+      const items = res.data?.items || [];
+      const unread = items.filter((n) => !n.isRead).length;
+      setUnreadCount(unread);
+    } catch {
+      // silently ignore
+    }
+  };
 
-    fetchProfile();
-    fetchUnreadCount();
-  }, []);
+  fetchProfile();
+  fetchUnreadCount();
+
+  const handleUpdate = () => fetchUnreadCount();
+  window.addEventListener("notifications:updated", handleUpdate);
+
+  return () => {
+    window.removeEventListener("notifications:updated", handleUpdate);
+  };
+}, []);
 
   return (
     <div className="ventic-topbar">
