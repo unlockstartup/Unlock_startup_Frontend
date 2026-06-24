@@ -72,8 +72,8 @@ function adaptPlan(plan) {
 }
 
 const SERVICE_TIERS = [
-  { durationType: '6m',  label: '6-Month Plan', priceKey: 'sixMonthPrice', period: '/ 6 months', desc: 'Flexible half-year access to service listings.' },
-  { durationType: '12m', label: 'Yearly Plan',  priceKey: 'yearlyPrice',   period: '/ year',     desc: 'Best value — full year of service listings.' },
+  { durationType: '6m',  label: '6-Month Plan', priceKey: 'sixMonthPrice', period: '/ 6 months', desc: 'Showcase your expertise and connect with new customers through a flexible six-month service listing plan.' },
+  { durationType: '12m', label: 'Yearly Plan',  priceKey: 'yearlyPrice',   period: '/ year',     desc: 'Expand your reach with 1 year of continuous service marketplace exposure.' },
 ];
 
 function buildServiceFeatures(plan) {
@@ -147,10 +147,10 @@ export default function Page() {
         {/* Hero Section */}
         <section className="pricingPage__hero">
           <div className="pricingPage__container">
-            <h1>Transparent pricing, built for every stage</h1>
+            <h1>Pricing</h1>
+            <h4>Affordable Plans for Every Stage of Growth</h4>
             <p>
-              From your first idea to full-scale operations — choose a plan that fits where you are today
-              and grows with you. No hidden fees, no long-term commitments.
+              Unlock Startup: Our affordable monthly/annually subscription plans are structured to give you more opportunities, exposure, and the right network to boost your success in the startup ecosystem, along with more growth and access. Subscribe to a plan that will unlock everything you need to ensure your startup is able to compete and thrive in the ecosystem.
             </p>
           </div>
         </section>
@@ -161,8 +161,8 @@ export default function Page() {
             Startup Plans
           </h2>
           <p style={{ textAlign: 'center', color: '#6b7280', fontSize: '15px', marginBottom: '40px' }}>
-            Publish and manage your job listings, event listings and fundings. Pick a duration that suits your needs.
-          </p>
+        Choose a subscription duration that aligns with your business objectives and access to powerful dashboard that enhance visibility, engagement, networking, and growth.          
+        </p>
           <div className="pricingPage__container">
 
             {loading && (
@@ -278,20 +278,20 @@ export default function Page() {
             <h2>Frequently Asked Questions</h2>
             <div className="pricingPage__faqGrid">
               <details className="pricingPage__faqItem">
-                <summary>How does the 14-day trial work?</summary>
-                <p>Start any paid plan with full access for 14 days completely free. No credit card required upfront. Cancel anytime.</p>
+                <summary>Are subscription fees refundable?</summary>
+                <p>Subscription fees, once a subscription has been initiated and a service associated with a plan has been delivered to you, are generally not refundable.</p>
               </details>
               <details className="pricingPage__faqItem">
-                <summary>Can I upgrade or downgrade plans?</summary>
-                <p>Yes! Upgrade instantly, downgrade at billing cycle end. We prorate everything fairly so you only pay for what you use.</p>
+                <summary>How to change my subscription plan?</summary>
+                <p>You can upgrade a subscription to higher one to use more benefits like more number of listing, enhanced profile views and extra features. Any price differences shall be accounted during the upgrading of subscription.</p>
               </details>
               <details className="pricingPage__faqItem">
-                <summary>What payment methods do you accept?</summary>
-                <p>Razorpay, cards, UPI, net banking.</p>
+                <summary>What happens after subscription expires?</summary>
+                <p>After expiration of a subscription any privilege and benefit associated with it, will stop being delivered. You can choose to renew the subscription at any time to make sure the ongoing service of managing your listings will not be discontinued.</p>
               </details>
               <details className="pricingPage__faqItem">
-                <summary>Is there a money-back guarantee?</summary>
-                <p>100% satisfaction or your money back within 30 days. We are confident you will love building with us!</p>
+                <summary>Can we receive a refund if we do not use my subscription?</summary>
+                <p>No. Subscription fees are generally non-refundable if the subscription has been successfully activated, regardless of usage. Refunds are only considered in exceptional circumstances, such as duplicate payments, incorrect multiple charges, payment processing errors, or verified billing issues.</p>
               </details>
             </div>
           </div>
