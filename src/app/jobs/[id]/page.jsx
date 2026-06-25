@@ -413,8 +413,6 @@ const handleApply = () => {
     {job.salaryMin && job.salaryMax && <span className="jd-salDash">–</span>}
     {job.salaryMax && <p className="jd-salAmount">{formatSalary(null, job.salaryMax)}</p>}
   </div>
-  <p className="jd-salType">Annual CTC &nbsp;·&nbsp; Based on experience</p>
-
   <div className="jd-salRange">
     <div className="jd-salTrack"><div className="jd-salFill" /></div>
     <div className="jd-salTicks">
