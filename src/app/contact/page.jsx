@@ -4,6 +4,7 @@ import Breadcrumb from "@/components/breadcrumb/Breadcrumb";
 import { useState } from "react";
 import "./contact.css";
 import { INDIA_STATES } from "@/app/constants";
+import api from "../api";
 
 const Page = () => {
 
@@ -30,15 +31,9 @@ const handleSubmit = async (e) => {
   setError("");
 
   try {
-    const res = await fetch("/api/public", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    const { data } = await api.post("/api/public/user-queries", formData);
 
-    const data = await res.json();
-
-    if (!res.ok || !data.success) {
+    if (!data.success) {
       setError(data.message || "Something went wrong. Please try again.");
       return;
     }
@@ -46,7 +41,9 @@ const handleSubmit = async (e) => {
     setIsSubmitted(true);
 
   } catch (err) {
-    setError("Network error. Please check your connection and try again.");
+    setError(
+      err?.response?.data?.message || "Network error. Please check your connection and try again."
+    );
   } finally {
     setIsLoading(false);
   }
