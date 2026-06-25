@@ -17,7 +17,7 @@ const Page = () => {
           </section>
 
           {/* Services Section */}
-          <section id="services" style={{ marginTop: 40 }}>
+          <section id="services">
             <div className="container">
               <div className="section-head">
                 <div className="section-label">What's Inside</div>
