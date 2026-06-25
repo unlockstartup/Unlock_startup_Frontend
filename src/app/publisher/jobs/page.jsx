@@ -193,7 +193,10 @@ const fetchJobs = async (overrides = {}) => {
 
   /*  Modal helpers  */
   const openCreate = () => { setForm(defaultForm); setEditId(null); setShowModal(true); };
-
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setForm((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
+  };
 const openEdit = (job) => {
   const alreadyEdited = (job.editCount ?? 0) >= 1;
 
@@ -895,6 +898,34 @@ const confirmToggleJob = (job) => {
                   <label className="label">External Application URL</label>
                   <input type="url" className="input" value={form.externalApplicationUrl} onChange={set("externalApplicationUrl")} placeholder="https://" />
                 </div>
+              </section>
+              <section className="section">
+                <h3 className="sectionTitle">Use &amp; disclosure consent</h3>
+
+                {/* Consent checkbox */}
+                <div style={{
+                  padding: "1rem", borderRadius: "var(--radius-lg)",
+                  background: "var(--blue-soft)", border: "1px solid rgba(1,148,223,0.25)",
+                }}>
+                  <label style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start", cursor: "pointer" }}>
+                    <input
+                      type="checkbox"
+                      name="disclosureConsent"
+                      checked={form.disclosureConsent}
+                      onChange={handleChange}
+                      style={{ width: "18px", height: "18px", accentColor: "var(--blue)", flexShrink: 0, marginTop: "2px" }}
+                    />
+                    <span style={{ fontSize: "var(--text-sm)", color: "var(--color-text)", lineHeight: 1.6 }}>
+                      I / We confirm that all information submitted in this application is non-confidential and may be reviewed, shared, or published for evaluation and listing purposes.{" "}
+                      <strong style={{ color: "var(--orange)" }}>*</strong>
+                    </span>
+                  </label>
+                </div>
+
+                {/* Notice */}
+              <div style={{ padding: "0.9rem 1rem", borderRadius: "0.85rem", background: "var(--yellow-soft)", border: "1px solid rgba(252,207,2,0.4)", color: "var(--yellow-hover)", fontSize: "var(--text-sm)" }}>
+                Note: After submission, your listing will be reviewed. If all details are correct, approval will be completed within 24 hours. Updates will be sent via Dashboard Notifications.
+              </div>
               </section>
               <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>
               <button className="btn btnSecondary btcancel" onClick={closeModal} disabled={saving}>Cancel</button>

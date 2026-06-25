@@ -675,13 +675,9 @@ export default function ServiceListings() {
                   </label>
                 </div>
 
-                <div style={{
-                  padding: "0.9rem 1rem", borderRadius: "var(--radius-lg)",
-                  background: "var(--yellow-soft)", border: "1px solid rgba(252,207,2,0.4)",
-                  color: "var(--yellow-hover)", fontSize: "var(--text-sm)",
-                }}>
-                  <strong>Note:</strong> Submitting does not guarantee listing. Our team will review and only approved listings will be published.
-                </div>
+              <div style={{ padding: "0.9rem 1rem", borderRadius: "0.85rem", background: "var(--yellow-soft)", border: "1px solid rgba(252,207,2,0.4)", color: "var(--yellow-hover)", fontSize: "var(--text-sm)" }}>
+                Note: After submission, your listing will be reviewed. If all details are correct, approval will be completed within 24 hours. Updates will be sent via Dashboard Notifications.
+              </div>
               </section>
 
               <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>

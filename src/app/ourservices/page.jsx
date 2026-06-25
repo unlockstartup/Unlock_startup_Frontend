@@ -14,9 +14,8 @@ const Page = () => {
             <h1 className="hero-heading">
               Unlock Startup Services
             </h1>
+            
           </section>
-
-          {/* Services Section */}
           <section id="services">
             <div className="container">
               <div className="section-head">
@@ -30,7 +29,6 @@ const Page = () => {
               </div>
 
               <div className="services-grid">
-                {/* Service 1 - Competitions */}
                 <article className="service-card">
                   <div className="service-header">
                     <div className="service-number">01</div>

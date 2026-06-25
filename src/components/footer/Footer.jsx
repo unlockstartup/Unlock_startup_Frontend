@@ -21,7 +21,7 @@ export default function Footer() {
                 </Link>
               </div>
               <p className="mb-20" style={{ fontSize: "14px", lineHeight: "1.7", color: "#6b7280", maxWidth: "300px", margin: "0 auto 20px" }}>
-                Empowering startups to scale faster — connecting founders with the right investors, opportunities, and resources to build what matters.
+                Unlock Startup is a comprehensive digital platform designed to connect startups, companies, organizations, investors, innovators, professionals and job seekers within in a unified ecosystem post and participate.
               </p>
               {/* <Link href="mailto:contact@unlockstartup.com" className="email fw-500">
                 contact@unlockstartup.com

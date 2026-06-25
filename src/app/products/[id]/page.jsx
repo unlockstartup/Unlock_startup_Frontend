@@ -206,7 +206,7 @@ const router = useRouter();
                   )}
                   {product.innovationCategory && (
                     <div className="sdpMetaItem">
-                      <span className="sdpMetaLabel">Innovation Category</span>
+                      <span className="sdpMetaLabel">Product Category</span>
                       <span className="sdpMetaValue sdpMetaValue--blue">{product.innovationCategory}</span>
                     </div>
                   )}

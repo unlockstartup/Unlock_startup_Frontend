@@ -37,14 +37,14 @@ const [stateOpen, setStateOpen] = useState(false);
         <div className="container" >
           <div className="hero-grid">
             <div className="hero-content">
-              <span className="eyebrow">Let&apos;s Connect</span>
-              <h1>Ready to Create High-Impact Startup Events That Drive Real Growth?</h1>
+              <h1>Get in Touch. Grow with Unlock Startup.</h1>
               <p>
-                Unlock Startup is Delhi&apos;s trusted company for ambitious founders. 
-                From product launches and investor summits to networking galas and industry conferences, 
-                we design strategic events that attract funding, customers, and partners. 
-                Reach out today — we respond within 24 hours and deliver measurable ROI.
-              </p>
+             Have a question, partnership inquiry, support request, or business opportunity? We're here to help.
+              </p> <br/> 
+              <p>Whether you are a startup, innovator, company, organization, investor, service provider, or job seeker, the Unlock Startup team is ready to assist you. Contact us to learn more about our platform, subscription plans, listings, partnerships, technical support, or any other inquiries.
+We value innovation, collaboration, and meaningful connections. Our team will review your message and respond as soon as possible.
+</p>
+<h4 style={{marginTop : 18}}>Let's connect and unlock new opportunities for growth, innovation, and success together.</h4>
             </div>
 
             <div className="contact-info" aria-label="Quick contact options">
@@ -100,10 +100,9 @@ const [stateOpen, setStateOpen] = useState(false);
           <div className="section-head">
             <div className="section-label">Tell us more</div>
             <div>
-              <h2>Let us know about Your Next Startup Event</h2>
+              <h2> Every Great Opportunity Starts with a Conversation.</h2>
               <p className="section-copy">
-                Fill out this quick form and our Delhi-based startup event management team will get back to you within 24 hours with a tailored proposal. 
-                No spam — only strategic ideas to accelerate your growth.
+               We'd love to learn more about your goals, ideas, and requirements. Whether you're looking to publish a challenge, promote an event, post a job, showcase a product, connect with investors, or explore business services, our team is here to assist you.
               </p>
             </div>
           </div>
@@ -267,7 +266,7 @@ const [stateOpen, setStateOpen] = useState(false);
       {/* Footer */}
       <footer className="site-footer">
         <div className="container">
-          Unlock Startup — Building the future, one startup at a time. Delhi, India.
+          Unlock Startup — A Platform for Startups Moving Towards Success.
         </div>
       </footer>
     </main>

@@ -88,15 +88,20 @@ const workModes = (() => {
   });
 })();
 
-  const formatSalary = (min, max) => {
-    if (!min && !max) return "Not disclosed";
-    const format = (num) => {
-      if (num >= 100000) return `₹${(num / 100000).toFixed(0)}L`;
-      return `₹${num.toLocaleString("en-IN")}`;
-    };
-    if (min && max) return `${format(min)} - ${format(max)}`;
-    return format(min || max);
+const formatSalary = (min, max) => {
+  if (!min && !max) return "Not disclosed";
+  
+  const format = (num) => {
+    if (!num) return null;
+    if (num >= 10000000) return `₹${(num / 10000000).toFixed(1).replace(/\.0$/, '')}Cr`;
+    if (num >= 100000)   return `₹${(num / 100000).toFixed(1).replace(/\.0$/, '')}L`;
+    if (num >= 1000)     return `₹${(num / 1000).toFixed(1).replace(/\.0$/, '')}K`;
+    return `₹${num.toLocaleString("en-IN")}`;
   };
+
+  if (min && max) return `${format(min)} - ${format(max)}`;
+  return format(min || max);
+};
 
   const salary = formatSalary(job.salaryMin, job.salaryMax);
   const location = [job.jobLocationCity, job.jobLocationState, job.jobLocationCountry]
@@ -162,8 +167,8 @@ const handleApply = () => {
                   <span className="jd-activityBadge">
                     <span className="jd-activityDot" /> Actively hiring
                   </span>
-{workModes.some(m => m.toLowerCase() === "remote") && (
-  <span className="jd-remoteBadge">Remote</span>
+{job.jobCategory && (
+  <span className="jd-remoteBadge">{job.jobCategory}</span>
 )}
                 </div>
               </div>
