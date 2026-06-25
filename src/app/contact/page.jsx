@@ -15,18 +15,42 @@ const Page = () => {
     state: "",
     message: "",
   });
-
-  const [isSubmitted, setIsSubmitted] = useState(false);
+const [isSubmitted, setIsSubmitted] = useState(false);
+const [isLoading, setIsLoading]     = useState(false);
+const [error, setError]             = useState("");
 const [stateOpen, setStateOpen] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+  setError("");
+
+  try {
+    const res = await fetch("/api/public", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      setError(data.message || "Something went wrong. Please try again.");
+      return;
+    }
+
     setIsSubmitted(true);
-  };
+
+  } catch (err) {
+    setError("Network error. Please check your connection and try again.");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <main className="contact-main">
@@ -248,9 +272,15 @@ We value innovation, collaboration, and meaningful connections. Our team will re
                   />
                 </div>
 
-                <button type="submit" className="submit-btn">
-                  Send Message
-                </button>
+<button type="submit" className="submit-btn" disabled={isLoading}>
+  {isLoading ? "Sending…" : "Send Message"}
+</button>
+
+{error && (
+  <p style={{ color: "#DC2626", marginTop: 12, fontSize: 14 }}>
+    {error}
+  </p>
+)}
               </form>
             ) : (
               <div className="success-msg" role="status" aria-live="polite">
