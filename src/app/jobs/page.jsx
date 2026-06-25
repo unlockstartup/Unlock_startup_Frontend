@@ -67,10 +67,10 @@ const JobListPage = () => {
       });
     }
 
-    if (sortBy === "salary")
-      list.sort((a, b) => (b.salaryMax || 0) - (a.salaryMax || 0));
-    else
-      list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+if (sortBy === "oldest")
+  list.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));  // ascending
+else
+  list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));  // latest 
 
     return list;
   }, [jobs, activeFilters, sortBy]);
@@ -118,7 +118,7 @@ const JobListPage = () => {
                     onChange={(e) => setSortBy(e.target.value)}
                   >
                     <option value="latest">Latest</option>
-                    <option value="salary">Salary</option>
+                    <option value="oldest"></option>
                   </select>
                 </div>
               </div>
