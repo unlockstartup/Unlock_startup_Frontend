@@ -21,35 +21,35 @@ function buildFeatures(plan) {
     items.push(
       plan.jobLimit === 0
         ? 'Unlimited job postings'
-        : `Up to ${plan.jobLimit} job posting${plan.jobLimit !== 1 ? 's' : ''}`
+        : `${plan.jobLimit} job posting${plan.jobLimit !== 1 ? 's' : ''}`
     );
   }
   if (plan.eventLimit !== undefined) {
     items.push(
       plan.eventLimit === 0
         ? 'Unlimited events'
-        : `Up to ${plan.eventLimit} event${plan.eventLimit !== 1 ? 's' : ''}`
+        : `${plan.eventLimit} event${plan.eventLimit !== 1 ? 's' : ''}`
     );
   }
   if (plan.productsLimit !== undefined) {
     items.push(
       plan.productsLimit === 0
         ? 'Unlimited products'
-        : `Up to ${plan.productsLimit} product${plan.productsLimit !== 1 ? 's' : ''}`
+        : `${plan.productsLimit} product${plan.productsLimit !== 1 ? 's' : ''}`
     );
   }
   if (plan.fundingCallsLimit !== undefined) {
     items.push(
       plan.fundingCallsLimit === 0
         ? 'Unlimited funding calls'
-        : `Up to ${plan.fundingCallsLimit} funding call${plan.fundingCallsLimit !== 1 ? 's' : ''}`
+        : `${plan.fundingCallsLimit} funding call${plan.fundingCallsLimit !== 1 ? 's' : ''}`
     );
   }
   if (plan.serviceListingLimit !== undefined) {
     items.push(
       plan.serviceListingLimit === 0
         ? 'Unlimited service listings'
-        : `Up to ${plan.serviceListingLimit} service listing${plan.serviceListingLimit !== 1 ? 's' : ''}`
+        : `${plan.serviceListingLimit} service listing${plan.serviceListingLimit !== 1 ? 's' : ''}`
     );
   }
   if (Array.isArray(plan.features)) {
@@ -81,7 +81,7 @@ function buildServiceFeatures(plan) {
   return [
     plan.serviceListingLimit === 0
       ? 'Unlimited service listings'
-      : `Up to ${plan.serviceListingLimit} service listing${plan.serviceListingLimit !== 1 ? 's' : ''}`,
+      : `${plan.serviceListingLimit} service listing${plan.serviceListingLimit !== 1 ? 's' : ''}`,
   ];
 }
 
