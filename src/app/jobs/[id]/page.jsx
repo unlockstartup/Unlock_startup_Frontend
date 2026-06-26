@@ -72,36 +72,36 @@ export default function Page() {
     );
   }
 
-/*  derived values  */
-const capitalize = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : "";
+  /*  derived values  */
+  const capitalize = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : "";
 
-const workModes = (() => {
-  const raw = job.workMode;
-  if (!raw) return [];
-  const arr = Array.isArray(raw) ? raw : raw.split(",").map(s => s.trim());
-  const seen = new Set();
-  return arr.filter(s => {
-    const key = s.toLowerCase();
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-})();
+  const workModes = (() => {
+    const raw = job.workMode;
+    if (!raw) return [];
+    const arr = Array.isArray(raw) ? raw : raw.split(",").map(s => s.trim());
+    const seen = new Set();
+    return arr.filter(s => {
+      const key = s.toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  })();
 
-const formatSalary = (min, max) => {
-  if (!min && !max) return "Not disclosed";
-  
-  const format = (num) => {
-    if (!num) return null;
-    if (num >= 10000000) return `₹${(num / 10000000).toFixed(1).replace(/\.0$/, '')}Cr`;
-    if (num >= 100000)   return `₹${(num / 100000).toFixed(1).replace(/\.0$/, '')}L`;
-    if (num >= 1000)     return `₹${(num / 1000).toFixed(1).replace(/\.0$/, '')}K`;
-    return `₹${num.toLocaleString("en-IN")}`;
+  const formatSalary = (min, max) => {
+    if (!min && !max) return "Not disclosed";
+
+    const format = (num) => {
+      if (!num) return null;
+      if (num >= 10000000) return `₹${(num / 10000000).toFixed(1).replace(/\.0$/, '')}Cr`;
+      if (num >= 100000) return `₹${(num / 100000).toFixed(1).replace(/\.0$/, '')}L`;
+      if (num >= 1000) return `₹${(num / 1000).toFixed(1).replace(/\.0$/, '')}K`;
+      return `₹${num.toLocaleString("en-IN")}`;
+    };
+
+    if (min && max) return `${format(min)} - ${format(max)}`;
+    return format(min || max);
   };
-
-  if (min && max) return `${format(min)} - ${format(max)}`;
-  return format(min || max);
-};
 
   const salary = formatSalary(job.salaryMin, job.salaryMax);
   const location = [job.jobLocationCity, job.jobLocationState, job.jobLocationCountry]
@@ -126,15 +126,15 @@ const formatSalary = (min, max) => {
     else navigator.clipboard.writeText(window.location.href);
   };
 
-const handleApply = () => {
-  if (!user) return;
-  TrackPublicAppyClick(job._id).catch(() => {});
-  if (job.externalApplicationUrl && job.externalApplicationUrl !== "link") {
-    window.open(job.externalApplicationUrl, "_blank", "noopener,noreferrer");
-  } else {
-    setModalOpen(true);
-  }
-};
+  const handleApply = () => {
+    if (!user) return;
+    TrackPublicAppyClick(job._id).catch(() => { });
+    if (job.externalApplicationUrl && job.externalApplicationUrl !== "link") {
+      window.open(job.externalApplicationUrl, "_blank", "noopener,noreferrer");
+    } else {
+      setModalOpen(true);
+    }
+  };
 
   return (
     <main>
@@ -142,7 +142,7 @@ const handleApply = () => {
         <div className="container">
           <Breadcrumb title="Jobs" dynamicTitle={job?.title} />
           {/*  Back link  */}
-          <a href="/jobs" className="backLink" style={{marginTop : "30px"}}>
+          <a href="/jobs" className="backLink" style={{ marginTop: "30px" }}>
             <ArrowLeft size={14} strokeWidth={2} /> All Jobs
           </a>
 
@@ -151,8 +151,8 @@ const handleApply = () => {
             <div className="jd-heroLeft">
               <div className="jd-logoWrap">
                 {job.companyLogo?.url ? (
-                  <Image 
-                    src={job.companyLogo.url} 
+                  <Image
+                    src={job.companyLogo.url}
                     alt={job.companyName}
                     width={80}
                     height={80}
@@ -167,9 +167,9 @@ const handleApply = () => {
                   <span className="jd-activityBadge">
                     <span className="jd-activityDot" /> Actively hiring
                   </span>
-{job.jobCategory && (
-  <span className="jd-remoteBadge">{job.jobCategory}</span>
-)}
+                  {job.jobCategory && (
+                    <span className="jd-remoteBadge">{job.jobCategory}</span>
+                  )}
                 </div>
               </div>
               <div className="jd-titleWrap">
@@ -406,35 +406,35 @@ const handleApply = () => {
                     )}
                   </div>
                 </div>
-<div className="jd-salSection">
-  <span className="jd-salLabel">Salary Range</span>
-  <div className="jd-salRow">
-    <p className="jd-salAmount">{formatSalary(job.salaryMin, null)}</p>
-    {job.salaryMin && job.salaryMax && <span className="jd-salDash">–</span>}
-    {job.salaryMax && <p className="jd-salAmount">{formatSalary(null, job.salaryMax)}</p>}
-  </div>
-  <div className="jd-salRange">
-    <div className="jd-salTrack"><div className="jd-salFill" /></div>
-    <div className="jd-salTicks">
-      <span className="jd-salTick jd-salTick--active">{formatSalary(job.salaryMin, null)}</span>
-      <span className="jd-salTick jd-salTick--active">{formatSalary(null, job.salaryMax)}</span>
-    </div>
-  </div>
+                <div className="jd-salSection">
+                  <span className="jd-salLabel">Salary Range</span>
+                  <div className="jd-salRow">
+                    <p className="jd-salAmount">{formatSalary(job.salaryMin, null)}</p>
+                    {job.salaryMin && job.salaryMax && <span className="jd-salDash">–</span>}
+                    {job.salaryMax && <p className="jd-salAmount">{formatSalary(null, job.salaryMax)}</p>}
+                  </div>
+                  <div className="jd-salRange">
+                    <div className="jd-salTrack"><div className="jd-salFill" /></div>
+                    <div className="jd-salTicks">
+                      <span className="jd-salTick jd-salTick--active">{formatSalary(job.salaryMin, null)}</span>
+                      <span className="jd-salTick jd-salTick--active">{formatSalary(null, job.salaryMax)}</span>
+                    </div>
+                  </div>
 
-  <div className="jd-salPills">
-    {job.salaryType && (
-      <span className="jd-salPill jd-salPill--green">
-        <span className="jd-salPillDot" />{job.salaryType}
-      </span>
-    )}
-{/* Line ~290 — Work mode pills */}
-{workModes.map((mode, i) => (
-  <span key={i} className={`jd-salPill jd-salPill--${i === 0 ? 'purple' : 'blue'}`}>
-    <span className="jd-salPillDot" />{capitalize(mode)}
-  </span>
-))}
-  </div>
-</div>
+                  <div className="jd-salPills">
+                    {job.salaryType && (
+                      <span className="jd-salPill jd-salPill--green">
+                        <span className="jd-salPillDot" />{job.salaryType}
+                      </span>
+                    )}
+                    {/* Line ~290 — Work mode pills */}
+                    {workModes.map((mode, i) => (
+                      <span key={i} className={`jd-salPill jd-salPill--${i === 0 ? 'purple' : 'blue'}`}>
+                        <span className="jd-salPillDot" />{capitalize(mode)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -464,25 +464,25 @@ const handleApply = () => {
           </div>
 
           {/*  APPLY NOW  */}
-{/*  APPLY NOW  */}
-<div className="jd-applySection">
-  <h2 className="jd-applyTitle">Apply Now</h2>
+          {/*  APPLY NOW  */}
+          <div className="jd-applySection">
+            <h2 className="jd-applyTitle">Apply Now</h2>
 
-  {user ? (
-    <button
-      className="jd-submitBtn"
-      onClick={handleApply}
-    >
-      <Send size={16} />
-      Submit Application
-    </button>
-  ) : (
-    <a href="/login" className="jd-submitBtn" style={{ textAlign: "center", justifyContent: "center", textDecoration: "none" }}>
-      <User size={16} />
-      Login to Apply
-    </a>
-  )}
-</div>
+            {user ? (
+              <button
+                className="jd-submitBtn"
+                onClick={handleApply}
+              >
+                <Send size={16} />
+                Submit Application
+              </button>
+            ) : (
+              <a href="/login" className="jd-submitBtn" style={{ textAlign: "center", justifyContent: "center", textDecoration: "none" }}>
+                <User size={16} />
+                Login to Apply
+              </a>
+            )}
+          </div>
 
         </div>
       </div>

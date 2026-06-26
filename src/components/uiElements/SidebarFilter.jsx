@@ -20,6 +20,7 @@ const API_OPTION_MAP = {
   serviceCategory:   { url: "/api/public/service-categories",       dataKey: "categories"       },
   patentStatus:      { url: "/api/public/patent-status/active",     dataKey: "statuses"         },
   productStatus:     { url: "/api/public/product-status/active",    dataKey: "statuses"         },
+  innovationCategory: { url: "/api/public/product-category/active", dataKey: "categories" },
 };
 
 const CASCADE_MAP = {
