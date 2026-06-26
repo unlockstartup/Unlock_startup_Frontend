@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Briefcase, CalendarDays, Trophy, Package, Settings } from "lucide-react";
+import { Briefcase, CalendarDays, Trophy, Package, Settings, DollarSign } from "lucide-react";
 import publisherApi from "@/app/publisherapi";
 
 import {
@@ -10,7 +10,13 @@ import {
 } from "recharts";
 
 const BLUE = "#0194df";
-
+const fmtINR = (val) => {
+  if (!val) return null;
+  if (val >= 10000000) return `₹${(val / 10000000).toFixed(2).replace(/\.00$/, "")} Cr`;
+  if (val >= 100000)   return `₹${(val / 100000).toFixed(2).replace(/\.00$/, "")} L`;
+  if (val >= 1000)     return `₹${(val / 1000).toFixed(2).replace(/\.00$/, "")} K`;
+  return `₹${val}`;
+};
 const TYPE_META = {
   jobs:         { label: "Job",         color: BLUE, bg: "#fff4f0", icon: "💼" },
   competitions: { label: "Competition", color: BLUE, bg: "#f0f8ff", icon: "🏆" },
@@ -32,6 +38,7 @@ const fetchComps    = () => publisherApi.get("/api/publisher/funding-calls");
 const fetchEvents   = () => publisherApi.get("/api/publisher/dashboard/events");
 const fetchProducts = () => publisherApi.get("/api/publisher/innovation-products/mine");
 const fetchServices = () => publisherApi.get("/api/publisher/service-listings/mine");
+const investorProfile = () => publisherApi.get("/api/publisher/investors/mine");
 
 /*  TypeBadge  */
 function TypeBadge({ type }) {
@@ -110,11 +117,12 @@ rows.push(
     ? renderField("Company Details", item.description || item.detailedDescription || item.companyDescription || item.about)
     : item._type === "services"
     ? renderField("Detailed Description", item.description || item.detailedDescription || item.about)
+    : item._type === "investors"
+    ? null  
     : renderField("Description", item.description || item.detailedDescription || item.eventDescription || item.about)
 );
   rows.push(renderField("Status", item.status || item.approvalStatus));
   if (item._type !== "jobs") rows.push(renderField("Location", item.location));
-  rows.push(renderField("Apply Clicks", clicks > 0 ? clicks : null));
 
   if (item._type === "jobs") {
     rows.push(renderField("Company", item.companyName));
@@ -241,23 +249,28 @@ rows.push(
   else if (item._type === "investors") {
     rows.push(renderField("Fund Name", item.fundName || item.title));
     rows.push(renderField("Investor Type", item.investorType));
-    rows.push(renderField("Fund Size", item.fundSize ? `${item.fundSize} ${item.currency || ""}` : null));
+rows.push(renderField("Fund Size", item.fundSize ? `${fmtINR(item.fundSize)} ${item.currency !== "INR" ? item.currency || "" : ""}`.trim() : null));
     rows.push(renderField("Currency", item.currency));
     rows.push(renderField("Years of Experience", item.yearsOfExperience));
-    rows.push(renderField("Ticket Size", item.ticketSize ? `Min: ${item.ticketSize.minimum} – Max: ${item.ticketSize.maximum} ${item.currency || ""}` : null));
+rows.push(renderField("Ticket Size", item.ticketSize
+  ? `Min: ${fmtINR(item.ticketSize.minimum)} – Max: ${fmtINR(item.ticketSize.maximum)}`
+  : null
+));
     rows.push(renderField("Preferred Stages", item.preferredStages));
-    rows.push(renderField("Geographic Focus", item.geographicFocus));
-    rows.push(renderField("Industry Sector Focus", item.industrySectorFocus));
     rows.push(renderField("Portfolio Companies Count", item.portfolioCompaniesCount));
-    rows.push(renderField("Portfolio Companies", item.portfolioCompanies?.map(p => `${p.companyName}${p.description ? ` (${p.description})` : ""}`).join(", ")));
+rows.push(
+  item.portfolioCompanies?.length
+    ? { label: "Portfolio Companies", val: item.portfolioCompanies, isPortfolio: true }
+    : null
+);
     rows.push(renderField("About", item.about));
     rows.push(renderField("Contact Name", item.contact?.name));
     rows.push(renderField("Designation", item.contact?.title));
     rows.push(renderField("Contact Email", item.contact?.email));
     rows.push(renderField("Contact Phone", item.contact?.phone));
     rows.push(renderLink("LinkedIn", item.linkedIn));
-    rows.push(renderField("Office Location", item.officeLocation));
-    rows.push(renderField("Profile Visibility", item.profileVisibility));
+    rows.push(renderField("State", item.officeLocation));
+    rows.push(renderField("Address", item.profileVisibility));
     rows.push(renderLink("Apply Link", item.applyLink));
   }
 
@@ -319,29 +332,45 @@ rows.push(
         {/* Body */}
         <div className="pd__modal-body pd__modal-body--scrollable">
           <div className="pd__modal-grid pd__modal-grid--full">
-            {validRows.map(({ label, val, isLink, href, isFallback }) => (
-              <div key={label} className="pd__modal-field">
-                <div className="pd__modal-field-label">{label}</div>
-                <div className="pd__modal-field-value">
-                  {isLink ? (
-                    <a
-                      href={href.startsWith("http") ? href : `https://${href}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      style={{ color: BLUE, textDecoration: "underline", wordBreak: "break-all" }}
-                    >
-                      {val}
-                    </a>
-                  ) : isFallback ? (
-                    <span  >
-                       {val}
-                    </span>
-                  ) : (
-                    val
-                  )}
-                </div>
+        {validRows.map(({ label, val, isLink, href, isFallback, isPortfolio }) => (
+  <div key={label} className="pd__modal-field">
+    <div className="pd__modal-field-label">{label}</div>
+    <div className="pd__modal-field-value">
+      {isPortfolio ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {val.map((p, i) => (
+            <div key={i} style={{
+              display: "flex", alignItems: "flex-start", gap: 8,
+              padding: "6px 10px", borderRadius: 6,
+              background: "#f8fafc", border: "1px solid #e2e8f0"
+            }}>
+              <span style={{
+                minWidth: 22, height: 22, borderRadius: "50%",
+                background: BLUE, color: "#fff",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 11, fontWeight: 700, flexShrink: 0
+              }}>{i + 1}</span>
+              <div>
+                <div style={{ fontWeight: 600, fontSize: 20, color: "#1e293b" }}>{p.companyName}</div>
+                {p.description && <div style={{ fontSize: 18, color: "#64748b", marginTop: 2 }}>{p.description}</div>}
               </div>
-            ))}
+            </div>
+          ))}
+        </div>
+      ) : isLink ? (
+        <a href={href.startsWith("http") ? href : `https://${href}`}
+          target="_blank" rel="noreferrer"
+          style={{ color: BLUE, textDecoration: "underline", wordBreak: "break-all" }}>
+          {val}
+        </a>
+      ) : isFallback ? (
+        <span>{val}</span>
+      ) : (
+        val
+      )}
+    </div>
+  </div>
+))}
           </div>
         </div>
 
@@ -361,23 +390,29 @@ export default function ListingsAnalytics() {
   const [loading, setLoading] = useState(true);
   const [filter,  setFilter]  = useState("all");
   const [preview, setPreview] = useState(null);
+const [category, setCategory] = useState(null);
+useEffect(() => {
+  setCategory(localStorage.getItem("publisher_category"));
+}, []);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [statsRes, planRes, jobsRes, compRes, eventsRes, productsRes, servicesRes] =
-        await Promise.allSettled([fetchStats(), fetchPlan(), fetchJobs(), fetchComps(), fetchEvents(), fetchProducts(), fetchServices()]);
-
+      const [statsRes, planRes, jobsRes, compRes, eventsRes, productsRes, servicesRes, investorRes] =
+  await Promise.allSettled([fetchStats(), fetchPlan(), fetchJobs(), fetchComps(), fetchEvents(), fetchProducts(), fetchServices(), investorProfile()]);
       if (statsRes.status === "fulfilled") setStats(statsRes.value.data);
       if (planRes.status  === "fulfilled") setPlan(planRes.value.data);
 
-      const jobMap = {}, compMap = {}, eventsMap = {}, productsMap = {}, servicesMap = {};
+      const jobMap = {}, compMap = {}, eventsMap = {}, productsMap = {}, servicesMap = {}, investorMap = {};
       if (jobsRes.status     === "fulfilled") (jobsRes.value.data?.jobs ?? jobsRes.value.data?.items ?? []).forEach(j => { jobMap[j._id] = j; });
       if (compRes.status     === "fulfilled") (compRes.value.data?.items ?? compRes.value.data?.fundings ?? []).forEach(c => { compMap[c._id] = c; });
       if (eventsRes.status   === "fulfilled") (eventsRes.value.data?.items ?? []).forEach(e => { eventsMap[e._id] = e; });
       if (productsRes.status === "fulfilled") (productsRes.value.data?.products ?? []).forEach(p => { productsMap[p._id] = p; });
       if (servicesRes.status === "fulfilled") (servicesRes.value.data?.listings ?? []).forEach(s => { servicesMap[s._id] = s; });
-
+      if (investorRes.status === "fulfilled" && investorRes.value.data?.investor) {
+  const inv = investorRes.value.data.investor;
+  investorMap[String(inv._id)] = inv;
+} 
       const rows = [];
       const bd = statsRes.status === "fulfilled" ? (statsRes.value.data?.breakdown ?? {}) : {};
 
@@ -399,7 +434,7 @@ const pushFromStats = (type, arr, map, titleKey) => {
       pushFromStats("events",       bd.events        ?? [], eventsMap,   "title");
       pushFromStats("products",     bd.products      ?? [], productsMap, "productName");
       pushFromStats("services",     bd.services      ?? [], servicesMap, "serviceTitle");
-      pushFromStats("investors",    bd.investors     ?? [], {},          "fundName");
+      pushFromStats("investors", bd.investors ?? [], investorMap, "fundName");
 
       const addZero = (type, items, titleKey) => {
         items.forEach(item => {
@@ -414,8 +449,13 @@ const pushFromStats = (type, arr, map, titleKey) => {
       addZero("products",     Object.values(productsMap), "productName");
       addZero("services",     Object.values(servicesMap), "serviceTitle");
 
-      rows.sort((a, b) => (b._clicks || 0) - (a._clicks || 0));
-      setAllRows(rows);
+const cat = localStorage.getItem("publisher_category");
+const finalRows = cat === "investor"
+  ? rows.filter(r => r._type !== "products")
+  : rows.filter(r => r._type !== "investors");
+
+finalRows.sort((a, b) => (b._clicks || 0) - (a._clicks || 0));
+setAllRows(finalRows);
     } catch (err) {
       console.error("ListingsAnalytics load error:", err);
     } finally {
@@ -432,19 +472,29 @@ const pushFromStats = (type, arr, map, titleKey) => {
   const isTrial = plan?.plan?.plan === "trial" || plan?.serviceplan?.plan === "trial";
 
 const overviewCards = [
-  { label: "Jobs",         value: allRows.filter(r => r._type === "jobs").length,         Icon: Briefcase    },
-  { label: "Events",       value: allRows.filter(r => r._type === "events").length,        Icon: CalendarDays },
-  { label: "Competitions", value: allRows.filter(r => r._type === "competitions").length,  Icon: Trophy       },
-  { label: "Products",     value: allRows.filter(r => r._type === "products").length,      Icon: Package      },
-  { label: "Services",     value: allRows.filter(r => r._type === "services").length,      Icon: Settings     },
+  { label: "Jobs",         value: allRows.filter(r => r._type === "jobs").length,        Icon: Briefcase    },
+  { label: "Events",       value: allRows.filter(r => r._type === "events").length,       Icon: CalendarDays },
+  { label: "Competitions", value: allRows.filter(r => r._type === "competitions").length, Icon: Trophy       },
+  { label: "Services",     value: allRows.filter(r => r._type === "services").length,     Icon: Settings     },
+  ...(category !== "investor" ? [
+    { label: "Products", value: allRows.filter(r => r._type === "products").length, Icon: Package },
+  ] : []),
+  ...(category === "investor" ? [
+    { label: "Investor", value: allRows.filter(r => r._type === "investors").length, Icon: DollarSign },
+  ] : []),
 ];
 
 const barData = [
   { name: "Jobs",         value: allRows.filter(r => r._type === "jobs").length         },
   { name: "Events",       value: allRows.filter(r => r._type === "events").length        },
   { name: "Competitions", value: allRows.filter(r => r._type === "competitions").length  },
-  { name: "Products",     value: allRows.filter(r => r._type === "products").length      },
   { name: "Services",     value: allRows.filter(r => r._type === "services").length      },
+  ...(category !== "investor" ? [
+    { name: "Products", value: allRows.filter(r => r._type === "products").length },
+  ] : []),
+  ...(category === "investor" ? [
+    { name: "Investor", value: allRows.filter(r => r._type === "investors").length },
+  ] : []),
 ];
 
 const clicksData = [
@@ -461,7 +511,11 @@ const clicksData = [
 const totalListings  = allRows.length;
 const activeListings = allRows.filter(r => (r._clicks || 0) > 0).length;
 const engagementPct  = totalListings > 0 ? Math.round((activeListings / totalListings) * 100) : 0;
-
+const allTabs = [
+  "all", "jobs", "competitions", "events", "services",
+  ...(category !== "investor" ? ["products"] : []),
+  ...(category === "investor" ? ["investors"] : []),
+];
 
   const getLimitLeft = (row) => {
     if (row._type === "jobs")         return limits.jobLimit           != null ? Math.max(0, (limits.jobLimit           || 0) - (usage.jobs            || 0)) : null;
@@ -613,7 +667,7 @@ const engagementPct  = totalListings > 0 ? Math.round((activeListings / totalLis
 
         {/* Filter tabs */}
         <div className="pd__filter-bar">
-          {["all", "jobs", "competitions", "events", "products", "services"].map(t => (
+          {allTabs.map(t => (
             <button
               key={t}
               className={`pd__filter-btn${filter === t ? " pd__filter-active" : ""}`}
@@ -683,9 +737,9 @@ const engagementPct  = totalListings > 0 ? Math.round((activeListings / totalLis
     limitLeft === 0 ? (
       <span
         className="pd__limit-left"
-        style={{ color: isTrial ? "#7c3aed" : "#7f1d1d" }}
+        style={{ color: "#7f1d1d" }}
       >
-        {isTrial ? "Trial" : "Limit reached"}
+       Limit reached
       </span>
     ) : (
       <span

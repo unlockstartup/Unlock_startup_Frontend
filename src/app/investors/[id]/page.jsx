@@ -66,14 +66,14 @@ export default function InvestorPage({ params }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [id, setId] = useState(null);
   const [portfolioIndex, setPortfolioIndex] = useState(0);
-  const { user } = useAuth();
- const router = useRouter();  
- 
-   useEffect(() => {
-    if (!user) {
+const { user, loading: authLoading } = useAuth();
+const router = useRouter();
+
+useEffect(() => {
+    if (!authLoading && !user) {
       router.replace("/login");
     }
-  }, [user, router]);
+  }, [user, authLoading, router]);
 
   useEffect(() => {
     const fetchInvestor = async () => {
@@ -109,6 +109,7 @@ export default function InvestorPage({ params }) {
           ? investor.industrySectorFocus.join(", ")
           : "Not specified";
       case "website":     return investor.applyLink || "#";
+      case "address":     return investor.profileVisibility || "";
       case "linkedin":    return investor.linkedIn || "#";
       case "fullAddress": return investor.officeLocation || "Delhi, India";
       case "timeZone":    return "IST (UTC+5:30)";
@@ -528,8 +529,15 @@ export default function InvestorPage({ params }) {
                   <div className="sdpRegRow">
                     <span className="sdpRegIcon"><MapPin size={13} strokeWidth={1.75} /></span>
                     <div className="sdpRegMeta">
-                      <span className="sdpRegLabel">Office</span>
+                      <span className="sdpRegLabel">State</span>
                       <span className="sdpRegValue">{getValue("fullAddress")}</span>
+                    </div>
+                  </div>
+                                    <div className="sdpRegRow">
+                    <span className="sdpRegIcon"><MapPin size={13} strokeWidth={1.75} /></span>
+                    <div className="sdpRegMeta">
+                      <span className="sdpRegLabel">Address</span>
+                      <span className="sdpRegValue">{getValue("address")}</span>
                     </div>
                   </div>
                 </div>

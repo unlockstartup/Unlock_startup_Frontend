@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "https://unlock-startup-project-backend.onrender.com",
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "https://unlock-startup-app-p497d.ondigitalocean.app",
 });
 
 api.interceptors.request.use((config) => {

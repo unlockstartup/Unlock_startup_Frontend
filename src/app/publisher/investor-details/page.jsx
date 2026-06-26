@@ -69,11 +69,11 @@ export default function Page() {
   const [contactPhone, setContactPhone]     = useState("");
   const [linkedIn, setLinkedIn]             = useState("");
   const [officeLocation, setOfficeLocation] = useState("");
-  const [profileVisibility, setProfileVisibility] = useState("Public");
+  const [address, setAddress] = useState("");
   const [stateOpen, setStateOpen]           = useState(false);
   const [applyLink, setApplyLink]           = useState("");
 const [sectors, setSectors] = useState([]);
-
+const [uploadingLogo, setUploadingLogo] = useState(false);
   const [showConfirm, setShowConfirm]   = useState(false);
   const [confirmConfig, setConfirmConfig] = useState({
     title: "", message: "",
@@ -111,6 +111,27 @@ const [sectors, setSectors] = useState([]);
     })();
   }, []);
 
+  const uploadLogo = async (file) => {
+    if (!file) return;
+   const fd = new FormData();
+    fd.append("files", file);
+    try {
+      setUploadingLogo(true);
+      const res = await publisherApi.post("/api/uploads", fd, { headers: { "Content-Type": "multipart/form-data" } });
+      const uploaded = res.data?.files?.[0];
+      if (uploaded) {
+        setLogo(uploaded.url);
+        toast.success("Logo uploaded");
+      } else {
+        toast.error("Upload failed");
+      }
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Upload failed");
+    } finally {
+      setUploadingLogo(false);
+    }
+  };
+
   const fetchProfile = async () => {
     try {
       const res = await publisherApi.get("/api/publisher/investors/mine");
@@ -135,7 +156,7 @@ const [sectors, setSectors] = useState([]);
       setContactPhone(inv.contact?.phone || "");
       setLinkedIn(inv.linkedIn || "");
       setOfficeLocation(inv.officeLocation || "");
-      setProfileVisibility(inv.profileVisibility || "Public");
+      setAddress(inv.profileVisibility || "");
       setApplyLink(inv.applyLink || "");
       setIsEdit(true);
     } catch {
@@ -175,7 +196,7 @@ const [sectors, setSectors] = useState([]);
       portfolioCompaniesCount: Number(portfolioCompaniesCount),
       portfolioCompanies, about,
       contact: { name: contactName, title: contactTitle, email: contactEmail, phone: contactPhone },
-      linkedIn, officeLocation, profileVisibility, applyLink,
+      linkedIn, officeLocation, profileVisibility: address, applyLink,
     };
     try {
       if (isEdit) {
@@ -209,7 +230,7 @@ const [sectors, setSectors] = useState([]);
           setPreferredStages([]); setGeographicFocus([]); setIndustrySectorFocus([]);
           setPortfolioCompaniesCount(""); setPortfolioCompanies([]); setAbout("");
           setContactName(""); setContactTitle(""); setContactEmail(""); setContactPhone("");
-          setLinkedIn(""); setOfficeLocation(""); setProfileVisibility("Public"); setApplyLink("");
+          setLinkedIn(""); setOfficeLocation(""); setAddress(""); setApplyLink("");
         } catch (err) {
           toast.error(err?.response?.data?.message || "Delete failed.");
         } finally {
@@ -269,8 +290,25 @@ const [sectors, setSectors] = useState([]);
           </div>
 
           <div className="field">
-            <label className="label">Logo URL <span style={{ color: "var(--orange)" }}>*</span></label>
-            <input className="input" value={logo} onChange={(e) => setLogo(e.target.value)} placeholder="https://" />
+                       <label className="label">Logo <span style={{ color: "var(--orange)" }}>*</span></label>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              <input
+                type="file"
+               accept="image/*"
+                className="input"
+                style={{ flex: 1 }}
+                onChange={(e) => uploadLogo(e.target.files?.[0])}
+                disabled={uploadingLogo}
+              />
+              {uploadingLogo && <span className="labelNote">Uploading…</span>}
+              {logo && (
+                <img
+                  src={logo}
+                  alt="logo preview"
+                  style={{ width: 64, height: 48, objectFit: "cover", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)" }}
+                />
+              )}
+            </div>
           </div>
         </div>
 
@@ -447,7 +485,7 @@ const [sectors, setSectors] = useState([]);
           </div>
 
           <div className="field">
-            <label className="label">Office Location <span style={{ color: "var(--orange)" }}>*</span></label>
+            <label className="label">State <span style={{ color: "var(--orange)" }}>*</span></label>
             <div className="stateDropdownWrapper">
               <div className="select" style={{ cursor: "pointer", userSelect: "none" }} onClick={() => setStateOpen((p) => !p)}>
                 {officeLocation || "Select State"}
@@ -479,12 +517,8 @@ const [sectors, setSectors] = useState([]);
           </div>
 
           <div className="field">
-            <label className="label">Profile Visibility <span style={{ color: "var(--orange)" }}>*</span></label>
-            <select className="select" value={profileVisibility} onChange={(e) => setProfileVisibility(e.target.value)}>
-              <option value="Public">🌍 Public</option>
-              <option value="Private">🔒 Private</option>
-              <option value="Limited visibility">👥 Limited Visibility</option>
-            </select>
+          <label className="label">Address <span style={{ color: "var(--orange)" }}>*</span></label>
+            <input className="input" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Enter full address" />
           </div>
         </div>
       </section>

@@ -37,16 +37,20 @@ import {
 import { useRouter } from "next/navigation"; 
 
 export default function Page({ params }) {
-  const { user } = useAuth();
+const { user, loading: authLoading } = useAuth();
 const router = useRouter(); 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!user) {
+
+
+useEffect(() => {
+    if (!authLoading && !user) {
       router.replace("/login");
     }
-  }, [user, router]);
+  }, [user, authLoading, router]);
+
+
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -65,7 +69,7 @@ const router = useRouter();
     fetchProduct();
   }, [params]);
 
-  if (loading || !user) {
+if (loading || authLoading || !user) {
     return (
       <main>
         <div className="productDetailPage">
