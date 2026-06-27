@@ -512,12 +512,12 @@ const [uploadingLogo, setUploadingLogo] = useState(false);
 
         <div className="row2">
           <div className="field">
-            <label className="label">Apply Link <span style={{ color: "var(--orange)" }}>*</span></label>
+            <label className="label">Pitch Deck Apply Url <span style={{ color: "var(--orange)" }}>*</span></label>
             <input className="input" value={applyLink} onChange={(e) => setApplyLink(e.target.value)} placeholder="https://" />
           </div>
 
           <div className="field">
-          <label className="label">Address <span style={{ color: "var(--orange)" }}>*</span></label>
+          <label className="label">Office Address <span style={{ color: "var(--orange)" }}>*</span></label>
             <input className="input" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Enter full address" />
           </div>
         </div>
