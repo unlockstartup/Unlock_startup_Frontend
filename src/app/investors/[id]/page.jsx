@@ -536,7 +536,7 @@ useEffect(() => {
                                     <div className="sdpRegRow">
                     <span className="sdpRegIcon"><MapPin size={13} strokeWidth={1.75} /></span>
                     <div className="sdpRegMeta">
-                      <span className="sdpRegLabel">Address</span>
+                      <span className="sdpRegLabel">Office Address</span>
                       <span className="sdpRegValue">{getValue("address")}</span>
                     </div>
                   </div>

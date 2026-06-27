@@ -270,7 +270,7 @@ rows.push(
     rows.push(renderField("Contact Phone", item.contact?.phone));
     rows.push(renderLink("LinkedIn", item.linkedIn));
     rows.push(renderField("State", item.officeLocation));
-    rows.push(renderField("Address", item.profileVisibility));
+    rows.push(renderField("Office Address", item.profileVisibility));
     rows.push(renderLink("Apply Link", item.applyLink));
   }
 
