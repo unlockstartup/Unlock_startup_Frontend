@@ -59,6 +59,7 @@ const applicationMethods = [
 ];
 const formats = [
   { value: "in-person", label: "In-Person" },
+  { value: "offline", label: "Offline" },
   { value: "online", label: "Online" },
   { value: "hybrid", label: "Hybrid" },
 ];
