@@ -21,7 +21,7 @@ export default function Home() {
       <TopInvestor />
       <ProductLaunches />
       <ServiceProvider />
-      <Testimonial />
+      {/* <Testimonial /> */}
      
       <JobCta />
     </main>

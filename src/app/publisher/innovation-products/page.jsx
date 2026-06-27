@@ -668,18 +668,19 @@ const confirmToggleProduct = (prod) => {
                 <h3 className="sectionTitle">Company Details</h3>
 
                 <div className="row2">
-                  <Field label="Company / Research Institution *">
+                  {/* <Field label="Company / Research Institution *">
                     <input className="input" name="companyInstitution" value={form.companyInstitution} onChange={handleChange} placeholder="Enter institution name" />
-                  </Field>
+                  </Field> */}
                   <Field label="Contact Email *">
                     <input type="email" className="input" name="contactEmail" value={form.contactEmail} onChange={handleChange} placeholder="Enter email" />
+                  </Field>
+                    <Field label="Contact Number">
+                    <input className="input" name="contactNumber" value={form.contactNumber} onChange={handleChange} placeholder="Enter phone number" />
                   </Field>
                 </div>
 
                 <div className="row2">
-                  <Field label="Contact Number">
-                    <input className="input" name="contactNumber" value={form.contactNumber} onChange={handleChange} placeholder="Enter phone number" />
-                  </Field>
+                
                   <Field label="Website URL">
                     <input type="url" className="input" name="websiteUrl" value={form.websiteUrl} onChange={handleChange} placeholder="https://" />
                   </Field>

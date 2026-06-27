@@ -91,6 +91,7 @@ endTime: raw.endDateTime
 
             venueName: raw.venueName ?? "",
             fullAddress: raw.fullAddress ?? "",
+            state: raw.jobLocationState ?? "",
             location: raw.venueName ? `${raw.venueName}, ${raw.fullAddress}` : raw.fullAddress ?? "TBA",
             category: raw.eventCategory ?? [],
             format: raw.eventFormat ?? "",
@@ -321,25 +322,44 @@ registrationDeadline: raw.registrationDeadline
                       {event.endTime && <><br /><span style={{ color: "var(--sdp-text-muted)", fontWeight: 400 }}>{event.endTime}</span></>}
                     </span>
                   </div>
+                  {event.fullAddress && (
+  <div className="eventVenueBlock">
+    <span className="eventVenueIcon"><MapPin size={14} strokeWidth={2} /></span>
+    <div className="eventVenueMeta">
+      <span className="eventVenueLabel">Address</span>
+      <span className="eventVenueValue">{event.fullAddress}</span>
+    </div>
+  </div>
+)}
+
+{event.state && (
+  <div className="eventVenueBlock" style={{width : "100%"}}>
+    <span className="eventVenueIcon"><MapPin size={14} strokeWidth={2} /></span>
+    <div className="eventVenueMeta">
+      <span className="eventVenueLabel">State</span>
+      <span className="eventVenueValue">{event.state}</span>
+    </div>
+  </div>
+)}
+  {event.venueName && (
+  <div className="eventVenueBlock" style={{width : "100%"}}>
+    <span className="eventVenueIcon"><MapPin size={14} strokeWidth={2} /></span>
+    <div className="eventVenueMeta">
+      <span className="eventVenueLabel">Venue</span>
+      <span className="eventVenueValue">{event.venueName}</span>
+    </div>
+  </div>
+)}
+  {event.registrationDeadline && (
+  <div className="eventVenueBlock" style={{width : "100%"}}>
+    <span className="eventVenueIcon"><CalendarClock size={14} strokeWidth={2} /></span>
+    <div className="eventVenueMeta">
+      <span className="eventVenueLabel">Registration Deadline</span>
+      <span className="eventVenueValue">{event.registrationDeadline}</span>
+    </div>
+  </div>
+)}
                 </div>
-                {event.registrationDeadline && (
-                  <div className="eventDeadlineAlert" style={{ width: "300px" }}>
-                    <span className="eventDeadlineIcon"><CalendarClock size={14} strokeWidth={2} /></span>
-                    <div className="eventDeadlineMeta">
-                      <span className="eventDeadlineLabel">Registration Deadline</span>
-                      <span className="eventDeadlineValue">{event.registrationDeadline}</span>
-                    </div>
-                  </div>
-                )}
-                {event.location && event.location !== "TBA" && (
-                  <div className="eventVenueBlock">
-                    <span className="eventVenueIcon"><MapPin size={14} strokeWidth={2} /></span>
-                    <div className="eventVenueMeta">
-                      <span className="eventVenueLabel">Venue</span>
-                      <span className="eventVenueValue">{event.location}</span>
-                    </div>
-                  </div>
-                )}
               </div>
 
               {/* Key Topics */}

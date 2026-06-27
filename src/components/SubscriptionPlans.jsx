@@ -339,7 +339,7 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
           </div>
         )}
 
-        <div className="row g-4 align-items-stretch justify-content-center grid-mob">
+        <div className="row g-4 justify-content-center grid-mob flex-nowrap" style={{ overflowX: "auto" }}>
           {allPlans.map((plan) => {
             if (plan.isTrial) {
               const isActivePlan = isTrialActive;
@@ -347,7 +347,7 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
               const isOtherLoading = loadingPlanId !== null && loadingPlanId !== plan._id;
 
               return (
-                <div className="col-12 col-sm-12 col-xl-3" key="trial_static">
+                <div className="col" key="trial_static">
                   <div
                     className="h-100 d-flex flex-column rounded-3"
                     style={{
@@ -447,7 +447,7 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
             const isDisabled = isThisLoading || isOtherLoading;
 
             return (
-              <div className="col-12 col-sm-12 col-xl-3" key={plan._id}>
+              <div className="col" key={plan._id}>
                 <div
                   className="h-100 d-flex flex-column rounded-3"
                   style={{

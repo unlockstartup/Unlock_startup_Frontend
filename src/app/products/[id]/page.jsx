@@ -415,7 +415,7 @@ if (loading || authLoading || !user) {
               )}
 
               {/* Company Card */}
-              {(product.companyName || product.establishedYear || product.companyInstitution) && (
+              {(product.companyName || product.establishedYear ) && (
                 <div className="sdpInfoCard sdpInfoCard--company">
                   <div className="sdpInfoBlock">
                     <div className="sdpInfoBlockTitle">
@@ -431,7 +431,7 @@ if (loading || authLoading || !user) {
                         </div>
                       </div>
                     )}
-                    {product.companyInstitution && (
+                    {/* {product.companyInstitution && (
                       <div className="sdpRegRow">
                         <span className="sdpRegIcon"><Globe size={13} strokeWidth={1.75} /></span>
                         <div className="sdpRegMeta">
@@ -439,7 +439,7 @@ if (loading || authLoading || !user) {
                           <span className="sdpRegValue">{product.companyInstitution}</span>
                         </div>
                       </div>
-                    )}
+                    )} */}
                     {product.establishedYear && (
                       <div className="sdpRegRow">
                         <span className="sdpRegIcon"><Info size={13} strokeWidth={1.75} /></span>
@@ -453,32 +453,59 @@ if (loading || authLoading || !user) {
                 </div>
               )}
               {/* Company Card */}
-              {(product.awardsRecognition) && (
-                <div className="sdpInfoCard sdpInfoCard--company">
-                  <div className="sdpInfoBlock">
-                    <div className="sdpInfoBlockTitle">
-                      <span className="sdpInfoBlockIcon"><Trophy size={14} strokeWidth={2} /></span>
-                      Awards & Recognition
-                    </div>
-                    {product.awardsRecognition && (
-                      <div className="sdpRegRow">
-                        <span className="sdpRegIcon"><Trophy size={13} strokeWidth={1.75} /></span>
-                        <div className="sdpRegMeta">
-                          <span className="sdpRegLabel">Awards & Recognition</span>
-                          <span className="sdpRegValue">{product.awardsRecognition}</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
+{product.awardsRecognition && (
+  <div className="sdpInfoCard sdpInfoCard--company">
+    <div className="sdpInfoBlock">
+      <div className="sdpInfoBlockTitle">
+        <span className="sdpInfoBlockIcon"><Trophy size={14} strokeWidth={2} /></span>
+        Awards &amp; Recognition
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px" }}>
+        {product.awardsRecognition
+          .split("\n")
+          .map(s => s.replace(/^[•*\-–]\s*/, "").trim())
+          .filter(Boolean)
+          .map((award, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: "10px",
+                padding: "8px 10px",
+                borderRadius: "8px",
+                background: "rgba(252, 207, 2, 0.08)",
+                border: "1px solid rgba(252, 207, 2, 0.25)",
+              }}
+            >
+              <span style={{
+                flexShrink: 0,
+                marginTop: "1px",
+                color: "#ca8a04",
+              }}>
+                <Trophy size={13} strokeWidth={2} />
+              </span>
+              <span style={{
+                fontSize: "0.8rem",
+                color: "var(--sdp-text, #1e293b)",
+                lineHeight: 1.5,
+                fontWeight: 500,
+              }}>
+                {award}
+              </span>
+            </div>
+          ))}
+      </div>
+    </div>
+  </div>
+)}
               {/* Contact Card – with login blur */}
               {(product.founderName || product.contactEmail || product.contactNumber) && (
                 <div className="sdpInfoCard sdpInfoCard--contact">
                   <div className="sdpInfoBlock">
                     <div className="sdpInfoBlockTitle">
                       <span className="sdpInfoBlockIcon"><User size={14} strokeWidth={2} /></span>
-                      Contact
+                      Contact Details
                     </div>
 
                     <div className={`sdpContactContent ${!user ? "sdpBlurred" : ""}`}>
@@ -488,7 +515,10 @@ if (loading || authLoading || !user) {
                         </div>
                         <div>
                           {product.founderName && (
+                            <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "2px" }}>
+                             <User size={12} strokeWidth={1.75} /> 
                             <p className="pdContactName">{product.founderName}</p>
+                            </div>
                           )}
                           <div className="pdContactMeta">
                             {product.contactEmail && (

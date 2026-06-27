@@ -897,8 +897,8 @@
 
 .sdpInfoCard--contact .sdpInfoBlockIcon,
 .sdpInfoCard--contact .sdpRegIcon {
-  background: var(--yellow-100);
-  color: var(--yellow-800);
+  background: var(--blue-700);
+  color: var(--blue-50);
 }
 
 .sdpInfoCard--awards .sdpInfoBlockIcon,

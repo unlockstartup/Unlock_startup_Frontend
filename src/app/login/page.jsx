@@ -505,8 +505,7 @@ const handleResendOtp = async () => {
                 <div className="lsb-orbit">
                   <strong>Welcome back to your Unlock Startup Platform.</strong>
                   <span>
-                    Access hiring tools, event registrations, competition tracks,
-                    and investor connections.
+                   Reconnect with opportunities, manage your dashboard, and continue building your startup journey  
                   </span>
                 </div>
                 <div className="lsb-features">

@@ -234,7 +234,7 @@ function OpportunityDetails({ sub, listingLoc, description, eventDates }) {
   }
   return (
     <DetailSection title="Event Details" variant="blue">
-      <DetailRow label="Location" value={listingLoc} />
+      <DetailRow label="Venue Name" value={listingLoc} />
       <DetailRow label="Dates"    value={eventDates} />
       <DetailRow label="About"    value={description?.length > 200 ? description.slice(0, 200) + "…" : description} />
     </DetailSection>
@@ -522,7 +522,7 @@ const resolvePublisherContact = (sub) => {
                             description={description}
                             eventDates={eventDates}
                           />
-<DetailSection title="Organiser / Publisher">
+<DetailSection title="Company / Publisher">
   {!sub.serviceId && (
     <DetailRow label="Company Name" value={resolveCompany(sub)} />
   )}

@@ -42,6 +42,7 @@ const defaultForm = {
   location: "",
   ticketPricingTiers: [],
   jobLocationState: "",
+  disclosureConsent: false, 
 };
 
 const registrationTypes = ["Free", "Paid", "Invite Only"];
@@ -240,10 +241,10 @@ export default function PublisherEventPage() {
 
   const closeModal = () => setShowModal(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
+const handleChange = (e) => {
+  const { name, value, type, checked } = e.target;
+  setForm((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
+};
   const handleNumberOnly = (e) => {
     const { name, value } = e.target;
     if (/^\d*$/.test(value)) setForm((prev) => ({ ...prev, [name]: value }));
@@ -265,13 +266,14 @@ export default function PublisherEventPage() {
   const isValidUrl = (url) => {
     try { new URL(url); return true; } catch { return false; }
   };
-  /*  Save / delete / toggle  */
-const validate = () => {
+
+  const validate = () => {
   if (!form.title.trim())          return "Event Name is required";
   if (!form.eventCategory?.length) return "Event Category is required";
   if (!form.startDateTime || !form.endDateTime) return "Start/End date-time required";
   if (!form.workEmail)             return "Work Email is required";
   if (!mainImage?.url)             return "Main image / banner is required";
+  if (!form.disclosureConsent)     return "You must agree to the disclosure consent";
   if (form.organizationWebsite && !isValidUrl(form.organizationWebsite))
                                    return "Enter a valid Company Website URL";
 

@@ -40,12 +40,11 @@ export default function InvestorCard({ investor }) {
         </h4>
       </div>
 
-      {/* Body — grows to fill available space, pushing button to bottom */}
       <div className="card-body-wrap" style={{color: "black"}}>
         <p className="mb-0 company">Investor Type: {investorType}</p>
         <p className="mb-0 company">Company: {companyName}</p>
         <p className="mb-0 company">Stage: {stages}</p>
-        <p className="mb-0 location">Location: {location}</p>
+        <p className="mb-0 location">State: {location}</p>
       </div>
 
       {/* Button always pinned to bottom */}

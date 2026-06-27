@@ -386,10 +386,9 @@ export default function Page() {
               </div>
               <div className="jd-locSalBody">
                 <div className="jd-locSection">
-                  <span className="jd-locLabel">LOCATION DETAILS</span>
-                  <p className="jd-locMain">{location}</p>
+                  <span className="jd-locLabel">Office Address</span>
                   {job.jobLocationAddress && (
-                    <p className="jd-locAddress">{job.jobLocationAddress}</p>
+                    <p className="jd-locAddress" style={{fontWeight : "bold"}}>{job.jobLocationAddress}</p>
                   )}
                   <div className="jd-locMeta">
                     {job.jobLocationCity && (

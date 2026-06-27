@@ -268,10 +268,10 @@ function FundingCallsCrud() {
   const closeModal = () => { if (saving || attachmentsUploading) return; setOpen(false); };
 
   const validate = () => {
-    if (!form.title.trim()) return "Challenge Name / Title is required";
+    if (!form.title.trim()) return "Title is required";
     if (!form.challengeCategory.trim()) return "Challenge Category is required";
     if (!form.submissionDeadline) return "Submission Deadline is required";
-    if (!form.organizingCompany.trim()) return "Organizing Company / Institution is required";
+    if (!form.organizingCompany.trim()) return "Company Name is required";
     if (!form.organizerType.trim()) return "Company Type is required";
     if (!form.officialEmail.trim()) return "Official Email is required";
     if (!form.description.trim()) return "Description is required";

@@ -271,7 +271,7 @@ const validate = () => {
   if (!form.yearsExperienceRequired)     return "Years of Experience is required";
   if (!form.mustHaveSkills?.trim())      return "Must-Have Skills is required";
   if (!form.salaryType)                  return "Salary Type is required";
-  if (!form.jobLocationAddress?.trim())  return "Job Location - Full Address is required";
+  if (!form.jobLocationAddress?.trim())  return "Job Location - Office Address is required";
   if (!form.jobLocationCity?.trim())     return "Job Location - City is required";
   if (!form.jobLocationState?.trim())    return "Job Location - State is required";
   if (!form.jobLocationCountry?.trim())  return "Job Location - Country is required";
@@ -836,7 +836,7 @@ const confirmToggleJob = (job) => {
                 <h3 className="sectionTitle">Location</h3>
 
                 <div className="field">
-                  <label className="label">Full Address</label>
+                  <label className="label">Office Address</label>
                   <textarea className="textarea" rows={2} value={form.jobLocationAddress} onChange={set("jobLocationAddress")} placeholder="Enter full address" />
                 </div>
 

@@ -353,7 +353,7 @@ const Page = () => {
     }}
   />
 <div className="lsb-hero">
-  <div className="lsb-tag">Join the ecosystem</div>
+  <div className="lsb-tag">Unlock Startup</div>
   <div className="lsb-orbit">
     {accountType === "user" && (
       <>

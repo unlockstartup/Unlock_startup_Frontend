@@ -122,8 +122,7 @@ rows.push(
     : renderField("Description", item.description || item.detailedDescription || item.eventDescription || item.about)
 );
   rows.push(renderField("Status", item.status || item.approvalStatus));
-  if (item._type !== "jobs") rows.push(renderField("Location", item.location));
-
+if (item._type !== "jobs" && item._type !== "events") rows.push(renderField("Location", item.location));
   if (item._type === "jobs") {
     rows.push(renderField("Company", item.companyName));
     rows.push(renderLink("Company Website", item.companyWebsite));
@@ -183,8 +182,9 @@ rows.push(
     rows.push(renderField("Event Type", item.eventType));
     rows.push(renderField("Categories", item.eventCategory));
     rows.push(renderField("Format", item.eventFormat));
-    rows.push(renderField("Venue", item.venueName));
-    rows.push(renderField("Full Address", item.fullAddress));
+rows.push(renderField("Venue Name", item.venueName));
+rows.push(renderField("State", item.jobLocationState));  
+rows.push(renderField("Full Address", item.fullAddress));
     rows.push(renderField("Start Date", fmt(item.startDateTime || item.startDate)));
     rows.push(renderField("End Date", fmt(item.endDateTime || item.endDate)));
     rows.push(renderField("Registration Deadline", fmt(item.registrationDeadline)));
@@ -197,7 +197,7 @@ rows.push(
     rows.push(renderField("Key Topics", item.keyTopics));
     rows.push(renderField("Featured Speakers", item.featuredSpeakers));
     rows.push(renderField("Attendee Benefits", item.attendeeBenefits));
-    rows.push(renderField("Organizer Contact", item.organizerContactPerson));
+    rows.push(renderField("Company Contact Person", item.organizerContactPerson));
     rows.push(renderField("Work Email", item.workEmail));
     rows.push(renderField("Phone Number", item.phoneNumber));
     rows.push(renderField("Active", item.isActive != null ? (item.isActive ? "Yes" : "No") : null));
@@ -214,7 +214,7 @@ rows.push(
     rows.push(renderField("Patent Status", item.patentStatus));
     rows.push(renderField("Target Industry", item.targetIndustry));
     rows.push(renderField("Challenge Solved", item.challengeSolved));
-    rows.push(renderField("Company/Institution", item.companyInstitution));
+    // rows.push(renderField("Company/Institution", item.companyInstitution));
     rows.push(renderField("Founder Name", item.founderName));
     rows.push(renderField("Key Features", item.keyFeatures));
     rows.push(renderLink("Product Demo URL", item.productDemoUrl));
