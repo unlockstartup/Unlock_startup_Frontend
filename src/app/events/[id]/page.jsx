@@ -322,6 +322,24 @@ registrationDeadline: raw.registrationDeadline
                       {event.endTime && <><br /><span style={{ color: "var(--sdp-text-muted)", fontWeight: 400 }}>{event.endTime}</span></>}
                     </span>
                   </div>
+                   {event.registrationDeadline && (
+  <div className="eventVenueBlock" style={{width : "100%"}}>
+    <span className="eventVenueIcon"><CalendarClock size={14} strokeWidth={2} /></span>
+    <div className="eventVenueMeta">
+      <span className="eventVenueLabel">Registration Deadline</span>
+      <span className="eventVenueValue">{event.registrationDeadline}</span>
+    </div>
+  </div>
+)}
+ {event.venueName && (
+  <div className="eventVenueBlock" style={{width : "100%"}}>
+    <span className="eventVenueIcon"><MapPin size={14} strokeWidth={2} /></span>
+    <div className="eventVenueMeta">
+      <span className="eventVenueLabel">Venue</span>
+      <span className="eventVenueValue">{event.venueName}</span>
+    </div>
+  </div>
+)}
                   {event.fullAddress && (
   <div className="eventVenueBlock">
     <span className="eventVenueIcon"><MapPin size={14} strokeWidth={2} /></span>
@@ -341,24 +359,8 @@ registrationDeadline: raw.registrationDeadline
     </div>
   </div>
 )}
-  {event.venueName && (
-  <div className="eventVenueBlock" style={{width : "100%"}}>
-    <span className="eventVenueIcon"><MapPin size={14} strokeWidth={2} /></span>
-    <div className="eventVenueMeta">
-      <span className="eventVenueLabel">Venue</span>
-      <span className="eventVenueValue">{event.venueName}</span>
-    </div>
-  </div>
-)}
-  {event.registrationDeadline && (
-  <div className="eventVenueBlock" style={{width : "100%"}}>
-    <span className="eventVenueIcon"><CalendarClock size={14} strokeWidth={2} /></span>
-    <div className="eventVenueMeta">
-      <span className="eventVenueLabel">Registration Deadline</span>
-      <span className="eventVenueValue">{event.registrationDeadline}</span>
-    </div>
-  </div>
-)}
+ 
+ 
                 </div>
               </div>
 

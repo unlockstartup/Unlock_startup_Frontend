@@ -263,7 +263,7 @@ const [uploadingLogo, setUploadingLogo] = useState(false);
           <h1 className="topbarTitle">{isEdit ? "Edit Investor Profile" : "Create Investor Profile"}</h1>
           <p className="topbarSub">
             {isEdit
-              ? "Keep your fund information up to date for founders to find you."
+              ? "Keep your profile information up to date for founders to find you."
               : "Set up your investor profile to start connecting with startups."}
           </p>
         </div>
@@ -290,7 +290,7 @@ const [uploadingLogo, setUploadingLogo] = useState(false);
           </div>
 
           <div className="field">
-                       <label className="label">Logo <span style={{ color: "var(--orange)" }}>*</span></label>
+                       <label className="label"> Profile Image <span style={{ color: "var(--orange)" }}>*</span></label>
             <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
               <input
                 type="file"

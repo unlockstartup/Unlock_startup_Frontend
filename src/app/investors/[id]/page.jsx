@@ -526,18 +526,18 @@ useEffect(() => {
                     <span className="sdpInfoBlockIcon"><MapPin size={14} strokeWidth={2} /></span>
                     Location
                   </div>
+                                      <div className="sdpRegRow">
+                    <span className="sdpRegIcon"><MapPin size={13} strokeWidth={1.75} /></span>
+                    <div className="sdpRegMeta">
+                      <span className="sdpRegLabel">Office Address</span>
+                      <span className="sdpRegValue">{getValue("address")}</span>
+                    </div>
+                  </div>
                   <div className="sdpRegRow">
                     <span className="sdpRegIcon"><MapPin size={13} strokeWidth={1.75} /></span>
                     <div className="sdpRegMeta">
                       <span className="sdpRegLabel">State</span>
                       <span className="sdpRegValue">{getValue("fullAddress")}</span>
-                    </div>
-                  </div>
-                                    <div className="sdpRegRow">
-                    <span className="sdpRegIcon"><MapPin size={13} strokeWidth={1.75} /></span>
-                    <div className="sdpRegMeta">
-                      <span className="sdpRegLabel">Office Address</span>
-                      <span className="sdpRegValue">{getValue("address")}</span>
                     </div>
                   </div>
                 </div>
