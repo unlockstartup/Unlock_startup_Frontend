@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect } from "react";
 import Hero from "@/components/home/hero/Hero";
 import HowItWorks from "@/components/home/howItWorks/HowItWorks";
 import UpcomingEvents from "@/components/home/upcomingEvents/UpcomingEvents";
@@ -11,18 +14,22 @@ import JobCta from "@/components/home/jobCta/JobCta";
 import UpcomingFundingCalls from "@/components/home/upcomingCompetitions/UpcomingFundingCalls";
 
 export default function Home() {
+  useEffect(() => {
+    if (sessionStorage.getItem("refreshHome") === "true") {
+      sessionStorage.removeItem("refreshHome");
+      window.location.reload();
+    }
+  }, []);
+
   return (
     <main>
       <Hero />
-      {/* <HowItWorks /> client said to remove this section */}
-      <UpcomingFundingCalls/>
+      <UpcomingFundingCalls />
       <UpcomingEvents />
       <JobListing />
       <TopInvestor />
       <ProductLaunches />
       <ServiceProvider />
-      {/* <Testimonial /> */}
-     
       <JobCta />
     </main>
   );

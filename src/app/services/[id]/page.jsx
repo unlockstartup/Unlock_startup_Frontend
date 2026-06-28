@@ -64,6 +64,10 @@ export default function ServicePage({ params }) {
     fetchService();
   }, [params]);
 
+  useEffect(() => {
+  sessionStorage.setItem("refreshHome", "true");
+}, []);
+
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({ title: company?.serviceTitle, url: window.location.href });
