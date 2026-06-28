@@ -96,13 +96,12 @@
   margin-top: 40px;
 }
 
-.pdp-page .container {
+.pdp-container {
   max-width: 1160px;
   margin: 0 auto;
   margin-top: 80px;
   padding: 0 24px;
 }
-
 /* ─── BACK LINK ─── */
 .pdp-backLink {
   display: inline-flex;
@@ -1155,9 +1154,7 @@
 
 /* Large tablet (≤1024px) */
 @media (max-width: 1024px) {
-  .pdp-page .container {
-    padding: 0 20px;
-  }
+ .pdp-container { padding: 0 20px; }
 
   .pdp-layout {
     gap: 28px;
@@ -1170,16 +1167,12 @@
   }
 }
 
-/* Tablet (821px – 1024px) */
 @media (min-width: 821px) and (max-width: 1024px) {
   .pdp-page {
     padding: 28px 0 80px;
   }
 
-  .pdp-page .container {
-    padding: 0 20px;
-    margin-top: 70px;
-  }
+.pdp-container { padding: 0 20px; margin-top: 70px; }
 
   .pdp-layout {
     grid-template-columns: 1fr 280px;
@@ -1320,7 +1313,7 @@
 
 /* Extra small (≤480px) */
 @media (max-width: 480px) {
-  .pdp-page .container  { padding: 0 16px; }
+  .pdp-container { padding: 0 16px; }
 
   .pdp-hero             { min-height: 200px; }
   .pdp-carouselWrap     { min-height: 200px; }

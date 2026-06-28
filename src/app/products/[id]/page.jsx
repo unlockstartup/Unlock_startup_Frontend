@@ -69,7 +69,7 @@ export default function Page({ params }) {
     return (
       <main>
         <div className="pdp-page">
-          <div className="container">
+          <div className="pdp-container mt-30">
             <div style={{ textAlign: "center", padding: "120px 0" }}>
               <p style={{ color: "var(--sdp-text-muted)", fontSize: "14px" }}>Loading product…</p>
             </div>
@@ -82,8 +82,8 @@ export default function Page({ params }) {
   if (!product) {
     return (
       <main>
-        <div className="pdp-page">
-          <div className="container">
+       <div className="pdp-page">
+  <div className="pdp-container mt-30">
             <div className="pdp-notFoundWrap">
               <h2>Product Not Found</h2>
               <p>This listing may have been removed or is unavailable.</p>
@@ -126,7 +126,7 @@ export default function Page({ params }) {
   return (
     <main>
       <div className="pdp-page">
-        <div className="container mt-30">
+        <div className="pdp-container mt-30">
           <Breadcrumb title="Products" dynamicTitle={product?.productName} />
 
           {/* Back Link */}

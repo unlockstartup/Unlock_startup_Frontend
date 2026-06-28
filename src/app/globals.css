@@ -13098,7 +13098,7 @@ body.compensate-for-scrollbar {
 .competition-section-one {
   position: relative;
   background: white;
-  overflow: hidden;
+  
   margin-top: 80px;
 }
 
@@ -13132,7 +13132,7 @@ background: linear-gradient(
 .event-section-one {
   position: relative;
   background: white;
-  overflow: hidden;
+ 
   margin-top: 80px;
 }
 
