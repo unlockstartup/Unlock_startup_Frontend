@@ -719,7 +719,7 @@ title={
                   <Field label="Official Email *">
                     <input type="email" className="input" value={form.officialEmail} onChange={sf("officialEmail")} placeholder="Enter email" />
                   </Field>
-                  <Field label="Contact Phone">
+                  <Field label="Contact Person Phone">
                     <input className="input" value={form.contactPhone} onChange={handleNumberOnly("contactPhone")} placeholder="Enter phone" maxLength={10} />
                   </Field>
                 </div>
@@ -846,16 +846,69 @@ title={
                       disabled={attachmentsUploading}
                       onChange={(e) => onAttachmentsPick(e.target.files)}
                     />
-                    {form.attachments?.length > 0 && (
-                      <div className="tagList">
-                        {form.attachments.map((a, idx) => (
-                          <span key={a.publicId || idx} className="tag">
-                            {a.publicId || `File ${idx + 1}`}
-                            <button type="button" className="tagRemove" onClick={() => removeAttachment(a.publicId)}>✕</button>
-                          </span>
-                        ))}
-                      </div>
-                    )}
+{form.attachments?.length > 0 && (
+  <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "8px" }}>
+    {form.attachments.map((a, idx) => (
+      <div
+        key={a.publicId || idx}
+        style={{
+          position: "relative",
+          display: "inline-flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 4,
+        }}
+      >
+        {a.url && a.resourceType === "image" ? (
+          <img
+            src={a.url}
+            alt={`attachment-${idx + 1}`}
+            style={{
+              width: 90,
+              height: 90,
+              objectFit: "cover",
+              borderRadius: 8,
+              border: "1px solid #e2e8f0",
+              background: "#f8fafc",
+            }}
+          />
+        ) : (
+          <div style={{
+            width: 90, height: 90, borderRadius: 8,
+            border: "1px solid #e2e8f0", background: "#f1f5f9",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 12, color: "#64748b", textAlign: "center", padding: 4,
+          }}>
+            {a.publicId?.split("/").pop() || `File ${idx + 1}`}
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={() => removeAttachment(a.publicId)}
+          style={{
+            position: "absolute",
+            top: -6,
+            right: -6,
+            width: 20,
+            height: 20,
+            borderRadius: "50%",
+            background: "#ef4444",
+            color: "#fff",
+            border: "none",
+            cursor: "pointer",
+            fontSize: 11,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1,
+          }}
+        >
+          ✕
+        </button>
+      </div>
+    ))}
+  </div>
+)}
                   </div>
                 </Field>
               </section>

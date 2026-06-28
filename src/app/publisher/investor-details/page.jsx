@@ -343,7 +343,7 @@ const [uploadingLogo, setUploadingLogo] = useState(false);
           </div>
 
           <div className="field">
-            <label className="label">Portfolio Companies <span style={{ color: "var(--orange)" }}>*</span></label>
+            <label className="label">Portfolio Companies Count<span style={{ color: "var(--orange)" }}>*</span></label>
             <input type="number" className="input" value={portfolioCompaniesCount} onChange={(e) => setPortfolioCompaniesCount(e.target.value)} placeholder="45" />
           </div>
         </div>
