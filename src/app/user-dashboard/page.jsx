@@ -211,13 +211,12 @@ function OpportunityDetails({ sub, listingLoc, description, eventDates }) {
     return (
       <DetailSection title="Investor Details" variant="blue">
         <DetailRow label="Investor name"     value={inv.fundName} />
-        <DetailRow label="Investor type" value={inv.investorType} />
+        <DetailRow label="Investor type"     value={inv.investorType} />
         <DetailRow label="Investor linkedIn" value={inv.linkedIn} />
-        {/* <DetailRow label="Website"       value={inv.website} link /> */}
-        <DetailRow label="Contact Person Name" value={inv.contact.name} />
-        <DetailRow label="Contact Person Email" value={inv.contact.email} />
-        <DetailRow label="Contact Person Number" value={inv.contact.phone} />
-        <DetailRow label="About"         value={description?.length > 200 ? description.slice(0, 200) + "…" : description} />
+        <DetailRow label="Contact Person Name"  value={inv.contact?.name} />
+        <DetailRow label="Contact Person Email" value={inv.contact?.email} />
+        <DetailRow label="Contact Person Number" value={inv.contact?.phone} />
+        <DetailRow label="About" value={description?.length > 200 ? description.slice(0, 200) + "…" : description} />
       </DetailSection>
     );
   }
@@ -225,20 +224,23 @@ function OpportunityDetails({ sub, listingLoc, description, eventDates }) {
     const svc = sub.serviceId;
     return (
       <DetailSection title="Service Details" variant="blue">
-        <DetailRow label="Service"  value={svc.serviceTitle} />
+        <DetailRow label="Service"      value={svc.serviceTitle} />
         <DetailRow label="Service type" value={svc.serviceType} />
-        <DetailRow label="Company"  value={svc.companyName} />
-        <DetailRow label="About"    value={description?.length > 200 ? description.slice(0, 200) + "…" : description} />
+        <DetailRow label="Company"      value={svc.companyName} />
+        <DetailRow label="About"        value={description?.length > 200 ? description.slice(0, 200) + "…" : description} />
       </DetailSection>
     );
   }
-  return (
-    <DetailSection title="Event Details" variant="blue">
-      <DetailRow label="Venue Name" value={listingLoc} />
-      <DetailRow label="Dates"    value={eventDates} />
-      <DetailRow label="About"    value={description?.length > 200 ? description.slice(0, 200) + "…" : description} />
-    </DetailSection>
-  );
+  if (sub.listingId) {
+    return (
+      <DetailSection title="Event Details" variant="blue">
+        <DetailRow label="Venue Name" value={listingLoc} />
+        <DetailRow label="Dates"      value={eventDates} />
+        <DetailRow label="About"      value={description?.length > 200 ? description.slice(0, 200) + "…" : description} />
+      </DetailSection>
+    );
+  }
+  return null;   // ← nothing rendered if all IDs are null
 }
 
 function ProfileView({ user, editData, getInitials, fileInputRef }) {
@@ -394,7 +396,58 @@ function Applications({ token, tabLabel }) {
   const resolveListingLocation = (sub) => sub.listingId?.location || null;
   const resolveDescription     = (sub) =>
     sub.listingId?.description || sub.investorId?.description || sub.serviceId?.description || null;
+const resolveContactDetails = (sub) => {
+  // ── Service submission ──
+  if (sub.serviceId) {
+    const s = sub.serviceId;
+    return {
+      companyName: s.companyName || null,
+      contactName: null,                 // service schema has no contact-person field
+      email:       s.contactEmail || null,
+      phone:       s.contactNumber || null,
+      website:     s.websiteUrl || null,
+      address:     s.contactAddress || null,
+    };
+  }
 
+  const l = sub.listingId;
+  if (!l) {
+    // Fallback to publisher for investor / other submissions
+    const p = sub.publisherId;
+    if (!p) return {};
+    return {
+      companyName: p.companyName || p.organizationName || null,
+      contactName: p.contactName || p.userId?.name || null,
+      email:       p.userId?.email || null,
+      phone:       p.phone || p.userId?.phone || null,
+      website:     p.website || null,
+      address:     p.address || null,
+    };
+  }
+
+  const type = l?.type?.name;
+
+  if (type === "event") {
+    return {
+      companyName: l.organizationName || null,
+      contactName: l.organizerContactPerson || null,
+      email:       l.workEmail || null,
+      phone:       l.phoneNumber || null,
+      website:     l.organizationWebsite || l.eventWebsite || null,
+      address:     l.fullAddress || l.location || null,
+    };
+  }
+
+
+  return {
+    companyName: l.companyName || null,
+    contactName: null,
+    email:       null,
+    phone:       null,
+    website:     null,
+    address:     l.location || null,
+  };
+};
   const resolveEventDates = (sub) => {
     const l = sub.listingId;
     if (!l) return null;
@@ -405,15 +458,43 @@ function Applications({ token, tabLabel }) {
     return start || null;
   };
 
-const resolvePublisherContact = (sub) => {
+// const resolvePublisherContact = (sub) => {
+//   const p = sub.publisherId;
+//   if (!p) return {};
+//   return {
+//     website:     p.website              || null,
+//     address:     p.address              || null,
+//     phone:       p.phone                || p.userId?.phone || null,
+//     email:       p.userId?.email        || null,
+//     contactName: p.userId?.name || null,
+//   };
+// };
+
+const resolveListingContact = (sub) => {
+  const l = sub.listingId;
+  const type = l?.type?.name;
+
+  if (type === "event") {
+    return {
+      companyName: l.organizationName || null,
+      contactName: l.organizerContactPerson || null,
+      email:       l.workEmail || null,
+      phone:       l.phoneNumber || null,
+      website:     l.organizationWebsite || l.eventWebsite || null,
+      address:     l.fullAddress || l.location || null,
+    };
+  }
+
+
   const p = sub.publisherId;
   if (!p) return {};
   return {
-    website:     p.website              || null,
-    address:     p.address              || null,
-    phone:       p.phone                || p.userId?.phone || null,
-    email:       p.userId?.email        || null,
-    contactName: p.userId?.name || null,
+    companyName: p.companyName || p.organizationName || null,
+    contactName: p.contactName || p.userId?.name || null,
+    email:       p.userId?.email || null,
+    phone:       p.phone || p.userId?.phone || null,
+    website:     p.website || null,
+    address:     p.address || null,
   };
 };
 
@@ -437,7 +518,12 @@ const resolvePublisherContact = (sub) => {
     "investor-apps": { title: "Investor Applications", subtitle: "Investor opportunities you applied to" },
   };
   const { title, subtitle } = headingMap[tabLabel] || { title: "Applications", subtitle: "" };
-
+  const filteredSubmissions = submissions.filter((sub) => {
+    if (tabLabel === "investor-apps") return sub.investorId != null;
+    if (tabLabel === "job-apps")      return sub.serviceId != null;
+    if (tabLabel === "event-apps")    return sub.listingId != null;
+    return true;
+  });
   return (
     <div>
       <SectionHeading title={title} subtitle={subtitle} />
@@ -453,7 +539,7 @@ const resolvePublisherContact = (sub) => {
             <p className="pd-state-text">{error}</p>
             <button className="pd-save-btn" style={{ marginTop: 12 }} onClick={() => fetchApplications(page)}>Retry</button>
           </div>
-        ) : submissions.length === 0 ? (
+        ) : filteredSubmissions.length === 0 ? (
           <div className="pd-state-center">
             <Briefcase size={36} color="#d1d5db" />
             <p className="pd-state-text" style={{ color: "#9ca3af" }}>No applications found</p>
@@ -461,10 +547,9 @@ const resolvePublisherContact = (sub) => {
         ) : (
           <>
             <div className="app-list">
-              {submissions.map((sub) => {
+              {filteredSubmissions.map((sub) => {
                 const { bg, color }  = statusMeta(sub.status);
                 const isOpen         = expanded === sub._id;
-                const pubContact     = resolvePublisherContact(sub);
                 const listingLoc     = resolveListingLocation(sub);
                 const eventDates     = resolveEventDates(sub);
                 const description    = resolveDescription(sub);
@@ -522,16 +607,36 @@ const resolvePublisherContact = (sub) => {
                             description={description}
                             eventDates={eventDates}
                           />
-<DetailSection title="Company / Publisher">
-  {!sub.serviceId && (
-    <DetailRow label="Company Name" value={resolveCompany(sub)} />
-  )}
-  <DetailRow label="Contact Name" value={pubContact.contactName} />
-  <DetailRow label="Email"        value={pubContact.email} />
-  <DetailRow label="Phone"        value={pubContact.phone} />
-  <DetailRow label="Website"      value={pubContact.website} link />
-  <DetailRow label="Address"      value={pubContact.address} />
-</DetailSection>
+{sub.listingId && sub.listingId.type?.name === "event" && (
+  <DetailSection title="Event Contact Details">
+    <DetailRow label="Company Name" value={sub.listingId.organizationName} />
+    <DetailRow label="Contact Person"    value={sub.listingId.organizerContactPerson} />
+    <DetailRow label="Work Email"        value={sub.listingId.workEmail} />
+    <DetailRow label="Phone Number"      value={sub.listingId.phoneNumber} />
+    <DetailRow label="Website"           value={sub.listingId.organizationWebsite} link />
+  </DetailSection>
+)}
+
+{sub.serviceId && (
+  <DetailSection title="Service Contact Details">
+    <DetailRow label="Company Name"    value={sub.serviceId.companyName} />
+    <DetailRow label="Brand Name"      value={sub.serviceId.brandName} />
+    <DetailRow label="Contact Email"   value={sub.serviceId.contactEmail} />
+    <DetailRow label="Contact Number"  value={sub.serviceId.contactNumber} />
+    <DetailRow label="Website"         value={sub.serviceId.websiteUrl} link />
+  </DetailSection>
+)}
+
+{sub.investorId && (
+  <DetailSection title="Investor Contact Details">
+    <DetailRow label="Fund Name"       value={sub.investorId.fundName} />
+    <DetailRow label="Investor Type"   value={sub.investorId.investorType} />
+    <DetailRow label="Contact Person"  value={sub.investorId.contact?.name} />
+    <DetailRow label="Contact Email"   value={sub.investorId.contact?.email} />
+    <DetailRow label="Contact Phone"   value={sub.investorId.contact?.phone} />
+    <DetailRow label="LinkedIn"        value={sub.investorId.linkedIn} link />
+  </DetailSection>
+)}
                         </div>
 
 <DetailSection title="My Submitted Details" variant="orange">
