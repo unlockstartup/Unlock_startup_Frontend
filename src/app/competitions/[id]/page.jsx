@@ -253,7 +253,7 @@ export default function CompetitionPage({ params }) {
                     <Layers size={20} strokeWidth={2} />
                   </span>
                   <div className="competitionHeroStatMeta">
-                    <span className="competitionHeroStatLabel">Startup Stage</span>
+                    <span className="competitionHeroStatLabel">Startup Stage Requirements</span>
                     <span className="competitionHeroStatValue">{funding.startupStage}</span>
                   </div>
                 </div>
@@ -304,13 +304,13 @@ export default function CompetitionPage({ params }) {
                   )}
                   {funding.challengeCategory && (
                     <div className="competitionMetaItem">
-                      <span className="competitionMetaLabel">Category</span>
+                      <span className="competitionMetaLabel">Challenge Category</span>
                       <span className="competitionMetaValue competitionMetaValue--yellow">{funding.challengeCategory}</span>
                     </div>
                   )}
                   {funding.startupStage && (
                     <div className="competitionMetaItem">
-                      <span className="competitionMetaLabel">Startup Stage</span>
+                      <span className="competitionMetaLabel">Startup Stage Requirements</span>
                       <span className="competitionMetaValue competitionMetaValue--blue">{funding.startupStage}</span>
                     </div>
                   )}
@@ -590,7 +590,7 @@ export default function CompetitionPage({ params }) {
                     <div className="competitionRegRow">
                       <span className="competitionRegIcon"><Layers size={16} strokeWidth={2} /></span>
                       <div className="competitionRegMeta">
-                        <span className="competitionRegLabel">Startup Stage</span>
+                        <span className="competitionRegLabel">Startup Stage Requirements</span>
                         <span className="competitionRegValue">{funding.startupStage}</span>
                       </div>
                     </div>

@@ -60,9 +60,9 @@ const FILTER_CONFIGS = {
     { key: "state",       label: "Location",       type: "searchable-checkbox" },
   ],
   competitions: [
-    { key: "challengeType",     label: "Competition Type",     type: "checkbox-group"      },
-    { key: "challengeCategory", label: "Competition Category", type: "checkbox-group"      },
-    { key: "startupStage",      label: "Startup Stage",        type: "checkbox-group"      },
+    { key: "challengeType",     label: "Challenge Type",     type: "checkbox-group"      },
+    { key: "challengeCategory", label: "Challenge Category", type: "checkbox-group"      },
+    { key: "startupStage",      label: "Startup Stage Requirements",        type: "checkbox-group"      },
     { key: "location",          label: "Location",             type: "searchable-checkbox" },
   ],
   products: [
