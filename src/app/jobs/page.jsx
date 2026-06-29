@@ -21,7 +21,11 @@ const JobListPage = () => {
       try {
         setLoading(true);
         const res = await api.get("/api/publisher/jobs/sorted");
-        setJobs(res.data?.items || res.data?.jobs || []);
+const raw = res.data?.items || res.data?.jobs || [];
+setJobs(raw.map((j) => ({
+  ...j,
+  state: j.jobLocationState ?? "", 
+})));
       } catch (err) {
         console.error("Failed to load jobs", err);
       } finally {
@@ -34,46 +38,53 @@ const JobListPage = () => {
     setCurrentPage(1);
   }, [activeFilters, sortBy]);
 
-  const filtered = useMemo(() => {
-    let list = [...jobs];
-    const { search, jobType, workMode, experienceLevel, location, jobCategory } = activeFilters;
+// 2. Fix all filter comparisons
+const filtered = useMemo(() => {
+  let list = [...jobs];
+  const { search, jobType, workMode, experienceLevel, location, jobCategory } = activeFilters;
 
-    if (search) {
-      const q = search.toLowerCase();
-      list = list.filter(
-        (j) =>
-          j.title?.toLowerCase().includes(q) ||
-          j.companyName?.toLowerCase().includes(q) ||
-          j.description?.toLowerCase().includes(q)
-      );
-    }
-    if (jobType?.length)
-      list = list.filter((j) => jobType.includes(j.jobType));
-    if (workMode?.length)
-      list = list.filter((j) => workMode.includes(j.workMode));
-    if (jobCategory?.length)
-      list = list.filter((j) => jobCategory.includes(j.jobCategory));
-    if (experienceLevel && experienceLevel !== "All")
-      list = list.filter((j) => j.experienceLevel === experienceLevel);
-    if (location && location !== "All") {
-      list = list.filter((j) => {
-        const jLoc =
-          j.location ||
-          j.officeLocation ||
-          (j.jobLocationCity && j.jobLocationState
-            ? `${j.jobLocationCity}, ${j.jobLocationState}`
-            : null);
-        return jLoc === location;
-      });
-    }
+  if (search) {
+    const q = search.toLowerCase();
+    list = list.filter(
+      (j) =>
+        j.title?.toLowerCase().includes(q) ||
+        j.companyName?.toLowerCase().includes(q) ||
+        j.description?.toLowerCase().includes(q)
+    );
+  }
 
-if (sortBy === "oldest")
-  list.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));  // ascending
-else
-  list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));  // latest 
+  // case-insensitive string comparison for all checkbox filters
+  if (jobType?.length)
+    list = list.filter((j) =>
+      jobType.some((t) => j.jobType?.toLowerCase() === t.toLowerCase())
+    );
 
-    return list;
-  }, [jobs, activeFilters, sortBy]);
+  if (workMode?.length)
+    list = list.filter((j) =>
+      workMode.some((w) => j.workMode?.toLowerCase() === w.toLowerCase())
+    );
+
+  if (jobCategory?.length)
+    list = list.filter((j) =>
+      jobCategory.some((c) => j.jobCategory?.toLowerCase() === c.toLowerCase())
+    );
+
+  if (experienceLevel && experienceLevel !== "All")
+    list = list.filter((j) => j.experienceLevel === experienceLevel);
+
+  // location is an array of state names from searchable-checkbox
+  if (location?.length)
+    list = list.filter((j) =>
+      location.some((s) => j.state?.toLowerCase() === s.toLowerCase())
+    );
+
+  if (sortBy === "oldest")
+    list.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+  else
+    list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  return list;
+}, [jobs, activeFilters, sortBy]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
 
