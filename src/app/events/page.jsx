@@ -28,7 +28,9 @@ const Page = () => {
           location:          item.venueName
                                ? `${item.venueName}, ${item.fullAddress}`
                                : item.fullAddress ?? "",
-          category:          item.eventCategory ? [item.eventCategory] : [],
+          category: item.eventCategory
+  ? [typeof item.eventCategory === "object" ? item.eventCategory.name : item.eventCategory]
+  : [],
           registrationPrice: item.registrationPrice ?? null,
           registrationType:  item.registrationType ?? "",
           publisherName:     item.publisherId?.organizationName ?? "",
