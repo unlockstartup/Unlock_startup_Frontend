@@ -293,7 +293,7 @@ export default function ServicePage({ params }) {
                 <div className="svd-card">
                   <div className="svd-section__head">
                     <div className="svd-section__icon"><Users size={15} strokeWidth={1.8} /></div>
-                    <h2 className="svd-section__title">Industry &amp; Categories</h2>
+                    <h2 className="svd-section__title">Target Industry &amp; Service Plans</h2>
                   </div>
 
                   {toList(company.targetIndustry).length > 0 && (
@@ -312,7 +312,7 @@ export default function ServicePage({ params }) {
 
                   {toList(company.serviceCategory).length > 0 && (
                     <div className="svd-audience" style={{ marginBottom: 0 }}>
-                      <span className="svd-audience__label">Categories</span>
+                      <span className="svd-audience__label">Service Plan</span>
                       <div className="svd-tags">
                         {toList(company.serviceCategory).map((tag, i) => (
                           <span key={i} className="svd-tag--topic">
