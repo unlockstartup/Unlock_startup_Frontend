@@ -80,15 +80,17 @@ const Page = () => {
         )
       );
     }
-    if (category?.length)
-      list = list.filter((e) =>
-        category.some((c) => e.category?.includes(c))
-      );
+if (category?.length)
+  list = list.filter((e) =>
+    category.some((c) =>
+      e.category?.some((ec) => ec?.toLowerCase() === c?.toLowerCase())
+    )
+  );
     if (registrationType && registrationType !== "All")
       list = list.filter((e) => e.registrationType === registrationType);
-    if (state && state !== "All") {
-      list = list.filter((e) => e.state === state);
-    }
+if (state?.length) {
+  list = list.filter((e) => state.includes(e.state));
+}
    list.sort((a, b) => {
       const dateA = a.startDateTime ? new Date(a.startDateTime).getTime() : 0;
       const dateB = b.startDateTime ? new Date(b.startDateTime).getTime() : 0;
