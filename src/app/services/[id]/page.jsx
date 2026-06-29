@@ -258,7 +258,7 @@ export default function ServicePage({ params }) {
                     )}
                     {company.certifications && (
                       <div className="svd-meta">
-                        <span className="svd-meta__label">Certifications</span>
+                        <span className="svd-meta__label">Certifications &amp; Credentials</span>
                         <span className="svd-meta__value">{company.certifications}</span>
                       </div>
                     )}
