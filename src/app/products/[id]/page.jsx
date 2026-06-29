@@ -302,7 +302,7 @@ export default function Page({ params }) {
                 <div className="pdp-card">
                   <div className="pdp-sectionHeader">
                     <div className="pdp-sectionIcon"><Lightbulb size={15} strokeWidth={1.8} /></div>
-                    <h2 className="pdp-sectionTitle">Key Features</h2>
+                    <h2 className="pdp-sectionTitle">Key Features / Innovations </h2>
                   </div>
                   <ul className="pdp-featureList">
                     {product.keyFeatures.split(/\n|•/).filter(s => s.trim()).map((feat, i) => (

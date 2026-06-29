@@ -225,19 +225,13 @@ const renderBullets = (label, val) => {
     rows.push(renderField("Detailed Description", item.detailedDescription || item.description));
     rows.push(renderField("Key Features / Innovations", item.keyFeatures));
     rows.push(renderLink("Product Demo / Video URL", item.productDemoUrl));
-
-    // Target market
     rows.push(renderField("Target Industry / Market", item.targetIndustry));
     rows.push(renderField("Challenge Solved", item.challengeSolved));
-
-    // Company Details
     rows.push(renderField("Contact Email", item.contactEmail));
     rows.push(renderField("Contact Number", item.contactNumber));
     rows.push(renderLink("Website URL", item.websiteUrl));
     rows.push(renderField("Product Status", item.productStatus));
     rows.push(renderField("Innovation Status", item.innovationStatus));
-
-    // Product Status
     rows.push(renderField("Founder / Lead Innovator", item.founderName));
     rows.push(renderField("Awards / Recognition", item.awardsRecognition));
   }

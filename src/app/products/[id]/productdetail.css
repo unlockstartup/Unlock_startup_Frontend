@@ -594,7 +594,6 @@
 .pdp-metaValue--blue   { color: var(--blue-800); }
 .pdp-metaValue--yellow { color: var(--yellow-900); }
 
-/* ─── KEY FEATURES LIST ─── */
 .pdp-featureList {
   list-style: none;
   padding: 0;
