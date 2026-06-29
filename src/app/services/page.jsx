@@ -33,29 +33,44 @@ const Page = () => {
     setCurrentPage(1);
   }, [activeFilters]);
 
-  const filtered = useMemo(() => {
-    let list = [...services];
-    const { search, serviceCategory, serviceType, state } = activeFilters;
+const filtered = useMemo(() => {
+  let list = [...services];
+  const { search, serviceCategory, serviceType, state } = activeFilters;
 
-    if (search) {
-      const q = search.toLowerCase();
-      list = list.filter(
-        (s) =>
-          s.serviceTitle?.toLowerCase().includes(q) ||
-          s.detailedDescription?.toLowerCase().includes(q) ||
-          s.companyName?.toLowerCase().includes(q) ||
-          s.brandName?.toLowerCase().includes(q)
-      );
-    }
-    if (serviceCategory?.length)
-      list = list.filter((s) => serviceCategory.includes(s.serviceCategory));
-    if (serviceType?.length)
-      list = list.filter((s) => serviceType.includes(s.serviceType));
-    if (state?.length)
-      list = list.filter((s) => state.includes(s.serviceArea));
+  if (search) {
+    const q = search.toLowerCase();
+    list = list.filter(
+      (s) =>
+        s.serviceTitle?.toLowerCase().includes(q) ||
+        s.detailedDescription?.toLowerCase().includes(q) ||
+        s.companyName?.toLowerCase().includes(q) ||
+        s.brandName?.toLowerCase().includes(q)
+    );
+  }
 
-    return list;
-  }, [services, activeFilters]);
+  if (serviceCategory?.length)
+    list = list.filter((s) =>
+      serviceCategory.some(
+        (c) => s.serviceCategory?.toLowerCase() === c.toLowerCase()
+      )
+    );
+
+  if (serviceType?.length)
+    list = list.filter((s) =>
+      serviceType.some(
+        (t) => s.serviceType?.toLowerCase() === t.toLowerCase()
+      )
+    );
+
+  if (state?.length)
+    list = list.filter((s) =>
+      state.some(
+        (st) => s.serviceArea?.toLowerCase() === st.toLowerCase()
+      )
+    );
+
+  return list;
+}, [services, activeFilters]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
   const paginated = useMemo(() => {

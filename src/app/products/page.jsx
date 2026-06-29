@@ -32,30 +32,47 @@ const Page = () => {
     setCurrentPage(1);
   }, [activeFilters, sortBy]);
 
-  const filtered = useMemo(() => {
-    let list = [...products];
-    const { search, innovationCategory, productStatus, patentStatus } = activeFilters;
+const filtered = useMemo(() => {
+  let list = [...products];
+  const { search, innovationCategory, productStatus, patentStatus } = activeFilters;
 
-    if (search) {
-      const q = search.toLowerCase();
-      list = list.filter(
-        (p) =>
-          p.productName?.toLowerCase().includes(q) ||
-          p.detailedDescription?.toLowerCase().includes(q)
-      );
-    }
-    if (innovationCategory?.length)
-      list = list.filter((p) => innovationCategory.includes(p.innovationCategory));
-    if (productStatus?.length)
-      list = list.filter((p) => productStatus.includes(p.productStatus));
-    if (patentStatus?.length)
-      list = list.filter((p) => patentStatus.includes(p.patentStatus));
+  if (search) {
+    const q = search.toLowerCase();
+    list = list.filter(
+      (p) =>
+        p.productName?.toLowerCase().includes(q) ||
+        p.brandName?.toLowerCase().includes(q) ||          // ← also search brand
+        p.companyName?.toLowerCase().includes(q) ||        // ← also search company
+        p.detailedDescription?.toLowerCase().includes(q)
+    );
+  }
 
-    if (sortBy === "latest")
-      list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  if (innovationCategory?.length)
+    list = list.filter((p) =>
+      innovationCategory.some(
+        (c) => p.innovationCategory?.toLowerCase() === c.toLowerCase()
+      )
+    );
 
-    return list;
-  }, [products, activeFilters, sortBy]);
+  if (productStatus?.length)
+    list = list.filter((p) =>
+      productStatus.some(
+        (s) => p.productStatus?.toLowerCase() === s.toLowerCase()
+      )
+    );
+
+  if (patentStatus?.length)
+    list = list.filter((p) =>
+      patentStatus.some(
+        (s) => p.patentStatus?.toLowerCase() === s.toLowerCase()
+      )
+    );
+
+  if (sortBy === "latest")
+    list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  return list;
+}, [products, activeFilters, sortBy]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
 
