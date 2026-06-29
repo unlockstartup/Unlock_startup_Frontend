@@ -108,7 +108,7 @@ function buildServiceDetails(plan, durationType) {
   return [
     limit === 0
       ? "Unlimited service listings"
-      : `Up to ${limit} service listing${limit !== 1 ? "s" : ""}`,
+      : `${limit} service listing${limit !== 1 ? "s" : ""}`,
   ];
 }
 
@@ -153,7 +153,12 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
     new Date(planInfo.serviceplan.expiryDate) > new Date();
 
   const activeServiceKey = isServiceActive ? planInfo?.serviceplan?.plan : null;
-
+const trialLimit = servicePlans[0]?.trialServiceListingLimit;
+const trialDetails = trialLimit !== undefined
+  ? [trialLimit === 0
+      ? "Unlimited service listings"
+      : `${trialLimit} service listing${trialLimit !== 1 ? "s" : ""}`]
+  : [];
   const currentPlanLabel = activeServiceKey === "6m" ? "6-Month Plan" : activeServiceKey === "12m" ? "Yearly Plan" : "current";
 
   const handleServiceSubscribe = async (plan, durationType) => {
@@ -236,8 +241,8 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
     );
 
   const tiers = [
-    { durationType: "6m",  label: "6-Month Plan", suffix: "/ 6 mo", desc: "Flexible half-year access to service listings." },
-    { durationType: "12m", label: "Yearly Plan",  suffix: "/ year",  desc: "Best value — full year of service listings." },
+    { durationType: "6m",  label: "6-Month Plan", suffix: "/ 6 mo", desc: "Showcase your expertise and connect with new customers through a flexible six-month service listing plan." },
+    { durationType: "12m", label: "Yearly Plan",  suffix: "/ year",  desc: "Expand your reach with 1 year of continuous service marketplace exposure." },
   ];
 
   return (
@@ -249,7 +254,7 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
             Pricing for Service plans
           </h2>
           <p className="text-muted mx-auto" style={{ maxWidth: "480px", fontSize: "1.2rem" }}>
-            Choose a service plan that works best for you. All service plans include access to our core service features.
+            Publish and manage your service listings. Pick a duration that suits your needs.
           </p>
         </div>
 
@@ -296,7 +301,7 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
                     </span>
                   </div>
                   <p className="text-muted mb-3" style={{ fontSize: "1.2rem", minHeight: "3.2rem" }}>
-                    Get started at no cost for 30 days.
+                    Get started at no cost for 1 month.
                   </p>
 
                   {isTrialActive ? (
@@ -327,14 +332,24 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
 
                 <div className="p-4 flex-grow-1">
                   <p className="fw-semibold mb-3" style={{ fontSize: "1.2rem", color: "#1a1a2e" }}>What's included</p>
-                  <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
-                    {["Access to service listing features", "No credit card required"].map((item, idx) => (
-                      <li key={idx} className="d-flex align-items-start gap-2">
-                        <CheckIcon />
-                        <span style={{ fontSize: "1.2rem", color: "#475569" }}>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+                 {trialDetails.length > 0 ? (
+  <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
+    {trialDetails.map((item, idx) => (
+      <li key={idx} className="d-flex align-items-start gap-2">
+        <CheckIcon />
+        <span style={{ fontSize: "1.2rem", color: "#475569" }}>{item}</span>
+      </li>
+    ))}
+    <li className="d-flex align-items-start gap-2">
+      <CheckIcon />
+      <span style={{ fontSize: "1.2rem", color: "#475569" }}>No credit card required</span>
+    </li>
+  </ul>
+) : (
+  <p className="text-muted mb-0" style={{ fontSize: "1.2rem" }}>
+    No features configured for this plan yet.
+  </p>
+)}
                 </div>
               </div>
             </div>

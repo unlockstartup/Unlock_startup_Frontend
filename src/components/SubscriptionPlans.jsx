@@ -15,7 +15,7 @@ function loadRazorpayScript() {
 }
 
 const planLabels = (months) => {
-  if (months === 0)  return { name: "Free",          desc: "Get started at no cost for 30 days." };
+  if (months === 0)  return { name: "Free",          desc: "Get started at no cost for 1 month." };
   if (months === 3)  return { name: "Startup Basic",  desc: "Perfect for individuals just getting started." };
   if (months === 6)  return { name: "Startup Plus",   desc: "Great for small teams and growing startups." };
   if (months === 9)  return { name: "Startup Pro",    desc: "Ideal for professionals who need more power." };
@@ -117,28 +117,28 @@ function buildPlanDetails(plan) {
     items.push(
       plan.jobLimit === 0
         ? "Unlimited job postings"
-        : `Up to ${plan.jobLimit} job posting${plan.jobLimit !== 1 ? "s" : ""}`
+        : `${plan.jobLimit} job posting${plan.jobLimit !== 1 ? "s" : ""}`
     );
 
   if (plan.eventLimit !== undefined)
     items.push(
       plan.eventLimit === 0
         ? "Unlimited events"
-        : `Up to ${plan.eventLimit} event${plan.eventLimit !== 1 ? "s" : ""}`
+        : `${plan.eventLimit} event${plan.eventLimit !== 1 ? "s" : ""}`
     );
 
   if (plan.fundingCallsLimit !== undefined)
     items.push(
       plan.fundingCallsLimit === 0
         ? "Unlimited funding calls"
-        : `Up to ${plan.fundingCallsLimit} funding call${plan.fundingCallsLimit !== 1 ? "s" : ""}`
+        : `${plan.fundingCallsLimit} funding call${plan.fundingCallsLimit !== 1 ? "s" : ""}`
     );
 
   if (plan.productsLimit !== undefined)
     items.push(
       plan.productsLimit === 0
         ? "Unlimited products"
-        : `Up to ${plan.productsLimit} product${plan.productsLimit !== 1 ? "s" : ""}`
+        : `${plan.productsLimit} product${plan.productsLimit !== 1 ? "s" : ""}`
     );
 
   if (Array.isArray(plan.features))
@@ -147,13 +147,7 @@ function buildPlanDetails(plan) {
   return items;
 }
 
-const TRIAL_PLAN = {
-  _id: "trial_static",
-  isTrial: true,
-  durationInMonths: 0,
-  price: 0,
-  features: ["Access to all core features", "No credit card required"],
-};
+
 
 export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
   const [plans, setPlans]                   = useState([]);
@@ -172,7 +166,7 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
         ]);
 
         if (plansRes.data?.success)
-          setPlans((plansRes.data.plans || []).filter((p) => p.durationInMonths !== 0));
+          setPlans(plansRes.data.plans || []);
 
         if (historyRes?.data?.success && Array.isArray(historyRes.data.subscriptions)) {
           const hasPremium = historyRes.data.subscriptions.some((s) => s.plan !== "trial");
@@ -306,7 +300,13 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
       </div>
     );
 
-  const allPlans = hasPremiumHistory ? plans : [TRIAL_PLAN, ...plans];
+const trialPlan = plans.find((p) => p.durationInMonths === 0);
+const paidPlans = plans.filter((p) => p.durationInMonths !== 0);
+const allPlans  = hasPremiumHistory
+  ? paidPlans
+  : trialPlan
+    ? [{ ...trialPlan, isTrial: true }, ...paidPlans]
+    : paidPlans;
 
   return (
     <section className="py-2">
@@ -317,7 +317,7 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
             Pricing for Startup plans
           </h2>
           <p className="text-muted mx-auto" style={{ maxWidth: "480px", fontSize: "1.2rem" }}>
-            Choose a plan that works best for you. All plans include access to our core features.
+           Choose a subscription duration that aligns with your business objectives and access to powerful dashboard that enhance visibility, engagement, networking, and growth.
           </p>
         </div>
 
@@ -389,7 +389,7 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
                         </span>
                       </div>
                       <p className="text-muted mb-3" style={{ fontSize: "1.2rem", minHeight: "3.2rem" }}>
-                        Get started at no cost for 30 days.
+                        Get started at no cost for 1 Month.
                       </p>
 
                       {isActivePlan ? (
@@ -422,14 +422,27 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
                       <p className="fw-semibold mb-3" style={{ fontSize: "1.2rem", color: "#1a1a2e" }}>
                         What's included
                       </p>
-                      <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
-                        {["Access to all core features", "No credit card required"].map((item, idx) => (
-                          <li key={idx} className="d-flex align-items-start gap-2">
-                            <CheckIcon />
-                            <span style={{ fontSize: "1.2rem", color: "#475569" }}>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+{(() => {
+  const details = buildPlanDetails(plan);
+  return details.length > 0 ? (
+    <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
+      {details.map((item, idx) => (
+        <li key={idx} className="d-flex align-items-start gap-2">
+          <CheckIcon />
+          <span style={{ fontSize: "1.2rem", color: "#475569" }}>{item}</span>
+        </li>
+      ))}
+      <li className="d-flex align-items-start gap-2">
+        <CheckIcon />
+        <span style={{ fontSize: "1.2rem", color: "#475569" }}>No credit card required</span>
+      </li>
+    </ul>
+  ) : (
+    <p className="text-muted mb-0" style={{ fontSize: "1.2rem" }}>
+      No features configured for this plan yet.
+    </p>
+  );
+})()}
                     </div>
                   </div>
                 </div>
