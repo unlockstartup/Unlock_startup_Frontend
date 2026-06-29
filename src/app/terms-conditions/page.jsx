@@ -90,10 +90,6 @@ export default function TermsConditions() {
         <div className="ex-hero-strip-bg" />
         <div className="ex-hero-strip-grid" />
         <div className="ex-hero-strip-content">
-          <span className="ex-hero-badge">
-            <span className="ex-hero-badge-dot" />
-            Legal Document
-          </span>
           <h1 className="ex-hero-title">
             Terms &amp; <span>Conditions</span>
           </h1>
@@ -134,7 +130,7 @@ export default function TermsConditions() {
             </div> */}
           </section>
 
-          <div className="ex-divider" />
+
 
           {/* 2. Prohibited Activities */}
           <section id="ex-prohibited" className="ex-section">
@@ -172,7 +168,7 @@ export default function TermsConditions() {
             </div> */}
           </section>
 
-          <div className="ex-divider" />
+
 
           {/* 3. Third-Party Links */}
           <section id="ex-third-party" className="ex-section">
@@ -197,7 +193,7 @@ This website may contain links to third-party websites. These links are provided
             </div> */}
           </section>
 
-          <div className="ex-divider" />
+
 
           {/* 4. Limitation of Liability */}
           <section id="ex-liability" className="ex-section">
@@ -221,7 +217,7 @@ Under no circumstances shall Unlock Startup, its directors, employees, partners,
             </div>
           </section>
 
-          <div className="ex-divider" />
+
 
           {/* 5. User Responsibilities */}
           <section id="ex-user-resp" className="ex-section">
@@ -245,7 +241,7 @@ By using this website, you agree to be solely responsible for any content you po
             </div> */}
           </section>
 
-          <div className="ex-divider" />
+
 
           {/* 6. Disclaimer of Warranties */}
           <section id="ex-disclaimer" className="ex-section">
@@ -269,7 +265,7 @@ This website is provided “as is” without any warranties or representations, 
             </div> */}
           </section>
 
-          <div className="ex-divider" />
+
 
           {/* 7. Indemnity */}
           <section id="ex-indemnity" className="ex-section">
@@ -293,7 +289,7 @@ You agree to indemnify and hold Unlock Startup and its affiliates, directors, em
             </div> */}
           </section>
 
-          <div className="ex-divider" />
+
 
           {/* 8. Governing Law */}
           <section id="ex-governing" className="ex-section">
@@ -317,7 +313,7 @@ These terms and conditions shall be governed by and construed in accordance with
             </div> */}
           </section>
 
-          <div className="ex-divider" />
+
 
           {/* 9. Modifications */}
           <section id="ex-modifications" className="ex-section">
@@ -341,7 +337,7 @@ Unlock Startup reserves the right to modify or replace these terms and condition
             </div> */}
           </section>
 
-          <div className="ex-divider" />
+
 
           {/* 10. Entire Agreement */}
           <section id="ex-entire-agreement" className="ex-section">
@@ -365,7 +361,7 @@ These terms and conditions constitute the entire agreement between you and Unloc
             </div> */}
           </section>
 
-          <div className="ex-divider" />
+
 
         </main>
 

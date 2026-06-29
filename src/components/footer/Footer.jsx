@@ -61,7 +61,7 @@ export default function Footer() {
                   <li><Link href="/privacy">Privacy</Link></li>
                   <li><Link href="/terms-conditions">Terms & conditions</Link></li>
                   <li><Link href="/refunds">Refund / Cancellation Policy</Link></li>
-                  <li><Link href="/cookie-policy">Cookie policy</Link></li>
+                  <li><Link href="/disclamer">Disclamer</Link></li>
                 </ul>
               </div>
 

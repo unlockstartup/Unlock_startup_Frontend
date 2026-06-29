@@ -34,6 +34,9 @@ const gordita = localFont({
 export const metadata = {
   title: "Unlock Startup",
   description: "Unlock Startup",
+  icons: {
+    icon: '/unlock-startup.png'
+  },
 };
 
 export default function RootLayout({ children }) {

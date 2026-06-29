@@ -192,14 +192,14 @@ export default function Page() {
                       )}
                     </div>
                     <p className="pricingPage__planDesc">{plan.desc}</p>
-                    <ul className="pricingPage__featuresList">
+                    {/* <ul className="pricingPage__featuresList">
                       {plan.features.map((f, idx) => (
                         <li key={idx} className="pricingPage__featureItem">
                           <CheckIcon />
                           {f}
                         </li>
                       ))}
-                    </ul>
+                    </ul> */}
                     <a href="#signup" className="pricingPage__btn pricingPage__btnSecondary pricingPage__planCta">
                       {plan.price === 0 ? 'Start Free' : 'Get Started'}
                     </a>

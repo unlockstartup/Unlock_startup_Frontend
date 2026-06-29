@@ -8,10 +8,9 @@ const JobCta = () => {
           <div className="row align-items-center">
             <div className="col-lg-7">
               <div className="text-center text-lg-start">
-                <h2>Your startup opportunity portal.</h2>
+                <h2>Everything your Startup Needs, all in one place.</h2>
                 <p className="m0 md-pb-20">
-                  Find jobs, hire talent, discover investors, apply for grants —
-                  everything starts with one signup.
+                  Access competitions, events, jobs, investors, products, and business services through a single platform. 
                 </p>
               </div>
             </div>

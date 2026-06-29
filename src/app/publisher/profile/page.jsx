@@ -236,7 +236,7 @@ const DownloadBtn = ({ sub, invNumber, onDownload, isDownloading }) => (
           </thead>
           <tbody>
             {subscriptions.map((sub, index) => {
-              const invNumber = `SRV-${String(sub._id).slice(-8).toUpperCase()}`;
+              const invNumber = `USI-${String(sub._id).slice(-8).toUpperCase()}`;
               return (
                 <tr key={sub._id}>
                   <td className="pp-td-muted" style={{ fontSize: "1.2rem" }}>{index + 1}</td>
@@ -287,7 +287,7 @@ const DownloadBtn = ({ sub, invNumber, onDownload, isDownloading }) => (
           </thead>
 <tbody>
   {serviceSubscriptions.map((sub, index) => {
-   const invNumber = `SRV-${String(sub._id).slice(-8).toUpperCase()}`;
+   const invNumber = `USI-${String(sub._id).slice(-8).toUpperCase()}`;
     return (
       <tr key={sub._id}>
         <td className="pp-td-muted" style={{ fontSize: "1.2rem" }}>{index + 1}</td>

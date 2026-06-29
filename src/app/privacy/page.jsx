@@ -110,10 +110,6 @@ export default function PrivacyPolicy() {
         <div className="ex-hero-strip-bg" />
         <div className="ex-hero-strip-grid" />
         <div className="ex-hero-strip-content">
-          <span className="ex-hero-badge">
-            <span className="ex-hero-badge-dot" />
-            Legal Document
-          </span>
           <h1 className="ex-hero-title">
             Privacy <span>Policy</span>
           </h1>
