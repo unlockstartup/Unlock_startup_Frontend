@@ -28,16 +28,14 @@ const Page = () => {
           location:          item.venueName
                                ? `${item.venueName}, ${item.fullAddress}`
                                : item.fullAddress ?? "",
-          category: item.eventCategory
-  ? [typeof item.eventCategory === "object" ? item.eventCategory.name : item.eventCategory]
-  : [],
+          category: Array.isArray(item.eventCategory) ? item.eventCategory : item.eventCategory ? [item.eventCategory] : [],
           registrationPrice: item.registrationPrice ?? null,
           registrationType:  item.registrationType ?? "",
           publisherName:     item.publisherId?.organizationName ?? "",
           targetAudience:    item.targetAudience ?? [],
           eventFormat:       item.eventFormat ?? "in-person",
           eventType:         item.eventType ?? "", 
-          state:             item.location
+          state: item.jobLocationState ?? item.location ?? "",
         }));
         setEvents(mapped);
       } catch (err) {
@@ -80,17 +78,15 @@ const Page = () => {
         )
       );
     }
-if (category?.length)
-  list = list.filter((e) =>
-    category.some((c) =>
-      e.category?.some((ec) => ec?.toLowerCase() === c?.toLowerCase())
-    )
-  );
+    if (category?.length)
+      list = list.filter((e) =>
+        category.some((c) => e.category?.includes(c))
+      );
     if (registrationType && registrationType !== "All")
       list = list.filter((e) => e.registrationType === registrationType);
-if (state?.length) {
-  list = list.filter((e) => state.includes(e.state));
-}
+    if (state && state !== "All") {
+      list = list.filter((e) => e.state === state);
+    }
    list.sort((a, b) => {
       const dateA = a.startDateTime ? new Date(a.startDateTime).getTime() : 0;
       const dateB = b.startDateTime ? new Date(b.startDateTime).getTime() : 0;
