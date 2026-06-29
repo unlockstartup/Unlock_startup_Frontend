@@ -7,6 +7,7 @@ import "../../public/assets/css/responsive.css";
 import BootstrapClient from "../components/bootstrapjs/BootstrapClient";
 import ConditionalShell from "@/components/ConditionalShell";
 import { AuthProvider } from "@/context/AuthContext";
+import CookieBanner from "@/components/Cookie-Policy";
 
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],
@@ -48,6 +49,7 @@ export default function RootLayout({ children }) {
           <ConditionalShell>
             {children}
           </ConditionalShell>
+          <CookieBanner />
         </AuthProvider>
       </body>
     </html>
