@@ -225,7 +225,7 @@ export default function Page({ params }) {
                   )}
                   {product.targetIndustry && (
                     <div className="pdp-metaItem">
-                      <span className="pdp-metaLabel">Target Industry</span>
+                      <span className="pdp-metaLabel">Target Industry / Market</span>
                       <span className="pdp-metaValue">{product.targetIndustry}</span>
                     </div>
                   )}

@@ -193,7 +193,7 @@ export default function ServicePage({ params }) {
                     <Briefcase size={15} strokeWidth={1.8} />
                   </span>
                   <div className="svd-stat__meta">
-                    <span className="svd-stat__label">Target Industry</span>
+                    <span className="svd-stat__label">Target Industry / Markety</span>
                     <span className="svd-stat__value">{company.targetIndustry}</span>
                   </div>
                 </div>
@@ -298,7 +298,7 @@ export default function ServicePage({ params }) {
 
                   {toList(company.targetIndustry).length > 0 && (
                     <div className="svd-audience">
-                      <span className="svd-audience__label">Target Industry</span>
+                      <span className="svd-audience__label">Target Industry / Market</span>
                       <div className="svd-tags">
                         {toList(company.targetIndustry).map((tag, i) => (
                           <span key={i} className="svd-tag--audience">
@@ -532,7 +532,7 @@ export default function ServicePage({ params }) {
               </div>
 
               {/* Service Type card */}
-              <div className="svd-info">
+              {/* <div className="svd-info">
                 <div className="svd-info__block">
                   <div className="svd-info__title">
                     <span className="svd-info__icon"><ClipboardList size={14} strokeWidth={2} /></span>
@@ -548,7 +548,7 @@ export default function ServicePage({ params }) {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
