@@ -38,7 +38,6 @@ setJobs(raw.map((j) => ({
     setCurrentPage(1);
   }, [activeFilters, sortBy]);
 
-// 2. Fix all filter comparisons
 const filtered = useMemo(() => {
   let list = [...jobs];
   const { search, jobType, workMode, experienceLevel, location, jobCategory } = activeFilters;

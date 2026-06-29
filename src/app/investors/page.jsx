@@ -32,43 +32,39 @@ export default function InvestorPage() {
     setCurrentPage(1);
   }, [activeFilters]);
 
-  const filtered = useMemo(() => {
-    let list = [...investors];
-    const { search, investorType, investmentStages, focusSector, location } = activeFilters;
+const filtered = useMemo(() => {
+  let list = [...investors];
+  const { search, investorType, preferredStages, location } = activeFilters;
 
-    if (search) {
-      const q = search.toLowerCase();
-      list = list.filter(
-        (inv) =>
-          inv.name?.toLowerCase().includes(q) ||
-          inv.firm?.toLowerCase().includes(q) ||
-          inv.bio?.toLowerCase().includes(q)
-      );
-    }
-    if (investorType?.length)
-      list = list.filter((inv) => investorType.includes(inv.investorType));
-    if (investmentStages?.length)
-      list = list.filter((inv) =>
-        investmentStages.some((s) => inv.investmentStages?.includes(s))
-      );
-    if (focusSector?.length)
-      list = list.filter((inv) =>
-        focusSector.some((sec) => inv.focusSector === sec)
-      );
-    if (location && location !== "All") {
-      list = list.filter((inv) => {
-        const invLoc =
-          inv.location ||
-          inv.officeLocation ||
-          (inv.jobLocationCity && inv.jobLocationState
-            ? `${inv.jobLocationCity}, ${inv.jobLocationState}`
-            : null);
-        return invLoc === location;
-      });
-    }
+  if (search) {
+    const q = search.toLowerCase();
+    list = list.filter(
+      (inv) =>
+        inv.fundName?.toLowerCase().includes(q) ||
+        inv.about?.toLowerCase().includes(q) ||
+        inv.publisherId?.organizationName?.toLowerCase().includes(q)
+    );
+  }
 
-    return list;
-  }, [investors, activeFilters]);
+  if (investorType?.length)
+    list = list.filter((inv) =>
+      investorType.some((t) => inv.investorType?.toLowerCase() === t.toLowerCase())
+    );
+
+  if (preferredStages?.length)
+    list = list.filter((inv) =>
+      preferredStages.some((s) =>
+        inv.preferredStages?.some((ps) => ps.toLowerCase() === s.toLowerCase())
+      )
+    );
+
+  if (location?.length)
+    list = list.filter((inv) =>
+      location.some((s) => inv.officeLocation?.toLowerCase() === s.toLowerCase())
+    );
+
+  return list;
+}, [investors, activeFilters]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
 
