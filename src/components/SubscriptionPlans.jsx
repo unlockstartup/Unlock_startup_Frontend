@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { getPlans, createOrder, verifyPayment, cancelSubscription } from "@/app/apiServices/subscriptions";
+import {
+  getServicePlans,
+  createServiceOrder,
+  verifyServicePayment,
+  cancelServicePlan,
+} from "@/app/apiServices/serviceplan";
 import { toast, ToastContainer } from "react-toastify";
 import publisherApi from "@/app/publisherapi";
 
@@ -8,28 +13,11 @@ function loadRazorpayScript() {
     if (window.Razorpay) return resolve(true);
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.onload = () => resolve(true);
+    script.onload  = () => resolve(true);
     script.onerror = () => reject(new Error("Failed to load Razorpay script"));
     document.body.appendChild(script);
   });
 }
-
-const planLabels = (months) => {
-  if (months === 0)  return { name: "Free",          desc: "Get started at no cost for 1 month." };
-  if (months === 3)  return { name: "Startup Basic",  desc: "Perfect for individuals just getting started." };
-  if (months === 6)  return { name: "Startup Plus",   desc: "Great for small teams and growing startups." };
-  if (months === 9)  return { name: "Startup Pro",    desc: "Ideal for professionals who need more power." };
-  return                    { name: "Startup Elite",  desc: "Best value for long-term power users." };
-};
-
-const monthsToPlanKey = (months) => {
-  if (months === 0)  return "free";
-  if (months === 3)  return "3m";
-  if (months === 6)  return "6m";
-  if (months === 9)  return "9m";
-  if (months === 12) return "12m";
-  return String(months) + "m";
-};
 
 const CheckIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="#4338ca" style={{ flexShrink: 0, marginTop: "2px" }}>
@@ -37,8 +25,8 @@ const CheckIcon = () => (
   </svg>
 );
 
-function ConfirmSwitchModal({ plan, currentPlanName, onConfirm, onCancel }) {
-  const { name } = plan.isTrial ? { name: "Free 30-Day Trial" } : planLabels(plan.durationInMonths);
+function ConfirmSwitchModal({ durationType, currentPlanLabel, onConfirm, onCancel }) {
+  const newPlanLabel = durationType === "6m" ? "6-Month Plan" : "Yearly Plan";
 
   return (
     <div
@@ -74,11 +62,11 @@ function ConfirmSwitchModal({ plan, currentPlanName, onConfirm, onCancel }) {
         </div>
 
         <h5 style={{ fontWeight: 700, color: "#1a1a2e", textAlign: "center", marginBottom: "14px", fontSize: "1.5rem" }}>
-          Switch to {name}?
+          Switch to {newPlanLabel}?
         </h5>
         <p style={{ color: "#64748b", fontSize: "1.15rem", textAlign: "center", lineHeight: 1.7, marginBottom: "32px" }}>
-          You currently have an active <strong style={{ color: "#1a1a2e" }}>{currentPlanName}</strong> plan.
-          Purchasing <strong style={{ color: "#1a1a2e" }}>{name}</strong> will{" "}
+          You currently have an active <strong style={{ color: "#1a1a2e" }}>{currentPlanLabel}</strong> plan.
+          Purchasing <strong style={{ color: "#1a1a2e" }}>{newPlanLabel}</strong> will{" "}
           <span style={{ color: "#dc2626", fontWeight: 600 }}>immediately deactivate</span> your current plan.
           This action cannot be undone.
         </p>
@@ -184,122 +172,97 @@ function ConfirmCancelModal({ onConfirm, onCancel, isCancelling }) {
   );
 }
 
-function buildPlanDetails(plan) {
-  const items = [];
+function buildServiceDetails(plan, durationType) {
+  const limit =
+    durationType === "6m"
+      ? plan.sixMonthServiceListingLimit
+      : plan.yearlyServiceListingLimit;
 
-  if (plan.jobLimit !== undefined)
-    items.push(
-      plan.jobLimit === 0
-        ? "Unlimited job postings"
-        : `${plan.jobLimit} job posting${plan.jobLimit !== 1 ? "s" : ""}`
-    );
+  if (limit === undefined) return [];
 
-  if (plan.eventLimit !== undefined)
-    items.push(
-      plan.eventLimit === 0
-        ? "Unlimited events"
-        : `${plan.eventLimit} event${plan.eventLimit !== 1 ? "s" : ""}`
-    );
-
-  if (plan.fundingCallsLimit !== undefined)
-    items.push(
-      plan.fundingCallsLimit === 0
-        ? "Unlimited Competitions"
-        : `${plan.fundingCallsLimit} Competition${plan.fundingCallsLimit !== 1 ? "s" : ""}`
-    );
-
-  if (plan.productsLimit !== undefined)
-    items.push(
-      plan.productsLimit === 0
-        ? "Unlimited products"
-        : `${plan.productsLimit} product${plan.productsLimit !== 1 ? "s" : ""}`
-    );
-
-  if (Array.isArray(plan.features))
-    plan.features.forEach((f) => { if (f?.trim()) items.push(f); });
-
-  return items;
+  return [
+    limit === 0
+      ? "Unlimited service listings"
+      : `${limit} service listing${limit !== 1 ? "s" : ""}`,
+  ];
 }
 
-
-
-export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
-  const [plans, setPlans]                   = useState([]);
-  const [loading, setLoading]               = useState(true);
-  const [loadingPlanId, setLoadingPlanId]   = useState(null);
-  const [pendingPlan, setPendingPlan]       = useState(null);
+export default function ServicePlans({ planInfo, onPaymentSuccess }) {
+  const [servicePlans, setServicePlans]           = useState([]);
+  const [loading, setLoading]                     = useState(true);
+  const [loadingServiceKey, setLoadingServiceKey] = useState(null);
+  const [pendingOrder, setPendingOrder]           = useState(null);
   const [hasPremiumHistory, setHasPremiumHistory] = useState(false);
-  const [isTrialActive, setIsTrialActive]   = useState(false);
-  // True when a trial subscription record exists but is no longer active,
-  // i.e. the trial period has already run its course.
-  const [hasUsedTrial, setHasUsedTrial]     = useState(false);
-  const [showCancelModal, setShowCancelModal] = useState(false);
-  const [isCancelling, setIsCancelling]       = useState(false);
-  const [hoveredPlanId, setHoveredPlanId]     = useState(null);
+  const [isTrialActive, setIsTrialActive]         = useState(false);
+  const [hasUsedTrial, setHasUsedTrial]           = useState(false);
+  const [showCancelModal, setShowCancelModal]     = useState(false);
+  const [isCancelling, setIsCancelling]           = useState(false);
+  const [hoveredServiceKey, setHoveredServiceKey] = useState(null);
 
   useEffect(() => {
     (async () => {
       try {
         const [plansRes, historyRes] = await Promise.all([
-          getPlans(),
+          getServicePlans(),
           publisherApi.get("/api/publisher/subscriptions/history"),
         ]);
 
-        if (plansRes.data?.success)
-          setPlans(plansRes.data.plans || []);
+        if (plansRes.data?.success) setServicePlans(plansRes.data.plans || []);
 
-        if (historyRes?.data?.success && Array.isArray(historyRes.data.subscriptions)) {
-          const hasPremium = historyRes.data.subscriptions.some((s) => s.plan !== "trial");
+        if (historyRes?.data?.success && Array.isArray(historyRes.data.serviceSubscriptions)) {
+          const hasPremium = historyRes.data.serviceSubscriptions.some((s) => s.durationType !== "trial");
           setHasPremiumHistory(hasPremium);
 
-          const activeTrial = historyRes.data.subscriptions.find(
-            (s) => s.plan === "trial" && s.isActive && new Date(s.expiryDate) > new Date()
+          const activeTrial = historyRes.data.serviceSubscriptions.find(
+            (s) => s.durationType === "trial" && s.isActive && new Date(s.expiryDate) > new Date()
           );
           setIsTrialActive(!!activeTrial);
 
-          // A trial record exists but isn't currently active -> the trial
-          // period has run its course (used up), regardless of whether
-          // any paid plan was ever bought.
-          const usedTrialBefore = historyRes.data.subscriptions.some((s) => s.plan === "trial");
+          const usedTrialBefore = historyRes.data.serviceSubscriptions.some((s) => s.durationType === "trial");
           setHasUsedTrial(usedTrialBefore && !activeTrial);
         }
       } catch (err) {
-        console.error("Failed to load plans", err);
+        console.error("Failed to load service plans", err);
       } finally {
         setLoading(false);
       }
     })();
   }, []);
 
-  const isSubscriptionActive =
-    planInfo?.subscriptionStatus === "active" &&
-    planInfo?.expiry &&
-    new Date(planInfo.expiry) > new Date();
+  const isServiceActive =
+    planInfo?.servicePlanActive === true &&
+    planInfo?.serviceplan?.expiryDate &&
+    new Date(planInfo.serviceplan.expiryDate) > new Date();
 
-  const activePlanKey = planInfo?.plan?.plan ?? null;
-
-  const isAnyLimitReached = (() => {
-    if (!planInfo?.usage || !planInfo?.limits) return false;
-    const { usage, limits } = planInfo;
-    return (
-      (limits.jobLimit            > 0 && usage.jobs            >= limits.jobLimit)           ||
-      (limits.eventLimit          > 0 && usage.events          >= limits.eventLimit)         ||
-      (limits.fundingCallsLimit   > 0 && usage.fundingCalls    >= limits.fundingCallsLimit)  ||
-      (limits.productsLimit       > 0 && usage.products        >= limits.productsLimit)      ||
-      (limits.serviceListingLimit > 0 && usage.serviceListings >= limits.serviceListingLimit)
-    );
-  })();
-
-  // Trial is permanently unavailable once either condition is true:
-  // the trial period already ran out, or any paid plan has been bought.
+  const activeServiceKey = isServiceActive ? planInfo?.serviceplan?.plan : null;
+  const trialLimit = servicePlans[0]?.trialServiceListingLimit;
+  const trialDetails = trialLimit !== undefined
+    ? [trialLimit === 0
+        ? "Unlimited service listings"
+        : `${trialLimit} service listing${trialLimit !== 1 ? "s" : ""}`]
+    : [];
+  const currentPlanLabel = activeServiceKey === "6m" ? "6-Month Plan" : activeServiceKey === "12m" ? "Yearly Plan" : "current";
   const isTrialUnavailable = hasUsedTrial || hasPremiumHistory;
 
-  const startPayment = async (plan) => {
-    setLoadingPlanId(plan._id);
+  const handleServiceSubscribe = async (plan, durationType) => {
+    const key = `${plan._id}_${durationType}`;
+    const isActivePlan = isServiceActive && activeServiceKey === durationType;
+
+    if (isActivePlan) return;
+
+    if (isServiceActive) {
+      setPendingOrder({ plan, durationType, key });
+      return;
+    }
+
+    await executeServicePayment(plan, durationType, key);
+  };
+
+  const executeServicePayment = async (plan, durationType, key) => {
+    setLoadingServiceKey(key);
     try {
-      const res = await createOrder(plan.durationInMonths);
-      if (!res.data?.success)
-        throw new Error(res.data?.message || "Order creation failed");
+      const res = await createServiceOrder(plan._id, durationType);
+      if (!res.data?.success) throw new Error(res.data?.message || "Order creation failed");
 
       const { order } = res.data;
       await loadRazorpayScript();
@@ -309,15 +272,16 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
         amount: order.amount,
         currency: order.currency,
         name: "Unlock Startup",
-        description: `${plan.durationInMonths} month subscription`,
+        description: `Service plan – ${durationType === "6m" ? "6 months" : "1 year"}`,
         order_id: order.id,
-        handler: async function (response) {
+        handler: async (response) => {
           try {
-            const verifyRes = await verifyPayment({
+            const verifyRes = await verifyServicePayment({
               razorpay_order_id:   response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature:  response.razorpay_signature,
-              durationInMonths:    plan.durationInMonths,
+              servicePlanId:       plan._id,
+              durationType,
             });
             if (verifyRes.data?.success) {
               toast.success("Payment successful and subscription activated");
@@ -334,441 +298,310 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
         theme: { color: "#4338ca" },
       };
 
-      const rzp = new window.Razorpay(options);
-      rzp.open();
+      new window.Razorpay(options).open();
     } catch (err) {
       console.error(err);
       toast.error(err.message || "Unable to start payment");
     } finally {
-      setLoadingPlanId(null);
+      setLoadingServiceKey(null);
     }
-  };
-
-  const handleSubscribe = (plan) => {
-    if (plan.isTrial) return;
-
-    const thisPlanKey = monthsToPlanKey(plan.durationInMonths);
-    const isActivePlan = isSubscriptionActive && activePlanKey === thisPlanKey;
-
-    if (isActivePlan) return;
-
-    if (isSubscriptionActive) {
-      setPendingPlan(plan);
-      return;
-    }
-
-    startPayment(plan);
   };
 
   const handleModalConfirm = () => {
-    const plan = pendingPlan;
-    setPendingPlan(null);
-    startPayment(plan);
+    const { plan, durationType, key } = pendingOrder;
+    setPendingOrder(null);
+    executeServicePayment(plan, durationType, key);
   };
 
-  const handleModalCancel = () => setPendingPlan(null);
+  const handleModalCancel = () => setPendingOrder(null);
 
-  const handleCancelSubscription = async () => {
+  const handleCancelServicePlan = async () => {
     setIsCancelling(true);
     try {
-      const res = await cancelSubscription();
+      const res = await cancelServicePlan();
       if (res.data?.success) {
-        toast.success(res.data.message || "Subscription cancelled");
+        toast.success(res.data.message || "Service plan cancelled");
         setShowCancelModal(false);
-        onPaymentSuccess?.(); // reuse existing refresh callback to reload plan info
+        onPaymentSuccess?.();
       } else {
-        toast.error(res.data?.message || "Failed to cancel subscription");
+        toast.error(res.data?.message || "Failed to cancel service plan");
       }
     } catch (err) {
       console.error(err);
-      toast.error(err.response?.data?.message || "Failed to cancel subscription");
+      toast.error(err.response?.data?.message || "Failed to cancel service plan");
     } finally {
       setIsCancelling(false);
     }
   };
 
-  const currentPlanName = (() => {
-    if (!activePlanKey) return "current";
-    const monthsMap = { free: 0, "3m": 3, "6m": 6, "9m": 9, "12m": 12 };
-    const months = monthsMap[activePlanKey] ?? 0;
-    return planLabels(months).name;
-  })();
-
   if (loading)
     return (
       <div className="py-5 text-center text-muted" style={{ fontSize: "1.2rem" }}>
         <div className="spinner-border spinner-border-sm me-2" role="status" />
-        Loading plans…
+        Loading service plans…
       </div>
     );
 
-  if (!plans.length)
-    return (
-      <div className="py-5 text-center text-muted" style={{ fontSize: "1.2rem" }}>
-        No subscription plans available.
-      </div>
-    );
+  const tiers = [
+    { durationType: "6m",  label: "6-Month Plan", suffix: "/ 6 mo", desc: "Showcase your expertise and connect with new customers through a flexible six-month service listing plan." },
+    { durationType: "12m", label: "Yearly Plan",  suffix: "/ year",  desc: "Expand your reach with 1 year of continuous service marketplace exposure." },
+  ];
 
-  const trialPlan = plans.find((p) => p.durationInMonths === 0);
-  const paidPlans = plans.filter((p) => p.durationInMonths !== 0);
-  // Trial card is always shown alongside paid plans when it exists.
-  // Whether it's clickable is decided per-card via isTrialUnavailable,
-  // not by leaving it out of the list.
-  const allPlans = trialPlan
-    ? [{ ...trialPlan, isTrial: true }, ...paidPlans]
-    : paidPlans;
+  const isTrialLocked = isTrialUnavailable && !isTrialActive;
 
   return (
     <section className="py-2">
       <div className="container">
 
-        <div className="text-center mb-2">
+        <div className="text-center mb-4">
           <h2 className="fw-bold mb-2" style={{ color: "#1a1a2e", letterSpacing: "-0.5px", fontSize: "2.4rem" }}>
-            Pricing for Startup plans
+            Pricing for Service plans
           </h2>
           <p className="text-muted mx-auto" style={{ maxWidth: "480px", fontSize: "1.2rem" }}>
-           Choose a subscription duration that aligns with your business objectives and access to powerful dashboard that enhance visibility, engagement, networking, and growth.
+            Publish and manage your service listings. Pick a duration that suits your needs.
           </p>
         </div>
 
-        {isAnyLimitReached && isSubscriptionActive && (
-          <div
-            style={{
-              display: "flex", alignItems: "center", justifyContent: "center",
-              gap: "10px", background: "rgba(255,91,91,0.07)",
-              border: "1px solid rgba(255,91,91,0.25)", borderRadius: "10px",
-              padding: "12px 18px", marginBottom: "20px",
-              fontSize: "1.2rem", color: "#991b1b", fontWeight: 500,
-            }}
-          >
-            <span style={{ fontSize: "1.2rem" }}>⚠</span>
-            <span>
-              You've reached the limit on one or more listing types. Upgrade your plan to
-              continue publishing.
-            </span>
-          </div>
-        )}
+        <div className="row g-4 align-items-stretch justify-content-center">
+          <div className="col-12 col-sm-12 col-xl-3" key="service_trial_static">
+            <div
+              className="h-100 d-flex flex-column rounded-3"
+              style={{
+                border: isTrialActive ? "2px solid #4338ca" : "1px solid #e2e8f0",
+                backgroundColor: "#fff",
+                boxShadow: isTrialActive
+                  ? "0 0 0 4px rgba(67,56,202,0.08)"
+                  : "0 1px 4px rgba(0,0,0,0.04)",
+                transition: "opacity 0.2s ease",
+                position: "relative",
+              }}
+            >
+              {isTrialActive && (
+                <div
+                  style={{
+                    position: "absolute", top: "-13px", left: "50%",
+                    transform: "translateX(-50%)", backgroundColor: "#4338ca",
+                    color: "#fff", fontSize: "1.2rem", fontWeight: 700,
+                    padding: "3px 14px", borderRadius: "999px",
+                    letterSpacing: "0.06em", textTransform: "uppercase",
+                    whiteSpace: "nowrap", zIndex: 1,
+                  }}
+                >
+                  ● Ongoing
+                </div>
+              )}
 
-        <div className="row g-4 justify-content-center grid-mob flex-nowrap" style={{ overflowX: "auto" }}>
-          {allPlans.map((plan) => {
-            if (plan.isTrial) {
-              // "Active" badge only when the trial is the one currently running.
-              const isActivePlan = isTrialActive;
-              // Button is locked once the trial has been used up or a paid
-              // plan exists in history — regardless of current active plan.
-              const isLocked = isTrialUnavailable && !isActivePlan;
+              <div className="p-4" style={{ borderBottom: "1px solid #f1f5f9" }}>
+                <p
+                  className="fw-semibold mb-1"
+                  style={{ color: "#4338ca", fontSize: "1.2rem", textTransform: "uppercase", letterSpacing: "0.06em" }}
+                >
+                  Free Trial
+                </p>
+                <div className="d-flex align-items-baseline gap-1 mb-2">
+                  <span className="fw-bold" style={{ fontSize: "2.4rem", color: "#1a1a2e", lineHeight: 1.1 }}>
+                    Free
+                  </span>
+                </div>
+                <p className="text-muted mb-3" style={{ fontSize: "1.2rem", minHeight: "3.2rem" }}>
+                  Get started at no cost for 1 month.
+                </p>
+
+                {isTrialActive ? (
+                  <div
+                    style={{
+                      width: "100%", padding: "10px 0", borderRadius: "8px",
+                      fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
+                      backgroundColor: "rgba(67,56,202,0.08)",
+                      color: "#4338ca", border: "2px solid #4338ca",
+                    }}
+                  >
+                    ✓ Current Plan
+                  </div>
+                ) : isTrialLocked ? (
+                  <div
+                    style={{
+                      width: "100%", padding: "10px 0", borderRadius: "8px",
+                      fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
+                      backgroundColor: "#f1f5f9",
+                      color: "#94a3b8", border: "1.5px solid #e2e8f0",
+                      cursor: "not-allowed",
+                    }}
+                  >
+                    Trial Ended
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      width: "100%", padding: "10px 0", borderRadius: "8px",
+                      fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
+                      backgroundColor: "#f1f5f9",
+                      color: "#94a3b8", border: "1.5px solid #e2e8f0",
+                      cursor: "default",
+                    }}
+                  >
+                    Trial Ended
+                  </div>
+                )}
+              </div>
+
+              <div className="p-4 flex-grow-1">
+                <p className="fw-semibold mb-3" style={{ fontSize: "1.2rem", color: "#1a1a2e" }}>What's included</p>
+                {trialDetails.length > 0 ? (
+                  <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
+                    {trialDetails.map((item, idx) => (
+                      <li key={idx} className="d-flex align-items-start gap-2">
+                        <CheckIcon />
+                        <span style={{ fontSize: "1.2rem", color: "#475569" }}>{item}</span>
+                      </li>
+                    ))}
+                    <li className="d-flex align-items-start gap-2">
+                      <CheckIcon />
+                      <span style={{ fontSize: "1.2rem", color: "#475569" }}>No credit card required</span>
+                    </li>
+                  </ul>
+                ) : (
+                  <p className="text-muted mb-0" style={{ fontSize: "1.2rem" }}>
+                    No features configured for this plan yet.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {servicePlans.map((plan) =>
+            tiers.map(({ durationType, label, suffix, desc }) => {
+              const key            = `${plan._id}_${durationType}`;
+              const price          = durationType === "6m" ? plan.sixMonthPrice : plan.yearlyPrice;
+              const isThisLoading  = loadingServiceKey === key;
+              const isOtherLoading = loadingServiceKey !== null && loadingServiceKey !== key;
+              const details        = buildServiceDetails(plan, durationType);
+              const isActivePlan   = isServiceActive && activeServiceKey === durationType;
+              const isDisabled     = isThisLoading || isOtherLoading;
 
               return (
-                <div className="col" key="trial_static">
+                <div className="col-12 col-sm-12 col-xl-3" key={key}>
                   <div
                     className="h-100 d-flex flex-column rounded-3"
+                    onMouseEnter={() => isActivePlan && setHoveredServiceKey(key)}
+                    onMouseLeave={() => setHoveredServiceKey(null)}
                     style={{
                       border: isActivePlan ? "2px solid #4338ca" : "1px solid #e2e8f0",
                       backgroundColor: "#fff",
-                      boxShadow: isActivePlan
-                        ? "0 0 0 4px rgba(67,56,202,0.08)"
-                        : "0 1px 4px rgba(0,0,0,0.04)",
-                      opacity: 1,
+                      boxShadow: isActivePlan ? "0 0 0 4px rgba(67,56,202,0.08)" : "0 1px 4px rgba(0,0,0,0.04)",
+                      opacity: isOtherLoading ? 0.5 : 1,
                       transition: "opacity 0.2s ease",
                       position: "relative",
                     }}
                   >
                     {isActivePlan && (
-                      <div
-                        style={{
-                          position: "absolute", top: "-13px", left: "50%",
-                          transform: "translateX(-50%)", backgroundColor: "#4338ca",
-                          color: "#fff", fontSize: "1.2rem", fontWeight: 700,
-                          padding: "3px 14px", borderRadius: "999px",
-                          letterSpacing: "0.06em", textTransform: "uppercase",
-                          whiteSpace: "nowrap", zIndex: 1,
-                        }}
-                      >
+                      <div style={{ position: "absolute", top: "-13px", left: "50%", transform: "translateX(-50%)", backgroundColor: "#4338ca", color: "#fff", fontSize: "1.2rem", fontWeight: 700, padding: "3px 14px", borderRadius: "999px", letterSpacing: "0.06em", textTransform: "uppercase", whiteSpace: "nowrap", zIndex: 1 }}>
                         ● Ongoing
                       </div>
                     )}
 
                     <div className="p-4" style={{ borderBottom: "1px solid #f1f5f9" }}>
-                      <p
-                        className="fw-semibold mb-1"
-                        style={{ color: "#4338ca", fontSize: "1.2rem", textTransform: "uppercase", letterSpacing: "0.06em" }}
-                      >
-                        Free
+                      <p className="fw-semibold mb-1" style={{ color: "#4338ca", fontSize: "1.2rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                        {label}
                       </p>
                       <div className="d-flex align-items-baseline gap-1 mb-2">
                         <span className="fw-bold" style={{ fontSize: "2.4rem", color: "#1a1a2e", lineHeight: 1.1 }}>
-                          Free
+                          ₹{price.toLocaleString("en-IN")}
                         </span>
+                        <span className="text-muted" style={{ fontSize: "1.2rem" }}>{suffix}</span>
                       </div>
-                      <p className="text-muted mb-3" style={{ fontSize: "1.2rem", minHeight: "3.2rem" }}>
-                        Get started at no cost for 1 Month.
-                      </p>
+                      <p className="text-muted mb-3" style={{ fontSize: "1.2rem", minHeight: "3.2rem" }}>{desc}</p>
 
                       {isActivePlan ? (
-                        <div
-                          style={{
-                            width: "100%", padding: "10px 0", borderRadius: "8px",
-                            fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
-                            backgroundColor: "rgba(67,56,202,0.08)",
-                            color: "#4338ca", border: "2px solid #4338ca",
-                          }}
-                        >
-                          ✓ Current Plan
-                        </div>
-                      ) : isLocked ? (
-                        <div
-                          style={{
-                            width: "100%", padding: "10px 0", borderRadius: "8px",
-                            fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
-                            backgroundColor: "#f1f5f9",
-                            color: "#94a3b8", border: "1.5px solid #e2e8f0",
-                            cursor: "not-allowed",
-                          }}
-                        >
-                          Trial ended
-                        </div>
+                        hoveredServiceKey === key ? (
+                          <div style={{ display: "flex", gap: "10px" }}>
+                            <button
+                              className="btn fw-semibold"
+                              onClick={() => executeServicePayment(plan, durationType, key)}
+                              disabled={isDisabled}
+                              style={{
+                                flex: 1, padding: "10px 0", borderRadius: "8px",
+                                fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
+                                backgroundColor: "#4338ca",
+                                color: "#fff", border: "2px solid #4338ca",
+                                cursor: isDisabled ? "not-allowed" : "pointer",
+                              }}
+                            >
+                              {isThisLoading ? "Processing..." : "Repurchase"}
+                            </button>
+                            <button
+                              className="btn fw-semibold"
+                              onClick={() => setShowCancelModal(true)}
+                              disabled={isDisabled}
+                              style={{
+                                flex: 1, padding: "10px 0", borderRadius: "8px",
+                                fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
+                                backgroundColor: "#dc2626",
+                                color: "#fff", border: "2px solid #dc2626",
+                                cursor: isDisabled ? "not-allowed" : "pointer",
+                              }}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <div style={{ width: "100%", padding: "10px 0", borderRadius: "8px", fontSize: "1.2rem", fontWeight: 600, textAlign: "center", backgroundColor: "rgba(67,56,202,0.08)", color: "#4338ca", border: "2px solid #4338ca" }}>
+                            ✓ Current Plan
+                          </div>
+                        )
                       ) : (
                         <button
                           className="btn w-100 fw-semibold"
-                          style={{
-                            backgroundColor: loadingPlanId === plan._id ? "#4338ca" : "#fff",
-                            color: loadingPlanId === plan._id ? "#fff" : "#4338ca",
-                            border: "2px solid #4338ca", borderRadius: "8px",
-                            padding: "10px 0", fontSize: "1.2rem",
-                            transition: "all 0.15s ease",
-                            cursor: loadingPlanId ? "not-allowed" : "pointer",
-                          }}
-                          disabled={!!loadingPlanId}
-                          onClick={() => startPayment(plan)}
+                          style={{ backgroundColor: isThisLoading ? "#4338ca" : "#fff", color: isThisLoading ? "#fff" : "#4338ca", border: "2px solid #4338ca", borderRadius: "8px", padding: "10px 0", fontSize: "1.2rem", transition: "all 0.15s ease", cursor: isDisabled ? "not-allowed" : "pointer" }}
+                          disabled={isDisabled}
+                          onClick={() => handleServiceSubscribe(plan, durationType)}
+                          onMouseEnter={(e) => { if (!isDisabled) { e.currentTarget.style.backgroundColor = "#4338ca"; e.currentTarget.style.color = "#fff"; } }}
+                          onMouseLeave={(e) => { if (!isThisLoading) { e.currentTarget.style.backgroundColor = "#fff"; e.currentTarget.style.color = "#4338ca"; } }}
                         >
-                          {loadingPlanId === plan._id ? (
+                          {isThisLoading ? (
                             <span className="d-flex align-items-center justify-content-center gap-2">
-                              <span
-                                className="spinner-border spinner-border-sm"
-                                role="status"
-                                style={{ width: "14px", height: "14px", borderWidth: "2px" }}
-                              />
+                              <span className="spinner-border spinner-border-sm" role="status" style={{ width: "14px", height: "14px", borderWidth: "2px" }} />
                               Processing...
                             </span>
-                          ) : (
-                            "Get Started"
-                          )}
+                          ) : "Get Started"}
                         </button>
                       )}
                     </div>
 
                     <div className="p-4 flex-grow-1">
-                      <p className="fw-semibold mb-3" style={{ fontSize: "1.2rem", color: "#1a1a2e" }}>
-                        What's included
-                      </p>
-                      {(() => {
-                        const details = buildPlanDetails(plan);
-                        return details.length > 0 ? (
-                          <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
-                            {details.map((item, idx) => (
-                              <li key={idx} className="d-flex align-items-start gap-2">
-                                <CheckIcon />
-                                <span style={{ fontSize: "1.2rem", color: "#475569" }}>{item}</span>
-                              </li>
-                            ))}
-                            <li className="d-flex align-items-start gap-2">
+                      <p className="fw-semibold mb-3" style={{ fontSize: "1.2rem", color: "#1a1a2e" }}>What's included</p>
+                      {details.length > 0 ? (
+                        <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
+                          {details.map((item, idx) => (
+                            <li key={idx} className="d-flex align-items-start gap-2">
                               <CheckIcon />
-                              <span style={{ fontSize: "1.2rem", color: "#475569" }}>No credit card required</span>
+                              <span style={{ fontSize: "1.2rem", color: "#475569" }}>{item}</span>
                             </li>
-                          </ul>
-                        ) : (
-                          <p className="text-muted mb-0" style={{ fontSize: "1.2rem" }}>
-                            No features configured for this plan yet.
-                          </p>
-                        );
-                      })()}
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-muted mb-0" style={{ fontSize: "1.2rem" }}>No features configured for this plan yet.</p>
+                      )}
                     </div>
                   </div>
                 </div>
               );
-            }
-
-            const { name, desc }  = planLabels(plan.durationInMonths);
-            const planDetails     = buildPlanDetails(plan);
-            const isThisLoading   = loadingPlanId === plan._id;
-            const isOtherLoading  = loadingPlanId !== null && loadingPlanId !== plan._id;
-
-            const thisPlanKey  = monthsToPlanKey(plan.durationInMonths);
-            const isActivePlan = isSubscriptionActive && activePlanKey === thisPlanKey;
-
-            const isDisabled = isThisLoading || isOtherLoading;
-
-            return (
-              <div className="col" key={plan._id}>
-                <div
-                  className="h-100 d-flex flex-column rounded-3"
-                  onMouseEnter={() => isActivePlan && setHoveredPlanId(plan._id)}
-                  onMouseLeave={() => setHoveredPlanId(null)}
-                  style={{
-                    border: isActivePlan ? "2px solid #4338ca" : "1px solid #e2e8f0",
-                    backgroundColor: "#fff",
-                    boxShadow: isActivePlan
-                      ? "0 0 0 4px rgba(67,56,202,0.08)"
-                      : "0 1px 4px rgba(0,0,0,0.04)",
-                    opacity: isOtherLoading ? 0.5 : 1,
-                    transition: "opacity 0.2s ease",
-                    position: "relative",
-                  }}
-                >
-                  {isActivePlan && (
-                    <div
-                      style={{
-                        position: "absolute", top: "-13px", left: "50%",
-                        transform: "translateX(-50%)", backgroundColor: "#4338ca",
-                        color: "#fff", fontSize: "1.2rem", fontWeight: 700,
-                        padding: "3px 14px", borderRadius: "999px",
-                        letterSpacing: "0.06em", textTransform: "uppercase",
-                        whiteSpace: "nowrap", zIndex: 1,
-                      }}
-                    >
-                      ● Ongoing
-                    </div>
-                  )}
-
-                  <div className="p-4" style={{ borderBottom: "1px solid #f1f5f9" }}>
-                    <p
-                      className="fw-semibold mb-1"
-                      style={{ color: "#4338ca", fontSize: "1.2rem", textTransform: "uppercase", letterSpacing: "0.06em" }}
-                    >
-                      {name}
-                    </p>
-                    <div className="d-flex align-items-baseline gap-1 mb-2">
-                      <span className="fw-bold" style={{ fontSize: "2.4rem", color: "#1a1a2e", lineHeight: 1.1 }}>
-                        {plan.price === 0 ? "Free" : `₹${plan.price.toLocaleString("en-IN")}`}
-                      </span>
-                      {plan.durationInMonths > 0 && (
-                        <span className="text-muted" style={{ fontSize: "1.2rem" }}>
-                          / {plan.durationInMonths} mo
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-muted mb-3" style={{ fontSize: "1.2rem", minHeight: "3.2rem" }}>
-                      {desc}
-                    </p>
-
-                    {isActivePlan ? (
-                      hoveredPlanId === plan._id ? (
-                        <div style={{ display: "flex", gap: "10px" }}>
-                          <button
-                            className="btn fw-semibold"
-                            onClick={() => startPayment(plan)}
-                            disabled={!!loadingPlanId}
-                            style={{
-                              flex: 1, padding: "10px 0", borderRadius: "8px",
-                              fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
-                              backgroundColor: "#4338ca",
-                              color: "#fff", border: "2px solid #4338ca",
-                              cursor: loadingPlanId ? "not-allowed" : "pointer",
-                            }}
-                          >
-                            {loadingPlanId === plan._id ? "Processing..." : "Repurchase"}
-                          </button>
-                          <button
-                            className="btn fw-semibold"
-                            onClick={() => setShowCancelModal(true)}
-                            disabled={!!loadingPlanId}
-                            style={{
-                              flex: 1, padding: "10px 0", borderRadius: "8px",
-                              fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
-                              backgroundColor: "#dc2626",
-                              color: "#fff", border: "2px solid #dc2626",
-                              cursor: loadingPlanId ? "not-allowed" : "pointer",
-                            }}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      ) : (
-                        <div
-                          style={{
-                            width: "100%", padding: "10px 0", borderRadius: "8px",
-                            fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
-                            backgroundColor: "rgba(67,56,202,0.08)",
-                            color: "#4338ca", border: "2px solid #4338ca",
-                          }}
-                        >
-                          ✓ Current Plan
-                        </div>
-                      )
-                    ) : (
-                      <button
-                        className="btn w-100 fw-semibold"
-                        style={{
-                          backgroundColor: isThisLoading ? "#4338ca" : "#fff",
-                          color: isThisLoading ? "#fff" : "#4338ca",
-                          border: "2px solid #4338ca", borderRadius: "8px",
-                          padding: "10px 0", fontSize: "1.2rem",
-                          transition: "all 0.15s ease",
-                          cursor: isDisabled ? "not-allowed" : "pointer",
-                        }}
-                        disabled={isDisabled}
-                        onClick={() => handleSubscribe(plan)}
-                        onMouseEnter={(e) => {
-                          if (!isDisabled) {
-                            e.currentTarget.style.backgroundColor = "#4338ca";
-                            e.currentTarget.style.color = "#fff";
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          if (!isThisLoading) {
-                            e.currentTarget.style.backgroundColor = "#fff";
-                            e.currentTarget.style.color = "#4338ca";
-                          }
-                        }}
-                      >
-                        {isThisLoading ? (
-                          <span className="d-flex align-items-center justify-content-center gap-2">
-                            <span
-                              className="spinner-border spinner-border-sm"
-                              role="status"
-                              style={{ width: "14px", height: "14px", borderWidth: "2px" }}
-                            />
-                            Processing...
-                          </span>
-                        ) : (
-                          "Get Started"
-                        )}
-                      </button>
-                    )}
-                  </div>
-
-                  <div className="p-4 flex-grow-1">
-                    <p className="fw-semibold mb-3" style={{ fontSize: "1.2rem", color: "#1a1a2e" }}>
-                      What's included
-                    </p>
-                    {planDetails.length > 0 ? (
-                      <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
-                        {planDetails.map((item, idx) => (
-                          <li key={idx} className="d-flex align-items-start gap-2">
-                            <CheckIcon />
-                            <span style={{ fontSize: "1.2rem", color: "#475569" }}>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="text-muted mb-0" style={{ fontSize: "1.2rem" }}>
-                        No features configured for this plan yet.
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+            })
+          )}
+          {!servicePlans.length && hasPremiumHistory && (
+            <div className="col-12 py-4 text-center text-muted" style={{ fontSize: "1.2rem" }}>
+              No service plans available.
+            </div>
+          )}
         </div>
 
         <ToastContainer position="top-center" />
       </div>
 
-      {pendingPlan && (
+      {pendingOrder && (
         <ConfirmSwitchModal
-          plan={pendingPlan}
-          currentPlanName={currentPlanName}
+          durationType={pendingOrder.durationType}
+          currentPlanLabel={currentPlanLabel}
           onConfirm={handleModalConfirm}
           onCancel={handleModalCancel}
         />
@@ -776,7 +609,7 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
 
       {showCancelModal && (
         <ConfirmCancelModal
-          onConfirm={handleCancelSubscription}
+          onConfirm={handleCancelServicePlan}
           onCancel={() => setShowCancelModal(false)}
           isCancelling={isCancelling}
         />

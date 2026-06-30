@@ -3,7 +3,9 @@ import {
   getServicePlans,
   createServiceOrder,
   verifyServicePayment,
-  cancelServicePlan,
+  cancelServicePlan, // NOTE: add/rename this export in @/app/apiServices/serviceplan
+                      // to match your backend cancel endpoint, mirroring
+                      // `cancelSubscription` in @/app/apiServices/subscriptions
 } from "@/app/apiServices/serviceplan";
 import { toast, ToastContainer } from "react-toastify";
 import publisherApi from "@/app/publisherapi";
@@ -194,9 +196,6 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
   const [pendingOrder, setPendingOrder]           = useState(null);
   const [hasPremiumHistory, setHasPremiumHistory] = useState(false);
   const [isTrialActive, setIsTrialActive]         = useState(false);
-  // True when a trial service-subscription record exists but is no longer
-  // active, i.e. the trial period has already run its course.
-  const [hasUsedTrial, setHasUsedTrial]           = useState(false);
   const [showCancelModal, setShowCancelModal]     = useState(false);
   const [isCancelling, setIsCancelling]           = useState(false);
   const [hoveredServiceKey, setHoveredServiceKey] = useState(null);
@@ -219,8 +218,6 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
             (s) => s.durationType === "trial" && s.isActive && new Date(s.expiryDate) > new Date()
           );
           setIsTrialActive(!!activeTrial);
-          const usedTrialBefore = historyRes.data.serviceSubscriptions.some((s) => s.durationType === "trial");
-          setHasUsedTrial(usedTrialBefore && !activeTrial);
         }
       } catch (err) {
         console.error("Failed to load service plans", err);
@@ -314,7 +311,7 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
   };
 
   const handleModalCancel = () => setPendingOrder(null);
-const showTrialCard = !hasPremiumHistory && !hasUsedTrial;
+
   const handleCancelServicePlan = async () => {
     setIsCancelling(true);
     try {
@@ -361,7 +358,7 @@ const showTrialCard = !hasPremiumHistory && !hasUsedTrial;
         </div>
 
         <div className="row g-4 align-items-stretch justify-content-center">
-         {showTrialCard && (
+          {!hasPremiumHistory && (
             <div className="col-12 col-sm-12 col-xl-3" key="service_trial_static">
               <div
                 className="h-100 d-flex flex-column rounded-3"
@@ -576,11 +573,11 @@ const showTrialCard = !hasPremiumHistory && !hasUsedTrial;
               );
             })
           )}
-         {!servicePlans.length && (hasPremiumHistory || hasUsedTrial) && (
-  <div className="col-12 py-4 text-center text-muted" style={{ fontSize: "1.2rem" }}>
-    No service plans available.
-  </div>
-)}
+          {!servicePlans.length && hasPremiumHistory && (
+            <div className="col-12 py-4 text-center text-muted" style={{ fontSize: "1.2rem" }}>
+              No service plans available.
+            </div>
+          )}
         </div>
 
         <ToastContainer position="top-center" />
