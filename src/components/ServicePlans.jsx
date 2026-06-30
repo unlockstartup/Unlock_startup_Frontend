@@ -3,9 +3,7 @@ import {
   getServicePlans,
   createServiceOrder,
   verifyServicePayment,
-  cancelServicePlan, // NOTE: add/rename this export in @/app/apiServices/serviceplan
-                      // to match your backend cancel endpoint, mirroring
-                      // `cancelSubscription` in @/app/apiServices/subscriptions
+  cancelServicePlan,
 } from "@/app/apiServices/serviceplan";
 import { toast, ToastContainer } from "react-toastify";
 import publisherApi from "@/app/publisherapi";
@@ -196,6 +194,7 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
   const [pendingOrder, setPendingOrder]           = useState(null);
   const [hasPremiumHistory, setHasPremiumHistory] = useState(false);
   const [isTrialActive, setIsTrialActive]         = useState(false);
+  const [hasUsedTrial, setHasUsedTrial]           = useState(false);
   const [showCancelModal, setShowCancelModal]     = useState(false);
   const [isCancelling, setIsCancelling]           = useState(false);
   const [hoveredServiceKey, setHoveredServiceKey] = useState(null);
@@ -218,6 +217,9 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
             (s) => s.durationType === "trial" && s.isActive && new Date(s.expiryDate) > new Date()
           );
           setIsTrialActive(!!activeTrial);
+
+          const usedTrialBefore = historyRes.data.serviceSubscriptions.some((s) => s.durationType === "trial");
+          setHasUsedTrial(usedTrialBefore && !activeTrial);
         }
       } catch (err) {
         console.error("Failed to load service plans", err);
@@ -240,6 +242,7 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
         : `${trialLimit} service listing${trialLimit !== 1 ? "s" : ""}`]
     : [];
   const currentPlanLabel = activeServiceKey === "6m" ? "6-Month Plan" : activeServiceKey === "12m" ? "Yearly Plan" : "current";
+  const isTrialUnavailable = hasUsedTrial || hasPremiumHistory;
 
   const handleServiceSubscribe = async (plan, durationType) => {
     const key = `${plan._id}_${durationType}`;
@@ -319,7 +322,7 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
       if (res.data?.success) {
         toast.success(res.data.message || "Service plan cancelled");
         setShowCancelModal(false);
-        onPaymentSuccess?.(); // reuse existing refresh callback to reload plan info
+        onPaymentSuccess?.();
       } else {
         toast.error(res.data?.message || "Failed to cancel service plan");
       }
@@ -344,6 +347,8 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
     { durationType: "12m", label: "Yearly Plan",  suffix: "/ year",  desc: "Expand your reach with 1 year of continuous service marketplace exposure." },
   ];
 
+  const isTrialLocked = isTrialUnavailable && !isTrialActive;
+
   return (
     <section className="py-2">
       <div className="container">
@@ -358,101 +363,111 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
         </div>
 
         <div className="row g-4 align-items-stretch justify-content-center">
-          {!hasPremiumHistory && (
-            <div className="col-12 col-sm-12 col-xl-3" key="service_trial_static">
-              <div
-                className="h-100 d-flex flex-column rounded-3"
-                style={{
-                  border: isTrialActive ? "2px solid #4338ca" : "1px solid #e2e8f0",
-                  backgroundColor: "#fff",
-                  boxShadow: isTrialActive
-                    ? "0 0 0 4px rgba(67,56,202,0.08)"
-                    : "0 1px 4px rgba(0,0,0,0.04)",
-                  transition: "opacity 0.2s ease",
-                  position: "relative",
-                }}
-              >
-                {isTrialActive && (
+          <div className="col-12 col-sm-12 col-xl-3" key="service_trial_static">
+            <div
+              className="h-100 d-flex flex-column rounded-3"
+              style={{
+                border: isTrialActive ? "2px solid #4338ca" : "1px solid #e2e8f0",
+                backgroundColor: "#fff",
+                boxShadow: isTrialActive
+                  ? "0 0 0 4px rgba(67,56,202,0.08)"
+                  : "0 1px 4px rgba(0,0,0,0.04)",
+                transition: "opacity 0.2s ease",
+                position: "relative",
+              }}
+            >
+              {isTrialActive && (
+                <div
+                  style={{
+                    position: "absolute", top: "-13px", left: "50%",
+                    transform: "translateX(-50%)", backgroundColor: "#4338ca",
+                    color: "#fff", fontSize: "1.2rem", fontWeight: 700,
+                    padding: "3px 14px", borderRadius: "999px",
+                    letterSpacing: "0.06em", textTransform: "uppercase",
+                    whiteSpace: "nowrap", zIndex: 1,
+                  }}
+                >
+                  ● Ongoing
+                </div>
+              )}
+
+              <div className="p-4" style={{ borderBottom: "1px solid #f1f5f9" }}>
+                <p
+                  className="fw-semibold mb-1"
+                  style={{ color: "#4338ca", fontSize: "1.2rem", textTransform: "uppercase", letterSpacing: "0.06em" }}
+                >
+                  Free Trial
+                </p>
+                <div className="d-flex align-items-baseline gap-1 mb-2">
+                  <span className="fw-bold" style={{ fontSize: "2.4rem", color: "#1a1a2e", lineHeight: 1.1 }}>
+                    Free
+                  </span>
+                </div>
+                <p className="text-muted mb-3" style={{ fontSize: "1.2rem", minHeight: "3.2rem" }}>
+                  Get started at no cost for 1 month.
+                </p>
+
+                {isTrialActive ? (
                   <div
                     style={{
-                      position: "absolute", top: "-13px", left: "50%",
-                      transform: "translateX(-50%)", backgroundColor: "#4338ca",
-                      color: "#fff", fontSize: "1.2rem", fontWeight: 700,
-                      padding: "3px 14px", borderRadius: "999px",
-                      letterSpacing: "0.06em", textTransform: "uppercase",
-                      whiteSpace: "nowrap", zIndex: 1,
+                      width: "100%", padding: "10px 0", borderRadius: "8px",
+                      fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
+                      backgroundColor: "rgba(67,56,202,0.08)",
+                      color: "#4338ca", border: "2px solid #4338ca",
                     }}
                   >
-                    ● Ongoing
+                    ✓ Current Plan
+                  </div>
+                ) : isTrialLocked ? (
+                  <div
+                    style={{
+                      width: "100%", padding: "10px 0", borderRadius: "8px",
+                      fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
+                      backgroundColor: "#f1f5f9",
+                      color: "#94a3b8", border: "1.5px solid #e2e8f0",
+                      cursor: "not-allowed",
+                    }}
+                  >
+                    Trial Ended
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      width: "100%", padding: "10px 0", borderRadius: "8px",
+                      fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
+                      backgroundColor: "#f1f5f9",
+                      color: "#94a3b8", border: "1.5px solid #e2e8f0",
+                      cursor: "default",
+                    }}
+                  >
+                    Trial Ended
                   </div>
                 )}
+              </div>
 
-                <div className="p-4" style={{ borderBottom: "1px solid #f1f5f9" }}>
-                  <p
-                    className="fw-semibold mb-1"
-                    style={{ color: "#4338ca", fontSize: "1.2rem", textTransform: "uppercase", letterSpacing: "0.06em" }}
-                  >
-                    Free Trial
+              <div className="p-4 flex-grow-1">
+                <p className="fw-semibold mb-3" style={{ fontSize: "1.2rem", color: "#1a1a2e" }}>What's included</p>
+                {trialDetails.length > 0 ? (
+                  <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
+                    {trialDetails.map((item, idx) => (
+                      <li key={idx} className="d-flex align-items-start gap-2">
+                        <CheckIcon />
+                        <span style={{ fontSize: "1.2rem", color: "#475569" }}>{item}</span>
+                      </li>
+                    ))}
+                    <li className="d-flex align-items-start gap-2">
+                      <CheckIcon />
+                      <span style={{ fontSize: "1.2rem", color: "#475569" }}>No credit card required</span>
+                    </li>
+                  </ul>
+                ) : (
+                  <p className="text-muted mb-0" style={{ fontSize: "1.2rem" }}>
+                    No features configured for this plan yet.
                   </p>
-                  <div className="d-flex align-items-baseline gap-1 mb-2">
-                    <span className="fw-bold" style={{ fontSize: "2.4rem", color: "#1a1a2e", lineHeight: 1.1 }}>
-                      Free
-                    </span>
-                  </div>
-                  <p className="text-muted mb-3" style={{ fontSize: "1.2rem", minHeight: "3.2rem" }}>
-                    Get started at no cost for 1 month.
-                  </p>
-
-                  {isTrialActive ? (
-                    <div
-                      style={{
-                        width: "100%", padding: "10px 0", borderRadius: "8px",
-                        fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
-                        backgroundColor: "rgba(67,56,202,0.08)",
-                        color: "#4338ca", border: "2px solid #4338ca",
-                      }}
-                    >
-                      ✓ Current Plan
-                    </div>
-                  ) : (
-                    <div
-                      style={{
-                        width: "100%", padding: "10px 0", borderRadius: "8px",
-                        fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
-                        backgroundColor: "#f1f5f9",
-                        color: "#94a3b8", border: "1.5px solid #e2e8f0",
-                        cursor: "default",
-                      }}
-                    >
-                      Trial Ended
-                    </div>
-                  )}
-                </div>
-
-                <div className="p-4 flex-grow-1">
-                  <p className="fw-semibold mb-3" style={{ fontSize: "1.2rem", color: "#1a1a2e" }}>What's included</p>
-                 {trialDetails.length > 0 ? (
-  <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
-    {trialDetails.map((item, idx) => (
-      <li key={idx} className="d-flex align-items-start gap-2">
-        <CheckIcon />
-        <span style={{ fontSize: "1.2rem", color: "#475569" }}>{item}</span>
-      </li>
-    ))}
-    <li className="d-flex align-items-start gap-2">
-      <CheckIcon />
-      <span style={{ fontSize: "1.2rem", color: "#475569" }}>No credit card required</span>
-    </li>
-  </ul>
-) : (
-  <p className="text-muted mb-0" style={{ fontSize: "1.2rem" }}>
-    No features configured for this plan yet.
-  </p>
-)}
-                </div>
+                )}
               </div>
             </div>
-          )}
+          </div>
 
           {servicePlans.map((plan) =>
             tiers.map(({ durationType, label, suffix, desc }) => {
