@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getPlans, createOrder, verifyPayment } from "@/app/apiServices/subscriptions";
+import { getPlans, createOrder, verifyPayment, cancelSubscription } from "@/app/apiServices/subscriptions";
 import { toast, ToastContainer } from "react-toastify";
 import publisherApi from "@/app/publisherapi";
 
@@ -110,6 +110,80 @@ function ConfirmSwitchModal({ plan, currentPlanName, onConfirm, onCancel }) {
   );
 }
 
+function ConfirmCancelModal({ onConfirm, onCancel, isCancelling }) {
+  return (
+    <div
+      style={{
+        position: "fixed", inset: 0, zIndex: 9999,
+        backgroundColor: "rgba(0,0,0,0.45)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "16px",
+      }}
+      onClick={isCancelling ? undefined : onCancel}
+    >
+      <div
+        style={{
+          backgroundColor: "#fff", borderRadius: "16px",
+          padding: "48px 40px", maxWidth: "560px", width: "100%",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.18)",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div style={{ textAlign: "center", marginBottom: "24px" }}>
+          <div style={{
+            display: "inline-flex", alignItems: "center", justifyContent: "center",
+            width: "72px", height: "72px", borderRadius: "50%",
+            backgroundColor: "rgba(220,38,38,0.1)",
+          }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"
+              fill="none" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+        </div>
+
+        <h5 style={{ fontWeight: 700, color: "#1a1a2e", textAlign: "center", marginBottom: "14px", fontSize: "1.5rem" }}>
+          Cancel your plan?
+        </h5>
+        <p style={{ color: "#64748b", fontSize: "1.15rem", textAlign: "center", lineHeight: 1.7, marginBottom: "32px" }}>
+          Once you cancel, <strong style={{ color: "#1a1a2e" }}>all features of your current plan can not be accessed</strong>.
+          This action cannot be undone.
+        </p>
+
+        <div style={{ display: "flex", gap: "16px" }}>
+          <button
+            onClick={onCancel}
+            disabled={isCancelling}
+            style={{
+              flex: 1, padding: "14px 0", borderRadius: "10px",
+              border: "1.5px solid #e2e8f0", backgroundColor: "#f8fafc",
+              color: "#475569", fontWeight: 600, fontSize: "1.1rem",
+              cursor: isCancelling ? "not-allowed" : "pointer",
+            }}
+          >
+            Keep plan
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={isCancelling}
+            style={{
+              flex: 1, padding: "14px 0", borderRadius: "10px",
+              border: "none", backgroundColor: "#dc2626",
+              color: "#fff", fontWeight: 600, fontSize: "1.1rem",
+              cursor: isCancelling ? "not-allowed" : "pointer",
+              opacity: isCancelling ? 0.7 : 1,
+            }}
+          >
+            {isCancelling ? "Cancelling..." : "Yes, cancel plan"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function buildPlanDetails(plan) {
   const items = [];
 
@@ -130,8 +204,8 @@ function buildPlanDetails(plan) {
   if (plan.fundingCallsLimit !== undefined)
     items.push(
       plan.fundingCallsLimit === 0
-        ? "Unlimited funding calls"
-        : `${plan.fundingCallsLimit} funding call${plan.fundingCallsLimit !== 1 ? "s" : ""}`
+        ? "Unlimited Competitions"
+        : `${plan.fundingCallsLimit} Competition${plan.fundingCallsLimit !== 1 ? "s" : ""}`
     );
 
   if (plan.productsLimit !== undefined)
@@ -156,6 +230,12 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
   const [pendingPlan, setPendingPlan]       = useState(null);
   const [hasPremiumHistory, setHasPremiumHistory] = useState(false);
   const [isTrialActive, setIsTrialActive]   = useState(false);
+  // True when a trial subscription record exists but is no longer active,
+  // i.e. the trial period has already run its course.
+  const [hasUsedTrial, setHasUsedTrial]     = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [isCancelling, setIsCancelling]       = useState(false);
+  const [hoveredPlanId, setHoveredPlanId]     = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -176,6 +256,12 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
             (s) => s.plan === "trial" && s.isActive && new Date(s.expiryDate) > new Date()
           );
           setIsTrialActive(!!activeTrial);
+
+          // A trial record exists but isn't currently active -> the trial
+          // period has run its course (used up), regardless of whether
+          // any paid plan was ever bought.
+          const usedTrialBefore = historyRes.data.subscriptions.some((s) => s.plan === "trial");
+          setHasUsedTrial(usedTrialBefore && !activeTrial);
         }
       } catch (err) {
         console.error("Failed to load plans", err);
@@ -203,6 +289,10 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
       (limits.serviceListingLimit > 0 && usage.serviceListings >= limits.serviceListingLimit)
     );
   })();
+
+  // Trial is permanently unavailable once either condition is true:
+  // the trial period already ran out, or any paid plan has been bought.
+  const isTrialUnavailable = hasUsedTrial || hasPremiumHistory;
 
   const startPayment = async (plan) => {
     setLoadingPlanId(plan._id);
@@ -278,6 +368,25 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
 
   const handleModalCancel = () => setPendingPlan(null);
 
+  const handleCancelSubscription = async () => {
+    setIsCancelling(true);
+    try {
+      const res = await cancelSubscription();
+      if (res.data?.success) {
+        toast.success(res.data.message || "Subscription cancelled");
+        setShowCancelModal(false);
+        onPaymentSuccess?.(); // reuse existing refresh callback to reload plan info
+      } else {
+        toast.error(res.data?.message || "Failed to cancel subscription");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.message || "Failed to cancel subscription");
+    } finally {
+      setIsCancelling(false);
+    }
+  };
+
   const currentPlanName = (() => {
     if (!activePlanKey) return "current";
     const monthsMap = { free: 0, "3m": 3, "6m": 6, "9m": 9, "12m": 12 };
@@ -300,11 +409,12 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
       </div>
     );
 
-const trialPlan = plans.find((p) => p.durationInMonths === 0);
-const paidPlans = plans.filter((p) => p.durationInMonths !== 0);
-const allPlans  = hasPremiumHistory
-  ? paidPlans
-  : trialPlan
+  const trialPlan = plans.find((p) => p.durationInMonths === 0);
+  const paidPlans = plans.filter((p) => p.durationInMonths !== 0);
+  // Trial card is always shown alongside paid plans when it exists.
+  // Whether it's clickable is decided per-card via isTrialUnavailable,
+  // not by leaving it out of the list.
+  const allPlans = trialPlan
     ? [{ ...trialPlan, isTrial: true }, ...paidPlans]
     : paidPlans;
 
@@ -342,9 +452,11 @@ const allPlans  = hasPremiumHistory
         <div className="row g-4 justify-content-center grid-mob flex-nowrap" style={{ overflowX: "auto" }}>
           {allPlans.map((plan) => {
             if (plan.isTrial) {
+              // "Active" badge only when the trial is the one currently running.
               const isActivePlan = isTrialActive;
-              const isThisLoading = loadingPlanId === plan._id;
-              const isOtherLoading = loadingPlanId !== null && loadingPlanId !== plan._id;
+              // Button is locked once the trial has been used up or a paid
+              // plan exists in history — regardless of current active plan.
+              const isLocked = isTrialUnavailable && !isActivePlan;
 
               return (
                 <div className="col" key="trial_static">
@@ -356,7 +468,7 @@ const allPlans  = hasPremiumHistory
                       boxShadow: isActivePlan
                         ? "0 0 0 4px rgba(67,56,202,0.08)"
                         : "0 1px 4px rgba(0,0,0,0.04)",
-                      opacity: isOtherLoading ? 0.5 : 1,
+                      opacity: 1,
                       transition: "opacity 0.2s ease",
                       position: "relative",
                     }}
@@ -403,18 +515,45 @@ const allPlans  = hasPremiumHistory
                         >
                           ✓ Current Plan
                         </div>
-                      ) : (
+                      ) : isLocked ? (
                         <div
                           style={{
                             width: "100%", padding: "10px 0", borderRadius: "8px",
                             fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
                             backgroundColor: "#f1f5f9",
                             color: "#94a3b8", border: "1.5px solid #e2e8f0",
-                            cursor: "default",
+                            cursor: "not-allowed",
                           }}
                         >
-                          Trial Ended
+                          Trial ended
                         </div>
+                      ) : (
+                        <button
+                          className="btn w-100 fw-semibold"
+                          style={{
+                            backgroundColor: loadingPlanId === plan._id ? "#4338ca" : "#fff",
+                            color: loadingPlanId === plan._id ? "#fff" : "#4338ca",
+                            border: "2px solid #4338ca", borderRadius: "8px",
+                            padding: "10px 0", fontSize: "1.2rem",
+                            transition: "all 0.15s ease",
+                            cursor: loadingPlanId ? "not-allowed" : "pointer",
+                          }}
+                          disabled={!!loadingPlanId}
+                          onClick={() => startPayment(plan)}
+                        >
+                          {loadingPlanId === plan._id ? (
+                            <span className="d-flex align-items-center justify-content-center gap-2">
+                              <span
+                                className="spinner-border spinner-border-sm"
+                                role="status"
+                                style={{ width: "14px", height: "14px", borderWidth: "2px" }}
+                              />
+                              Processing...
+                            </span>
+                          ) : (
+                            "Get Started"
+                          )}
+                        </button>
                       )}
                     </div>
 
@@ -422,27 +561,27 @@ const allPlans  = hasPremiumHistory
                       <p className="fw-semibold mb-3" style={{ fontSize: "1.2rem", color: "#1a1a2e" }}>
                         What's included
                       </p>
-{(() => {
-  const details = buildPlanDetails(plan);
-  return details.length > 0 ? (
-    <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
-      {details.map((item, idx) => (
-        <li key={idx} className="d-flex align-items-start gap-2">
-          <CheckIcon />
-          <span style={{ fontSize: "1.2rem", color: "#475569" }}>{item}</span>
-        </li>
-      ))}
-      <li className="d-flex align-items-start gap-2">
-        <CheckIcon />
-        <span style={{ fontSize: "1.2rem", color: "#475569" }}>No credit card required</span>
-      </li>
-    </ul>
-  ) : (
-    <p className="text-muted mb-0" style={{ fontSize: "1.2rem" }}>
-      No features configured for this plan yet.
-    </p>
-  );
-})()}
+                      {(() => {
+                        const details = buildPlanDetails(plan);
+                        return details.length > 0 ? (
+                          <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
+                            {details.map((item, idx) => (
+                              <li key={idx} className="d-flex align-items-start gap-2">
+                                <CheckIcon />
+                                <span style={{ fontSize: "1.2rem", color: "#475569" }}>{item}</span>
+                              </li>
+                            ))}
+                            <li className="d-flex align-items-start gap-2">
+                              <CheckIcon />
+                              <span style={{ fontSize: "1.2rem", color: "#475569" }}>No credit card required</span>
+                            </li>
+                          </ul>
+                        ) : (
+                          <p className="text-muted mb-0" style={{ fontSize: "1.2rem" }}>
+                            No features configured for this plan yet.
+                          </p>
+                        );
+                      })()}
                     </div>
                   </div>
                 </div>
@@ -463,6 +602,8 @@ const allPlans  = hasPremiumHistory
               <div className="col" key={plan._id}>
                 <div
                   className="h-100 d-flex flex-column rounded-3"
+                  onMouseEnter={() => isActivePlan && setHoveredPlanId(plan._id)}
+                  onMouseLeave={() => setHoveredPlanId(null)}
                   style={{
                     border: isActivePlan ? "2px solid #4338ca" : "1px solid #e2e8f0",
                     backgroundColor: "#fff",
@@ -511,16 +652,49 @@ const allPlans  = hasPremiumHistory
                     </p>
 
                     {isActivePlan ? (
-                      <div
-                        style={{
-                          width: "100%", padding: "10px 0", borderRadius: "8px",
-                          fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
-                          backgroundColor: "rgba(67,56,202,0.08)",
-                          color: "#4338ca", border: "2px solid #4338ca",
-                        }}
-                      >
-                        ✓ Current Plan
-                      </div>
+                      hoveredPlanId === plan._id ? (
+                        <div style={{ display: "flex", gap: "10px" }}>
+                          <button
+                            className="btn fw-semibold"
+                            onClick={() => startPayment(plan)}
+                            disabled={!!loadingPlanId}
+                            style={{
+                              flex: 1, padding: "10px 0", borderRadius: "8px",
+                              fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
+                              backgroundColor: "#4338ca",
+                              color: "#fff", border: "2px solid #4338ca",
+                              cursor: loadingPlanId ? "not-allowed" : "pointer",
+                            }}
+                          >
+                            {loadingPlanId === plan._id ? "Processing..." : "Repurchase"}
+                          </button>
+                          <button
+                            className="btn fw-semibold"
+                            onClick={() => setShowCancelModal(true)}
+                            disabled={!!loadingPlanId}
+                            style={{
+                              flex: 1, padding: "10px 0", borderRadius: "8px",
+                              fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
+                              backgroundColor: "#dc2626",
+                              color: "#fff", border: "2px solid #dc2626",
+                              cursor: loadingPlanId ? "not-allowed" : "pointer",
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <div
+                          style={{
+                            width: "100%", padding: "10px 0", borderRadius: "8px",
+                            fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
+                            backgroundColor: "rgba(67,56,202,0.08)",
+                            color: "#4338ca", border: "2px solid #4338ca",
+                          }}
+                        >
+                          ✓ Current Plan
+                        </div>
+                      )
                     ) : (
                       <button
                         className="btn w-100 fw-semibold"
@@ -597,6 +771,14 @@ const allPlans  = hasPremiumHistory
           currentPlanName={currentPlanName}
           onConfirm={handleModalConfirm}
           onCancel={handleModalCancel}
+        />
+      )}
+
+      {showCancelModal && (
+        <ConfirmCancelModal
+          onConfirm={handleCancelSubscription}
+          onCancel={() => setShowCancelModal(false)}
+          isCancelling={isCancelling}
         />
       )}
     </section>

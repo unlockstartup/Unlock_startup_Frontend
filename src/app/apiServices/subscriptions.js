@@ -9,4 +9,6 @@ export const createOrder = (durationInMonths) =>
 
 export const verifyPayment = (payload) => publisherApi.post("/api/subscription/verify", payload);
 
-export default { getPlans, createOrder, verifyPayment };
+export const cancelSubscription = () => publisherApi.post("/api/subscription/cancel");
+
+export default { getPlans, createOrder, verifyPayment, cancelSubscription };

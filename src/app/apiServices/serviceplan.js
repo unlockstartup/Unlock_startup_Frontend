@@ -8,4 +8,8 @@ export const createServiceOrder = (servicePlanId, durationType) =>
 export const verifyServicePayment = (payload) =>
   publisherApi.post("/api/service-plans/verify", payload);
 
+export const cancelServicePlan = (payload) =>
+  publisherApi.post("/api/service-plans/cancel", payload);
+
+
 export default { getServicePlans, createServiceOrder, verifyServicePayment };

@@ -3,6 +3,9 @@ import {
   getServicePlans,
   createServiceOrder,
   verifyServicePayment,
+  cancelServicePlan, // NOTE: add/rename this export in @/app/apiServices/serviceplan
+                      // to match your backend cancel endpoint, mirroring
+                      // `cancelSubscription` in @/app/apiServices/subscriptions
 } from "@/app/apiServices/serviceplan";
 import { toast, ToastContainer } from "react-toastify";
 import publisherApi from "@/app/publisherapi";
@@ -97,6 +100,80 @@ function ConfirmSwitchModal({ durationType, currentPlanLabel, onConfirm, onCance
   );
 }
 
+function ConfirmCancelModal({ onConfirm, onCancel, isCancelling }) {
+  return (
+    <div
+      style={{
+        position: "fixed", inset: 0, zIndex: 9999,
+        backgroundColor: "rgba(0,0,0,0.45)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "16px",
+      }}
+      onClick={isCancelling ? undefined : onCancel}
+    >
+      <div
+        style={{
+          backgroundColor: "#fff", borderRadius: "16px",
+          padding: "48px 40px", maxWidth: "560px", width: "100%",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.18)",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div style={{ textAlign: "center", marginBottom: "24px" }}>
+          <div style={{
+            display: "inline-flex", alignItems: "center", justifyContent: "center",
+            width: "72px", height: "72px", borderRadius: "50%",
+            backgroundColor: "rgba(220,38,38,0.1)",
+          }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"
+              fill="none" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+        </div>
+
+        <h5 style={{ fontWeight: 700, color: "#1a1a2e", textAlign: "center", marginBottom: "14px", fontSize: "1.5rem" }}>
+          Cancel your plan?
+        </h5>
+        <p style={{ color: "#64748b", fontSize: "1.15rem", textAlign: "center", lineHeight: 1.7, marginBottom: "32px" }}>
+          Once you cancel, <strong style={{ color: "#1a1a2e" }}>all features of your current plan can not be accessed</strong>.
+          This action cannot be undone.
+        </p>
+
+        <div style={{ display: "flex", gap: "16px" }}>
+          <button
+            onClick={onCancel}
+            disabled={isCancelling}
+            style={{
+              flex: 1, padding: "14px 0", borderRadius: "10px",
+              border: "1.5px solid #e2e8f0", backgroundColor: "#f8fafc",
+              color: "#475569", fontWeight: 600, fontSize: "1.1rem",
+              cursor: isCancelling ? "not-allowed" : "pointer",
+            }}
+          >
+            Keep plan
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={isCancelling}
+            style={{
+              flex: 1, padding: "14px 0", borderRadius: "10px",
+              border: "none", backgroundColor: "#dc2626",
+              color: "#fff", fontWeight: 600, fontSize: "1.1rem",
+              cursor: isCancelling ? "not-allowed" : "pointer",
+              opacity: isCancelling ? 0.7 : 1,
+            }}
+          >
+            {isCancelling ? "Cancelling..." : "Yes, cancel plan"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function buildServiceDetails(plan, durationType) {
   const limit =
     durationType === "6m"
@@ -119,6 +196,9 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
   const [pendingOrder, setPendingOrder]           = useState(null);
   const [hasPremiumHistory, setHasPremiumHistory] = useState(false);
   const [isTrialActive, setIsTrialActive]         = useState(false);
+  const [showCancelModal, setShowCancelModal]     = useState(false);
+  const [isCancelling, setIsCancelling]           = useState(false);
+  const [hoveredServiceKey, setHoveredServiceKey] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -153,12 +233,12 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
     new Date(planInfo.serviceplan.expiryDate) > new Date();
 
   const activeServiceKey = isServiceActive ? planInfo?.serviceplan?.plan : null;
-const trialLimit = servicePlans[0]?.trialServiceListingLimit;
-const trialDetails = trialLimit !== undefined
-  ? [trialLimit === 0
-      ? "Unlimited service listings"
-      : `${trialLimit} service listing${trialLimit !== 1 ? "s" : ""}`]
-  : [];
+  const trialLimit = servicePlans[0]?.trialServiceListingLimit;
+  const trialDetails = trialLimit !== undefined
+    ? [trialLimit === 0
+        ? "Unlimited service listings"
+        : `${trialLimit} service listing${trialLimit !== 1 ? "s" : ""}`]
+    : [];
   const currentPlanLabel = activeServiceKey === "6m" ? "6-Month Plan" : activeServiceKey === "12m" ? "Yearly Plan" : "current";
 
   const handleServiceSubscribe = async (plan, durationType) => {
@@ -231,6 +311,25 @@ const trialDetails = trialLimit !== undefined
   };
 
   const handleModalCancel = () => setPendingOrder(null);
+
+  const handleCancelServicePlan = async () => {
+    setIsCancelling(true);
+    try {
+      const res = await cancelServicePlan();
+      if (res.data?.success) {
+        toast.success(res.data.message || "Service plan cancelled");
+        setShowCancelModal(false);
+        onPaymentSuccess?.(); // reuse existing refresh callback to reload plan info
+      } else {
+        toast.error(res.data?.message || "Failed to cancel service plan");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.message || "Failed to cancel service plan");
+    } finally {
+      setIsCancelling(false);
+    }
+  };
 
   if (loading)
     return (
@@ -369,6 +468,8 @@ const trialDetails = trialLimit !== undefined
                 <div className="col-12 col-sm-12 col-xl-3" key={key}>
                   <div
                     className="h-100 d-flex flex-column rounded-3"
+                    onMouseEnter={() => isActivePlan && setHoveredServiceKey(key)}
+                    onMouseLeave={() => setHoveredServiceKey(null)}
                     style={{
                       border: isActivePlan ? "2px solid #4338ca" : "1px solid #e2e8f0",
                       backgroundColor: "#fff",
@@ -397,9 +498,42 @@ const trialDetails = trialLimit !== undefined
                       <p className="text-muted mb-3" style={{ fontSize: "1.2rem", minHeight: "3.2rem" }}>{desc}</p>
 
                       {isActivePlan ? (
-                        <div style={{ width: "100%", padding: "10px 0", borderRadius: "8px", fontSize: "1.2rem", fontWeight: 600, textAlign: "center", backgroundColor: "rgba(67,56,202,0.08)", color: "#4338ca", border: "2px solid #4338ca" }}>
-                          ✓ Current Plan
-                        </div>
+                        hoveredServiceKey === key ? (
+                          <div style={{ display: "flex", gap: "10px" }}>
+                            <button
+                              className="btn fw-semibold"
+                              onClick={() => executeServicePayment(plan, durationType, key)}
+                              disabled={isDisabled}
+                              style={{
+                                flex: 1, padding: "10px 0", borderRadius: "8px",
+                                fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
+                                backgroundColor: "#4338ca",
+                                color: "#fff", border: "2px solid #4338ca",
+                                cursor: isDisabled ? "not-allowed" : "pointer",
+                              }}
+                            >
+                              {isThisLoading ? "Processing..." : "Repurchase"}
+                            </button>
+                            <button
+                              className="btn fw-semibold"
+                              onClick={() => setShowCancelModal(true)}
+                              disabled={isDisabled}
+                              style={{
+                                flex: 1, padding: "10px 0", borderRadius: "8px",
+                                fontSize: "1.2rem", fontWeight: 600, textAlign: "center",
+                                backgroundColor: "#dc2626",
+                                color: "#fff", border: "2px solid #dc2626",
+                                cursor: isDisabled ? "not-allowed" : "pointer",
+                              }}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <div style={{ width: "100%", padding: "10px 0", borderRadius: "8px", fontSize: "1.2rem", fontWeight: 600, textAlign: "center", backgroundColor: "rgba(67,56,202,0.08)", color: "#4338ca", border: "2px solid #4338ca" }}>
+                            ✓ Current Plan
+                          </div>
+                        )
                       ) : (
                         <button
                           className="btn w-100 fw-semibold"
@@ -455,6 +589,14 @@ const trialDetails = trialLimit !== undefined
           currentPlanLabel={currentPlanLabel}
           onConfirm={handleModalConfirm}
           onCancel={handleModalCancel}
+        />
+      )}
+
+      {showCancelModal && (
+        <ConfirmCancelModal
+          onConfirm={handleCancelServicePlan}
+          onCancel={() => setShowCancelModal(false)}
+          isCancelling={isCancelling}
         />
       )}
     </section>

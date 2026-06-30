@@ -41,8 +41,8 @@ function buildFeatures(plan) {
   if (plan.fundingCallsLimit !== undefined) {
     items.push(
       plan.fundingCallsLimit === 0
-        ? 'Unlimited funding calls'
-        : `${plan.fundingCallsLimit} funding call${plan.fundingCallsLimit !== 1 ? 's' : ''}`
+        ? 'Unlimited Competitions'
+        : `${plan.fundingCallsLimit} Competition${plan.fundingCallsLimit !== 1 ? 's' : ''}`
     );
   }
   if (plan.serviceListingLimit !== undefined) {
