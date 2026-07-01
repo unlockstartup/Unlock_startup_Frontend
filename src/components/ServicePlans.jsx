@@ -198,6 +198,7 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
   const [showCancelModal, setShowCancelModal]     = useState(false);
   const [isCancelling, setIsCancelling]           = useState(false);
   const [hoveredServiceKey, setHoveredServiceKey] = useState(null);
+const [localOverride, setLocalOverride] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -228,13 +229,26 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
       }
     })();
   }, []);
+useEffect(() => {
+    if (
+      localOverride &&
+      planInfo?.servicePlanActive === true &&
+      planInfo?.serviceplan?.plan === localOverride.durationType
+    ) {
+      setLocalOverride(null); 
+    }
+  }, [planInfo, localOverride]);
+const isServiceActive =
+    !!localOverride ||
+    (planInfo?.servicePlanActive === true &&
+      planInfo?.serviceplan?.expiryDate &&
+      new Date(planInfo.serviceplan.expiryDate) > new Date());
 
-  const isServiceActive =
-    planInfo?.servicePlanActive === true &&
-    planInfo?.serviceplan?.expiryDate &&
-    new Date(planInfo.serviceplan.expiryDate) > new Date();
-
-  const activeServiceKey = isServiceActive ? planInfo?.serviceplan?.plan : null;
+  const activeServiceKey = localOverride
+    ? localOverride.durationType
+    : isServiceActive
+    ? planInfo?.serviceplan?.plan
+    : null;
   const trialLimit = servicePlans[0]?.trialServiceListingLimit;
   const trialDetails = trialLimit !== undefined
     ? [trialLimit === 0
@@ -283,9 +297,10 @@ export default function ServicePlans({ planInfo, onPaymentSuccess }) {
               servicePlanId:       plan._id,
               durationType,
             });
-            if (verifyRes.data?.success) {
+if (verifyRes.data?.success) {
               toast.success("Payment successful and subscription activated");
-              onPaymentSuccess?.();
+              setLocalOverride({ durationType });
+              onPaymentSuccess?.(); 
             } else {
               toast.error("Payment succeeded but verification failed");
             }
