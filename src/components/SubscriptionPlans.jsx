@@ -187,11 +187,12 @@ function ConfirmCancelModal({ onConfirm, onCancel, isCancelling }) {
 function buildPlanDetails(plan) {
   const items = [];
 
-  if (plan.jobLimit !== undefined)
+
+  if (plan.fundingCallsLimit !== undefined)
     items.push(
-      plan.jobLimit === 0
-        ? "Unlimited job postings"
-        : `${plan.jobLimit} job posting${plan.jobLimit !== 1 ? "s" : ""}`
+      plan.fundingCallsLimit === 0
+        ? "Unlimited Competitions"
+        : `${plan.fundingCallsLimit} Competition${plan.fundingCallsLimit !== 1 ? "s" : ""}`
     );
 
   if (plan.eventLimit !== undefined)
@@ -201,11 +202,11 @@ function buildPlanDetails(plan) {
         : `${plan.eventLimit} event${plan.eventLimit !== 1 ? "s" : ""}`
     );
 
-  if (plan.fundingCallsLimit !== undefined)
+  if (plan.jobLimit !== undefined)
     items.push(
-      plan.fundingCallsLimit === 0
-        ? "Unlimited Competitions"
-        : `${plan.fundingCallsLimit} Competition${plan.fundingCallsLimit !== 1 ? "s" : ""}`
+      plan.jobLimit === 0
+        ? "Unlimited job postings"
+        : `${plan.jobLimit} job posting${plan.jobLimit !== 1 ? "s" : ""}`
     );
 
   if (plan.productsLimit !== undefined)
@@ -230,8 +231,6 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
   const [pendingPlan, setPendingPlan]       = useState(null);
   const [hasPremiumHistory, setHasPremiumHistory] = useState(false);
   const [isTrialActive, setIsTrialActive]   = useState(false);
-  // True when a trial subscription record exists but is no longer active,
-  // i.e. the trial period has already run its course.
   const [hasUsedTrial, setHasUsedTrial]     = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [isCancelling, setIsCancelling]       = useState(false);
@@ -257,9 +256,6 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
           );
           setIsTrialActive(!!activeTrial);
 
-          // A trial record exists but isn't currently active -> the trial
-          // period has run its course (used up), regardless of whether
-          // any paid plan was ever bought.
           const usedTrialBefore = historyRes.data.subscriptions.some((s) => s.plan === "trial");
           setHasUsedTrial(usedTrialBefore && !activeTrial);
         }
@@ -290,8 +286,6 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
     );
   })();
 
-  // Trial is permanently unavailable once either condition is true:
-  // the trial period already ran out, or any paid plan has been bought.
   const isTrialUnavailable = hasUsedTrial || hasPremiumHistory;
 
   const startPayment = async (plan) => {
