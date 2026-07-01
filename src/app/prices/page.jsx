@@ -17,11 +17,11 @@ function planLabels(months) {
 function buildFeatures(plan) {
   const items = [];
 
-  if (plan.jobLimit !== undefined) {
+  if (plan.fundingCallsLimit !== undefined) {
     items.push(
-      plan.jobLimit === 0
-        ? 'Unlimited job postings'
-        : `${plan.jobLimit} job posting${plan.jobLimit !== 1 ? 's' : ''}`
+      plan.fundingCallsLimit === 0
+        ? 'Unlimited Competitions'
+        : `${plan.fundingCallsLimit} Competition${plan.fundingCallsLimit !== 1 ? 's' : ''}`
     );
   }
   if (plan.eventLimit !== undefined) {
@@ -31,6 +31,13 @@ function buildFeatures(plan) {
         : `${plan.eventLimit} event${plan.eventLimit !== 1 ? 's' : ''}`
     );
   }
+     if (plan.jobLimit !== undefined) {
+    items.push(
+      plan.jobLimit === 0
+        ? 'Unlimited job postings'
+        : `${plan.jobLimit} job posting${plan.jobLimit !== 1 ? 's' : ''}`
+    );
+  }
   if (plan.productsLimit !== undefined) {
     items.push(
       plan.productsLimit === 0
@@ -38,13 +45,8 @@ function buildFeatures(plan) {
         : `${plan.productsLimit} product${plan.productsLimit !== 1 ? 's' : ''}`
     );
   }
-  if (plan.fundingCallsLimit !== undefined) {
-    items.push(
-      plan.fundingCallsLimit === 0
-        ? 'Unlimited Competitions'
-        : `${plan.fundingCallsLimit} Competition${plan.fundingCallsLimit !== 1 ? 's' : ''}`
-    );
-  }
+
+
   if (plan.serviceListingLimit !== undefined) {
     items.push(
       plan.serviceListingLimit === 0
