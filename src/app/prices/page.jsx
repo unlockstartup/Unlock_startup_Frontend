@@ -193,7 +193,7 @@ export default function Page() {
                         </span>
                       )}
                     </div>
-                    <p className="pricingPage__planDesc">{plan.desc}</p>
+                    {/* <p className="pricingPage__planDesc">{plan.desc}</p> */}
                     <ul className="pricingPage__featuresList">
                       {plan.features.map((f, idx) => (
                         <li key={idx} className="pricingPage__featureItem">
