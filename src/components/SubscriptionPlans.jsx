@@ -288,55 +288,65 @@ export default function SubscriptionPlans({ planInfo, onPaymentSuccess }) {
 
   const isTrialUnavailable = hasUsedTrial || hasPremiumHistory;
 
-  const startPayment = async (plan) => {
-    setLoadingPlanId(plan._id);
-    try {
-      const res = await createOrder(plan.durationInMonths);
-      if (!res.data?.success)
-        throw new Error(res.data?.message || "Order creation failed");
+const startPayment = async (plan) => {
+  setLoadingPlanId(plan._id);
+  try {
+    const res = await createOrder(plan.durationInMonths);
+    if (!res.data?.success)
+      throw new Error(res.data?.message || "Order creation failed");
 
-      const { order } = res.data;
-      await loadRazorpayScript();
+    const { order } = res.data;
+    await loadRazorpayScript();
 
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "",
-        amount: order.amount,
-        currency: order.currency,
-        name: "Unlock Startup",
-        description: `${plan.durationInMonths} month subscription`,
-        order_id: order.id,
-        handler: async function (response) {
-          try {
-            const verifyRes = await verifyPayment({
-              razorpay_order_id:   response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature:  response.razorpay_signature,
-              durationInMonths:    plan.durationInMonths,
-            });
-            if (verifyRes.data?.success) {
-              toast.success("Payment successful and subscription activated");
-              onPaymentSuccess?.();
-            } else {
-              toast.error("Payment succeeded but verification failed");
-            }
-          } catch (e) {
-            console.error(e);
-            toast.error("Payment verification failed");
+    console.log("Frontend Razorpay key:", process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID);
+    console.log("Order details:", order.id, order.amount, order.currency);
+
+    const options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "",
+      amount: order.amount,
+      currency: order.currency,
+      name: "Unlock Startup",
+      description: `${plan.durationInMonths} month subscription`,
+      order_id: order.id,
+      handler: async function (response) {
+        console.log("Razorpay handler fired:", response);
+        try {
+          const verifyRes = await verifyPayment({
+            razorpay_order_id:   response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature:  response.razorpay_signature,
+            durationInMonths:    plan.durationInMonths,
+          });
+          if (verifyRes.data?.success) {
+            toast.success("Payment successful and subscription activated");
+            onPaymentSuccess?.();
+          } else {
+            toast.error("Payment succeeded but verification failed");
           }
-        },
-        prefill: {},
-        theme: { color: "#4338ca" },
-      };
+        } catch (e) {
+          console.error(e);
+          toast.error("Payment verification failed");
+        }
+      },
+      prefill: {},
+      theme: { color: "#4338ca" },
+    };
 
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-    } catch (err) {
-      console.error(err);
-      toast.error(err.message || "Unable to start payment");
-    } finally {
-      setLoadingPlanId(null);
-    }
-  };
+    const rzp = new window.Razorpay(options);
+
+    rzp.on("payment.failed", function (response) {
+      console.error("Razorpay payment.failed:", response.error);
+      toast.error(response.error.description || "Payment failed");
+    });
+
+    rzp.open();
+  } catch (err) {
+    console.error(err);
+    toast.error(err.message || "Unable to start payment");
+  } finally {
+    setLoadingPlanId(null);
+  }
+};
 
   const handleSubscribe = (plan) => {
     if (plan.isTrial) return;
