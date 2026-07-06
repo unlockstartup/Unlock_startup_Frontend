@@ -47,6 +47,7 @@ const defaultForm = {
   applyDate: "",
   applicationMethod: "",
   externalApplicationUrl: "",
+  disclosureConsent: false,  
 };
 
 const companySizes    = ["1-10", "11-50", "51-200", "201-500", "501-1000", "1000+"];
@@ -265,6 +266,8 @@ const validate = () => {
   if (!form.industrySector?.trim())      return "Industry / Sector is required";
   if (!form.hiringManagerName?.trim())   return "Hiring Manager Name is required";
   if (!form.hiringManagerEmail?.trim())  return "Hiring Manager Email is required";
+  if (form.hiringManagerEmail && !/^\S+@\S+\.\S+$/.test(form.hiringManagerEmail.trim()))
+    return "Enter a valid Hiring Manager Email";
   if (!form.roleOverview?.trim())        return "Role Overview is required";
   if (!form.keyResponsibilities?.trim()) return "Key Responsibilities is required";
   if (!form.requiredEducation)           return "Required Education is required";
@@ -277,11 +280,11 @@ const validate = () => {
   if (!form.jobLocationCountry?.trim())  return "Job Location - Country is required";
   if (!form.applyLastDate)               return "Application Deadline is required";
   if (!form.applyDate)                   return "Expected Start Date is required";
-  // if (!form.applicationMethod)           return "Application Method is required";
   if (form.companyWebsite && !isValidUrl(form.companyWebsite))
     return "Enter a valid Company Website URL";
   if (form.externalApplicationUrl && !isValidUrl(form.externalApplicationUrl))
     return "Enter a valid External Application URL";
+  if (!form.disclosureConsent)           return "You must agree to the disclosure consent";  
   return null;
 };
 

@@ -228,27 +228,37 @@ export default function ServiceListings() {
   const removeImage = (idx) => setServiceImages((prev) => prev.filter((_, i) => i !== idx));
 
   /*  Validate & save  */
-  const validate = () => {
-    const checks = [
-      [!form.companyName.trim(),         "Company name is required"],
-      [!form.brandName.trim(),           "Brand name is required"],
-      [!form.establishedYear.trim(),     "Established year is required"],
-      [!form.serviceTitle.trim(),        "Service title is required"],
-      [!form.serviceType,                "Service type is required"],
-      [!form.serviceCategory,            "Service plan is required"],
-      [!form.detailedDescription.trim(), "Detailed description is required"],
-      [!form.benefits.trim(),            "Benefits / Key Features required"],
-      [!form.serviceArea.trim(),         "Service area is required"],
-      [!form.targetIndustry.trim(),      "Target industry is required"],
-      [!form.teamSize.trim(),            "Team size is required"],
-      [!form.contactEmail.trim(),        "Contact email is required"],
-      [!form.disclosureConsent,          "You must provide consent to submit"],
-    ];
-    for (const [fail, msg] of checks) {
-      if (fail) { toast.warn(msg); return false; }
-    }
-    return true;
-  };
+const isValidUrl = (v) => {
+  if (!v) return true;
+  try { new URL(v); return true; } catch { return false; }
+};
+const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
+const validate = () => {
+  const checks = [
+    [!form.companyName.trim(),         "Company name is required"],
+    [!form.brandName.trim(),           "Brand name is required"],
+    [!form.establishedYear.trim(),     "Established year is required"],
+    [!form.serviceTitle.trim(),        "Service title is required"],
+    [!form.serviceType,                "Service type is required"],
+    [!form.serviceCategory,            "Service plan is required"],
+    [!form.detailedDescription.trim(), "Detailed description is required"],
+    [form.detailedDescription.trim().split(/\s+/).filter(Boolean).length > 500, "Detailed description exceeds 500 words"],
+    [!form.benefits.trim(),            "Benefits / key features are required"],
+    [form.benefits.trim().split(/\s+/).filter(Boolean).length > 300, "Benefits / key features exceeds 300 words"],
+    [!form.serviceArea.trim(),         "Service area is required"],
+    [!form.targetIndustry.trim(),      "Target industry is required"],
+    [!form.teamSize.trim(),            "Team size is required"],
+    [!form.contactEmail.trim(),        "Contact email is required"],
+    [form.contactEmail.trim() && !isValidEmail(form.contactEmail), "Please enter a valid contact email"],
+    [!isValidUrl(form.websiteUrl),     "Please enter a valid website URL"],
+    [!form.disclosureConsent,          "You must provide consent to submit"],
+  ];
+  for (const [fail, msg] of checks) {
+    if (fail) { toast.warn(msg); return false; }
+  }
+  return true;
+};
 
   const save = async () => {
     if (!validate()) return;

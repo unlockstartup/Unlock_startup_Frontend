@@ -133,7 +133,7 @@ function FundingCallsCrud() {
     confirmVariant: "danger", onConfirm: () => {},
   });
 
-  const initialForm = useMemo(() => ({
+const initialForm = useMemo(() => ({
     title: "",
     challengeType: "",
     challengeCategory: "",
@@ -160,6 +160,7 @@ function FundingCallsCrud() {
     problemStatement: "",
     attachments: [],
     applicationType: "",
+    disclosureConsent: false,  
   }), []);
 
   const [form, setForm] = useState(initialForm);
@@ -267,7 +268,7 @@ function FundingCallsCrud() {
 
   const closeModal = () => { if (saving || attachmentsUploading) return; setOpen(false); };
 
-  const validate = () => {
+const validate = () => {
     if (!form.title.trim()) return "Title is required";
     if (!form.challengeCategory.trim()) return "Challenge Category is required";
     if (!form.submissionDeadline) return "Submission Deadline is required";
@@ -275,6 +276,7 @@ function FundingCallsCrud() {
     if (!form.organizerType.trim()) return "Company Type is required";
     if (!form.officialEmail.trim()) return "Official Email is required";
     if (!form.description.trim()) return "Description is required";
+    if (!form.problemStatement?.trim()) return "Problem Statement is required";   // ← added
     if (!form.startupStage.trim()) return "Startup Stage Requirements is required";
     if (!form.location.trim()) return "Location is required";
     if (!form.registrationLink.trim()) return "Registration Link is required";
@@ -288,6 +290,7 @@ function FundingCallsCrud() {
     if (form.organizationWebsite && !isValidUrl(form.organizationWebsite.trim())) {
       return "Enter a valid website URL";
     }
+    if (!form.disclosureConsent) return "You must agree to the disclosure consent";   
     return null;
   };
 
@@ -733,9 +736,9 @@ title={
               <section className="section">
                 <h3 className="sectionTitle">About Challenges</h3>
 
-                <Field label="Problem Statement">
-                  <textarea className="textarea" rows={4} placeholder="Detailed challenge description / problem being solved" value={form.problemStatement} onChange={sf("problemStatement")} />
-                </Field>
+<Field label="Problem Statement *">
+  <textarea className="textarea" rows={4} placeholder="Detailed challenge description / problem being solved" value={form.problemStatement} onChange={sf("problemStatement")} />
+</Field>
 
                 <Field label="Description *">
                   <textarea className="textarea" rows={5} value={form.description} onChange={sf("description")} placeholder="Describe the competition" />

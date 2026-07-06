@@ -260,15 +260,41 @@ const openEdit = (prod) => {
     setProductImages((prev) => prev.filter((img) => img.publicId !== publicId));
 
   /*  Validate & save  */
-  const validate = () => {
-    if (!form.companyName.trim())              { toast.warn("Company name is required");              return false; }
-    if (!form.productName.trim())              { toast.warn("Product name is required");              return false; }
-    if (!form.contactEmail.trim())             { toast.warn("Contact email is required");             return false; }
-    if (productImages.length === 0)            { toast.warn("At least one product image is required"); return false; }
-    if (!form.disclosureConsent)               { toast.warn("You must provide consent to submit");    return false; }
-    if (!form.shortProductDescription.trim())  { toast.warn("Short Product Description is required"); return false; }
-    return true;
-  };
+const isValidUrl = (v) => {
+  if (!v) return true; // optional fields
+  try { new URL(v); return true; } catch { return false; }
+};
+const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
+const validate = () => {
+  const checks = [
+    [!form.companyName.trim(),              "Company name is required"],
+    [!form.establishedYear.trim(),          "Established year is required"],
+    [!form.brandName.trim(),                "Brand name is required"],
+    [!form.productName.trim(),              "Product name is required"],
+    [!form.innovationCategory,              "Please select a product category"],
+    [!form.technology.trim(),               "Technology is required"],
+    [!form.shortProductDescription.trim(),  "Short product description is required"],
+    [!form.detailedDescription.trim(),      "Detailed description is required"],
+    [!form.keyFeatures.trim(),              "Key features / innovations are required"],
+    [!form.patentStatus,                    "Please select a patent / IP status"],
+    [productImages.length === 0,            "At least one product image is required"],
+    [!form.targetIndustry.trim(),           "Target industry / market is required"],
+    [!form.challengeSolved.trim(),          "Challenge solved is required"],
+    [!form.contactEmail.trim(),             "Contact email is required"],
+    [form.contactEmail.trim() && !isValidEmail(form.contactEmail), "Please enter a valid contact email"],
+    [!form.innovationStatus,                "Please select an innovation status"],
+    [!form.productStatus,                   "Please select a product status"],
+    [!form.founderName.trim(),              "Founder / lead innovator name is required"],
+    [!isValidUrl(form.productDemoUrl),      "Please enter a valid demo/video URL"],
+    [!isValidUrl(form.websiteUrl),          "Please enter a valid website URL"],
+    [!form.disclosureConsent,               "You must provide consent to submit"],
+  ];
+  for (const [fail, msg] of checks) {
+    if (fail) { toast.warn(msg); return false; }
+  }
+  return true;
+};
 
   const save = async () => {
     if (!validate()) return;

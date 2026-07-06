@@ -263,19 +263,26 @@ const handleChange = (e) => {
   const removeCategoryTag = (cat) => setForm((p) => ({ ...p, eventCategory: p.eventCategory.filter((c) => c !== cat) }));
 
 
-  const isValidUrl = (url) => {
-    try { new URL(url); return true; } catch { return false; }
-  };
+const isValidUrl = (url) => {
+  try { new URL(url); return true; } catch { return false; }
+};
 
-  const validate = () => {
+const isValidEmail = (email) => /^\S+@\S+\.\S+$/.test((email || "").trim());
+
+const validate = () => {
   if (!form.title.trim())          return "Event Name is required";
   if (!form.eventCategory?.length) return "Event Category is required";
   if (!form.startDateTime || !form.endDateTime) return "Start/End date-time required";
   if (!form.workEmail)             return "Work Email is required";
+  if (!isValidEmail(form.workEmail)) return "Enter a valid Work Email";
   if (!mainImage?.url)             return "Main image / banner is required";
   if (!form.disclosureConsent)     return "You must agree to the disclosure consent";
   if (form.organizationWebsite && !isValidUrl(form.organizationWebsite))
                                    return "Enter a valid Company Website URL";
+  if (form.eventWebsite && !isValidUrl(form.eventWebsite))
+                                   return "Enter a valid Event Website URL";
+  if (applicationMethod !== "platform" && form.registrationUrl && !isValidUrl(form.registrationUrl))
+                                   return "Enter a valid Registration Link URL";
 
   const wordCount = stripHtml(form.eventDescription)
     .split(/\s+/)
