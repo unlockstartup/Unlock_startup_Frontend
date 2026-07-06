@@ -10,15 +10,37 @@ function humanizeFieldName(field) {
 export function formatServerError(message, overrides = {}) {
   if (!message) return "Something went wrong. Please try again.";
 
-  const match = message.match(/validation failed:\s*(.+)/i);
-  if (!match) return message;
+  // Mongoose errors often contain newlines — use [\s\S] instead of .
+  const match = message.match(/validation failed:\s*([\s\S]*)/i);
+  if (!match) {
+    return message.length > 150
+      ? "Something went wrong. Please review your entries and try again."
+      : message;
+  }
 
-  const parts = match[1].split(/,\s*(?=\w+:)/);
-  const labels = parts
-    .map((p) => p.match(/^(\w+):/)?.[1])
+  const errorBlock = match[1].trim();
+
+  // Extract field names from "Path 'fieldName' is required"
+  const pathMatches = [...errorBlock.matchAll(/Path\s+['"`]([^'"`]+)['"`]\s+is required/g)];
+  let labels = pathMatches
+    .map((m) => m[1])
     .filter(Boolean)
+    .filter((v, i, a) => a.indexOf(v) === i) // deduplicate
     .map((field) => overrides[field] || humanizeFieldName(field));
 
+  // Fallback: look for "fieldName: ..." at the start of a line
+  if (!labels.length) {
+    const fieldMatches = [...errorBlock.matchAll(/^([a-zA-Z_]\w*):/gm)];
+    labels = fieldMatches
+      .map((m) => m[1])
+      .filter(Boolean)
+      .filter((v, i, a) => a.indexOf(v) === i)
+      .map((field) => overrides[field] || humanizeFieldName(field));
+  }
+
   if (!labels.length) return "Please fill in all required fields.";
-  return `Please fill in the required fields: ${labels.join(", ")}.`;
+  if (labels.length === 1) return `Please fill in the required field: ${labels[0]}.`;
+  if (labels.length <= 4) return `Please fill in the required fields: ${labels.join(", ")}.`;
+
+  return `Please fill in all required fields. ${labels.length} fields are missing.`;
 }
