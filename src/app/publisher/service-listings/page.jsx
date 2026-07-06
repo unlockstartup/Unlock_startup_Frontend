@@ -10,7 +10,7 @@ import {
   getPublicServiceCategories,
 } from "@/app/apiServices/publicapi";
 import { INDIA_STATES } from "@/app/constants";
-
+import { formatServerError } from "@/app/formatServerError";
 import "../styles/publishercretepages.css";
 
 /*  Field helper */
@@ -274,9 +274,11 @@ const validate = () => {
       }
       setOpen(false);
       fetchListings();
-    } catch (err) {
-      toast.error(err?.response?.data?.message || "Submission failed");
-    } finally { setSaving(false); }
+   } catch (err) {
+  toast.error(formatServerError(err?.response?.data?.message) || "Submission failed");
+} finally {
+  setSaving(false);
+}
   };
 
   /*  Delete / toggle  */
@@ -321,13 +323,14 @@ const validate = () => {
       confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
       cancelText: "Cancel",
       confirmVariant: isDeactivating ? "warning" : "success",
-      onConfirm: async () => {
+onConfirm: async () => {
         try {
           await publisherApi.patch(`/api/publisher/service-listings/${listing._id}/toggle`);
           toast.success(`Service ${isDeactivating ? "deactivated" : "activated"}`);
           fetchListings();
         } catch (err) {
-          toast.error(err?.response?.data?.message || "Toggle failed");
+          const msg = err?.response?.data?.message;
+          toast.error(msg ? formatServerError(msg) : "Toggle failed");
         }
       },
     });

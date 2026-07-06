@@ -7,7 +7,7 @@ export default function FundingCalls() {
 import { useEffect, useMemo, useState , useRef } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { INDIA_STATES } from "@/app/constants";
-
+import { formatServerError } from "@/app/formatServerError";
 import {
   createFundingCall,
   deleteFundingCall,
@@ -195,7 +195,7 @@ const initialForm = useMemo(() => ({
     if (/^[a-zA-Z\s]*$/.test(value)) setForm((p) => ({ ...p, [field]: value }));
   };
 
-  const load = async () => {
+const load = async () => {
     try {
       setLoading(true);
       const res = await listFundingCalls({ status, q: q || undefined, page, limit });
@@ -294,7 +294,7 @@ const validate = () => {
     return null;
   };
 
-  const save = async () => {
+const save = async () => {
     const msg = validate();
     if (msg) return toast.warn(msg);
 
@@ -341,7 +341,8 @@ const validate = () => {
       setForm(initialForm);
       await load();
     } catch (e) {
-      toast.error(e?.response?.data?.message || e?.message || "Save failed");
+      const errMsg = e?.response?.data?.message || e?.message;
+      toast.error(errMsg ? formatServerError(errMsg) : "Save failed");
     } finally {
       setSaving(false);
     }
@@ -393,13 +394,14 @@ const validate = () => {
       confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
       cancelText: "Cancel",
       confirmVariant: isDeactivating ? "warning" : "success",
-      onConfirm: async () => {
+   onConfirm: async () => {
         try {
           await toggleFundingCallActive(row._id);
           toast.success(isDeactivating ? "Deactivated" : "Activated");
           load();
         } catch (e) {
-          toast.error(e?.response?.data?.message || "Toggle failed");
+          const msg = e?.response?.data?.message;
+          toast.error(msg ? formatServerError(msg) : "Toggle failed");
         }
       },
     });

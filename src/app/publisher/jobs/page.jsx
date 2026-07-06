@@ -13,6 +13,7 @@ import {
 import ConfirmationModal from "@/components/ConfirmationModal";
 import { INDIA_STATES } from "@/app/constants";
 import "../styles/publishercretepages.css";
+import { formatServerError } from "@/app/formatServerError";
 
 /*  Constants  */
 const defaultForm = {
@@ -316,7 +317,7 @@ const saveJob = async () => {
     yearsExperienceRequired: form.yearsExperienceRequired ? Number(form.yearsExperienceRequired) : undefined,
     workMode: form.workMode || "",
   };
-    try {
+try {
       setSaving(true);
       if (editId) {
         await publisherApi.patch(`/api/publisher/jobs/${editId}`, payload);
@@ -328,7 +329,8 @@ const saveJob = async () => {
       setShowModal(false);
       fetchJobs();
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Save failed");
+      const msg = err?.response?.data?.message;
+      toast.error(msg ? formatServerError(msg) : "Save failed");
     } finally {
       setSaving(false);
     }
@@ -402,13 +404,14 @@ const confirmToggleJob = (job) => {
     confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
     cancelText: "Cancel",
     confirmVariant: isDeactivating ? "warning" : "success",
-    onConfirm: async () => {
+   onConfirm: async () => {
       try {
         await publisherApi.post(`/api/publisher/jobs/${job._id}/toggle`);
         toast.success(job.isActive ? "Deactivated" : "Activated");
         fetchJobs();
       } catch (err) {
-        toast.error(err?.response?.data?.message || "Update failed");
+        const msg = err?.response?.data?.message;
+        toast.error(msg ? formatServerError(msg) : "Update failed");
       }
     },
   });

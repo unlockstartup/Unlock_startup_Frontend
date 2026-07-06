@@ -10,10 +10,9 @@ import {
 } from "@/app/apiServices/publicapi";
 import { getPublisherPlanInfo } from "@/app/apiServices/subscriptions";
 import ConfirmationModal from "@/components/ConfirmationModal";
-
+import { formatServerError } from "@/app/formatServerError";
 import "../styles/publishercretepages.css";
 
-/*  Field helper  */
 function Field({ label, note, children }) {
   return (
     <div className="field">
@@ -296,7 +295,7 @@ const validate = () => {
   return true;
 };
 
-  const save = async () => {
+const save = async () => {
     if (!validate()) return;
     try {
       setSaving(true);
@@ -311,7 +310,8 @@ const validate = () => {
       setOpen(false);
       fetchProducts();
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Submission failed");
+      const msg = err?.response?.data?.message;
+      toast.error(msg ? formatServerError(msg) : "Submission failed");
     } finally {
       setSaving(false);
     }
@@ -331,13 +331,16 @@ const validate = () => {
       title: "Delete Product",
       message: "Are you sure you want to permanently delete this product? This action cannot be undone.",
       confirmText: "Yes, Delete this Product", cancelText: "Cancel", confirmVariant: "danger",
-      onConfirm: async () => {
-        try {
-          await publisherApi.delete(`/api/publisher/innovation-products/${id}`);
-          toast.success("Product deleted");
-          fetchProducts();
-        } catch (err) { toast.error(err?.response?.data?.message || "Delete failed"); }
-      },
+onConfirm: async () => {
+      try {
+        await publisherApi.patch(`/api/publisher/innovation-products/${prod._id}/toggle`);
+        toast.success(`Product ${isDeactivating ? "deactivated" : "activated"}`);
+        fetchProducts();
+      } catch (err) {
+        const msg = err?.response?.data?.message;
+        toast.error(msg ? formatServerError(msg) : "Toggle failed");
+      }
+    },
     });
     setShowConfirm(true);
   };

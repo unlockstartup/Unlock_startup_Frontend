@@ -11,7 +11,7 @@ import {
   getPublicEventCategories,
   getPublicEventTypes,
 } from "@/app/apiServices/publicapi";
-
+import { formatServerError } from "@/app/formatServerError";
 import "../styles/publishercretepages.css";
 
 /*  Constants */
@@ -292,7 +292,7 @@ const validate = () => {
   return null;
 };
 
-  const saveEvent = async () => {
+const saveEvent = async () => {
     const msg = validate();
     if (msg) return toast.warn(msg);
     const toUTC = (str) => (str ? new Date(str).toISOString() : "");
@@ -324,7 +324,8 @@ const validate = () => {
       }
       setShowModal(false); setEditId(null); fetchEvents();
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Failed to save event");
+      const errMsg = err?.response?.data?.message;
+      toast.error(errMsg ? formatServerError(errMsg) : "Failed to save event");
     } finally {
       setSaving(false);
     }
@@ -357,13 +358,14 @@ const validate = () => {
       title: "Delete Event",
       message: "Are you sure you want to permanently delete this event? This action cannot be undone.",
       confirmText: "Yes, Delete Event", cancelText: "Cancel", confirmVariant: "danger",
-      onConfirm: async () => {
+onConfirm: async () => {
         try {
-          await publisherApi.delete(`/api/publisher/dashboard/events/${id}`);
-          toast.success("Event deleted successfully");
+          await publisherApi.patch(`/api/publisher/dashboard/${ev._id}/toggle`, {});
+          toast.success(`Event ${ev.isActive ? "deactivated" : "activated"}`);
           fetchEvents();
         } catch (err) {
-          toast.error(err?.response?.data?.message || "Failed to delete event");
+          const msg = err?.response?.data?.message;
+          toast.error(msg ? formatServerError(msg) : "Toggle failed");
         }
       },
     });
