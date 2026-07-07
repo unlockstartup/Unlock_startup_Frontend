@@ -4,7 +4,7 @@ export default function FundingCalls() {
   return <FundingCallsCrud />;
 }
 
-import { useEffect, useMemo, useState , useRef } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { INDIA_STATES } from "@/app/constants";
 import { formatServerError } from "@/app/formatServerError";
@@ -47,7 +47,7 @@ function StatusBadge({ status = "pending", reason }) {
 
   const cls = status === "approved" ? "badgeSuccess"
     : status === "rejected" ? "badgeDanger"
-    : "badgeWarning";
+      : "badgeWarning";
 
   const showTooltip = (hovered || pinned) && !!reason;
 
@@ -106,34 +106,34 @@ const isValidUrl = (url) => {
 
 /*  Main component  */
 function FundingCallsCrud() {
-  const [loading, setLoading]   = useState(true);
-  const [saving, setSaving]     = useState(false);
-  const [rows, setRows]         = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [rows, setRows] = useState([]);
   const [planInfo, setPlanInfo] = useState(null);
-  const [status, setStatus]     = useState("all");
-  const [q, setQ]               = useState("");
-  const [page, setPage]         = useState(1);
-  const [limit, setLimit]       = useState(10);
-  const [pages, setPages]       = useState(1);
+  const [status, setStatus] = useState("all");
+  const [q, setQ] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [pages, setPages] = useState(1);
   const [stateOpen, setStateOpen] = useState(false);
 
   const [challengeCategories, setChallengeCategories] = useState([]);
-  const [organizerTypes, setOrganizerTypes]           = useState([]);
-  const [startupStages, setStartupStages]             = useState([]);
-  const [competitionTypes, setCompetitionTypes]       = useState([]);
+  const [organizerTypes, setOrganizerTypes] = useState([]);
+  const [startupStages, setStartupStages] = useState([]);
+  const [competitionTypes, setCompetitionTypes] = useState([]);
 
-  const [open, setOpen]       = useState(false);
-  const [mode, setMode]       = useState("create");
+  const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState("create");
   const [editing, setEditing] = useState(null);
 
-  const [showConfirm, setShowConfirm]   = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [confirmConfig, setConfirmConfig] = useState({
     title: "", message: "",
     confirmText: "Confirm", cancelText: "Cancel",
-    confirmVariant: "danger", onConfirm: () => {},
+    confirmVariant: "danger", onConfirm: () => { },
   });
 
-const initialForm = useMemo(() => ({
+  const initialForm = useMemo(() => ({
     title: "",
     challengeType: "",
     challengeCategory: "",
@@ -160,7 +160,7 @@ const initialForm = useMemo(() => ({
     problemStatement: "",
     attachments: [],
     applicationType: "",
-    disclosureConsent: false,  
+    disclosureConsent: false,
   }), []);
 
   const [form, setForm] = useState(initialForm);
@@ -177,8 +177,8 @@ const initialForm = useMemo(() => ({
         getPublicChallengeCategories(),
       ]);
       setCompetitionTypes(types.data?.competitionTypes || types.data?.types || []);
-      setOrganizerTypes(orgs.data?.organizerTypes     || orgs.data?.types   || []);
-      setStartupStages(stages.data?.startupStages     || stages.data?.stages || []);
+      setOrganizerTypes(orgs.data?.organizerTypes || orgs.data?.types || []);
+      setStartupStages(stages.data?.startupStages || stages.data?.stages || []);
       setChallengeCategories([...(cats.data?.categories || [])].reverse());
     } catch {
       toast.error("Failed to load dropdown data");
@@ -192,10 +192,10 @@ const initialForm = useMemo(() => ({
 
   const handleTextOnly = (field) => (e) => {
     const value = e.target.value;
-    if (/^[a-zA-Z\s]*$/.test(value)) setForm((p) => ({ ...p, [field]: value }));
+    if (/^[a-zA-Z\s.&'-]*$/.test(value)) setForm((p) => ({ ...p, [field]: value }));
   };
 
-const load = async () => {
+  const load = async () => {
     try {
       setLoading(true);
       const res = await listFundingCalls({ status, q: q || undefined, page, limit });
@@ -212,7 +212,7 @@ const load = async () => {
   useEffect(() => {
     loadMeta();
     (async () => {
-      try { const res = await getPublisherPlanInfo(); setPlanInfo(res.data); } catch {}
+      try { const res = await getPublisherPlanInfo(); setPlanInfo(res.data); } catch { }
     })();
   }, []);
 
@@ -245,20 +245,20 @@ const load = async () => {
         setEditing(row);
         setForm({
           ...initialForm, ...row,
-          organizerType:      resolveOrgType(row.organizerType),
-          challengeType:      row.challengeType     || "",
-          challengeCategory:  row.challengeCategory || "",
-          launchDate:         toDateInput(row.launchDate),
+          organizerType: resolveOrgType(row.organizerType),
+          challengeType: row.challengeType || "",
+          challengeCategory: row.challengeCategory || "",
+          launchDate: toDateInput(row.launchDate),
           submissionDeadline: toDateInput(row.submissionDeadline),
-          resultDate:         toDateInput(row.resultDate),
+          resultDate: toDateInput(row.resultDate),
           additionalRewards: Array.isArray(row.additionalRewards)
             ? row.additionalRewards.join(", ") : row.additionalRewards || "",
           eligibilityVerification: Array.isArray(row.eligibilityVerification)
             ? row.eligibilityVerification.join(", ") : row.eligibilityVerification || "",
           organizationWebsite: row.organizationWebsite || "",
-          problemStatement:    row.problemStatement   || "",
-          attachments:         row.attachments        || [],
-          applicationType:     row.applicationType    || "",
+          problemStatement: row.problemStatement || "",
+          attachments: row.attachments || [],
+          applicationType: row.applicationType || "",
         });
         setOpen(true);
       },
@@ -267,34 +267,49 @@ const load = async () => {
   };
 
   const closeModal = () => { if (saving || attachmentsUploading) return; setOpen(false); };
-
-const validate = () => {
-    if (!form.title.trim()) return "Title is required";
-    if (!form.challengeCategory.trim()) return "Challenge Category is required";
-    if (!form.submissionDeadline) return "Submission Deadline is required";
-    if (!form.organizingCompany.trim()) return "Company Name is required";
-    if (!form.organizerType.trim()) return "Company Type is required";
-    if (!form.officialEmail.trim()) return "Official Email is required";
-    if (!form.description.trim()) return "Description is required";
-    if (!form.problemStatement?.trim()) return "Problem Statement is required";   // ← added
-    if (!form.startupStage.trim()) return "Startup Stage Requirements is required";
-    if (!form.location.trim()) return "Location is required";
-    if (!form.registrationLink.trim()) return "Registration Link is required";
-    if (form.officialEmail && !/^\S+@\S+\.\S+$/.test(form.officialEmail.trim())) {
-      return "Enter a valid official email";
-    }
-    if (form.registrationLink && !isValidUrl(form.registrationLink.trim())) {
-      return "Enter a valid registration link URL";
-    }
-    if (!form.attachments?.length) return "Please upload at least one image/attachment";
-    if (form.organizationWebsite && !isValidUrl(form.organizationWebsite.trim())) {
-      return "Enter a valid website URL";
-    }
-    if (!form.disclosureConsent) return "You must agree to the disclosure consent";   
-    return null;
+  const isValidPhone = (v) => {
+    if (!v) return false;
+    // Indian mobile
+    return /^[6-9]\d{9}$/.test(v.replace(/\D/g, ""));
   };
+const validate = () => {
+  if (!form.title.trim()) return "Title is required";
+  if (!form.challengeType.trim()) return "Challenge Type is required";
+  if (!form.challengeCategory.trim()) return "Challenge Category is required";
+  if (!form.startupStage.trim()) return "Startup Stage Requirements is required";
+  if (!form.launchDate) return "Start Date is required";
+  if (!form.submissionDeadline) return "Submission Deadline is required";
+  if (!form.resultDate) return "Result Date is required";
+  if (form.launchDate && form.submissionDeadline && new Date(form.submissionDeadline) <= new Date(form.launchDate))
+    return "Submission Deadline must be after Start Date";
+  if (form.submissionDeadline && form.resultDate && new Date(form.resultDate) <= new Date(form.submissionDeadline))
+    return "Result Date must be after Submission Deadline";
+  if (!form.organizingCompany.trim()) return "Company Name is required";
+  if (!form.organizerType.trim()) return "Company Type is required";
+  if (!form.contactPersonName.trim()) return "Contact Person Name is required";
+  if (!form.officialEmail.trim()) return "Official Email is required";
+  if (!/^\S+@\S+\.\S+$/.test(form.officialEmail.trim())) return "Enter a valid official email";
+  if (!form.contactPhone?.trim()) return "Contact Person Phone is required";
+  if (!isValidPhone(form.contactPhone)) return "Enter a valid 10-digit Indian mobile number";
+  if (!form.organizationWebsite?.trim()) return "Website URL is required";
+  if (!isValidUrl(form.organizationWebsite.trim())) return "Enter a valid website URL";
+  if (!form.problemStatement?.trim()) return "Problem Statement is required";
+  if (!form.description.trim()) return "Description is required";
+  if (!form.challengeObjective?.trim()) return "Challenge Objective is required";
+  if (!form.keyFocusAreas?.trim()) return "Key Focus Areas is required";
+  if (!form.eligibleParticipants?.trim()) return "Who can participate is required";
+  if (!form.applicationType?.trim()) return "Application Type is required";
+  if (form.applicationType === "paid" && (!form.applicationFee || Number(form.applicationFee) <= 0))
+    return "Application Fee is required for paid competitions";
+  if (!form.location.trim()) return "Location is required";
+  if (!form.registrationLink.trim()) return "Registration Link is required";
+  if (!isValidUrl(form.registrationLink.trim())) return "Enter a valid registration link URL";
+  if (!form.attachments?.length) return "Please upload at least one image/attachment";
+  if (!form.disclosureConsent) return "You must agree to the disclosure consent";
+  return null;
+};
 
-const save = async () => {
+  const save = async () => {
     const msg = validate();
     if (msg) return toast.warn(msg);
 
@@ -303,32 +318,32 @@ const save = async () => {
       const toISO = (s) => { if (!s) return undefined; const d = new Date(s + "T00:00:00"); return isNaN(d.getTime()) ? undefined : d.toISOString(); };
       const payload = {
         ...form,
-        title:                   form.title.trim(),
-        challengeType:           form.challengeType.trim() || undefined,
-        challengeCategory:       form.challengeCategory.trim(),
-        challengeObjective:      form.challengeObjective.trim() || undefined,
-        launchDate:              toISO(form.launchDate),
-        submissionDeadline:      toISO(form.submissionDeadline),
-        resultDate:              toISO(form.resultDate),
-        organizingCompany:       form.organizingCompany.trim(),
-        organizerType:           form.organizerType.trim(),
-        contactPersonName:       form.contactPersonName.trim() || undefined,
-        officialEmail:           form.officialEmail.trim(),
-        contactPhone:            form.contactPhone.trim() || undefined,
-        description:             form.description.trim(),
-        keyFocusAreas:           form.keyFocusAreas.trim() || undefined,
-        eligibleParticipants:    form.eligibleParticipants.trim() || undefined,
-        startupStage:            form.startupStage.trim(),
-        geographicRestrictions:  form.geographicRestrictions.trim() || undefined,
-        additionalRewards:       form.additionalRewards ? form.additionalRewards.split(",").map((s) => s.trim()).filter(Boolean) : [],
-        applicationFee:          Number(form.applicationFee) || 0,
+        title: form.title.trim(),
+        challengeType: form.challengeType.trim() || undefined,
+        challengeCategory: form.challengeCategory.trim(),
+        challengeObjective: form.challengeObjective.trim() || undefined,
+        launchDate: toISO(form.launchDate),
+        submissionDeadline: toISO(form.submissionDeadline),
+        resultDate: toISO(form.resultDate),
+        organizingCompany: form.organizingCompany.trim(),
+        organizerType: form.organizerType.trim(),
+        contactPersonName: form.contactPersonName.trim() || undefined,
+        officialEmail: form.officialEmail.trim(),
+        contactPhone: form.contactPhone.trim() || undefined,
+        description: form.description.trim(),
+        keyFocusAreas: form.keyFocusAreas.trim() || undefined,
+        eligibleParticipants: form.eligibleParticipants.trim() || undefined,
+        startupStage: form.startupStage.trim(),
+        geographicRestrictions: form.geographicRestrictions.trim() || undefined,
+        additionalRewards: form.additionalRewards ? form.additionalRewards.split(",").map((s) => s.trim()).filter(Boolean) : [],
+        applicationFee: Number(form.applicationFee) || 0,
         eligibilityVerification: form.eligibilityVerification ? form.eligibilityVerification.split(",").map((s) => s.trim()).filter(Boolean) : [],
-        organizationWebsite:     form.organizationWebsite?.trim() || undefined,
-        problemStatement:        form.problemStatement?.trim() || undefined,
-        location:                form.location.trim(),
-        registrationLink:        form.registrationLink.trim(),
-        attachments:             form.attachments?.length ? form.attachments : [],
-        applicationType:         form.applicationType?.trim() || undefined,
+        organizationWebsite: form.organizationWebsite?.trim() || undefined,
+        problemStatement: form.problemStatement?.trim() || undefined,
+        location: form.location.trim(),
+        registrationLink: form.registrationLink.trim(),
+        attachments: form.attachments?.length ? form.attachments : [],
+        applicationType: form.applicationType?.trim() || undefined,
       };
       if (mode === "create") {
         await createFundingCall(payload);
@@ -369,7 +384,7 @@ const save = async () => {
   };
 
 
-  
+
   const onToggleActiveConfirm = (row) => {
     if (!row?._id) { toast.error("Invalid Competition ID"); return; }
     const toggleCount = row.toggleCount ?? 0;
@@ -380,7 +395,7 @@ const save = async () => {
         confirmText: "OK",
         cancelText: "",
         confirmVariant: "danger",
-        onConfirm: () => {},
+        onConfirm: () => { },
       });
       setShowConfirm(true);
       return;
@@ -394,7 +409,7 @@ const save = async () => {
       confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
       cancelText: "Cancel",
       confirmVariant: isDeactivating ? "warning" : "success",
-   onConfirm: async () => {
+      onConfirm: async () => {
         try {
           await toggleFundingCallActive(row._id);
           toast.success(isDeactivating ? "Deactivated" : "Activated");
@@ -438,22 +453,22 @@ const save = async () => {
     setForm((p) => ({ ...p, attachments: p.attachments.filter((a) => a.publicId !== publicId) }));
 
   /*  Plan limits  */
-const isDateExpired = planInfo?.expiry && new Date(planInfo.expiry) < new Date();
-const isExpired = planInfo && (
-  planInfo.subscriptionStatus !== "active" || isDateExpired
-);
-const hasAccess           = planInfo ? !isExpired : false;
-const subscriptionExpired = isExpired;
-const fundingLimitReached  = planInfo && !subscriptionExpired && planInfo.limits?.fundingCallsLimit > 0 && planInfo.usage?.fundingCalls >= planInfo.limits?.fundingCallsLimit;
-const fundingButtonDisabled = !hasAccess || fundingLimitReached;
+  const isDateExpired = planInfo?.expiry && new Date(planInfo.expiry) < new Date();
+  const isExpired = planInfo && (
+    planInfo.subscriptionStatus !== "active" || isDateExpired
+  );
+  const hasAccess = planInfo ? !isExpired : false;
+  const subscriptionExpired = isExpired;
+  const fundingLimitReached = planInfo && !subscriptionExpired && planInfo.limits?.fundingCallsLimit > 0 && planInfo.usage?.fundingCalls >= planInfo.limits?.fundingCallsLimit;
+  const fundingButtonDisabled = !hasAccess || fundingLimitReached;
 
-const addBtnLabel = subscriptionExpired
-  ? "Subscription Expired"
-  : !hasAccess
-  ? "Create (Subscribe)"
-  : fundingLimitReached
-  ? `Limit Reached (${planInfo.usage.fundingCalls}/${planInfo.limits.fundingCallsLimit})`
-  : "+ Add Competition";
+  const addBtnLabel = subscriptionExpired
+    ? "Subscription Expired"
+    : !hasAccess
+      ? "Create (Subscribe)"
+      : fundingLimitReached
+        ? `Limit Reached (${planInfo.usage.fundingCalls}/${planInfo.limits.fundingCallsLimit})`
+        : "+ Add Competition";
 
   /*  Render  */
   return (
@@ -468,19 +483,19 @@ const addBtnLabel = subscriptionExpired
         <div className="topbarActions">
           <button
             className={`btn ${fundingButtonDisabled ? "btnSecondary" : "btnPrimary"}`}
-onClick={
-  subscriptionExpired ? undefined
-  : !hasAccess ? () => toast.info("Please purchase a subscription to create Competition")
-  : fundingLimitReached ? undefined
-  : openCreate
-}
-disabled={subscriptionExpired || fundingLimitReached}
-title={
-  subscriptionExpired ? "Your subscription has expired. Please renew to add competitions."
-  : !hasAccess ? "Subscribe to create Competition"
-  : fundingLimitReached ? `Competitions limit of ${planInfo.limits.fundingCallsLimit} reached`
-  : ""
-}
+            onClick={
+              subscriptionExpired ? undefined
+                : !hasAccess ? () => toast.info("Please purchase a subscription to create Competition")
+                  : fundingLimitReached ? undefined
+                    : openCreate
+            }
+            disabled={subscriptionExpired || fundingLimitReached}
+            title={
+              subscriptionExpired ? "Your subscription has expired. Please renew to add competitions."
+                : !hasAccess ? "Subscribe to create Competition"
+                  : fundingLimitReached ? `Competitions limit of ${planInfo.limits.fundingCallsLimit} reached`
+                    : ""
+            }
           >
             {addBtnLabel}
           </button>
@@ -579,10 +594,10 @@ title={
                       </td>
 
                       <td data-label="Status">
-                           <StatusBadge
-     status={r.status}
-     reason={r.status === "approved" ? r.approvalReason : r.rejectionReason}
-   />
+                        <StatusBadge
+                          status={r.status}
+                          reason={r.status === "approved" ? r.approvalReason : r.rejectionReason}
+                        />
                       </td>
 
                       <td data-label="Active">
@@ -603,13 +618,13 @@ title={
 
                       <td data-label="Actions">
                         <div className="actionGroup">
-<button
-  className={`btn btnSm ${editLocked ? "btnSecondary" : "btnPrimary"}`}
-  onClick={() => openEdit(r)}
-  title={editLocked ? "Edit not allowed — already edited once" : "Edit competition"}
->
-  Edit
-</button>
+                          <button
+                            className={`btn btnSm ${editLocked ? "btnSecondary" : "btnPrimary"}`}
+                            onClick={() => openEdit(r)}
+                            title={editLocked ? "Edit not allowed — already edited once" : "Edit competition"}
+                          >
+                            Edit
+                          </button>
                           <button
                             className={`btn btnSm ${r.isActive ? "btnWarning" : "btnSuccess"}`}
                             onClick={() => onToggleActiveConfirm(r)}
@@ -660,7 +675,7 @@ title={
                 </Field>
 
                 <div className="row3">
-                  <Field label="Challenge Type">
+                  <Field label="Challenge Type  *">
                     <select className="select" value={form.challengeType} onChange={(e) => setForm({ ...form, challengeType: e.target.value, challengeCategory: "" })}>
                       <option value="">Select</option>
                       {competitionTypes.map((t) => <option key={t._id} value={t.name}>{t.name}</option>)}
@@ -689,13 +704,13 @@ title={
                 </div>
 
                 <div className="row3">
-                  <Field label="Start Date">
+                  <Field label="Start Date *">
                     <input type="date" className="input" value={form.launchDate} onChange={sf("launchDate")} />
                   </Field>
                   <Field label="Submission Deadline *">
                     <input type="date" className="input" value={form.submissionDeadline} onChange={sf("submissionDeadline")} />
                   </Field>
-                  <Field label="Result Date">
+                  <Field label="Result Date *">
                     <input type="date" className="input" value={form.resultDate} onChange={sf("resultDate")} />
                   </Field>
                 </div>
@@ -706,7 +721,7 @@ title={
                 <h3 className="sectionTitle">Company information</h3>
 
                 <div className="row2">
-                  <Field label="Company Name*">
+                  <Field label="Company Name *">
                     <input className="input" value={form.organizingCompany} onChange={sf("organizingCompany")} placeholder="Enter company name" />
                   </Field>
                   <Field label="Company Type *">
@@ -718,18 +733,28 @@ title={
                 </div>
 
                 <div className="row3">
-                  <Field label="Contact Person Name">
+                  <Field label="Contact Person Name *">
                     <input className="input" value={form.contactPersonName} onChange={handleTextOnly("contactPersonName")} placeholder="Enter name" />
                   </Field>
                   <Field label="Official Email *">
                     <input type="email" className="input" value={form.officialEmail} onChange={sf("officialEmail")} placeholder="Enter email" />
                   </Field>
-                  <Field label="Contact Person Phone">
-                    <input className="input" value={form.contactPhone} onChange={handleNumberOnly("contactPhone")} placeholder="Enter phone" maxLength={10} />
+                  <Field label="Contact Person Phone *">
+                    <input
+                      className="input"
+                      value={form.contactPhone}
+                      onChange={(e) => {
+                        const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+                        setForm((p) => ({ ...p, contactPhone: digits }));
+                      }}
+                      placeholder="Enter 10-digit mobile number"
+                      maxLength={10}
+                      inputMode="numeric"
+                    />
                   </Field>
                 </div>
 
-                <Field label="Website Url">
+                <Field label="Website Url *">
                   <input type="url" className="input" placeholder="https://" value={form.organizationWebsite} onChange={sf("organizationWebsite")} />
                 </Field>
               </section>
@@ -738,23 +763,23 @@ title={
               <section className="section">
                 <h3 className="sectionTitle">About Challenges</h3>
 
-<Field label="Problem Statement *">
-  <textarea className="textarea" rows={4} placeholder="Detailed challenge description / problem being solved" value={form.problemStatement} onChange={sf("problemStatement")} />
-</Field>
+                <Field label="Problem Statement *">
+                  <textarea className="textarea" rows={4} placeholder="Detailed challenge description / problem being solved" value={form.problemStatement} onChange={sf("problemStatement")} />
+                </Field>
 
                 <Field label="Description *">
                   <textarea className="textarea" rows={5} value={form.description} onChange={sf("description")} placeholder="Describe the competition" />
                 </Field>
 
-                <Field label="Challenge Objective">
+                <Field label="Challenge Objective *">
                   <textarea className="textarea" rows={3} placeholder="What is the main goal of this challenge?" value={form.challengeObjective} onChange={sf("challengeObjective")} />
                 </Field>
 
                 <div className="row2">
-                  <Field label="Key Focus Areas">
+                  <Field label="Key Focus Areas *">
                     <input className="input" value={form.keyFocusAreas} onChange={sf("keyFocusAreas")} placeholder="e.g. Climate Tech, FinTech" />
                   </Field>
-                  <Field label="Who can participate">
+                  <Field label="Who can participate *">
                     <input className="input" value={form.eligibleParticipants} onChange={sf("eligibleParticipants")} placeholder="e.g. Individual, Company, Startups, Innovators, Students" />
                   </Field>
                 </div>
@@ -769,7 +794,7 @@ title={
                 </Field>
 
                 <div className="row2">
-                  <Field label="Application Type">
+                  <Field label="Application Type *">
                     <select
                       className="select"
                       value={form.applicationType}
@@ -788,11 +813,19 @@ title={
                       <option value="invite only">Invite Only</option>
                     </select>
                   </Field>
-                  {form.applicationType === "paid" && (
-                    <Field label="Application Fee (₹)">
-                      <input type="number" className="input" value={form.applicationFee} onChange={sf("applicationFee")} min="0" step="1" placeholder="0" />
-                    </Field>
-                  )}
+                 {form.applicationType === "paid" && (
+  <Field label="Application Fee (₹) *">
+    <input
+      type="number"
+      className="input"
+      value={form.applicationFee}
+      onChange={sf("applicationFee")}
+      min="1"
+      step="1"
+      placeholder="Enter fee amount"
+    />
+  </Field>
+)}
                 </div>
               </section>
 
@@ -851,69 +884,69 @@ title={
                       disabled={attachmentsUploading}
                       onChange={(e) => onAttachmentsPick(e.target.files)}
                     />
-{form.attachments?.length > 0 && (
-  <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "8px" }}>
-    {form.attachments.map((a, idx) => (
-      <div
-        key={a.publicId || idx}
-        style={{
-          position: "relative",
-          display: "inline-flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 4,
-        }}
-      >
-        {a.url && a.resourceType === "image" ? (
-          <img
-            src={a.url}
-            alt={`attachment-${idx + 1}`}
-            style={{
-              width: 90,
-              height: 90,
-              objectFit: "cover",
-              borderRadius: 8,
-              border: "1px solid #e2e8f0",
-              background: "#f8fafc",
-            }}
-          />
-        ) : (
-          <div style={{
-            width: 90, height: 90, borderRadius: 8,
-            border: "1px solid #e2e8f0", background: "#f1f5f9",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 12, color: "#64748b", textAlign: "center", padding: 4,
-          }}>
-            {a.publicId?.split("/").pop() || `File ${idx + 1}`}
-          </div>
-        )}
-        <button
-          type="button"
-          onClick={() => removeAttachment(a.publicId)}
-          style={{
-            position: "absolute",
-            top: -6,
-            right: -6,
-            width: 20,
-            height: 20,
-            borderRadius: "50%",
-            background: "#ef4444",
-            color: "#fff",
-            border: "none",
-            cursor: "pointer",
-            fontSize: 11,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            lineHeight: 1,
-          }}
-        >
-          ✕
-        </button>
-      </div>
-    ))}
-  </div>
-)}
+                    {form.attachments?.length > 0 && (
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "8px" }}>
+                        {form.attachments.map((a, idx) => (
+                          <div
+                            key={a.publicId || idx}
+                            style={{
+                              position: "relative",
+                              display: "inline-flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              gap: 4,
+                            }}
+                          >
+                            {a.url && a.resourceType === "image" ? (
+                              <img
+                                src={a.url}
+                                alt={`attachment-${idx + 1}`}
+                                style={{
+                                  width: 90,
+                                  height: 90,
+                                  objectFit: "cover",
+                                  borderRadius: 8,
+                                  border: "1px solid #e2e8f0",
+                                  background: "#f8fafc",
+                                }}
+                              />
+                            ) : (
+                              <div style={{
+                                width: 90, height: 90, borderRadius: 8,
+                                border: "1px solid #e2e8f0", background: "#f1f5f9",
+                                display: "flex", alignItems: "center", justifyContent: "center",
+                                fontSize: 12, color: "#64748b", textAlign: "center", padding: 4,
+                              }}>
+                                {a.publicId?.split("/").pop() || `File ${idx + 1}`}
+                              </div>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => removeAttachment(a.publicId)}
+                              style={{
+                                position: "absolute",
+                                top: -6,
+                                right: -6,
+                                width: 20,
+                                height: 20,
+                                borderRadius: "50%",
+                                background: "#ef4444",
+                                color: "#fff",
+                                border: "none",
+                                cursor: "pointer",
+                                fontSize: 11,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                lineHeight: 1,
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </Field>
               </section>
@@ -942,9 +975,9 @@ title={
                 </div>
 
                 {/* Notice */}
-              <div style={{ padding: "0.9rem 1rem", borderRadius: "0.85rem", background: "var(--yellow-soft)", border: "1px solid rgba(252,207,2,0.4)", color: "var(--yellow-hover)", fontSize: "var(--text-sm)" }}>
-                Note: After submission, your listing will be reviewed. If all details are correct, approval will be completed within 24 hours. Updates will be sent via Dashboard Notifications.
-              </div>
+                <div style={{ padding: "0.9rem 1rem", borderRadius: "0.85rem", background: "var(--yellow-soft)", border: "1px solid rgba(252,207,2,0.4)", color: "var(--yellow-hover)", fontSize: "var(--text-sm)" }}>
+                  Note: After submission, your listing will be reviewed. If all details are correct, approval will be completed within 24 hours. Updates will be sent via Dashboard Notifications.
+                </div>
               </section>
 
               <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>

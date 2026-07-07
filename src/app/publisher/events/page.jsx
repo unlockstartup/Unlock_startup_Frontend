@@ -137,6 +137,7 @@ export default function PublisherEventPage() {
   const [stateOpen, setStateOpen] = useState(false);
   const [status, setStatus] = useState("all");
   const [q, setQ] = useState("");
+  const [serverError, setServerError] = useState(null);
   const [applicationMethod, setApplicationMethod] = useState("");
   const [confirmConfig, setConfirmConfig] = useState({
     title: "", message: "",
@@ -186,6 +187,7 @@ export default function PublisherEventPage() {
 
 
   const openModal = () => {
+    setServerError(null);
     setForm(defaultForm);
     setEditId(null);
     setMainImage(null);
@@ -205,7 +207,7 @@ export default function PublisherEventPage() {
       confirmVariant: alreadyEdited ? "danger" : "primary",
       onConfirm: () => {
         if (alreadyEdited) return;
-
+        setServerError(null);
         const pad = (n) => String(n).padStart(2, "0");
         const fmt = (iso) => {
           if (!iso) return "";
@@ -239,7 +241,7 @@ export default function PublisherEventPage() {
 
 
 
-  const closeModal = () => setShowModal(false);
+  const closeModal = () => { setServerError(null); setShowModal(false); };
 
 const handleChange = (e) => {
   const { name, value, type, checked } = e.target;
@@ -250,10 +252,10 @@ const handleChange = (e) => {
     if (/^\d*$/.test(value)) setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleTextOnly = (e) => {
-    const { name, value } = e.target;
-    if (/^[a-zA-Z\s]*$/.test(value)) setForm((prev) => ({ ...prev, [name]: value }));
-  };
+const handleTextOnly = (e) => {
+  const { name, value } = e.target;
+  if (/^[a-zA-Z\s.&'-]*$/.test(value)) setForm((prev) => ({ ...prev, [name]: value }));
+};
   const addTier = () => setForm((p) => ({ ...p, ticketPricingTiers: [...p.ticketPricingTiers, { label: "", price: "" }] }));
   const removeTier = (idx) => setForm((p) => ({ ...p, ticketPricingTiers: p.ticketPricingTiers.filter((_, i) => i !== idx) }));
   const updateTier = (idx, field, value) =>
@@ -268,21 +270,44 @@ const isValidUrl = (url) => {
 };
 
 const isValidEmail = (email) => /^\S+@\S+\.\S+$/.test((email || "").trim());
-
+const isValidPhone = (v) => {
+  if (!v) return false;
+  return /^[6-9]\d{9}$/.test(v.replace(/\D/g, ""));
+};
 const validate = () => {
   if (!form.title.trim())          return "Event Name is required";
+  if (!form.eventType)             return "Event Type is required";
   if (!form.eventCategory?.length) return "Event Category is required";
-  if (!form.startDateTime || !form.endDateTime) return "Start/End date-time required";
-  if (!form.workEmail)             return "Work Email is required";
+  if (!form.startDateTime)         return "Start Date & Time is required";
+  if (!form.endDateTime)           return "End Date & Time is required";
+  if (!form.eventFormat)           return "Event Format is required";
+  if (!form.venueName.trim())      return "Venue Name is required";
+  if (!form.jobLocationState)      return "State is required";
+  if (!form.fullAddress.trim())    return "Full Address is required";
+  if (!form.organizationName.trim()) return "Company Name is required";
+  if (!form.organizerContactPerson.trim()) return "Company Contact Person is required";
+  if (!form.workEmail.trim())      return "Work Email is required";
   if (!isValidEmail(form.workEmail)) return "Enter a valid Work Email";
+  if (!form.phoneNumber?.trim())   return "Phone Number is required";
+  if (!isValidPhone(form.phoneNumber)) return "Enter a valid phone number";
+  if (!form.organizationWebsite?.trim()) return "Company Website is required";
+  if (!isValidUrl(form.organizationWebsite)) return "Enter a valid Company Website URL";
   if (!mainImage?.url)             return "Main image / banner is required";
-  if (!form.disclosureConsent)     return "You must agree to the disclosure consent";
-  if (form.organizationWebsite && !isValidUrl(form.organizationWebsite))
-                                   return "Enter a valid Company Website URL";
-  if (form.eventWebsite && !isValidUrl(form.eventWebsite))
-                                   return "Enter a valid Event Website URL";
+  if (!form.registrationType)      return "Registration Type is required";
+  if (!form.registrationDeadline)  return "Registration Deadline is required";
+  if (applicationMethod !== "platform" && !form.registrationUrl?.trim())
+                                   return "Registration Link is required for external applications";
   if (applicationMethod !== "platform" && form.registrationUrl && !isValidUrl(form.registrationUrl))
                                    return "Enter a valid Registration Link URL";
+  if (!stripHtml(form.eventDescription).trim()) return "Event Description is required";
+  if (!form.targetAudience.trim()) return "Target Audience is required";
+    if (form.endDateTime && new Date(form.endDateTime) <= new Date(form.startDateTime))
+    return "End Date & Time must be after Start Date & Time";
+  if (form.registrationDeadline && new Date(form.registrationDeadline) >= new Date(form.startDateTime))
+    return "Registration Deadline must be before the event starts";
+  if (!form.disclosureConsent)     return "You must agree to the disclosure consent";
+  if (form.eventWebsite && !isValidUrl(form.eventWebsite))
+                                   return "Enter a valid Event Website URL";
 
   const wordCount = stripHtml(form.eventDescription)
     .split(/\s+/)
@@ -323,9 +348,11 @@ const saveEvent = async () => {
         toast.success("Event created (pending approval)");
       }
       setShowModal(false); setEditId(null); fetchEvents();
-    } catch (err) {
-      const errMsg = err?.response?.data?.message;
-      toast.error(errMsg ? formatServerError(errMsg) : "Failed to save event");
+    }  catch (err) {
+  const errMsg = err?.response?.data?.message;
+  const formatted = errMsg ? formatServerError(errMsg) : "Failed to save event";
+  toast.error(formatted);
+  setServerError(formatted);
     } finally {
       setSaving(false);
     }
@@ -352,25 +379,27 @@ const saveEvent = async () => {
     }
   };
 
-  const deleteEvent = (id) => {
-    if (!id) return;
-    setConfirmConfig({
-      title: "Delete Event",
-      message: "Are you sure you want to permanently delete this event? This action cannot be undone.",
-      confirmText: "Yes, Delete Event", cancelText: "Cancel", confirmVariant: "danger",
-onConfirm: async () => {
-        try {
-          await publisherApi.patch(`/api/publisher/dashboard/${ev._id}/toggle`, {});
-          toast.success(`Event ${ev.isActive ? "deactivated" : "activated"}`);
-          fetchEvents();
-        } catch (err) {
-          const msg = err?.response?.data?.message;
-          toast.error(msg ? formatServerError(msg) : "Toggle failed");
-        }
-      },
-    });
-    setShowConfirm(true);
-  };
+const deleteEvent = (id) => {
+  if (!id) { toast.error("Invalid Event ID"); return; }
+  setConfirmConfig({
+    title: "Delete Event",
+    message: "Are you sure you want to permanently delete this event? This action cannot be undone.",
+    confirmText: "Yes, Delete Event",
+    cancelText: "Cancel",
+    confirmVariant: "danger",
+    onConfirm: async () => {
+      try {
+        await publisherApi.delete(`/api/publisher/dashboard/events/${id}`);
+        toast.success("Event deleted successfully");
+        fetchEvents();
+      } catch (err) {
+        const msg = err?.response?.data?.message;
+        toast.error(msg ? formatServerError(msg) : "Delete failed");
+      }
+    },
+  });
+  setShowConfirm(true);
+};
 
   const confirmToggleEvent = (ev) => {
     if (!ev?._id) return;
@@ -656,7 +685,23 @@ onConfirm: async () => {
 
             {/* Body */}
             <div className="modalBody">
-
+{serverError && (
+  <div style={{
+    padding: "0.9rem 1rem",
+    borderRadius: "var(--radius-lg)",
+    background: "rgba(220,53,69,0.08)",
+    border: "1px solid rgba(220,53,69,0.25)",
+    color: "#b02a37",
+    fontSize: "var(--text-sm)",
+    marginBottom: "1.25rem",
+    display: "flex",
+    alignItems: "center",
+    gap: "0.6rem"
+  }}>
+    <span style={{ fontSize: "1.1rem", lineHeight: 1 }}>⚠️</span>
+    <span>{serverError}</span>
+  </div>
+)}
               {/*  Core details  */}
               <section className="section">
                 <h3 className="sectionTitle">Core details</h3>
@@ -668,7 +713,7 @@ onConfirm: async () => {
 
                 <div className="row2" style={{ alignItems: "start" }}>
                   <div className="field">
-                    <label className="label">Event Type</label>
+                    <label className="label">Event Type *</label>
                     <select className="select" name="eventType" value={form.eventType} onChange={handleChange}>
                       <option value="">Select Type</option>
                       {eventTypes.map((t) => <option key={t._id} value={t.name}>{t.name}</option>)}
@@ -704,7 +749,7 @@ onConfirm: async () => {
                 </div>
 
                 <div className="field">
-                  <label className="label">Event Format</label>
+                  <label className="label">Event Format *</label>
                   <select className="select" name="eventFormat" value={form.eventFormat} onChange={handleChange}>
                     <option value="">Select Format</option>
                     {formats.map((fmt) => (
@@ -731,11 +776,11 @@ onConfirm: async () => {
 
                 <div className="row2">
                   <div className="field">
-                    <label className="label">Venue Name</label>
+                    <label className="label">Venue Name *</label>
                     <input className="input" name="venueName" value={form.venueName} onChange={handleChange} placeholder="Enter venue name" />
                   </div>
                   <div className="field">
-                    <label className="label">State</label>
+                    <label className="label">State *</label>
                     <div className="stateDropdownWrapper">
                       <div className="select" style={{ cursor: "pointer", userSelect: "none" }} onClick={() => setStateOpen((p) => !p)}>
                         {form.jobLocationState || "Select State"}
@@ -761,7 +806,7 @@ onConfirm: async () => {
                 </div>
 
                 <div className="field">
-                  <label className="label">Full Address</label>
+                  <label className="label">Full Address *</label>
                   <textarea className="textarea" rows={2} name="fullAddress" value={form.fullAddress} onChange={handleChange} placeholder="Enter full address" />
                 </div>
               </section>
@@ -772,7 +817,7 @@ onConfirm: async () => {
 
                 <div className="row2">
                   <div className="field">
-                    <label className="label">Company Name</label>
+                    <label className="label">Company Name *</label>
                     <input
                       className="input"
                       name="organizationName"
@@ -782,7 +827,7 @@ onConfirm: async () => {
                     />
                   </div>
                   <div className="field">
-                    <label className="label">Company Contact Person</label>
+                    <label className="label">Company Contact Person *</label>
                     <input
                       className="input"
                       name="organizerContactPerson"
@@ -799,18 +844,22 @@ onConfirm: async () => {
                     <input type="email" className="input" name="workEmail" value={form.workEmail} onChange={handleChange} placeholder="Enter work email" />
                   </div>
                   <div className="field">
-                    <label className="label">Phone Number</label>
-                    <input
-                      className="input"
-                      name="phoneNumber"
-                      value={form.phoneNumber}
-                      onChange={handleNumberOnly}
-                      placeholder="Enter phone number"
-                      maxLength={10}
-                    />
+                    <label className="label">Phone Number *</label>
+                   <input
+  className="input"
+  name="contactNumber"
+  value={form.contactNumber}
+  onChange={(e) => {
+    const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+    setForm((prev) => ({ ...prev, contactNumber: digits }));
+  }}
+  placeholder="Enter 10-digit mobile number"
+  maxLength={10}
+  inputMode="numeric"
+/>
                   </div>
                   <div className="field">
-                    <label className="label">Company Website</label>
+                    <label className="label">Company Website *</label>
                     <input type="url" className="input" name="organizationWebsite" value={form.organizationWebsite} onChange={handleChange} placeholder="https://" />
                   </div>
                 </div>
@@ -822,7 +871,7 @@ onConfirm: async () => {
 
                 <div className="field">
                   <label className="label">
-                    Main Image / Banner
+                      Main Image / Banner *
                     <span className="labelNote">Recommended: 1500 × 750 px</span>
                   </label>
                   <div className="imageRow">
@@ -839,7 +888,7 @@ onConfirm: async () => {
                 </div>
 
                 <div className="field">
-                  <label className="label">About / Event Description <span className="labelNote">(500 words)</span></label>
+                  <label className="label">About / Event Description  *<span className="labelNote">(500 words)</span></label>
                   <RichTextEditor value={form.eventDescription} onChange={(val) => setForm((p) => ({ ...p, eventDescription: val }))} placeholder="Describe the event" />
                 </div>
 
@@ -850,7 +899,7 @@ onConfirm: async () => {
 
                 <div className="row2">
                   <div className="field">
-                    <label className="label">Target Audience <span className="labelNote">(comma separated)</span></label>
+                    <label className="label">Target Audience  *<span className="labelNote">(comma separated)</span></label>
                     <input className="input" name="targetAudience" value={form.targetAudience} onChange={handleChange} placeholder="e.g. Developers, Designers" />
                   </div>
                   <div className="field">
@@ -893,14 +942,14 @@ onConfirm: async () => {
                 </div>
                 <div className="row2">
                   <div className="field">
-                    <label className="label">Registration Type</label>
+                    <label className="label">Registration Type *</label>
                     <select className="select" name="registrationType" value={form.registrationType} onChange={handleChange}>
                       <option value="">Select Registration Type</option>
                       {registrationTypes.map((r) => <option key={r} value={r}>{r}</option>)}
                     </select>
                   </div>
                   <div className="field">
-                    <label className="label">Registration Deadline</label>
+                    <label className="label">Registration Deadline *</label>
                     <input type="datetime-local" className="input" name="registrationDeadline" value={form.registrationDeadline} onChange={handleChange} />
                   </div>
                 </div>
@@ -956,7 +1005,7 @@ onConfirm: async () => {
                 {applicationMethod !== "platform" && (
                   <div className="row2">
                     <div className="field">
-                      <label className="label">Registration Link / URL</label>
+                      <label className="label">Registration Link / URL *</label>
                       <input type="url" className="input" name="registrationUrl" value={form.registrationUrl} onChange={handleChange} placeholder="https://" />
                     </div>
                   </div>

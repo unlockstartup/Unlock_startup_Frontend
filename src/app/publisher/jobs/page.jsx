@@ -257,11 +257,15 @@ const isValidUrl = (url) => {
 
 const validate = () => {
   if (!form.title.trim())                return "Job Title is required";
+  if (!form.jobCategory)                 return "Job Category is required";
   if (!form.jobType)                     return "Job Type is required";
   if (!form.workMode)                    return "Work Mode is required";
   if (!form.experienceLevel)             return "Experience Level is required";
   if (!form.openings || Number(form.openings) < 1) return "Number of Openings is required";
   if (!form.companyName?.trim())         return "Company Name is required";
+  if (!form.companyWebsite?.trim())      return "Company Website is required";
+  if (form.companyWebsite && !isValidUrl(form.companyWebsite))
+    return "Enter a valid Company Website URL";
   if (!form.companyDescription?.trim())  return "Company Description is required";
   if (!form.companySize)                 return "Company Size is required";
   if (!form.industrySector?.trim())      return "Industry / Sector is required";
@@ -269,23 +273,29 @@ const validate = () => {
   if (!form.hiringManagerEmail?.trim())  return "Hiring Manager Email is required";
   if (form.hiringManagerEmail && !/^\S+@\S+\.\S+$/.test(form.hiringManagerEmail.trim()))
     return "Enter a valid Hiring Manager Email";
+  if (!form.hiringManagerPhone?.trim())  return "Hiring Manager Phone is required";
+  if (form.hiringManagerPhone && !/^\d{10}$/.test(form.hiringManagerPhone.trim()))
+    return "Enter a valid 10-digit Hiring Manager Phone number";
   if (!form.roleOverview?.trim())        return "Role Overview is required";
   if (!form.keyResponsibilities?.trim()) return "Key Responsibilities is required";
   if (!form.requiredEducation)           return "Required Education is required";
   if (!form.yearsExperienceRequired)     return "Years of Experience is required";
   if (!form.mustHaveSkills?.trim())      return "Must-Have Skills is required";
   if (!form.salaryType)                  return "Salary Type is required";
+  if (!form.salaryMax)                   return "Maximum Salary is required";
+  if (form.salaryMin && form.salaryMax && Number(form.salaryMax) < Number(form.salaryMin))
+    return "Maximum Salary cannot be less than Minimum Salary";
   if (!form.jobLocationAddress?.trim())  return "Job Location - Office Address is required";
   if (!form.jobLocationCity?.trim())     return "Job Location - City is required";
   if (!form.jobLocationState?.trim())    return "Job Location - State is required";
   if (!form.jobLocationCountry?.trim())  return "Job Location - Country is required";
   if (!form.applyLastDate)               return "Application Deadline is required";
   if (!form.applyDate)                   return "Expected Start Date is required";
-  if (form.companyWebsite && !isValidUrl(form.companyWebsite))
-    return "Enter a valid Company Website URL";
+  if (!form.companyLogo?.url)            return "Company Logo is required";
+  if (!form.externalApplicationUrl?.trim()) return "External Application URL is required";
   if (form.externalApplicationUrl && !isValidUrl(form.externalApplicationUrl))
     return "Enter a valid External Application URL";
-  if (!form.disclosureConsent)           return "You must agree to the disclosure consent";  
+  if (!form.disclosureConsent)           return "You must agree to the disclosure consent";
   return null;
 };
 

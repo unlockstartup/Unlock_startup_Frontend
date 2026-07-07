@@ -99,7 +99,7 @@ export default function InnovationProducts() {
   const [patentStatuses, setPatentStatuses]       = useState([]);
   const [productStatuses, setProductStatuses]     = useState([]);
   const [innovationStatuses, setInnovationStatuses] = useState([]);
-
+const [serverError, setServerError] = useState(null);
   const [showConfirm, setShowConfirm]   = useState(false);
   const [confirmConfig, setConfirmConfig] = useState({
     title: "", message: "",
@@ -195,11 +195,15 @@ export default function InnovationProducts() {
     : productLimitReached ? `Limit Reached (${planInfo.usage.products}/${planInfo.limits.productsLimit})`
     : "+ Add Product";
 
-  /*  Modal helpers  */
-  const openCreate = () => {
-    setMode("create"); setEditing(null); setForm(initialForm);
-    setProductLogo(null); setProductImages([]); setOpen(true);
-  };
+const openCreate = () => {
+  setServerError(null); 
+  setMode("create");
+  setEditing(null);
+  setForm(initialForm);
+  setProductLogo(null);
+  setProductImages([]);
+  setOpen(true);
+};
 const openEdit = (prod) => {
   const alreadyEdited = (prod.editCount ?? 0) >= 1;
   setConfirmConfig({
@@ -212,6 +216,7 @@ const openEdit = (prod) => {
     confirmVariant: alreadyEdited ? "danger" : "primary",
     onConfirm: () => {
       if (alreadyEdited) return;
+      setServerError(null);
       setMode("edit"); setEditing(prod);
       setForm({ ...initialForm, ...prod, shortProductDescription: prod.shortProductDescription || "", awardsRecognition: prod.awardsRecognition || "" });
       setProductLogo(prod.productLogo || null);
@@ -223,7 +228,7 @@ const openEdit = (prod) => {
 };
 
 
-  const closeModal = () => { if (saving || uploadingImage || uploadingProductImages) return; setOpen(false); };
+  const closeModal = () => { if (saving || uploadingImage || uploadingProductImages) return; setServerError(null); setOpen(false); };
 
   /*  Image uploads  */
   const uploadLogo = async (file) => {
@@ -258,12 +263,22 @@ const openEdit = (prod) => {
   const removeProductImage = (publicId) =>
     setProductImages((prev) => prev.filter((img) => img.publicId !== publicId));
 
-  /*  Validate & save  */
+const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
 const isValidUrl = (v) => {
-  if (!v) return true; // optional fields
+  if (!v) return true;
   try { new URL(v); return true; } catch { return false; }
 };
-const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+const isRequiredUrl = (v) => {
+  if (!v || !v.trim()) return false;
+  try { new URL(v); return true; } catch { return false; }
+};
+
+const isValidPhone = (v) => {
+  if (!v) return false;
+  const digits = v.replace(/\D/g, "");
+  return digits.length >= 7 && digits.length <= 15 && /^[\d\s+\-().]+$/.test(v);
+};
 
 const validate = () => {
   const checks = [
@@ -272,6 +287,7 @@ const validate = () => {
     [!form.brandName.trim(),                "Brand name is required"],
     [!form.productName.trim(),              "Product name is required"],
     [!form.innovationCategory,              "Please select a product category"],
+    [!productLogo,                          "Product logo is required"],
     [!form.technology.trim(),               "Technology is required"],
     [!form.shortProductDescription.trim(),  "Short product description is required"],
     [!form.detailedDescription.trim(),      "Detailed description is required"],
@@ -282,11 +298,13 @@ const validate = () => {
     [!form.challengeSolved.trim(),          "Challenge solved is required"],
     [!form.contactEmail.trim(),             "Contact email is required"],
     [form.contactEmail.trim() && !isValidEmail(form.contactEmail), "Please enter a valid contact email"],
+    [!form.contactNumber.trim(),            "Contact number is required"],
+    [form.contactNumber.trim() && !isValidPhone(form.contactNumber), "Please enter a valid contact number"],
     [!form.innovationStatus,                "Please select an innovation status"],
     [!form.productStatus,                   "Please select a product status"],
     [!form.founderName.trim(),              "Founder / lead innovator name is required"],
     [!isValidUrl(form.productDemoUrl),      "Please enter a valid demo/video URL"],
-    [!isValidUrl(form.websiteUrl),          "Please enter a valid website URL"],
+    [!isRequiredUrl(form.websiteUrl),       "Please enter a valid website URL"],
     [!form.disclosureConsent,               "You must provide consent to submit"],
   ];
   for (const [fail, msg] of checks) {
@@ -309,10 +327,12 @@ const save = async () => {
       }
       setOpen(false);
       fetchProducts();
-    } catch (err) {
-      const msg = err?.response?.data?.message;
-      toast.error(msg ? formatServerError(msg) : "Submission failed");
-    } finally {
+} catch (err) {
+  const msg = err?.response?.data?.message;
+  const formatted = msg ? formatServerError(msg) : "Submission failed";
+  toast.error(formatted);
+  setServerError(formatted);  
+} finally {
       setSaving(false);
     }
   };
@@ -325,25 +345,27 @@ const save = async () => {
     } catch (err) { toast.error(err?.response?.data?.message || "Toggle failed"); }
   };
 
-  const deleteProduct = (id) => {
-    if (!id) { toast.error("Invalid Product ID"); return; }
-    setConfirmConfig({
-      title: "Delete Product",
-      message: "Are you sure you want to permanently delete this product? This action cannot be undone.",
-      confirmText: "Yes, Delete this Product", cancelText: "Cancel", confirmVariant: "danger",
-onConfirm: async () => {
+const deleteProduct = (id) => {
+  if (!id) { toast.error("Invalid Product ID"); return; }
+  setConfirmConfig({
+    title: "Delete Product",
+    message: "Are you sure you want to permanently delete this product? This action cannot be undone.",
+    confirmText: "Yes, Delete this Product",
+    cancelText: "Cancel",
+    confirmVariant: "danger",
+    onConfirm: async () => {
       try {
-        await publisherApi.patch(`/api/publisher/innovation-products/${prod._id}/toggle`);
-        toast.success(`Product ${isDeactivating ? "deactivated" : "activated"}`);
+        await publisherApi.delete(`/api/publisher/innovation-products/${id}`);
+        toast.success("Product deleted successfully");
         fetchProducts();
       } catch (err) {
         const msg = err?.response?.data?.message;
-        toast.error(msg ? formatServerError(msg) : "Toggle failed");
+        toast.error(msg ? formatServerError(msg) : "Delete failed");
       }
     },
-    });
-    setShowConfirm(true);
-  };
+  });
+  setShowConfirm(true);
+};
 
 const confirmToggleProduct = (prod) => {
   if (!prod?._id) { toast.error("Invalid Product ID"); return; }
@@ -562,7 +584,23 @@ const confirmToggleProduct = (prod) => {
 
             {/* Body */}
             <div className="modalBody">
-
+{serverError && (
+  <div style={{
+    padding: "0.9rem 1rem",
+    borderRadius: "var(--radius-lg)",
+    background: "rgba(220,53,69,0.08)",
+    border: "1px solid rgba(220,53,69,0.25)",
+    color: "#b02a37",
+    fontSize: "var(--text-sm)",
+    marginBottom: "1.25rem",
+    display: "flex",
+    alignItems: "center",
+    gap: "0.6rem"
+  }}>
+    <span style={{ fontSize: "1.1rem", lineHeight: 1 }}>⚠️</span>
+    <span>{serverError}</span>
+  </div>
+)}
               {/*  Company information  */}
               <section className="section">
                 <h3 className="sectionTitle">Company information</h3>
@@ -596,7 +634,7 @@ const confirmToggleProduct = (prod) => {
                 </div>
 
                 {/* Product Logo */}
-                <Field label="Product Logo / Icon" note="Recommended: 270 × 180 px">
+                <Field label="Product Logo / Icon *" note="Recommended: 270 × 180 px">
                   <div className="imageRow">
                     <input
                       type="file" accept="image/*" className="input" style={{ flex: 1 }}
@@ -703,14 +741,14 @@ const confirmToggleProduct = (prod) => {
                   <Field label="Contact Email *">
                     <input type="email" className="input" name="contactEmail" value={form.contactEmail} onChange={handleChange} placeholder="Enter email" />
                   </Field>
-                    <Field label="Contact Number">
-                    <input className="input" name="contactNumber" value={form.contactNumber} onChange={handleChange} placeholder="Enter phone number" />
+                    <Field label="Contact Number *">
+                    <input className="input" name="contactNumber" value={form.contactNumber} onChange={handleChange} placeholder="Enter phone number" maxLength={10}/>
                   </Field>
                 </div>
 
                 <div className="row2">
                 
-                  <Field label="Website URL">
+                  <Field label="Website URL *">
                     <input type="url" className="input" name="websiteUrl" value={form.websiteUrl} onChange={handleChange} placeholder="https://" />
                   </Field>
                 </div>
