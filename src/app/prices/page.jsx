@@ -194,9 +194,22 @@ export default function Page() {
   )}
 </div>
 {plan.price > 0 && (
-  <p style={{ fontSize: '12px', color: '#9ca3af', margin: '2px 0 12px' }}>
-    Including tax
-  </p>
+  <span
+    style={{
+      display: 'inline-block',
+      fontSize: '11px',
+      fontWeight: 600,
+      color: '#6366f1',
+      backgroundColor: '#eef2ff',
+      padding: '2px 8px',
+      borderRadius: '999px',
+      marginTop: '6px',
+      marginBottom: '14px',
+      letterSpacing: '0.02em',
+    }}
+  >
+    Inclusive of all taxes
+  </span>
 )}
                     {/* <p className="pricingPage__planDesc">{plan.desc}</p> */}
                     <ul className="pricingPage__featuresList">
@@ -240,41 +253,57 @@ export default function Page() {
               </p>
             )}
 
-            {!serviceLoading && !serviceError && (
-              <div className="pricingPage__pricingGrid pricingPage__pricingGrid--centered">
-                {servicePlans.flatMap((plan) =>
-                  SERVICE_TIERS.map(({ durationType, label, priceKey, period, desc }) => {
-                    const price    = plan[priceKey];
-                    const features = buildServiceFeatures(plan);
-                    const cardKey  = `${plan._id}_${durationType}`;
+{!serviceLoading && !serviceError && (
+  <div className="pricingPage__pricingGrid pricingPage__pricingGrid--centered">
+    {servicePlans.flatMap((plan) =>
+      SERVICE_TIERS.map(({ durationType, label, priceKey, period, desc }) => {
+        const price    = plan[priceKey];
+        const features = buildServiceFeatures(plan);
+        const cardKey  = `${plan._id}_${durationType}`;
 
-                    return (
-                      <div key={cardKey} className="pricingPage__planCard">
-                        <h2 className="pricingPage__planName">{label}</h2>
-                        <div className="pricingPage__planPrice">
-                          <span className="pricingPage__priceAmount">
-                            ₹{(price ?? 0).toLocaleString('en-IN')}
-                          </span>
-                          <span className="pricingPage__pricePeriod">{period}</span>
-                        </div>
-                        <p className="pricingPage__planDesc">{desc}</p>
-                        <ul className="pricingPage__featuresList">
-                          {features.map((f, idx) => (
-                            <li key={idx} className="pricingPage__featureItem">
-                              <CheckIcon />
-                              {f}
-                            </li>
-                          ))}
-                        </ul>
-                        <a href="#signup" className="pricingPage__btn pricingPage__btnSecondary pricingPage__planCta">
-                          Get Started
-                        </a>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-            )}
+        return (
+          <div key={cardKey} className="pricingPage__planCard">
+            <h2 className="pricingPage__planName">{label}</h2>
+            <div className="pricingPage__planPrice">
+              <span className="pricingPage__priceAmount">
+                ₹{(price ?? 0).toLocaleString('en-IN')}
+              </span>
+              <span className="pricingPage__pricePeriod">{period}</span>
+            </div>
+            <span
+              style={{
+                display: 'inline-block',
+                fontSize: '11px',
+                fontWeight: 600,
+                color: '#6366f1',
+                backgroundColor: '#eef2ff',
+                padding: '2px 8px',
+                borderRadius: '999px',
+                marginTop: '6px',
+                marginBottom: '14px',
+                letterSpacing: '0.02em',
+              }}
+            >
+              Inclusive of all taxes
+            </span>
+            <p className="pricingPage__planDesc">{desc}</p>
+            <ul className="pricingPage__featuresList">
+              {features.map((f, idx) => (
+                <li key={idx} className="pricingPage__featureItem">
+                  <CheckIcon />
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <a href="#signup" className="pricingPage__btn pricingPage__btnSecondary pricingPage__planCta">
+              Get Started
+            </a>
+          </div>
+        );
+      })
+    )}
+  </div>
+)}
 
           </div>
         </section>
