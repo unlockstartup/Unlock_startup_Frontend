@@ -183,16 +183,21 @@ export default function Page() {
                 {plans.map((plan) => (
                   <div key={plan._id} className="pricingPage__planCard">
                     <h2 className="pricingPage__planName">{plan.name}</h2>
-                    <div className="pricingPage__planPrice">
-                      <span className="pricingPage__priceAmount">
-                        {plan.price === 0 ? 'Free' : `₹${plan.price.toLocaleString('en-IN')}`}
-                      </span>
-                      {plan.durationInMonths > 0 && (
-                        <span className="pricingPage__pricePeriod">
-                          / {plan.durationInMonths} month{plan.durationInMonths !== 1 ? 's' : ''}
-                        </span>
-                      )}
-                    </div>
+  <div className="pricingPage__planPrice">
+  <span className="pricingPage__priceAmount">
+    {plan.price === 0 ? 'Free' : `₹${plan.price.toLocaleString('en-IN')}`}
+  </span>
+  {plan.durationInMonths > 0 && (
+    <span className="pricingPage__pricePeriod">
+      / {plan.durationInMonths} month{plan.durationInMonths !== 1 ? 's' : ''}
+    </span>
+  )}
+</div>
+{plan.price > 0 && (
+  <p style={{ fontSize: '12px', color: '#9ca3af', margin: '2px 0 12px' }}>
+    Including tax
+  </p>
+)}
                     {/* <p className="pricingPage__planDesc">{plan.desc}</p> */}
                     <ul className="pricingPage__featuresList">
                       {plan.features.map((f, idx) => (

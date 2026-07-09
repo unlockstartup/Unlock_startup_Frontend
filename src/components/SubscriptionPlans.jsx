@@ -379,7 +379,7 @@ const startPayment = async (plan) => {
       if (res.data?.success) {
         toast.success(res.data.message || "Subscription cancelled");
         setShowCancelModal(false);
-        onPaymentSuccess?.(); // reuse existing refresh callback to reload plan info
+        onPaymentSuccess?.(); 
       } else {
         toast.error(res.data?.message || "Failed to cancel subscription");
       }
@@ -641,19 +641,21 @@ const startPayment = async (plan) => {
                     >
                       {name}
                     </p>
-                    <div className="d-flex align-items-baseline gap-1 mb-2">
-                      <span className="fw-bold" style={{ fontSize: "2.4rem", color: "#1a1a2e", lineHeight: 1.1 }}>
-                        {plan.price === 0 ? "Free" : `₹${plan.price.toLocaleString("en-IN")}`}
-                      </span>
-                      {plan.durationInMonths > 0 && (
-                        <span className="text-muted" style={{ fontSize: "1.2rem" }}>
-                          / {plan.durationInMonths} mo
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-muted mb-3" style={{ fontSize: "1.2rem", minHeight: "3.2rem" }}>
-                      {desc}
-                    </p>
+                 <div className="d-flex align-items-baseline gap-1 mb-2">
+  <span className="fw-bold" style={{ fontSize: "2.4rem", color: "#1a1a2e", lineHeight: 1.1 }}>
+    {plan.price === 0 ? "Free" : `₹${plan.price.toLocaleString("en-IN")}`}
+  </span>
+  {plan.durationInMonths > 0 && (
+    <span className="text-muted" style={{ fontSize: "1.2rem" }}>
+      / {plan.durationInMonths} mo
+    </span>
+  )}
+</div>
+{plan.price > 0 && (
+  <p className="text-muted mb-1" style={{ fontSize: "1rem" }}>
+    Including tax
+  </p>
+)}
 
                     {isActivePlan ? (
                       hoveredPlanId === plan._id ? (

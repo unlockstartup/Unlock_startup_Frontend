@@ -519,13 +519,15 @@ if (verifyRes.data?.success) {
                       <p className="fw-semibold mb-1" style={{ color: "#4338ca", fontSize: "1.2rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                         {label}
                       </p>
-                      <div className="d-flex align-items-baseline gap-1 mb-2">
-                        <span className="fw-bold" style={{ fontSize: "2.4rem", color: "#1a1a2e", lineHeight: 1.1 }}>
-                          ₹{price.toLocaleString("en-IN")}
-                        </span>
-                        <span className="text-muted" style={{ fontSize: "1.2rem" }}>{suffix}</span>
-                      </div>
-                      <p className="text-muted mb-3" style={{ fontSize: "1.2rem", minHeight: "3.2rem" }}>{desc}</p>
+       <div className="d-flex align-items-baseline gap-1 mb-2">
+  <span className="fw-bold" style={{ fontSize: "2.4rem", color: "#1a1a2e", lineHeight: 1.1 }}>
+    ₹{price.toLocaleString("en-IN")}
+  </span>
+  <span className="text-muted" style={{ fontSize: "1.2rem" }}>{suffix}</span>
+</div>
+<p className="text-muted mb-1" style={{ fontSize: "1rem" }}>
+  Including tax
+</p>
 
                       {isActivePlan ? (
                         hoveredServiceKey === key ? (
