@@ -321,7 +321,6 @@ export default function Page() {
                 <summary>How to change my subscription plan?</summary>
                 <p>You can upgrade a subscription to higher one to use more benefits like more number of listing, enhanced profile views and extra features. Any price differences shall be accounted during the upgrading of subscription.</p>
               </details>
-              
               <details className="pricingPage__faqItem">
                 <summary>What happens after subscription expires?</summary>
                 <p>After expiration of a subscription any privilege and benefit associated with it, will stop being delivered. You can choose to renew the subscription at any time to make sure the ongoing service of managing your listings will not be discontinued.</p>
