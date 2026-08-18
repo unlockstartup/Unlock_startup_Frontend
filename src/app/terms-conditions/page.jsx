@@ -115,7 +115,7 @@ export default function TermsConditions() {
               <div>
                 <h2 className="ex-section-title">Introduction</h2>
                 <p className="ex-section-subtitle">Welcome to Unlock Startup Platform</p>
-                 <p>Terms & Conditions wording for a brand called “Unlock Startup”, with the company name “World Mirror Innovations Pvt Ltd”.</p>
+                 <p className="ex-section-subtitle">Terms & Conditions wording for a brand called “Unlock Startup”, with the company name “World Mirror Innovations Pvt Ltd”.</p>
               </div>
             </div>
             <div className="ex-prose">
