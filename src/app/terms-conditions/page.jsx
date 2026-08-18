@@ -437,7 +437,7 @@ export default function TermsConditions() {
               <div>
                 <h2 className="ex-section-title">Modifications</h2>
                 <p className="ex-section-subtitle">Our right to update these terms</p>
-              </div>
+                </div>
             </div>
             <div className="ex-prose">
               <p>
