@@ -22,16 +22,18 @@ import {
 import '@/app/styles/termandcondition.css';
 
 const sections = [
-  { id: 'ex-introduction',       label: 'Introduction',                color: 'orange' },
-  { id: 'ex-prohibited',         label: 'Prohibited Activities',       color: 'blue'   },
-  { id: 'ex-third-party',        label: 'Third-Party Links',           color: 'yellow' },
-  { id: 'ex-liability',          label: 'Limitation of Liability',     color: 'orange' },
-  { id: 'ex-user-resp',          label: 'User Responsibilities',       color: 'blue'   },
-  { id: 'ex-disclaimer',         label: 'Disclaimer of Warranties',    color: 'yellow' },
-  { id: 'ex-indemnity',          label: 'Indemnity',                   color: 'orange' },
-  { id: 'ex-governing',          label: 'Governing Law',               color: 'blue'   },
-  { id: 'ex-modifications',      label: 'Modifications',               color: 'yellow' },
-  { id: 'ex-entire-agreement',   label: 'Entire Agreement',            color: 'orange' },
+  { id: 'ex-introduction',   label: 'Introduction',                 color: 'orange' },
+  { id: 'ex-accounts',       label: 'User Accounts',                color: 'blue'   },
+  { id: 'ex-content',        label: 'Content Sharing',              color: 'yellow' },
+  { id: 'ex-data',           label: 'Data Collection & Privacy',    color: 'orange' },
+  { id: 'ex-privacy-rights', label: 'Your Privacy Rights',          color: 'blue'   },
+  { id: 'ex-third-party',    label: 'Third-Party Links',            color: 'yellow' },
+  { id: 'ex-liability',      label: 'Limitation of Liability',      color: 'orange' },
+  { id: 'ex-user-resp',      label: 'User Responsibilities',        color: 'blue'   },
+  { id: 'ex-disclaimer',     label: 'Disclaimer of Warranties',     color: 'yellow' },
+  { id: 'ex-cancellations',  label: 'Cancellations & Termination',  color: 'orange' },
+  { id: 'ex-governing',      label: 'Governing Law',                color: 'blue'   },
+  { id: 'ex-modifications',  label: 'Modifications',                color: 'yellow' },
 ];
 
 export default function TermsConditions() {
@@ -78,7 +80,7 @@ export default function TermsConditions() {
     <>
       <Head>
         <title>Terms & Conditions | Unlock Startup</title>
-        <meta name="description" content="Unlock Startup Blog Terms and Conditions — please read before using our website." />
+        <meta name="description" content="Unlock Startup Platform Terms and Conditions — please read before using our platform." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -93,7 +95,7 @@ export default function TermsConditions() {
           <h1 className="ex-hero-title">
             Terms &amp; <span>Conditions</span>
           </h1>
-          <p className="ex-hero-subtitle">for Unlock Startup Blog</p>
+          <p className="ex-hero-subtitle">for Unlock Startup Platform</p>
           <div className="ex-hero-meta">
             <span className="ex-hero-meta-item">Last Updated: April 28, 2026</span>
           </div>
@@ -102,8 +104,6 @@ export default function TermsConditions() {
 
       {/* Main Layout */}
       <div className="ex-page-layout">
-
-
 
         {/* Content */}
         <main className="ex-content">
@@ -114,45 +114,40 @@ export default function TermsConditions() {
               <span className="ex-section-num ex-orange">01</span>
               <div>
                 <h2 className="ex-section-title">Introduction</h2>
-                <p className="ex-section-subtitle">Governing your use of Unlock Startup</p>
+                <p className="ex-section-subtitle">Welcome to Unlock Startup Platform</p>
               </div>
             </div>
             <div className="ex-prose">
               <p>
-                These terms and conditions govern your use of the website <strong>Unlock Startup</strong>. By accessing and using this website, you agree to abide by these terms and conditions in full. If you disagree with any part of these terms and conditions, you must refrain from using this website.
+                These Terms and Conditions ("Terms") explain the rules for using our content platform ("Platform"), operated by <strong>World Mirror Innovations Pvt Ltd</strong>. By accessing or using our Platform, you agree to follow these Terms. If you don&apos;t agree with any part of them, please don&apos;t use our Platform.
+              </p>
+              <p>
+                We may update these Terms at any time. We&apos;ll notify you of significant changes by posting the updated version here and updating the &quot;Last Updated&quot; date. Your continued use of the Platform means you accept the updated Terms.
               </p>
             </div>
-            {/* <div className="ex-callout ex-orange">
-              <AlertCircle className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Important:</strong> Continued use of Unlock Startup constitutes your full acceptance of these terms and conditions. Please read them carefully before proceeding.
-              </p>
-            </div> */}
           </section>
 
-
-
-          {/* 2. Prohibited Activities */}
-          <section id="ex-prohibited" className="ex-section">
+          {/* 2. User Accounts */}
+          <section id="ex-accounts" className="ex-section">
             <div className="ex-section-header">
               <span className="ex-section-num ex-blue">02</span>
               <div>
-                <h2 className="ex-section-title">Prohibited Activities</h2>
-                <p className="ex-section-subtitle">What you must not do while using this website</p>
+                <h2 className="ex-section-title">User Accounts</h2>
+                <p className="ex-section-subtitle">Creating and maintaining your account</p>
               </div>
             </div>
             <div className="ex-prose">
               <p>
-                While using this website, you must not engage in any unlawful, fraudulent, or harmful activities. This includes but is not limited to:
+                To use certain features on our Platform, you&apos;ll need to create an account. Here&apos;s what you need to know:
               </p>
             </div>
             <ul className="ex-rule-list">
               {[
-                'Attempting to gain unauthorized access to the website or its server.',
-                'Uploading or transmitting any malicious software, viruses, or harmful code.',
-                'Interfering with the website\'s functionality or disrupting its services.',
-                'Collecting or storing personal information of other users without their consent.',
-                'Posting or transmitting any offensive, indecent, or objectionable content.',
+                'You must be at least 18 years old (or the legal age of majority in your state) to create an account.',
+                'You\'re responsible for keeping your password confidential and secure.',
+                'You agree to provide accurate, current, and complete information when registering.',
+                'You\'re responsible for all activity that happens under your account.',
+                'You must notify us immediately if you suspect unauthorized access to your account.',
               ].map((rule, i) => (
                 <li key={i} className="ex-rule-item">
                   <span className="ex-rule-dot ex-blue" />
@@ -160,20 +155,183 @@ export default function TermsConditions() {
                 </li>
               ))}
             </ul>
-            {/* <div className="ex-callout ex-blue">
-              <Shield className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Enforcement:</strong> Violations of these prohibitions may result in immediate suspension of your access and may be reported to the relevant authorities.
-              </p>
-            </div> */}
+            <div className="ex-prose">
+              <p><strong>Account Termination.</strong> We can suspend or terminate your account if you:</p>
+            </div>
+            <ul className="ex-rule-list">
+              {[
+                'Violate these Terms.',
+                'Engage in illegal activity.',
+                'Harass or harm other users.',
+                'Attempt to gain unauthorized access to our systems.',
+              ].map((rule, i) => (
+                <li key={i} className="ex-rule-item">
+                  <span className="ex-rule-dot ex-blue" />
+                  {rule}
+                </li>
+              ))}
+            </ul>
           </section>
 
-
-
-          {/* 3. Third-Party Links */}
-          <section id="ex-third-party" className="ex-section">
+          {/* 3. Content Sharing */}
+          <section id="ex-content" className="ex-section">
             <div className="ex-section-header">
               <span className="ex-section-num ex-yellow">03</span>
+              <div>
+                <h2 className="ex-section-title">Content Sharing</h2>
+                <p className="ex-section-subtitle">Your Content, prohibited content, and moderation</p>
+              </div>
+            </div>
+            <div className="ex-prose">
+              <p>
+                When you upload, post, list, or share content on our Platform (&quot;Your Content&quot;):
+              </p>
+            </div>
+            <ul className="ex-rule-list">
+              {[
+                'You retain ownership of Your Content.',
+                'You grant us a worldwide, non-exclusive license to use, display, and distribute Your Content to operate and improve the Platform.',
+                'You\'re responsible for ensuring Your Content doesn\'t violate anyone\'s rights or these Terms.',
+                'You warrant that you have the right to share Your Content and that it doesn\'t infringe on third-party intellectual property rights.',
+              ].map((rule, i) => (
+                <li key={i} className="ex-rule-item">
+                  <span className="ex-rule-dot ex-yellow" />
+                  {rule}
+                </li>
+              ))}
+            </ul>
+            <div className="ex-prose">
+              <p><strong>Prohibited Content.</strong> You agree not to share content that:</p>
+            </div>
+            <ul className="ex-rule-list">
+              {[
+                'Is illegal or promotes illegal activity.',
+                'Violates someone\'s privacy, publicity, or intellectual property rights.',
+                'Contains hate speech, harassment, or threats.',
+                'Is sexually explicit or exploitative.',
+                'Contains malware, viruses, or harmful code.',
+                'Is spam or misleading advertising.',
+                'Impersonates another person or entity.',
+              ].map((rule, i) => (
+                <li key={i} className="ex-rule-item">
+                  <span className="ex-rule-dot ex-yellow" />
+                  {rule}
+                </li>
+              ))}
+            </ul>
+            <div className="ex-prose">
+              <p><strong>Content Moderation.</strong> We reserve the right to:</p>
+            </div>
+            <ul className="ex-rule-list">
+              {[
+                'Review, monitor, and remove content that violates these Terms.',
+                'Disable access to content that infringes on third-party rights.',
+                'Cooperate with law enforcement regarding illegal content.',
+              ].map((rule, i) => (
+                <li key={i} className="ex-rule-item">
+                  <span className="ex-rule-dot ex-yellow" />
+                  {rule}
+                </li>
+              ))}
+            </ul>
+            <div className="ex-prose">
+              <p>
+                We&apos;re not responsible for content posted by other users, but we&apos;ll take action against violations when we become aware of them.
+              </p>
+              <p>
+                <strong>Third-Party Content.</strong> Our Platform may contain links to or embed content from third parties. We&apos;re not responsible for third-party content, and your use of it is governed by their terms and policies.
+              </p>
+            </div>
+          </section>
+
+          {/* 4. Data Collection and Privacy */}
+          <section id="ex-data" className="ex-section">
+            <div className="ex-section-header">
+              <span className="ex-section-num ex-orange">04</span>
+              <div>
+                <h2 className="ex-section-title">Data Collection and Privacy</h2>
+                <p className="ex-section-subtitle">What we collect and how we use it</p>
+              </div>
+            </div>
+            <div className="ex-prose">
+              <p><strong>Information We Collect.</strong> We collect information to provide and improve our Platform, including:</p>
+            </div>
+            <ul className="ex-rule-list">
+              {[
+                'Account Information: Name, email, company name, password, profile details.',
+                'Payment Information: Billing address, payment method (processed securely by third parties).',
+                'Usage Data: Pages visited, content viewed, search queries, time spent on Platform.',
+                'Device Information: IP address, browser type, operating system, device identifiers.',
+                'Communications: Messages, support requests, feedback you send us.',
+              ].map((rule, i) => (
+                <li key={i} className="ex-rule-item">
+                  <span className="ex-rule-dot ex-orange" />
+                  {rule}
+                </li>
+              ))}
+            </ul>
+            <div className="ex-prose">
+              <p><strong>How We Use Your Information.</strong> We use your information to:</p>
+            </div>
+            <ul className="ex-rule-list">
+              {[
+                'Create and maintain your account.',
+                'Process payments and send billing information.',
+                'Provide, improve, and personalize our Platform.',
+                'Send you service updates and support communications.',
+                'Comply with legal obligations.',
+                'Prevent fraud and enhance security.',
+                'Analyze usage trends and user behavior.',
+              ].map((rule, i) => (
+                <li key={i} className="ex-rule-item">
+                  <span className="ex-rule-dot ex-orange" />
+                  {rule}
+                </li>
+              ))}
+            </ul>
+            <div className="ex-prose">
+              <p>
+                <strong>Data Sharing.</strong> We may share your information with law enforcement or government agencies when required by law. Once your content or information is published and made live on the Platform, it may be accessible to third parties and could be viewed by anyone, depending on the Platform&apos;s privacy and visibility settings. We don&apos;t sell your personal information to third parties for marketing purposes.
+              </p>
+              <p>
+                <strong>Data Security.</strong> We implement reasonable security measures to protect your information, including encryption and secure servers. However, no online transmission is completely secure. You use the Platform at your own risk.
+              </p>
+            </div>
+          </section>
+
+          {/* 5. Your Privacy Rights */}
+          <section id="ex-privacy-rights" className="ex-section">
+            <div className="ex-section-header">
+              <span className="ex-section-num ex-blue">05</span>
+              <div>
+                <h2 className="ex-section-title">Your Privacy Rights</h2>
+                <p className="ex-section-subtitle">Accessing, correcting, and deleting your information</p>
+              </div>
+            </div>
+            <div className="ex-prose">
+              <p>You have the right to:</p>
+            </div>
+            <ul className="ex-rule-list">
+              {[
+                'Access the personal information we hold about you.',
+                'Request correction of inaccurate information.',
+                'Request deletion of your information (subject to legal retention requirements).',
+              ].map((rule, i) => (
+                <li key={i} className="ex-rule-item">
+                  <span className="ex-rule-dot ex-blue" />
+                  {rule}
+                </li>
+              ))}
+            </ul>
+            <div className="ex-prose">
+              <p>To exercise these rights, contact us using the information in the &quot;Contact Us&quot; section.</p>
+            </div>
+          </section>
+
+          {/* 6. Third-Party Links */}
+          <section id="ex-third-party" className="ex-section">
+            <div className="ex-section-header">
+              <span className="ex-section-num ex-yellow">06</span>
               <div>
                 <h2 className="ex-section-title">Third-Party Links</h2>
                 <p className="ex-section-subtitle">External links and your responsibility</p>
@@ -181,48 +339,34 @@ export default function TermsConditions() {
             </div>
             <div className="ex-prose">
               <p>
-This website may contain links to third-party websites. These links are provided solely for your convenience. Unlock Startup does not endorse, control, or guarantee the accuracy, relevance, or completeness of any third-party websites. Visiting such websites is at your own risk, and you should review their respective terms and conditions.
+                This website may contain links to third-party websites. These links are provided solely for your convenience. Unlock Startup does not endorse, control, or guarantee the accuracy, relevance, or completeness of any third-party websites. Visiting such websites is at your own risk, and you should review their respective terms and conditions.
               </p>
-            
+              <p>
+                World Mirror Innovations Pvt Ltd shall not be held responsible, directly or indirectly, for any damage, loss, or harm caused or alleged to be caused by or in connection with the use of or reliance on any content, goods, or services available on or through any such third-party websites or services.
+              </p>
             </div>
-            {/* <div className="ex-callout ex-yellow">
-              <AlertTriangle className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Disclaimer:</strong> Unlock Startup bears no responsibility for the content, privacy practices, or any damages arising from your visit to any linked third-party website.
-              </p>
-            </div> */}
           </section>
 
-
-
-          {/* 4. Limitation of Liability */}
+          {/* 7. Limitation of Liability */}
           <section id="ex-liability" className="ex-section">
             <div className="ex-section-header">
-              <span className="ex-section-num ex-orange">04</span>
+              <span className="ex-section-num ex-orange">07</span>
               <div>
                 <h2 className="ex-section-title">Limitation of Liability</h2>
                 <p className="ex-section-subtitle">Disclaimers and maximum liability caps</p>
               </div>
             </div>
-            {/* <div className="ex-callout ex-yellow">
-              <AlertTriangle className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Disclaimer:</strong> Under no circumstances shall Unlock Startup, its directors, employees, partners, or affiliates be liable for any direct, indirect, incidental, consequential, or special damages arising out of or in any way connected with the use of this website.
-              </p>
-            </div> */}
             <div className="ex-prose">
               <p>
-Under no circumstances shall Unlock Startup, its directors, employees, partners, or affiliates be liable for any direct, indirect, incidental, consequential, or special damages arising out of or in any way connected with the use of this website or reliance on any information provided on the website. This includes but is not limited to loss of data, revenue, or profits.
+                Under no circumstances shall Unlock Startup, its directors, employees, partners, or affiliates be liable for any direct, indirect, incidental, consequential, or special damages arising out of or in any way connected with the use of this website or reliance on any information provided on the website. This includes but is not limited to loss of data, revenue, or profits.
               </p>
             </div>
           </section>
 
-
-
-          {/* 5. User Responsibilities */}
+          {/* 8. User Responsibilities */}
           <section id="ex-user-resp" className="ex-section">
             <div className="ex-section-header">
-              <span className="ex-section-num ex-blue">05</span>
+              <span className="ex-section-num ex-blue">08</span>
               <div>
                 <h2 className="ex-section-title">User Responsibilities</h2>
                 <p className="ex-section-subtitle">Your obligations when using this website</p>
@@ -230,23 +374,15 @@ Under no circumstances shall Unlock Startup, its directors, employees, partners,
             </div>
             <div className="ex-prose">
               <p>
-By using this website, you agree to be solely responsible for any content you post, upload, or transmit. You must ensure that such content complies with applicable laws and does not infringe upon any intellectual property rights or violate any third-party rights.
+                By using this website, you agree to be solely responsible for any content you post, upload, or transmit. You must ensure that such content complies with applicable laws and does not infringe upon any intellectual property rights or violate any third-party rights.
               </p>
             </div>
-            {/* <div className="ex-callout ex-blue">
-              <UserCheck className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Your Commitment:</strong> You are solely accountable for all content you contribute to the platform. Unlock Startup reserves the right to remove any content that violates these responsibilities.
-              </p>
-            </div> */}
           </section>
 
-
-
-          {/* 6. Disclaimer of Warranties */}
+          {/* 9. Disclaimer of Warranties */}
           <section id="ex-disclaimer" className="ex-section">
             <div className="ex-section-header">
-              <span className="ex-section-num ex-yellow">06</span>
+              <span className="ex-section-num ex-yellow">09</span>
               <div>
                 <h2 className="ex-section-title">Disclaimer of Warranties</h2>
                 <p className="ex-section-subtitle">No guarantees on information accuracy or reliability</p>
@@ -254,47 +390,34 @@ By using this website, you agree to be solely responsible for any content you po
             </div>
             <div className="ex-prose">
               <p>
-This website is provided “as is” without any warranties or representations, whether express or implied. Unlock Startup makes no guarantees regarding the accuracy, reliability, or suitability of the information and materials found on the website. Any reliance you place on such information is strictly at your own risk.
+                This website is provided &quot;as is&quot; without any warranties or representations, whether express or implied. Unlock Startup makes no guarantees regarding the accuracy, reliability, or suitability of the information and materials found on the website. Any reliance you place on such information is strictly at your own risk.
               </p>
             </div>
-            {/* <div className="ex-callout ex-yellow">
-              <ShieldCheck className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>As-Is Basis:</strong> All content and services are provided without warranty of any kind. Unlock Startup expressly disclaims all implied warranties, including merchantability and fitness for a particular purpose.
-              </p>
-            </div> */}
           </section>
 
-
-
-          {/* 7. Indemnity */}
-          <section id="ex-indemnity" className="ex-section">
+          {/* 10. Competitions/Event/Job/Product/Services Cancellations or Termination */}
+          <section id="ex-cancellations" className="ex-section">
             <div className="ex-section-header">
-              <span className="ex-section-num ex-orange">07</span>
+              <span className="ex-section-num ex-orange">10</span>
               <div>
-                <h2 className="ex-section-title">Indemnity</h2>
-                <p className="ex-section-subtitle">Your agreement to hold Unlock Startup harmless</p>
+                <h2 className="ex-section-title">Cancellations &amp; Termination</h2>
+                <p className="ex-section-subtitle">Competitions, events, jobs, products, and services listings</p>
               </div>
             </div>
             <div className="ex-prose">
               <p>
-You agree to indemnify and hold Unlock Startup and its affiliates, directors, employees, and partners harmless from any claims, liabilities, damages, expenses, and costs, including reasonable attorneys’ fees, arising from your use of this website or any violation of these terms and conditions.
+                Unlock Startup reserves the right to remove any third-party competition, challenge, event, job listing, product, or services listing from our Platform if it is found to violate our content guidelines, or if we receive complaints regarding the event&apos;s legitimacy or ethics.
+              </p>
+              <p>
+                Removal of a challenge or event from our Platform does not affect your participation or relationship with the third-party company, and you should contact the event organizer and host directly for further guidance.
               </p>
             </div>
-            {/* <div className="ex-callout ex-orange">
-              <Scale className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Note:</strong> This indemnification obligation survives termination of your use of this website and remains in full force regardless of any changes to these terms.
-              </p>
-            </div> */}
           </section>
 
-
-
-          {/* 8. Governing Law */}
+          {/* 11. Governing Law */}
           <section id="ex-governing" className="ex-section">
             <div className="ex-section-header">
-              <span className="ex-section-num ex-blue">08</span>
+              <span className="ex-section-num ex-blue">11</span>
               <div>
                 <h2 className="ex-section-title">Governing Law &amp; Jurisdiction</h2>
                 <p className="ex-section-subtitle">Legal framework and dispute resolution</p>
@@ -302,23 +425,15 @@ You agree to indemnify and hold Unlock Startup and its affiliates, directors, em
             </div>
             <div className="ex-prose">
               <p>
-These terms and conditions shall be governed by and construed in accordance with the laws of [Jurisdiction]. Any disputes arising out of or related to the use of this website shall be subject to the exclusive jurisdiction of the courts in [Jurisdiction].
+                These Terms and Conditions shall be governed by and construed in accordance with the laws of [Jurisdiction]. Any disputes arising out of or related to the use of this website shall be subject to the exclusive jurisdiction of the courts in Delhi.
               </p>
             </div>
-            {/* <div className="ex-callout ex-blue">
-              <Shield className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Jurisdiction:</strong> By using this website, you consent to the personal jurisdiction of the courts specified herein for the purpose of litigating any such disputes.
-              </p>
-            </div> */}
           </section>
 
-
-
-          {/* 9. Modifications */}
+          {/* 12. Modifications */}
           <section id="ex-modifications" className="ex-section">
             <div className="ex-section-header">
-              <span className="ex-section-num ex-yellow">09</span>
+              <span className="ex-section-num ex-yellow">12</span>
               <div>
                 <h2 className="ex-section-title">Modifications</h2>
                 <p className="ex-section-subtitle">Our right to update these terms</p>
@@ -326,48 +441,14 @@ These terms and conditions shall be governed by and construed in accordance with
             </div>
             <div className="ex-prose">
               <p>
-Unlock Startup reserves the right to modify or replace these terms and conditions at any time without prior notice. By continuing to use this website after such modifications are made, you signify your acceptance of the updated terms and conditions.
+                Unlock Startup reserves the right to modify or replace these Terms and Conditions at any time without prior notice. By continuing to use this website after such modifications are made, you signify your acceptance of the updated Terms and Conditions.
               </p>
             </div>
-            {/* <div className="ex-callout ex-yellow">
-              <AlertTriangle className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Stay Informed:</strong> We recommend reviewing these terms periodically to stay aware of any updates. Your continued use of the website constitutes acceptance of any revised terms.
-              </p>
-            </div> */}
           </section>
-
-
-
-          {/* 10. Entire Agreement */}
-          <section id="ex-entire-agreement" className="ex-section">
-            <div className="ex-section-header">
-              <span className="ex-section-num ex-orange">10</span>
-              <div>
-                <h2 className="ex-section-title">Entire Agreement</h2>
-                <p className="ex-section-subtitle">The complete agreement between you and Unlock Startup</p>
-              </div>
-            </div>
-            <div className="ex-prose">
-              <p>
-These terms and conditions constitute the entire agreement between you and Unlock Startup and supersede all prior agreements and understandings, whether written or verbal, relating to the subject matter herein.
-              </p>
-            </div>
-            {/* <div className="ex-callout ex-orange">
-              <FileText className="ex-callout-icon" size={20} />
-              <p className="ex-callout-text">
-                <strong>Final Agreement:</strong> No other representations, warranties, or agreements, whether oral or written, shall be binding unless expressly included in these terms and conditions.
-              </p>
-            </div> */}
-          </section>
-
-
 
         </main>
-
 
       </div>
     </>
   );
 }
-
