@@ -97,7 +97,7 @@ export default function TermsConditions() {
           </h1>
           <p className="ex-hero-subtitle">for Unlock Startup Platform</p>
           <div className="ex-hero-meta">
-            <span className="ex-hero-meta-item">Last Updated: </span>
+            <span className="ex-hero-meta-item"> <strong>Last Updated:</strong> 18/08/2026 </span>
           </div>
         </div>
       </div>
