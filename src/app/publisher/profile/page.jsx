@@ -55,7 +55,7 @@ const [downloadingServiceId, setDownloadingServiceId] = useState(null);
       setProfileurl(rawProfileurl?.url ? rawProfileurl : null);
       setFormData({
         name:             p.userId?.name     || p.contactName || "",
-        phone:            p.phone            || "",
+        phone:            p.userId?.phone    || "",
         email:            p.userId?.email    || "",
         companyName:      p.companyName      || "",
         organizationName: p.organizationName || "",
@@ -180,7 +180,7 @@ const isSubActive = profile.subscriptionStatus === "active" && !isExpired;
     ["Name",         formData.name],
     ["Email",        profile.userId?.email],
     ["Phone",        formData.phone],
-    ["Company Name", formData.organizationName],
+    ["Company Name", formData.companyName],
     ["Company Type", formData.organizationType],
     ["Address",      formData.address],
   ];
