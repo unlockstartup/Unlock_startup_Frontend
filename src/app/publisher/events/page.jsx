@@ -845,18 +845,18 @@ const deleteEvent = (id) => {
                   </div>
                   <div className="field">
                     <label className="label">Phone Number *</label>
-                   <input
-  className="input"
-  name="contactNumber"
-  value={form.contactNumber}
-  onChange={(e) => {
-    const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
-    setForm((prev) => ({ ...prev, contactNumber: digits }));
-  }}
-  placeholder="Enter 10-digit mobile number"
-  maxLength={10}
-  inputMode="numeric"
-/>
+                    <input
+                      className="input"
+                      name="phoneNumber"
+                      value={form.phoneNumber}
+                      onChange={(e) => {
+                        const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+                        setForm((prev) => ({ ...prev, phoneNumber: digits }));
+                      }}
+                      placeholder="Enter 10-digit mobile number"
+                      maxLength={10}
+                      inputMode="numeric"
+                    />
                   </div>
                   <div className="field">
                     <label className="label">Company Website *</label>
