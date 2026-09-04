@@ -88,7 +88,7 @@ const initialForm = {
   websiteUrl: "", disclosureConsent: false,
 };
 
-const MAX_IMAGES = 3;
+const MAX_IMAGES = 1;
 
 /*  Main component  */
 export default function ServiceListings() {
@@ -108,6 +108,7 @@ export default function ServiceListings() {
   const [form, setForm]                     = useState(initialForm);
   const [stateOpen, setStateOpen]           = useState(false);
   const [showConfirm, setShowConfirm]       = useState(false);
+  const [approvedCount, setApprovedCount]   = useState(0);
   const [confirmConfig, setConfirmConfig]   = useState({
     title: "", message: "", confirmText: "Confirm",
     cancelText: "Cancel", confirmVariant: "danger", onConfirm: () => {},
@@ -131,6 +132,15 @@ export default function ServiceListings() {
     }
   };
 
+  const fetchApprovedCount = async () => {
+    try {
+      const res = await publisherApi.get("/api/publisher/service-listings/mine?status=approved");
+      setApprovedCount(res.data?.listings?.length || 0);
+    } catch {
+      /* silently fail */
+    }
+  };
+
   useEffect(() => { fetchListings(); }, [status]);
 
   useEffect(() => {
@@ -149,6 +159,8 @@ export default function ServiceListings() {
         setServiceCategories(res.data?.categories || []);
       } catch { toast.error("Failed to load service categories"); }
     })();
+
+    fetchApprovedCount();
   }, []);
 
   /*  Plan guards  */
@@ -161,7 +173,7 @@ export default function ServiceListings() {
 
   const serviceLimitReached = planInfo && !subscriptionExpired && !serviceInactive && !servicePlanExpired
     && planInfo.limits?.serviceListingLimit > 0
-    && planInfo.usage?.serviceListings >= planInfo.limits?.serviceListingLimit;
+    && approvedCount >= planInfo.limits?.serviceListingLimit;
 
   const addButtonDisabled = subscriptionExpired || serviceInactive || servicePlanExpired || serviceLimitReached;
 
@@ -172,27 +184,24 @@ export default function ServiceListings() {
     : servicePlanExpired
     ? "Service Plan Expired"
     : serviceLimitReached
-    ? `Limit Reached (${planInfo.usage.serviceListings}/${planInfo.limits.serviceListingLimit})`
+    ? `Limit Reached (${approvedCount}/${planInfo.limits.serviceListingLimit})`
     : "+ Add Service";
 
   /*  Modal helpers  */
   const openCreate = () => { setMode("create"); setEditing(null); setForm(initialForm); setServiceImages([]); setOpen(true); };
 
   const openEdit = (listing) => {
-    const alreadyEdited = (listing.editCount ?? 0) >= 1;
     setConfirmConfig({
-      title: alreadyEdited ? "Edit Not Allowed" : "Edit Service Listing",
-      message: alreadyEdited
-        ? "This listing has already been edited once and can no longer be modified."
-        : "You can only update this listing once. Please review all details carefully before submitting, as no further edits will be allowed after this.",
-      confirmText: alreadyEdited ? "OK" : "I Understand, Proceed",
-      cancelText: alreadyEdited ? "" : "Cancel",
-      confirmVariant: alreadyEdited ? "danger" : "primary",
+      title: "Edit Service Listing",
+      message: "Please review all details carefully before submitting, as your listing will be sent for re-approval after update.",
+      confirmText: "I Understand, Proceed",
+      cancelText: "Cancel",
+      confirmVariant: "primary",
       onConfirm: () => {
-        if (alreadyEdited) return;
-        setMode("edit"); setEditing(listing);
+        setMode("edit");
+        setEditing(listing);
         setForm({ ...initialForm, ...listing, disclosureConsent: false });
-        setServiceImages(listing.serviceImages || []);
+        setServiceImages((listing.serviceImages || []).slice(0, MAX_IMAGES));
         setOpen(true);
       },
     });
@@ -228,48 +237,48 @@ export default function ServiceListings() {
   const removeImage = (idx) => setServiceImages((prev) => prev.filter((_, i) => i !== idx));
 
   /*  Validate & save  */
-const isValidUrl = (v) => {
-  if (!v) return true;
-  try { new URL(v); return true; } catch { return false; }
-};
-const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  const isValidUrl = (v) => {
+    if (!v) return true;
+    try { new URL(v); return true; } catch { return false; }
+  };
+  const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
-const validate = () => {
-  const checks = [
-    [!form.companyName.trim(),         "Company name is required"],
-    [!form.brandName.trim(),           "Brand name is required"],
-    [!form.establishedYear.trim(),     "Established year is required"],
-    [!form.serviceTitle.trim(),        "Service title is required"],
-    [!form.serviceType,                "Service type is required"],
-    [!form.serviceCategory,            "Service plan is required"],
-    [!form.detailedDescription.trim(), "Detailed description is required"],
-    [form.detailedDescription.trim().split(/\s+/).filter(Boolean).length > 500, "Detailed description exceeds 500 words"],
-    [!form.benefits.trim(),            "Benefits / key features are required"],
-    [form.benefits.trim().split(/\s+/).filter(Boolean).length > 300, "Benefits / key features exceeds 300 words"],
-    [!serviceImages.some((img) => img?.url), "At least one service image is required"],
-    [!form.serviceArea.trim(),         "Service area is required"],
-    [!form.targetIndustry.trim(),      "Target industry is required"],
-    [!form.teamSize.trim(),            "Team size is required"],
-    [!form.contactEmail.trim(),        "Contact email is required"],
-    [form.contactEmail.trim() && !isValidEmail(form.contactEmail), "Please enter a valid contact email"],
-    [!form.contactNumber.trim(),       "Contact number is required"],
-    [form.contactNumber.trim() && !/^\d{10}$/.test(form.contactNumber.trim()), "Enter a valid 10-digit contact number"],
-    [!form.contactAddress.trim(), "Contact address is required"],
-    [!form.websiteUrl.trim(),          "Website URL is required"],
-    [!isValidUrl(form.websiteUrl),     "Please enter a valid website URL"],
-    [!form.disclosureConsent,          "You must provide consent to submit"],
-  ];
-  for (const [fail, msg] of checks) {
-    if (fail) { toast.warn(msg); return false; }
-  }
-  return true;
-};
+  const validate = () => {
+    const checks = [
+      [!form.companyName.trim(),         "Company name is required"],
+      [!form.brandName.trim(),           "Brand name is required"],
+      [!form.establishedYear.trim(),     "Established year is required"],
+      [!form.serviceTitle.trim(),        "Service title is required"],
+      [!form.serviceType,                "Service type is required"],
+      [!form.serviceCategory,            "Service plan is required"],
+      [!form.detailedDescription.trim(), "Detailed description is required"],
+      [form.detailedDescription.trim().split(/\s+/).filter(Boolean).length > 500, "Detailed description exceeds 500 words"],
+      [!form.benefits.trim(),            "Benefits / key features are required"],
+      [form.benefits.trim().split(/\s+/).filter(Boolean).length > 300, "Benefits / key features exceeds 300 words"],
+      [!serviceImages.some((img) => img?.url), "At least one service image is required"],
+      [!form.serviceArea.trim(),         "Service area is required"],
+      [!form.targetIndustry.trim(),      "Target industry is required"],
+      [!form.teamSize.trim(),            "Team size is required"],
+      [!form.contactEmail.trim(),        "Contact email is required"],
+      [form.contactEmail.trim() && !isValidEmail(form.contactEmail), "Please enter a valid contact email"],
+      [!form.contactNumber.trim(),       "Contact number is required"],
+      [form.contactNumber.trim() && !/^\d{10}$/.test(form.contactNumber.trim()), "Enter a valid 10-digit contact number"],
+      [!form.contactAddress.trim(), "Contact address is required"],
+      [!form.websiteUrl.trim(),          "Website URL is required"],
+      [!isValidUrl(form.websiteUrl),     "Please enter a valid website URL"],
+      [!form.disclosureConsent,          "You must provide consent to submit"],
+    ];
+    for (const [fail, msg] of checks) {
+      if (fail) { toast.warn(msg); return false; }
+    }
+    return true;
+  };
 
   const save = async () => {
     if (!validate()) return;
     try {
       setSaving(true);
-      const payload = { ...form, serviceImages };
+      const payload = { ...form, serviceImages: serviceImages.slice(0, MAX_IMAGES) };
       if (mode === "create") {
         await publisherApi.post("/api/publisher/service-listings/create", payload);
         toast.success("Service listing submitted!");
@@ -279,11 +288,12 @@ const validate = () => {
       }
       setOpen(false);
       fetchListings();
-   } catch (err) {
-  toast.error(formatServerError(err?.response?.data?.message) || "Submission failed");
-} finally {
-  setSaving(false);
-}
+      fetchApprovedCount();
+    } catch (err) {
+      toast.error(formatServerError(err?.response?.data?.message) || "Submission failed");
+    } finally {
+      setSaving(false);
+    }
   };
 
   /*  Delete / toggle  */
@@ -298,6 +308,7 @@ const validate = () => {
           await publisherApi.delete(`/api/publisher/service-listings/${id}`);
           toast.success("Listing deleted");
           fetchListings();
+          fetchApprovedCount();
         } catch (err) { toast.error(err?.response?.data?.message || "Delete failed"); }
       },
     });
@@ -328,7 +339,7 @@ const validate = () => {
       confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
       cancelText: "Cancel",
       confirmVariant: isDeactivating ? "warning" : "success",
-onConfirm: async () => {
+      onConfirm: async () => {
         try {
           await publisherApi.patch(`/api/publisher/service-listings/${listing._id}/toggle`);
           toast.success(`Service ${isDeactivating ? "deactivated" : "activated"}`);
@@ -446,67 +457,64 @@ onConfirm: async () => {
                 </tr>
               </thead>
               <tbody>
-                {listings.map((l, idx) => {
-                  const editLocked = (l.editCount ?? 0) >= 1;
-                  return (
-                    <tr key={l._id}>
-                      <td className="tdMuted" data-label="#">{idx + 1}</td>
+                {listings.map((l, idx) => (
+                  <tr key={l._id}>
+                    <td className="tdMuted" data-label="#">{idx + 1}</td>
 
-                      <td className="tdSemibold" data-label="Service Title">
-                        {l.serviceTitle}
-                      </td>
+                    <td className="tdSemibold" data-label="Service Title">
+                      {l.serviceTitle}
+                    </td>
 
-                      <td data-label="Image">
-                        {l.serviceImages?.[0]?.url ? (
-                          <img src={l.serviceImages[0].url} alt="service" className="thumb" />
-                        ) : (
-                          <span className="tdMuted">No image</span>
-                        )}
-                      </td>
+                    <td data-label="Image">
+                      {l.serviceImages?.[0]?.url ? (
+                        <img src={l.serviceImages[0].url} alt="service" className="thumb" />
+                      ) : (
+                        <span className="tdMuted">No image</span>
+                      )}
+                    </td>
 
-                      <td className="tdMuted tdNoWrap" data-label="Company">
-                        <div>{l.companyName || "—"}</div>
-                      </td>
+                    <td className="tdMuted tdNoWrap" data-label="Company">
+                      <div>{l.companyName || "—"}</div>
+                    </td>
 
-                      <td data-label="Plan">
-                        <span className="badge badgePrimary">{l.serviceCategory || "—"}</span>
-                      </td>
+                    <td data-label="Plan">
+                      <span className="badge badgePrimary">{l.serviceCategory || "—"}</span>
+                    </td>
 
-                      <td data-label="Status">
-                        <StatusBadge
-                          status={l.approvalStatus}
-                          reason={l.approvalStatus === "approved" ? l.approvalReason : l.rejectionReason}
-                        />
-                      </td>
+                    <td data-label="Status">
+                      <StatusBadge
+                        status={l.approvalStatus}
+                        reason={l.approvalStatus === "approved" ? l.approvalReason : l.rejectionReason}
+                      />
+                    </td>
 
-                      <td data-label="Active">
-                        <span className={`badge ${l.isActive ? "badgeSuccess" : "badgeNeutral"}`}>
-                          {l.isActive ? "Active" : "Inactive"}
-                        </span>
-                      </td>
+                    <td data-label="Active">
+                      <span className={`badge ${l.isActive ? "badgeSuccess" : "badgeNeutral"}`}>
+                        {l.isActive ? "Active" : "Inactive"}
+                      </span>
+                    </td>
 
-                      <td data-label="Actions">
-                        <div className="actionGroup">
-                          <button
-                            className={`btn btnSm ${editLocked ? "btnSecondary" : "btnPrimary"}`}
-                            onClick={() => openEdit(l)}
-                            title={editLocked ? "Already edited once" : "Edit listing"}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            className={`btn btnSm ${l.isActive ? "btnWarning" : "btnSuccess"}`}
-                            onClick={() => confirmToggleListing(l)}
-                            title={(l.toggleCount ?? 0) >= 2 ? "Toggle limit reached" : l.isActive ? "Deactivate" : "Activate"}
-                          >
-                            {l.isActive ? "Deactivate" : "Activate"}
-                          </button>
-                          <button className="btn btnSm btnDanger" onClick={() => deleteListing(l._id)}>Delete</button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                    <td data-label="Actions">
+                      <div className="actionGroup">
+                        <button
+                          className="btn btnSm btnPrimary"
+                          onClick={() => openEdit(l)}
+                          title="Edit listing"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className={`btn btnSm ${l.isActive ? "btnWarning" : "btnSuccess"}`}
+                          onClick={() => confirmToggleListing(l)}
+                          title={(l.toggleCount ?? 0) >= 2 ? "Toggle limit reached" : l.isActive ? "Deactivate" : "Activate"}
+                        >
+                          {l.isActive ? "Deactivate" : "Activate"}
+                        </button>
+                        <button className="btn btnSm btnDanger" onClick={() => deleteListing(l._id)}>Delete</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           )}
@@ -584,27 +592,23 @@ onConfirm: async () => {
 
               {/*  Service images  */}
               <section className="section">
-                <h3 className="sectionTitle">Service images <span className="labelNote">(up to {MAX_IMAGES} — recommended 1300 × 580 px)</span></h3>
-                <div className="row3">
-                  {[0, 1, 2].map((idx) => (
-                    <div className="field" key={idx}>
-                      <label className="label">Image {idx + 1}</label>
-                      <div className="imageRow" style={{ flexDirection: "column", alignItems: "flex-start", gap: "0.5rem" }}>
-                        <input
-                          type="file" accept="image/*" className="input"
-                          onChange={(e) => uploadImage(e.target.files?.[0], idx)}
-                          disabled={uploadingIdx !== null}
-                        />
-                        {uploadingIdx === idx && <span className="labelNote">Uploading…</span>}
-                        {serviceImages[idx]?.url && (
-                          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-                            <img src={serviceImages[idx].url} alt={`img-${idx}`} className="imagePreview" />
-                            <button className="btn btnSm btnDanger" onClick={() => removeImage(idx)}>Remove</button>
-                          </div>
-                        )}
+                <h3 className="sectionTitle">Service image <span className="labelNote">(recommended 1300 × 580 px)</span></h3>
+                <div className="field">
+                  <label className="label">Image 1</label>
+                  <div className="imageRow" style={{ flexDirection: "column", alignItems: "flex-start", gap: "0.5rem" }}>
+                    <input
+                      type="file" accept="image/*" className="input"
+                      onChange={(e) => uploadImage(e.target.files?.[0], 0)}
+                      disabled={uploadingIdx !== null}
+                    />
+                    {uploadingIdx === 0 && <span className="labelNote">Uploading…</span>}
+                    {serviceImages[0]?.url && (
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                        <img src={serviceImages[0].url} alt="service-img" className="imagePreview" />
+                        <button className="btn btnSm btnDanger" onClick={() => removeImage(0)}>Remove</button>
                       </div>
-                    </div>
-                  ))}
+                    )}
+                  </div>
                 </div>
               </section>
 
@@ -693,9 +697,9 @@ onConfirm: async () => {
                   </label>
                 </div>
 
-              <div style={{ padding: "0.9rem 1rem", borderRadius: "0.85rem", background: "var(--yellow-soft)", border: "1px solid rgba(252,207,2,0.4)", color: "var(--yellow-hover)", fontSize: "var(--text-sm)" }}>
-                Note: After submission, your listing will be reviewed. If all details are correct, approval will be completed within 24 hours. Updates will be sent via Dashboard Notifications.
-              </div>
+                <div style={{ padding: "0.9rem 1rem", borderRadius: "0.85rem", background: "var(--yellow-soft)", border: "1px solid rgba(252,207,2,0.4)", color: "var(--yellow-hover)", fontSize: "var(--text-sm)" }}>
+                  Note: After submission, your listing will be reviewed. If all details are correct, approval will be completed within 24 hours. Updates will be sent via Dashboard Notifications.
+                </div>
               </section>
 
               <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>

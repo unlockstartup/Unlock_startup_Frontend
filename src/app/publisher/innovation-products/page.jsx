@@ -99,7 +99,8 @@ export default function InnovationProducts() {
   const [patentStatuses, setPatentStatuses]       = useState([]);
   const [productStatuses, setProductStatuses]     = useState([]);
   const [innovationStatuses, setInnovationStatuses] = useState([]);
-const [serverError, setServerError] = useState(null);
+  const [serverError, setServerError] = useState(null);
+  const [approvedCount, setApprovedCount] = useState(0);
   const [showConfirm, setShowConfirm]   = useState(false);
   const [confirmConfig, setConfirmConfig] = useState({
     title: "", message: "",
@@ -157,6 +158,15 @@ const [serverError, setServerError] = useState(null);
     }
   };
 
+  const fetchApprovedCount = async () => {
+    try {
+      const res = await publisherApi.get("/api/publisher/innovation-products/mine?status=approved");
+      setApprovedCount(res.data?.products?.length || 0);
+    } catch {
+      /* silently fail */
+    }
+  };
+
   useEffect(() => { fetchProducts(); }, [status]);
 
   useEffect(() => {
@@ -181,52 +191,50 @@ const [serverError, setServerError] = useState(null);
       try { const res = await getPublicProductStatuses();   setProductStatuses(res.data?.statuses   || []); }
       catch { toast.error("Failed to load product statuses"); }
     })();
+
+    fetchApprovedCount();
   }, []);
 
   /*  Plan limits  */
   const subscriptionExpired = planInfo && (
-  planInfo.subscriptionStatus !== "active" ||
-  (planInfo.expiry && new Date(planInfo.expiry) < new Date())
-);
-  const productLimitReached  = planInfo && !subscriptionExpired && planInfo.limits?.productsLimit > 0 && planInfo.usage?.products >= planInfo.limits?.productsLimit;
+    planInfo.subscriptionStatus !== "active" ||
+    (planInfo.expiry && new Date(planInfo.expiry) < new Date())
+  );
+  const productLimitReached  = planInfo && !subscriptionExpired && planInfo.limits?.productsLimit > 0 && approvedCount >= planInfo.limits?.productsLimit;
   const productButtonDisabled = subscriptionExpired || productLimitReached;
 
   const addBtnLabel = subscriptionExpired ? "Subscription Expired"
-    : productLimitReached ? `Limit Reached (${planInfo.usage.products}/${planInfo.limits.productsLimit})`
+    : productLimitReached ? `Limit Reached (${approvedCount}/${planInfo.limits.productsLimit})`
     : "+ Add Product";
 
-const openCreate = () => {
-  setServerError(null); 
-  setMode("create");
-  setEditing(null);
-  setForm(initialForm);
-  setProductLogo(null);
-  setProductImages([]);
-  setOpen(true);
-};
-const openEdit = (prod) => {
-  const alreadyEdited = (prod.editCount ?? 0) >= 1;
-  setConfirmConfig({
-    title: alreadyEdited ? "Edit Not Allowed" : "Edit Product",
-    message: alreadyEdited
-      ? "This product has already been edited once and can no longer be modified."
-      : "You can only update this listing once. Please review all details carefully before submitting, as no further edits will be allowed after this.",
-    confirmText: alreadyEdited ? "OK" : "I Understand, Proceed",
-    cancelText: alreadyEdited ? "" : "Cancel",
-    confirmVariant: alreadyEdited ? "danger" : "primary",
-    onConfirm: () => {
-      if (alreadyEdited) return;
-      setServerError(null);
-      setMode("edit"); setEditing(prod);
-      setForm({ ...initialForm, ...prod, shortProductDescription: prod.shortProductDescription || "", awardsRecognition: prod.awardsRecognition || "" });
-      setProductLogo(prod.productLogo || null);
-      setProductImages(prod.productImages || []);
-      setOpen(true);
-    },
-  });
-  setShowConfirm(true);
-};
+  const openCreate = () => {
+    setServerError(null); 
+    setMode("create");
+    setEditing(null);
+    setForm(initialForm);
+    setProductLogo(null);
+    setProductImages([]);
+    setOpen(true);
+  };
 
+  const openEdit = (prod) => {
+    setConfirmConfig({
+      title: "Edit Product",
+      message: "Please review all details carefully before submitting, as your listing will be sent for re-approval after update.",
+      confirmText: "I Understand, Proceed",
+      cancelText: "Cancel",
+      confirmVariant: "primary",
+      onConfirm: () => {
+        setServerError(null);
+        setMode("edit"); setEditing(prod);
+        setForm({ ...initialForm, ...prod, shortProductDescription: prod.shortProductDescription || "", awardsRecognition: prod.awardsRecognition || "" });
+        setProductLogo(prod.productLogo || null);
+        setProductImages(prod.productImages || []);
+        setOpen(true);
+      },
+    });
+    setShowConfirm(true);
+  };
 
   const closeModal = () => { if (saving || uploadingImage || uploadingProductImages) return; setServerError(null); setOpen(false); };
 
@@ -263,57 +271,57 @@ const openEdit = (prod) => {
   const removeProductImage = (publicId) =>
     setProductImages((prev) => prev.filter((img) => img.publicId !== publicId));
 
-const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
-const isValidUrl = (v) => {
-  if (!v) return true;
-  try { new URL(v); return true; } catch { return false; }
-};
-const isRequiredUrl = (v) => {
-  if (!v || !v.trim()) return false;
-  try { new URL(v); return true; } catch { return false; }
-};
+  const isValidUrl = (v) => {
+    if (!v) return true;
+    try { new URL(v); return true; } catch { return false; }
+  };
+  const isRequiredUrl = (v) => {
+    if (!v || !v.trim()) return false;
+    try { new URL(v); return true; } catch { return false; }
+  };
 
-const isValidPhone = (v) => {
-  if (!v) return false;
-  const digits = v.replace(/\D/g, "");
-  return digits.length >= 7 && digits.length <= 15 && /^[\d\s+\-().]+$/.test(v);
-};
+  const isValidPhone = (v) => {
+    if (!v) return false;
+    const digits = v.replace(/\D/g, "");
+    return digits.length >= 7 && digits.length <= 15 && /^[\d\s+\-().]+$/.test(v);
+  };
 
-const validate = () => {
-  const checks = [
-    [!form.companyName.trim(),              "Company name is required"],
-    [!form.establishedYear.trim(),          "Established year is required"],
-    [!form.brandName.trim(),                "Brand name is required"],
-    [!form.productName.trim(),              "Product name is required"],
-    [!form.innovationCategory,              "Please select a product category"],
-    [!productLogo,                          "Product logo is required"],
-    [!form.technology.trim(),               "Technology is required"],
-    [!form.shortProductDescription.trim(),  "Short product description is required"],
-    [!form.detailedDescription.trim(),      "Detailed description is required"],
-    [!form.keyFeatures.trim(),              "Key features / innovations are required"],
-    [!form.patentStatus,                    "Please select a patent / IP status"],
-    [productImages.length === 0,            "At least one product image is required"],
-    [!form.targetIndustry.trim(),           "Target industry / market is required"],
-    [!form.challengeSolved.trim(),          "Challenge solved is required"],
-    [!form.contactEmail.trim(),             "Contact email is required"],
-    [form.contactEmail.trim() && !isValidEmail(form.contactEmail), "Please enter a valid contact email"],
-    [!form.contactNumber.trim(),            "Contact number is required"],
-    [form.contactNumber.trim() && !isValidPhone(form.contactNumber), "Please enter a valid contact number"],
-    [!form.innovationStatus,                "Please select an innovation status"],
-    [!form.productStatus,                   "Please select a product status"],
-    [!form.founderName.trim(),              "Founder / lead innovator name is required"],
-    [!isValidUrl(form.productDemoUrl),      "Please enter a valid demo/video URL"],
-    [!isRequiredUrl(form.websiteUrl),       "Please enter a valid website URL"],
-    [!form.disclosureConsent,               "You must provide consent to submit"],
-  ];
-  for (const [fail, msg] of checks) {
-    if (fail) { toast.warn(msg); return false; }
-  }
-  return true;
-};
+  const validate = () => {
+    const checks = [
+      [!form.companyName.trim(),              "Company name is required"],
+      [!form.establishedYear.trim(),          "Established year is required"],
+      [!form.brandName.trim(),                "Brand name is required"],
+      [!form.productName.trim(),              "Product name is required"],
+      [!form.innovationCategory,              "Please select a product category"],
+      [!productLogo,                          "Product logo is required"],
+      [!form.technology.trim(),               "Technology is required"],
+      [!form.shortProductDescription.trim(),  "Short product description is required"],
+      [!form.detailedDescription.trim(),      "Detailed description is required"],
+      [!form.keyFeatures.trim(),              "Key features / innovations are required"],
+      [!form.patentStatus,                    "Please select a patent / IP status"],
+      [productImages.length === 0,            "At least one product image is required"],
+      [!form.targetIndustry.trim(),           "Target industry / market is required"],
+      [!form.challengeSolved.trim(),          "Challenge solved is required"],
+      [!form.contactEmail.trim(),             "Contact email is required"],
+      [form.contactEmail.trim() && !isValidEmail(form.contactEmail), "Please enter a valid contact email"],
+      [!form.contactNumber.trim(),            "Contact number is required"],
+      [form.contactNumber.trim() && !isValidPhone(form.contactNumber), "Please enter a valid contact number"],
+      [!form.innovationStatus,                "Please select an innovation status"],
+      [!form.productStatus,                   "Please select a product status"],
+      [!form.founderName.trim(),              "Founder / lead innovator name is required"],
+      [!isValidUrl(form.productDemoUrl),      "Please enter a valid demo/video URL"],
+      [!isRequiredUrl(form.websiteUrl),       "Please enter a valid website URL"],
+      [!form.disclosureConsent,               "You must provide consent to submit"],
+    ];
+    for (const [fail, msg] of checks) {
+      if (fail) { toast.warn(msg); return false; }
+    }
+    return true;
+  };
 
-const save = async () => {
+  const save = async () => {
     if (!validate()) return;
     try {
       setSaving(true);
@@ -327,82 +335,77 @@ const save = async () => {
       }
       setOpen(false);
       fetchProducts();
-} catch (err) {
-  const msg = err?.response?.data?.message;
-  const formatted = msg ? formatServerError(msg) : "Submission failed";
-  toast.error(formatted);
-  setServerError(formatted);  
-} finally {
+      fetchApprovedCount();
+    } catch (err) {
+      const msg = err?.response?.data?.message;
+      const formatted = msg ? formatServerError(msg) : "Submission failed";
+      toast.error(formatted);
+      setServerError(formatted);  
+    } finally {
       setSaving(false);
     }
   };
 
-  const toggleProduct = async (prod) => {
-    try {
-      await publisherApi.patch(`/api/publisher/innovation-products/${prod._id}/toggle`);
-      toast.success(`Product ${prod.isActive ? "deactivated" : "activated"}`);
-      fetchProducts();
-    } catch (err) { toast.error(err?.response?.data?.message || "Toggle failed"); }
-  };
-
-const deleteProduct = (id) => {
-  if (!id) { toast.error("Invalid Product ID"); return; }
-  setConfirmConfig({
-    title: "Delete Product",
-    message: "Are you sure you want to permanently delete this product? This action cannot be undone.",
-    confirmText: "Yes, Delete this Product",
-    cancelText: "Cancel",
-    confirmVariant: "danger",
-    onConfirm: async () => {
-      try {
-        await publisherApi.delete(`/api/publisher/innovation-products/${id}`);
-        toast.success("Product deleted successfully");
-        fetchProducts();
-      } catch (err) {
-        const msg = err?.response?.data?.message;
-        toast.error(msg ? formatServerError(msg) : "Delete failed");
-      }
-    },
-  });
-  setShowConfirm(true);
-};
-
-const confirmToggleProduct = (prod) => {
-  if (!prod?._id) { toast.error("Invalid Product ID"); return; }
-  const toggleCount = prod.toggleCount ?? 0;
-  if (toggleCount >= 2) {
+  const deleteProduct = (id) => {
+    if (!id) { toast.error("Invalid Product ID"); return; }
     setConfirmConfig({
-      title: "Toggle Not Allowed",
-      message: "This product has already been deactivated and reactivated once. No further activation or deactivation is allowed.",
-      confirmText: "OK",
-      cancelText: "",
+      title: "Delete Product",
+      message: "Are you sure you want to permanently delete this product? This action cannot be undone.",
+      confirmText: "Yes, Delete this Product",
+      cancelText: "Cancel",
       confirmVariant: "danger",
-      onConfirm: () => {},
+      onConfirm: async () => {
+        try {
+          await publisherApi.delete(`/api/publisher/innovation-products/${id}`);
+          toast.success("Product deleted successfully");
+          fetchProducts();
+          fetchApprovedCount();
+        } catch (err) {
+          const msg = err?.response?.data?.message;
+          toast.error(msg ? formatServerError(msg) : "Delete failed");
+        }
+      },
     });
     setShowConfirm(true);
-    return;
-  }
-  const isDeactivating = prod.isActive;
-  setConfirmConfig({
-    title: isDeactivating ? "Deactivate Product" : "Activate Product",
-    message: isDeactivating
-      ? "You may reactivate this product once after deactivating, but after that no further toggling will be allowed. Are you sure you want to deactivate?"
-      : "You can activate this listing once more. After reactivating, no further deactivation or activation will be permitted. Proceed?",
-    confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
-    cancelText: "Cancel",
-    confirmVariant: isDeactivating ? "warning" : "success",
-    onConfirm: async () => {
-      try {
-        await publisherApi.patch(`/api/publisher/innovation-products/${prod._id}/toggle`);
-        toast.success(`Product ${isDeactivating ? "deactivated" : "activated"}`);
-        fetchProducts();
-      } catch (err) {
-        toast.error(err?.response?.data?.message || "Toggle failed");
-      }
-    },
-  });
-  setShowConfirm(true);
-};
+  };
+
+  const confirmToggleProduct = (prod) => {
+    if (!prod?._id) { toast.error("Invalid Product ID"); return; }
+    const toggleCount = prod.toggleCount ?? 0;
+    if (toggleCount >= 2) {
+      setConfirmConfig({
+        title: "Toggle Not Allowed",
+        message: "This product has already been deactivated and reactivated once. No further activation or deactivation is allowed.",
+        confirmText: "OK",
+        cancelText: "",
+        confirmVariant: "danger",
+        onConfirm: () => {},
+      });
+      setShowConfirm(true);
+      return;
+    }
+    const isDeactivating = prod.isActive;
+    setConfirmConfig({
+      title: isDeactivating ? "Deactivate Product" : "Activate Product",
+      message: isDeactivating
+        ? "You may reactivate this product once after deactivating, but after that no further toggling will be allowed. Are you sure you want to deactivate?"
+        : "You can activate this listing once more. After reactivating, no further deactivation or activation will be permitted. Proceed?",
+      confirmText: isDeactivating ? "Yes, Deactivate" : "Yes, Activate",
+      cancelText: "Cancel",
+      confirmVariant: isDeactivating ? "warning" : "success",
+      onConfirm: async () => {
+        try {
+          await publisherApi.patch(`/api/publisher/innovation-products/${prod._id}/toggle`);
+          toast.success(`Product ${isDeactivating ? "deactivated" : "activated"}`);
+          fetchProducts();
+        } catch (err) {
+          toast.error(err?.response?.data?.message || "Toggle failed");
+        }
+      },
+    });
+    setShowConfirm(true);
+  };
+
   /*  Render  */
   return (
     <div className="page">
@@ -488,82 +491,79 @@ const confirmToggleProduct = (prod) => {
             </div>
           ) : (
             <table className="table">
-<thead>
-  <tr>
-    <th>#</th>
-    <th>Product Name</th>
-    <th>Logo</th>
-    <th>Company</th>
-    <th>Category</th>
-    <th>Status</th>
-    <th>Active</th>
-    <th className="tdRight" style={{ textAlign: "center" }}>Actions</th>
-  </tr>
-</thead>
-<tbody>
-  {products.map((prod, idx) => {
-    const editLocked = (prod.editCount ?? 0) >= 1;
-    return (
-      <tr key={prod._id}>
-        <td className="tdMuted" data-label="#">{idx + 1}</td>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Product Name</th>
+                  <th>Logo</th>
+                  <th>Company</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Active</th>
+                  <th className="tdRight" style={{ textAlign: "center" }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((prod, idx) => (
+                  <tr key={prod._id}>
+                    <td className="tdMuted" data-label="#">{idx + 1}</td>
 
-        <td className="tdSemibold" data-label="Product Name">
-          {prod.productName}
-          {prod.brandName && <div className="tdMuted">{prod.brandName}</div>}
-        </td>
+                    <td className="tdSemibold" data-label="Product Name">
+                      {prod.productName}
+                      {prod.brandName && <div className="tdMuted">{prod.brandName}</div>}
+                    </td>
 
-        <td data-label="Logo">
-          {prod.productLogo?.url ? (
-            <img src={prod.productLogo.url} alt="logo" className="thumb" />
-          ) : (
-            <span className="tdMuted">No logo</span>
-          )}
-        </td>
+                    <td data-label="Logo">
+                      {prod.productLogo?.url ? (
+                        <img src={prod.productLogo.url} alt="logo" className="thumb" />
+                      ) : (
+                        <span className="tdMuted">No logo</span>
+                      )}
+                    </td>
 
-        <td className="tdMuted tdNoWrap" data-label="Company">
-          {prod.companyName || "—"}
-        </td>
+                    <td className="tdMuted tdNoWrap" data-label="Company">
+                      {prod.companyName || "—"}
+                    </td>
 
-        <td className="tdMuted tdNoWrap" data-label="Category">
-          {prod.innovationCategory || "—"}
-        </td>
+                    <td className="tdMuted tdNoWrap" data-label="Category">
+                      {prod.innovationCategory || "—"}
+                    </td>
 
-<td data-label="Status">
-  <StatusBadge
-    status={prod.status}
-    reason={prod.status === "approved" ? prod.approvalReason : prod.rejectionReason}
-  />
-</td>
+                    <td data-label="Status">
+                      <StatusBadge
+                        status={prod.status}
+                        reason={prod.status === "approved" ? prod.approvalReason : prod.rejectionReason}
+                      />
+                    </td>
 
-        <td data-label="Active">
-          <span className={`badge ${prod.isActive ? "badgeSuccess" : "badgeNeutral"}`}>
-            {prod.isActive ? "Active" : "Inactive"}
-          </span>
-        </td>
+                    <td data-label="Active">
+                      <span className={`badge ${prod.isActive ? "badgeSuccess" : "badgeNeutral"}`}>
+                        {prod.isActive ? "Active" : "Inactive"}
+                      </span>
+                    </td>
 
-        <td data-label="Actions">
-          <div className="actionGroup">
-            <button
-              className={`btn btnSm ${editLocked ? "btnSecondary" : "btnPrimary"}`}
-              onClick={() => openEdit(prod)}
-              title={editLocked ? "Already edited once" : "Edit product"}
-            >
-              Edit
-            </button>
-            <button
-              className={`btn btnSm ${prod.isActive ? "btnWarning" : "btnSuccess"}`}
-              onClick={() => confirmToggleProduct(prod)}
-              title={(prod.toggleCount ?? 0) >= 2 ? "Toggle limit reached" : prod.isActive ? "Deactivate" : "Activate"}
-            >
-              {prod.isActive ? "Deactivate" : "Activate"}
-            </button>
-            <button className="btn btnSm btnDanger" onClick={() => deleteProduct(prod._id)}>Delete</button>
-          </div>
-        </td>
-      </tr>
-    );
-  })}
-</tbody>
+                    <td data-label="Actions">
+                      <div className="actionGroup">
+                        <button
+                          className="btn btnSm btnPrimary"
+                          onClick={() => openEdit(prod)}
+                          title="Edit product"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className={`btn btnSm ${prod.isActive ? "btnWarning" : "btnSuccess"}`}
+                          onClick={() => confirmToggleProduct(prod)}
+                          title={(prod.toggleCount ?? 0) >= 2 ? "Toggle limit reached" : prod.isActive ? "Deactivate" : "Activate"}
+                        >
+                          {prod.isActive ? "Deactivate" : "Activate"}
+                        </button>
+                        <button className="btn btnSm btnDanger" onClick={() => deleteProduct(prod._id)}>Delete</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           )}
         </div>
@@ -584,23 +584,23 @@ const confirmToggleProduct = (prod) => {
 
             {/* Body */}
             <div className="modalBody">
-{serverError && (
-  <div style={{
-    padding: "0.9rem 1rem",
-    borderRadius: "var(--radius-lg)",
-    background: "rgba(220,53,69,0.08)",
-    border: "1px solid rgba(220,53,69,0.25)",
-    color: "#b02a37",
-    fontSize: "var(--text-sm)",
-    marginBottom: "1.25rem",
-    display: "flex",
-    alignItems: "center",
-    gap: "0.6rem"
-  }}>
-    <span style={{ fontSize: "1.1rem", lineHeight: 1 }}>⚠️</span>
-    <span>{serverError}</span>
-  </div>
-)}
+              {serverError && (
+                <div style={{
+                  padding: "0.9rem 1rem",
+                  borderRadius: "var(--radius-lg)",
+                  background: "rgba(220,53,69,0.08)",
+                  border: "1px solid rgba(220,53,69,0.25)",
+                  color: "#b02a37",
+                  fontSize: "var(--text-sm)",
+                  marginBottom: "1.25rem",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.6rem"
+                }}>
+                  <span style={{ fontSize: "1.1rem", lineHeight: 1 }}>⚠️</span>
+                  <span>{serverError}</span>
+                </div>
+              )}
               {/*  Company information  */}
               <section className="section">
                 <h3 className="sectionTitle">Company information</h3>
@@ -735,19 +735,15 @@ const confirmToggleProduct = (prod) => {
                 <h3 className="sectionTitle">Company Details</h3>
 
                 <div className="row2">
-                  {/* <Field label="Company / Research Institution *">
-                    <input className="input" name="companyInstitution" value={form.companyInstitution} onChange={handleChange} placeholder="Enter institution name" />
-                  </Field> */}
                   <Field label="Contact Email *">
                     <input type="email" className="input" name="contactEmail" value={form.contactEmail} onChange={handleChange} placeholder="Enter email" />
                   </Field>
-                    <Field label="Contact Number *">
+                  <Field label="Contact Number *">
                     <input className="input" name="contactNumber" value={form.contactNumber} onChange={handleChange} placeholder="Enter phone number" maxLength={10}/>
                   </Field>
                 </div>
 
                 <div className="row2">
-                
                   <Field label="Website URL *">
                     <input type="url" className="input" name="websiteUrl" value={form.websiteUrl} onChange={handleChange} placeholder="https://" />
                   </Field>
@@ -779,15 +775,12 @@ const confirmToggleProduct = (prod) => {
                 <Field label="Awards / Recognition">
                   <textarea className="textarea" rows={2} name="awardsRecognition" value={form.awardsRecognition} onChange={handleChange} placeholder="Any awards, recognitions, or notable achievements (optional)" />
                 </Field>
-
-                
               </section>
 
               {/*  Consent  */}
               <section className="section">
                 <h3 className="sectionTitle">Use &amp; disclosure consent</h3>
 
-                {/* Consent checkbox */}
                 <div style={{
                   padding: "1rem", borderRadius: "var(--radius-lg)",
                   background: "var(--blue-soft)", border: "1px solid rgba(1,148,223,0.25)",
@@ -807,16 +800,15 @@ const confirmToggleProduct = (prod) => {
                   </label>
                 </div>
 
-                {/* Notice */}
-              <div style={{ padding: "0.9rem 1rem", borderRadius: "0.85rem", background: "var(--yellow-soft)", border: "1px solid rgba(252,207,2,0.4)", color: "var(--yellow-hover)", fontSize: "var(--text-sm)" }}>
-                Note: After submission, your listing will be reviewed. If all details are correct, approval will be completed within 24 hours. Updates will be sent via Dashboard Notifications.
-              </div>
+                <div style={{ padding: "0.9rem 1rem", borderRadius: "0.85rem", background: "var(--yellow-soft)", border: "1px solid rgba(252,207,2,0.4)", color: "var(--yellow-hover)", fontSize: "var(--text-sm)" }}>
+                  Note: After submission, your listing will be reviewed. If all details are correct, approval will be completed within 24 hours. Updates will be sent via Dashboard Notifications.
+                </div>
               </section>
               <div style={{ display: "flex", justifyContent: "center", gap: "1rem", paddingTop: "3.75rem" }}>
-              <button className="btn btnSecondary btcancel" onClick={closeModal} disabled={saving || uploadingImage || uploadingProductImages}>Cancel</button>
-              <button className="btn btnPrimary btsubmit" onClick={save} disabled={saving || uploadingImage || uploadingProductImages}>
-                {saving ? "Submitting…" : mode === "create" ? "Submit" : "Update"}
-              </button>
+                <button className="btn btnSecondary btcancel" onClick={closeModal} disabled={saving || uploadingImage || uploadingProductImages}>Cancel</button>
+                <button className="btn btnPrimary btsubmit" onClick={save} disabled={saving || uploadingImage || uploadingProductImages}>
+                  {saving ? "Submitting…" : mode === "create" ? "Submit" : "Update"}
+                </button>
               </div>
             </div>{/* /modalBody */}
           </div>
