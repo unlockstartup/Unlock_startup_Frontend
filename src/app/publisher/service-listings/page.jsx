@@ -600,7 +600,7 @@ export default function ServiceListings() {
                       type="file" accept="image/*" className="input"
                       onChange={(e) => uploadImage(e.target.files?.[0], 0)}
                       disabled={uploadingIdx !== null}
-                    />
+                     />
                     {uploadingIdx === 0 && <span className="labelNote">Uploading…</span>}
                     {serviceImages[0]?.url && (
                       <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
