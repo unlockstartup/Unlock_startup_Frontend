@@ -8,6 +8,7 @@ import BootstrapClient from "../components/bootstrapjs/BootstrapClient";
 import ConditionalShell from "@/components/ConditionalShell";
 import { AuthProvider } from "@/context/AuthContext";
 import CookieBanner from "@/components/Cookie-Policy";
+import Script from "next/script";
 
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],
@@ -44,6 +45,20 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${gordita.variable} ${ebGaramond.variable}`}>
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-SMHZ7VMP37"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-SMHZ7VMP37');
+          `}
+        </Script>
+
         <AuthProvider>
           <BootstrapClient />
           <ConditionalShell>
