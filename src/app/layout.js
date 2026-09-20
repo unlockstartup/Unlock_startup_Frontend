@@ -58,7 +58,7 @@ export default function RootLayout({ children }) {
             gtag('config', 'G-SMHZ7VMP37');
           `}
         </Script>
-
+<meta name="google-site-verification" content="P8RkaI14F8mS7QsEHhZu_0SHRpF-u5OVeDkj-scX_kY" />
         <AuthProvider>
           <BootstrapClient />
           <ConditionalShell>
