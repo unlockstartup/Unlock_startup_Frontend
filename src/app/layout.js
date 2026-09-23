@@ -34,10 +34,31 @@ const gordita = localFont({
 });
 
 export const metadata = {
-  title: "Unlock Startup",
-  description: "Unlock Startup",
+  metadataBase: new URL("https://www.unlockstartup.com"),
+  title: "Unlock Startup | Jobs, Investors, Competitions & Events for Indian Startups",
+  description:
+    "Unlock Startup connects Indian startups and founders with jobs, investors, funding competitions, events, innovative products and professional services.",
   icons: {
-    icon: '/unlock-startup.png'
+    icon: "/unlock-startup.png",
+  },
+  verification: {
+    google: "P8RkaI14F8mS7QsEHhZu_0SHRpF-u5OVeDkj-scX_kY",
+  },
+  openGraph: {
+    type: "website",
+    siteName: "Unlock Startup",
+    url: "https://www.unlockstartup.com",
+    title: "Unlock Startup",
+    description:
+      "Jobs, investors, funding competitions, events, products and services for Indian startups.",
+    images: ["/unlock-startup.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Unlock Startup",
+    description:
+      "Jobs, investors, funding competitions, events, products and services for Indian startups.",
+    images: ["/unlock-startup.png"],
   },
 };
 
@@ -58,8 +79,6 @@ export default function RootLayout({ children }) {
             gtag('config', 'G-SMHZ7VMP37');
           `}
         </Script>
-<meta name="google-site-verification" content="P8RkaI14F8mS7QsEHhZu_0SHRpF-u5OVeDkj-scX_kY" />
-          <title>Startup Competitions in India | Apply Online And  Upcoming Contests</title>          
         <AuthProvider>
           <BootstrapClient />
           <ConditionalShell>
