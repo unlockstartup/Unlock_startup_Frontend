@@ -59,6 +59,12 @@ export default function RootLayout({ children }) {
           `}
         </Script>
 <meta name="google-site-verification" content="P8RkaI14F8mS7QsEHhZu_0SHRpF-u5OVeDkj-scX_kY" />
+          <title>Startup Competitions in India | Apply Online And  Upcoming Contests</title>
+
+<meta name="description" content="Discover upcoming startup competitions in India, startup idea competitions, online contests, innovation challenges and hardware technology competitions. Find competitions for idea-stage startups, founders and innovators, check last dates and apply online. Call +91-9266733959 for more information.">
+
+<meta name="keywords" content="startup showcase competitions in India, startup idea competitions in India, apply for startup competitions online in India, upcoming startup competitions in India, startup competitions with last date in India, idea stage startup competitions in India, online startup competitions for innovators in India, hardware technology startup competition in India, startup competitions for founders in Delhi, platform to discover startup competitions in India, +91-9266733959">
+          
         <AuthProvider>
           <BootstrapClient />
           <ConditionalShell>
