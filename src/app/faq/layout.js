@@ -1,10 +1,10 @@
 export const metadata = {
-  title: "Startup Jobs & Internships in India | Unlock Startup",
+  title: "FAQs | Unlock Startup",
   description:
-    "Find startup jobs and internships in India across technology, IT, digital marketing, business development, sales, operations and more. Search jobs by location, work mode, job type and experience level. Apply for startup jobs online. Call +91-9266733959.",
+    "Answers to common questions about Unlock Startup: creating an account, User, Publisher and Investor accounts, pricing, listings, applications and pitch deck submissions.",
   robots: "index, follow",
   alternates: {
-    canonical: "https://www.unlockstartup.com/jobs",
+    canonical: "https://www.unlockstartup.com/faq",
   },
 };
 

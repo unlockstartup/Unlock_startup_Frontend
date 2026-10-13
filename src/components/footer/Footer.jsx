@@ -33,7 +33,7 @@ export default function Footer() {
 
               {/* Company */}
               <div className="footer-nav-col">
-                <h5 className="footer-title">Company</h5>
+                <h2 className="footer-title">Company</h2>
                 <ul className="footer-nav-link style-none">
                   <li><Link href="/about">About us</Link></li>
                   <li><Link href="https://blog.unlockstartup.com/" target="_blank" rel="noopener noreferrer">Blogs</Link></li>
@@ -42,7 +42,7 @@ export default function Footer() {
 
               {/* Services */}
               <div className="footer-nav-col">
-                <h5 className="footer-title">Services</h5>
+                <h2 className="footer-title">Services</h2>
                 <ul className="footer-nav-link style-none">
                   <li><Link href="/ourservices">Our Services</Link></li>
                   <li><Link href="/competitions">Competitions</Link></li>
@@ -56,7 +56,7 @@ export default function Footer() {
 
               {/* Legal */}
               <div className="footer-nav-col">
-                <h5 className="footer-title">Legal</h5>
+                <h2 className="footer-title">Legal</h2>
                 <ul className="footer-nav-link style-none">
                   <li><Link href="/privacy">Privacy</Link></li>
                   <li><Link href="/terms-conditions">Terms & conditions</Link></li>
@@ -67,7 +67,7 @@ export default function Footer() {
 
               {/* Support */}
               <div className="footer-nav-col">
-                <h5 className="footer-title">Support</h5>
+                <h2 className="footer-title">Support</h2>
                 <ul className="footer-nav-link style-none">
                   <li><Link href="/contact">Contact Us</Link></li>
                   <li><Link href="/faq">FAQs</Link></li>
@@ -76,22 +76,22 @@ export default function Footer() {
 
               {/* Socials */}
               <div className="footer-nav-col footer-social-col">
-                <h5 className="footer-title">Follow Us</h5>
+                <h2 className="footer-title">Follow Us</h2>
 <ul className="style-none d-flex social-icon gap-3 footer-social-list">
   <li>
-    <a href="https://wa.me/919266733959" target="_blank" rel="noopener noreferrer">
+    <a href="https://wa.me/919266733959" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
       <i className="bi bi-whatsapp"></i>
     </a>
   </li>
 
   <li>
-    <a href="https://www.facebook.com/unlockstartup" target="_blank" rel="noopener noreferrer">
+    <a href="https://www.facebook.com/unlockstartup" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
       <i className="bi bi-facebook"></i>
     </a>
   </li>
 
   <li>
-    <a href="https://www.linkedin.com/company/unlock-startup" target="_blank" rel="noopener noreferrer">
+    <a href="https://www.linkedin.com/company/unlock-startup" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
       <i className="bi bi-linkedin"></i>
     </a>
   </li>

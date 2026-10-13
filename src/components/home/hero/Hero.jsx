@@ -6,6 +6,12 @@ import Link from "next/link";
 
 export default function Hero() {
   useEffect(() => {
+    if (sessionStorage.getItem("refreshHome") === "true") {
+      sessionStorage.removeItem("refreshHome");
+      window.location.reload();
+      return;
+    }
+
     const WOW = require("wowjs");
     const wow = new WOW.WOW({ live: false });
     wow.init();
@@ -22,6 +28,7 @@ export default function Hero() {
         style={{ objectFit: "fill", objectPosition: "center", zIndex: 0 }}
         className="lazy-img"
         priority
+        fetchPriority="high"
       />
 
       {/* Content sits on top */}
