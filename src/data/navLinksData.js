@@ -6,6 +6,7 @@ const navLinksData = [
   { name: "Investors", href: "/investors" },
   { name: "Products", href: "/products" },
   { name: "Services", href: "/services" },
+  { name: "PPT", href: "/ppt" },
   { name: "Pricing", href: "/prices" },
 ];
 

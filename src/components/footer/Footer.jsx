@@ -51,6 +51,7 @@ export default function Footer() {
                   <li><Link href="/jobs">Jobs</Link></li>
                   <li><Link href="/investors">Investor</Link></li>
                   <li><Link href="/products">Products</Link></li>
+                  <li><Link href="/ppt">PPT Templates</Link></li>
                 </ul>
               </div>
 
