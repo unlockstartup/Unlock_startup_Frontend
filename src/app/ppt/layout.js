@@ -1,7 +1,7 @@
 export const metadata = {
-  title: "Pitch Deck & PPT Templates for Startups | Unlock Startup",
+  title: "Pitch Decks & Startup Meet Investors | Unlock Startup",
   description:
-    "Download fully editable pitch deck and business PowerPoint templates for startups and founders. Preview every slide, pay securely and download instantly.",
+    "Unlock Startup offers ready-to-use pitch deck templates tailored for seed-stage and early-stage founders. Explore multiple styles featuring clean, modern layouts that are easy to customize to your brand and business needs. Create a compelling investor presentation in minutes and download your pitch deck instantly after purchase.",
   robots: "index, follow",
   alternates: {
     canonical: "https://www.unlockstartup.com/ppt",

@@ -236,11 +236,12 @@ export default function PptPage() {
           <div className="ppt-hero__content">
             <span className="ppt-hero__badge"><i className="bi bi-easel2"></i> For Founders &amp; Startups</span>
             <h1>
-              Pitch Decks &amp; <span>Startup Templates</span>
+              Pitch Decks &amp; <span>Startup Meet Investors</span>
             </h1>
             <p>
-              Editable PowerPoint templates made for founders and startups: pitch decks, business plans,
-              investor updates and more. Preview every slide, pay securely and download instantly.
+              Unlock Startup offers ready-to-use pitch deck templates tailored for seed-stage and early-stage founders.
+              Explore multiple styles featuring clean, modern layouts that are easy to customize to your brand and business needs.
+              Create a compelling investor presentation in minutes and download your pitch deck instantly after purchase.
             </p>
 
             <form className="ppt-search" role="search" onSubmit={(e) => { e.preventDefault(); scrollToSection("templates"); }}>
