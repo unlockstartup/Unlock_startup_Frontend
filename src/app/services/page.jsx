@@ -6,7 +6,7 @@ import SidebarFilter from "@/components/uiElements/SidebarFilter";
 import api from "@/app/api";
 import Breadcrumb from "@/components/breadcrumb/Breadcrumb";
 
-const PER_PAGE = 3;
+const PER_PAGE = 30;
 
 const Page = () => {
   const [services, setServices] = useState([]);
