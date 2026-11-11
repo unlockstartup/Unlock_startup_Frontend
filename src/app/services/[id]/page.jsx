@@ -122,6 +122,7 @@ export default function ServicePage({ params }) {
               <ProductCarousel
                 images={serviceImages}
                 productName={company.serviceTitle}
+                imageFit="contain"
               />
             </div>
           )}

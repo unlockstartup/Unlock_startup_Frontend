@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import './carousel.css';
 
-const ProductCarousel = ({ images, productName }) => {
+const ProductCarousel = ({ images, productName, imageFit = 'fill' }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const containerRef = useRef(null);
@@ -83,7 +83,7 @@ const ProductCarousel = ({ images, productName }) => {
                   alt={`${productName} - ${index + 1}`}
                   className="image"
                   loading="lazy"
-                  style={{objectFit: "fill"}}
+                  style={{ objectFit: imageFit }}
                 />
                 {absOffset === 0 && (
                   <div className="imageOverlay" />
