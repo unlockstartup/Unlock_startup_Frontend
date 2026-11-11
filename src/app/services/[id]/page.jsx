@@ -123,6 +123,7 @@ export default function ServicePage({ params }) {
                 images={serviceImages}
                 productName={company.serviceTitle}
                 imageFit="contain"
+                showImageBackdrop
               />
             </div>
           )}
