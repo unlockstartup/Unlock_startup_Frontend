@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import './carousel.css';
 
-const ProductCarousel = ({ images, productName, imageFit = 'fill', showImageBackdrop = false }) => {
+const ProductCarousel = ({ images, productName, imageFit = 'fill' }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const containerRef = useRef(null);
@@ -78,15 +78,6 @@ const ProductCarousel = ({ images, productName, imageFit = 'fill', showImageBack
               onClick={() => goToSlide(index)}
             >
               <div className="cardInner">
-                {showImageBackdrop && (
-                  <img
-                    src={image.url || image}
-                    alt=""
-                    aria-hidden="true"
-                    className="imageBackdrop"
-                    loading="lazy"
-                  />
-                )}
                 <img 
                   src={image.url || image} 
                   alt={`${productName} - ${index + 1}`}

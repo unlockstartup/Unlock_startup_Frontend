@@ -39,6 +39,16 @@ function validate({ name, email, phone, agree }) {
 
 const formatINR = (n) => `₹${Number(n || 0).toLocaleString("en-IN")}`;
 
+// GST invoice PDF — the backend sends it as an attachment, so a plain link downloads it
+function InvoiceButton({ result }) {
+  if (!result?.invoicePath) return null;
+  return (
+    <a href={pptDownloadUrl(result.invoicePath)} className="ppt-btn ppt-btn--outline ppt-btn--block ppt-modal__invoice">
+      <i className="bi bi-receipt"></i> Download invoice
+    </a>
+  );
+}
+
 export default function PptDownloadModal({ template, onClose, onPurchased, allSlidesHref }) {
   const { user } = useAuth();
   const [form, setForm] = useState({ name: "", company: "", email: "", phone: "", agree: false });
@@ -218,6 +228,7 @@ export default function PptDownloadModal({ template, onClose, onPurchased, allSl
                 disabled={result?.downloadsLeft <= 0}>
                 <i className="bi bi-download"></i> Download again
               </button>
+              <InvoiceButton result={result} />
               <p className="ppt-modal__note">
                 {downloadsLeftLabel(result?.downloadsLeft)}{expiry && <> · link valid until {expiry}</>}
               </p>
@@ -233,11 +244,12 @@ export default function PptDownloadModal({ template, onClose, onPurchased, allSl
               <h3>Payment successful</h3>
               <p>
                 Thank you! <strong>{template.title}</strong> is ready to download.
-                {result?.emailSent && <> We&apos;ve also emailed the download link to <strong>{form.email}</strong>.</>}
+                {result?.emailSent && <> We&apos;ve also emailed the download link and your invoice to <strong>{form.email}</strong>.</>}
               </p>
               <button type="button" className="ppt-btn ppt-btn--primary ppt-btn--block" onClick={handleDownload}>
                 <i className="bi bi-download"></i> Download now
               </button>
+              <InvoiceButton result={result} />
               <p className="ppt-modal__note">
                 {downloadsLeftLabel(result?.downloadsLeft)}{expiry && <> · link valid until {expiry}</>}
               </p>

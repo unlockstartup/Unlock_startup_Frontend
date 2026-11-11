@@ -841,6 +841,7 @@ a.ppt-feature:hover strong { color: var(--ppt-primary); }
   justify-content: center;
 }
 .ppt-modal__success h3 { font-size: 22px; font-weight: 600; color: var(--ppt-ink); margin-bottom: 8px; }
+.ppt-modal__invoice { margin-top: 10px; }
 .ppt-modal__success > p { font-size: 14px; color: var(--ppt-muted); line-height: 1.6; margin-bottom: 20px; }
 
 .ppt-link-btn {
